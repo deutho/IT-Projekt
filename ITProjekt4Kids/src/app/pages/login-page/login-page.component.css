@@ -5,3 +5,28 @@
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+
+p {
+font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.button-vertical-center {
+    margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.login-button-style {
+    border-radius: 23px;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));
+    background-color: #40d04f;
+}
