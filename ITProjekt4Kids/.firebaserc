@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "kids-8b916"
+  },
+  "targets": {
+    "kids-8b916": {
+      "hosting": {
+        "ITProjekt4Kids": [
+          "kids-8b916"
+        ]
+      }
+    }
   }
 }

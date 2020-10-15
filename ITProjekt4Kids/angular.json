@@ -117,8 +117,13 @@
               "devServerTarget": "ITProjekt4Kids:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
-    }},
+    }
+  },
   "defaultProject": "ITProjekt4Kids"
 }
