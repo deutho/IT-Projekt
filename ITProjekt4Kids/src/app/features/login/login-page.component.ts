@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import {AngularFireAuth} from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
@@ -11,9 +12,13 @@ import { Router } from '@angular/router';
 export class LoginPageComponent implements OnInit {
 
 loginform: FormGroup;
-error: String = "";
+
   constructor(private fb: FormBuilder, private auth: AngularFireAuth, private router: Router) { }
   
+
+
+  errorMessage: string = "";
+
 
   ngOnInit(): void {
     this.loginform = this.fb.group({
@@ -22,20 +27,22 @@ error: String = "";
     });
   }
 
-  onSubmit() {
-    
+  public onSubmit() {
+
     let username :string = this.loginform.get('username').value
     let password :string = this.loginform.get('password').value
     username = username + '@derdiedaz.at'
     this.auth.signInWithEmailAndPassword(username, password).then(() => this.router.navigate([''])).catch(function(error) {
       console.log(error.code + " " + error.message);
       if(error.code == "auth/user-not-found") {
-         this.error = "Dieser Benutzername existiert nicht";
+         alert("Dieser Benutzername existiert nicht");
+         
       }
       else if (error.code == "auth/wrong-password"){
-        this.error = "Das Passwort ist falsch";
+        alert("Das Passwort ist falsch");
       }
-      else this.error = "Ups, da hat was nicht funktionert. Überprüfe bitte deine Internetverbindung";
+      else  alert("Ups, da hat was nicht funktionert. Überprüfe bitte deine Internetverbindung");
     });
   }
+
 }

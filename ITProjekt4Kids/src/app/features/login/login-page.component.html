@@ -17,10 +17,12 @@
 			<div>
 				<form [formGroup]="loginform" (ngSubmit) = "onSubmit()">
 					<div style= "margin-bottom: 35px">
-						<input type="text" class="form-control" placeholder="Benutzername" name = "username" formControlName ="username">
+						<input type="text" class="form-control" placeholder="Benutzername" name = "username" formControlName ="username"
+						appFormControlValidationMsg validationMsgId="username">
 					</div>
 					<div style = "margin-bottom: 35px">
-						<input type="password" class="form-control" placeholder="Passwort" name = "password" formControlName ="password">
+						<input type="password" class="form-control" placeholder="Passwort" name = "password" formControlName ="password"
+							appFormControlValidationMsg validationMsgId="password">
 					</div>
 					
 					<div>
@@ -28,7 +30,6 @@
 					</div>
 				</form>
 			</div>
-			<div>{{error}}</div>
 		</div>
 	</div>
 </div>
