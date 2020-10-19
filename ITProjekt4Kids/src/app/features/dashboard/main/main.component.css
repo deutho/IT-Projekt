@@ -8,14 +8,14 @@
     
 }
 body {
-    background-image:url('./../../../assets/Images/background.svg')
+    background-image:url('../../../../assets/Images/background.svg')
 }
 
 .circle-green {
     display: block;
     width: 20rem;
     height: 20rem;
-    background: url('./../../../assets/Images/green-circle.svg');
+    background: url('../../../../assets/Images/green-circle.svg');
     background-size: 20rem 20rem;
 
 }

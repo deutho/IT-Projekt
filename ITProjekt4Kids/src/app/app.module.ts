@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { LoginModule } from './features/login.module';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
-import { DashboardModule } from './features/dashboard.module';
+import { DashboardModule } from './features/dashboard/dashboard.module';
 
 
 @NgModule({

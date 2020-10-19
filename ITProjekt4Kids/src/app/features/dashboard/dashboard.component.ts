@@ -1,23 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { DashboardHostDirective } from '../../directives/dashboard-host.directive';
+import { DashboardService } from '../../services/dashboard.service';
+import { mergeMap, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+    selector: 'app-dashboard-container',
+    template: `
+      <ng-template appProfileHost></ng-template>
+    `
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+    @ViewChild(DashboardHostDirective, {static: true})
+    dashboardHost: DashboardHostDirective;
+    private destroySubject = new Subject();
 
-  constructor(private auth: AngularFireAuth, private router: Router) { }
+    constructor(private dashboardService: DashboardService) {}
 
-  ngOnInit(): void {
-  }
+    ngOnInit() {
+        const viewContainerRef = this.dashboardHost.viewContainerRef;
+        this.dashboardService.loadComponent(viewContainerRef).subscribe();
+    }
 
+    ngOnDestroy() {
+        this.destroySubject.next();
+        this.destroySubject.complete();
+    }
 
-  logout() {
-    this.auth.signOut().then(() => this.router.navigate(['login']))
-  }
-
-} 
-
+}
