@@ -15,4 +15,4 @@ imports: [
 ],
 exports: [DashboardComponent]
 })
-export class DashboardModule { }
+export class DashboardModule { } 
