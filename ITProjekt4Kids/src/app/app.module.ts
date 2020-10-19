@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { LoginModule } from './features/login.module';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
+import { DashboardModule } from './features/dashboard.module';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { environment } from 'src/environments/environment';
     BrowserModule,
     AppRoutingModule, 
     LoginModule,
+    DashboardModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [],

@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
-  declarations: [LoginPageComponent, DashboardComponent],
+  declarations: [LoginPageComponent],
   imports: [
     CommonModule,
     RouterModule,
