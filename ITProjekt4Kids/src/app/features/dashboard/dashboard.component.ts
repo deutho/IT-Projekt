@@ -20,7 +20,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         const viewContainerRef = this.dashboardHost.viewContainerRef;
-        this.dashboardService.loadComponent(viewContainerRef).subscribe();
+        this.dashboardService.hasChanged$
+        .pipe(
+            takeUntil(this.destroySubject),
+            mergeMap(hasChanged => this.dashboardService.loadComponent(viewContainerRef)
+            )
+        )   
+        .subscribe();
     }
 
     ngOnDestroy() {

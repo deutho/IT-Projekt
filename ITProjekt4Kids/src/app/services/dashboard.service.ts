@@ -6,6 +6,8 @@ import { AppService } from '../services/app.service';
 export class DashboardService {
 
     public data = "";
+    private hasChanged = new BehaviorSubject(false);
+    hasChanged$ = this.hasChanged.asObservable();
 
   constructor(private appService: AppService) {
       this.appService.myComponent$.subscribe((data) => {
@@ -34,6 +36,16 @@ export class DashboardService {
       );
   }
 
+  private mainMenu() {
+    return () =>
+      import('../features/dashboard/main-menu/main-menu.component').then(
+        m => m.MainMenuComponent
+      );
+  }
+
+  changes() {
+    this.hasChanged.next(!this.hasChanged);
+  }
 
   loadComponent(vcr: ViewContainerRef) {
     vcr.clear();
@@ -51,6 +63,11 @@ export class DashboardService {
         return this.appService.forChild(vcr, {
         loadChildren: this.statistics()    
         });
+    } else if (this.data == "mainMenu") {
+        return this.appService.forChild(vcr, {
+          loadChildren: this.mainMenu()
+        });
     }
+
   }
 }
