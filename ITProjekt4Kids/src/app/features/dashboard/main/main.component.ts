@@ -12,6 +12,7 @@ import { DashboardService } from 'src/app/services/dashboard.service';
 export class MainComponent implements OnInit {
 
   public data: string = "mainMenu";
+  public header: string = "Hauptmenü"
   constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private dashboardService: DashboardService) {
     this.appService.myComponent(this.data);
    }
@@ -28,24 +29,38 @@ export class MainComponent implements OnInit {
     this.data = "profile";
     this.appService.myComponent(this.data);
     this.dashboardService.changes();
+    this.header = "Profil"
   }
 
   addUser() {
     this.data = "addUser";
     this.appService.myComponent(this.data);
     this.dashboardService.changes();
+    this.header = "Benutzer hinzufügen"
   }
+
+  addTask() {
+    this.data = "addTask";
+    this.appService.myComponent(this.data);
+    this.dashboardService.changes();
+    this.header = "Aufgabe hinzufügen"
+  }
+
 
   statistics() {
     this.data = "statistics";
     this.appService.myComponent(this.data);
     this.dashboardService.changes();
+    this.header = "Statistik"
   }
 
   mainMenu() {
     this.data = "mainMenu";
     this.appService.myComponent(this.data);
     this.dashboardService.changes();
+    this.header = "Hauptmenü"
   }
+
+
 } 
 
