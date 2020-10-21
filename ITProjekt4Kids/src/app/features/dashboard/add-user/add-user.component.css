@@ -1,0 +1,26 @@
+.login-button-style {
+    display: block;
+    margin: 0 auto;
+    width: 60%;
+    min-width: 200px;
+    border-radius: 23px;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));
+    background-color: #40d04f;
+}
+
+form {
+    width: 60%;
+    margin: 0 auto;
+}
+
+div {
+    padding-top: 30px;
+}
+
+.ng-valid:not(form) {
+    border: solid 2px lightgreen;
+  }
+  
+.ng-invalid:not(form).form-submitted {
+border: solid 2px lightcoral;
+}
