@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { auth } from 'firebase';
+import { tap } from 'rxjs/internal/operators/tap';
 import { User } from 'src/app/interfaces/users.model';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -10,16 +12,15 @@ import { AuthService } from 'src/app/services/auth.service';
 export class ProfileComponent implements OnInit {
 
 
-  public user: User;
+  public user$: User;
   
   constructor(public authService: AuthService) { 
-    this.authService.user$.subscribe((user) => {
-      this.user = user;
-    })
+   
   }
   
 
   ngOnInit(): void {
+
   }
 
 }

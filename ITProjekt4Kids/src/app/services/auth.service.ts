@@ -4,7 +4,7 @@ import { User } from '../interfaces/users.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -15,37 +15,14 @@ export class AuthService {
         private afAuth: AngularFireAuth,
         private afs: AngularFirestore,
         private router: Router
-    ) { 
+    ) {}
 
-        this.user$ = this.afAuth.authState.pipe(
-            switchMap(user => {
-
-                if (user) {
-                    
-                    return this.afs.doc<User>('users/${user.uid}').valueChanges();
-                } else {
-                    return of(null);
-                }
-            })
-        )
-    }
-    async signIn(email, password) {
-        this.afAuth.signInWithEmailAndPassword(email, password);
-    }
-
-    public updateUserData(user){
-        const userRef: AngularFirestoreDocument<User> = this.afs.doc('users/${user.uid}');
-
-        const data = {
-            uid: user.uid,
-            email: user.email,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            photoID: user.photoID,
-            role: user.role
-        }
-
-        return userRef.set(data, {merge: true})
+    async signIn(username, password) {
+        username = username + '@derdiedaz.at'
+        this.afAuth.signInWithEmailAndPassword(username, password).then((credential) =>{
+            this.setUserObservable(credential.user)
+        })
+        
     }
 
     async signOut() {
@@ -53,4 +30,16 @@ export class AuthService {
         this.router.navigate(['login']);
     }
 
+    private setUserObservable(user) {
+        this.user$ = this.afs.doc('users/${user.uid}').valueChanges();
+        
+       
+     }
+
+     public getCurrentUser() {
+         return this.user$;
+     }
+
+
+    
 }

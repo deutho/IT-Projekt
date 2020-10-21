@@ -32,7 +32,6 @@ loginform: FormGroup;
 
     let username :string = this.loginform.get('username').value
     let password :string = this.loginform.get('password').value
-    username = username + '@derdiedaz.at'
     this.auth.signIn(username, password).then(() => this.router.navigate([''])).catch(function(error) {
       console.log(error.code + " " + error.message);
       if(error.code == "auth/user-not-found") {
@@ -42,7 +41,9 @@ loginform: FormGroup;
         alert("Das Passwort ist falsch");
       }
       else  alert("Ups, da hat was nicht funktionert. Überprüfe bitte deine Internetverbindung");
-    });
+    })
+
+
   }
 
 }
