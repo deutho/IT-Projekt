@@ -12,11 +12,12 @@ import { first } from 'rxjs/operators';
 })
 export class AddUserComponent implements OnInit {
 
-adduserform: FormGroup;
-formSubmitted = false;
-success;
-response;
-errorMessage = '';
+  adduserform: FormGroup;
+  formSubmitted = false;
+  success;
+  response;
+  errorMessage = '';
+  firebaseErrors;
   constructor(private fb: FormBuilder, private auth: AngularFireAuth, private router: Router) { }
 
   ngOnInit(): void {
@@ -27,7 +28,17 @@ errorMessage = '';
       password: ['', Validators.required],
       role: ['', Validators.required]
     });
+
+    this.firebaseErrors = {
+      'auth/user-not-found': 'Kein Account mit diesem Benutzernamen gefunden.',
+      'auth/email-already-in-use': 'Dieser Benutzername wird bereits von einem anderen Nutzer verwendet.',
+      'auth/invalid-email':	'Der angegebene Wert des Benutzernamens ist falsch - Symbole wie "@" dürfen nicht enthalten sein.',
+      'auth/invalid-password':	'Der angegebene Wert für das Password ist ungültig. Es muss eine Zeichenfolge mit mindestens sechs Zeichen sein.',
+      'auth/weak-password': 'Das Passwort muss mindestens 6 Zeichen lang sein.'
+    }; // list of firebase error codes to alternate error messages
   }
+
+
 
   public async onSubmit() {   
     this.success = undefined; 
@@ -46,7 +57,7 @@ errorMessage = '';
         // registration failed
         console.log(error.code + " \n\n" + error.message);
         this.success = false;
-        this.errorMessage = error.message;
+        this.errorMessage = this.firebaseErrors[error.code] || error.message;
       })
       
       if(this.success == true || this.success == undefined) {

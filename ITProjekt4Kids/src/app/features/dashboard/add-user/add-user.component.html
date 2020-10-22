@@ -23,11 +23,11 @@
             <option>Schüler</option>
         </select>
     </div>
-    <div>
-        <div *ngIf="success === false" class="alert alert-danger">        
+    <div style="display: table; margin: 0 auto;">
+        <div *ngIf="success === false" class="alert alert-danger response" id="hideMe">        
                 {{errorMessage}}
         </div>
-        <div *ngIf="success === true" class="alert alert-success">        
+        <div *ngIf="success === true" class="alert alert-success response" id="hideMe">        
             Benutzer erfolgreich angelegt
         </div>
     </div>
