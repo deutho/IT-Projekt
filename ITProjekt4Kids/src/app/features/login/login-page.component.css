@@ -30,3 +30,9 @@ font-family: "Comic Sans MS", cursive, sans-serif;
     filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));
     background-color: #40d04f;
 }
+
+.response {
+    margin: 0 auto;
+    padding: 10px 20px 10px 20px; 
+    border-radius: 100px;
+}
