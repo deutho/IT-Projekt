@@ -7,9 +7,6 @@
     opacity:0.5;
     
 }
-body {
-    background-image:url('../../../../assets/Images/background.svg')
-}
 
 .circle-green {
     display: block;
