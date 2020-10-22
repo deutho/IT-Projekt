@@ -31,7 +31,7 @@ export class AuthService {
     }
 
     private setUserObservable(user) {
-        this.user$ = this.afs.doc('users/${user.uid}').valueChanges();
+        
         
        
      }

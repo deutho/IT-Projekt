@@ -28,6 +28,9 @@
 					</div>
 				</form>
 			</div>
+			<div *ngIf = "error === true" class="alert alert-danger" role="alert">
+				{{errorMessage}}
+			</div>
 		</div>
 	</div>
 </div>

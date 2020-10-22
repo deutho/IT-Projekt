@@ -18,8 +18,8 @@ loginform: FormGroup;
   
 
 
-  errorMessage: string = "";
-
+  errorMessage = '';
+  error = undefined;
 
   ngOnInit(): void {
     this.loginform = this.fb.group({
@@ -29,21 +29,20 @@ loginform: FormGroup;
   }
 
   public onSubmit() {
-
+    this.error = false;
     let username :string = this.loginform.get('username').value
     let password :string = this.loginform.get('password').value
     this.auth.signIn(username, password).then(() => this.router.navigate([''])).catch(function(error) {
       console.log(error.code + " " + error.message);
+      this.error = true;
       if(error.code == "auth/user-not-found") {
-         alert("Dieser Benutzername existiert nicht");
+         this.errorMessage = "Dieser Benutzername existiert nicht";
       }
       else if (error.code == "auth/wrong-password"){
-        alert("Das Passwort ist falsch");
+        this.errorMessage = "Das Passwort ist falsch";
       }
-      else  alert("Ups, da hat was nicht funktionert. Überprüfe bitte deine Internetverbindung");
+      else  this.errorMessage = "Ups, da hat was nicht funktionert. Überprüfe bitte deine Internetverbindung";
     })
-
-
   }
 
 }
