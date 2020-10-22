@@ -10,28 +10,22 @@ import { map, switchMap } from 'rxjs/operators';
 export class AuthService {
 
     user$: Observable<User>;
+    credential;
 
     constructor(
         private afAuth: AngularFireAuth,
         private afs: AngularFirestore,
-        private router: Router
+        private router: Router,
+        private auth: AngularFireAuth
     ) {}
-
-    async signIn(username, password) {
-        username = username + '@derdiedaz.at'
-        this.afAuth.signInWithEmailAndPassword(username, password).then((credential) =>{
-            this.setUserObservable(credential.user)
-        })
-        
-    }
 
     async signOut() {
         await this.afAuth.signOut();
         this.router.navigate(['login']);
     }
 
-    private setUserObservable(user) {
-        
+    public setUserObservable() {
+        this.auth.onAuthStateChanged
      }
 
      public getCurrentUser() {

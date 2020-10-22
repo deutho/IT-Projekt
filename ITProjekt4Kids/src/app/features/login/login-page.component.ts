@@ -14,35 +14,38 @@ export class LoginPageComponent implements OnInit {
 
 loginform: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, public auth: AuthService) { }
+  constructor(private fb: FormBuilder, private router: Router, public auth: AuthService, private fireauth: AngularFireAuth) { }
   
 
 
   errorMessage = '';
-  error = undefined;
+  error;
+  firebaseErrors;
 
   ngOnInit(): void {
     this.loginform = this.fb.group({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required)
     });
-  }
 
-  public onSubmit() {
-    this.error = false;
+    this.firebaseErrors = {
+      'auth/user-not-found': 'Kein Account mit diesem Benutzernamen gefunden.',
+      'auth/wrong-password': 'Das eingegebene Passwort ist nicht richtig.',
+      'auth/everything-else':	'Ups, da hat was nicht funktionert. Überprüfe bitte deine Internetverbindung und versuche es erneut',
+    }; // list of firebase error codes to alternate error messages
+  }
+    
+  public async onSubmit() {
+    this.error = undefined;
     let username :string = this.loginform.get('username').value
     let password :string = this.loginform.get('password').value
-    this.auth.signIn(username, password).then(() => this.router.navigate([''])).catch(function(error) {
-      console.log(error.code + " " + error.message);
+    username = username+'@derdiedaz.at'
+    this.fireauth.signInWithEmailAndPassword(username, password).then(() => this.router.navigate([''])).then(() => this.auth.setUserObservable()).catch((error) => {
       this.error = true;
-      if(error.code == "auth/user-not-found") {
-         this.errorMessage = "Dieser Benutzername existiert nicht";
-      }
-      else if (error.code == "auth/wrong-password"){
-        this.errorMessage = "Das Passwort ist falsch";
-      }
-      else  this.errorMessage = "Ups, da hat was nicht funktionert. Überprüfe bitte deine Internetverbindung";
+      this.loginform.get("username").setValue('');
+      this.loginform.get("password").setValue('');
+      this.errorMessage = this.firebaseErrors[error.code] || this.firebaseErrors['auth/everything-else'];
     })
+  
   }
-
 }
