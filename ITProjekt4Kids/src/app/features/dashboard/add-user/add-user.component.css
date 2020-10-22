@@ -1,0 +1,60 @@
+.login-button-style {
+    display: block;
+    margin: 0 auto;
+    width: 40%;
+    min-width: 200px;
+    border-radius: 23px;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));
+    background-color: #40d04f;
+}
+
+form {
+    width: 60%;
+    margin: 0 auto;
+}
+
+div {
+    padding-top: 30px;
+}
+
+.ng-valid:not(form) {
+    border: solid 2px lightgreen;
+  }
+  
+.ng-invalid:not(form).form-submitted {
+border: solid 2px lightcoral;
+}
+
+.response {
+    margin: 0 auto;
+    padding: 10px 20px 10px 20px; 
+    border-radius: 100px;
+}
+
+#hideMe {
+    -moz-animation: cssAnimation 0s ease-in 5s forwards;
+    /* Firefox */
+    -webkit-animation: cssAnimation 0s ease-in 5s forwards;
+    /* Safari and Chrome */
+    -o-animation: cssAnimation 0s ease-in 5s forwards;
+    /* Opera */
+    animation: cssAnimation 0s ease-in 5s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+@keyframes cssAnimation {    
+    to {        
+        width:0;
+        height:0;
+        padding: 0 0 0 0;
+        overflow:hidden;
+    }
+}
+@-webkit-keyframes cssAnimation {
+    to {        
+        width:0;
+        height:0;
+        padding: 0 0 0 0;
+        visibility:hidden;
+    }
+}

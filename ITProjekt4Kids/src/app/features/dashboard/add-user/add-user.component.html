@@ -1,1 +1,37 @@
-<p>add-user works!</p>
+<form [formGroup]="adduserform" (ngSubmit) = "onSubmit()">
+    <div>
+        <h6>Vorname</h6>
+        <input (ngModelChange)="generateUsernameAndPasswort()" [ngClass]="{'form-submitted': formSubmitted}" type="text" class="form-control" name = "firstname" formControlName ="firstname">
+    </div>
+    <div>
+        <h6>Nachname</h6>
+        <input (ngModelChange)="generateUsernameAndPasswort()" [ngClass]="{'form-submitted': formSubmitted}" type="text" class="form-control" name = "lastname" formControlName ="lastname">
+    </div>
+    <div>
+        <h6>Benutzername</h6>
+        <input type="text" class="form-control" [ngClass]="{'form-submitted': formSubmitted}" name = "username" formControlName ="username" value={{username}}>
+    </div>
+    <div>
+        <h6>Passwort</h6>
+        <input type="text" class="form-control" [ngClass]="{'form-submitted': formSubmitted}" name = "password" formControlName ="password" value={{username}}>
+    </div>
+    <div>
+        <h6>Rolle</h6>
+        <select class="custom-select" formControlName ="role" [ngClass]="{'form-submitted': formSubmitted}">
+            <option value="" disabled>Rolle</option>
+            <option>Lehrer</option>
+            <option>Schüler</option>
+        </select>
+    </div>
+    <div style="display: table; margin: 0 auto;">
+        <div *ngIf="success === false" class="alert alert-danger response" id="hideMe">        
+                {{errorMessage}}
+        </div>
+        <div *ngIf="success === true" class="alert alert-success response" id="hideMe">        
+            Benutzer erfolgreich angelegt
+        </div>
+    </div>
+    <div>
+        <input type="submit" value="Benutzer anlegen"   class="btn login-button-style center">
+    </div>    
+</form>
