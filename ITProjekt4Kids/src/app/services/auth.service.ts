@@ -32,8 +32,6 @@ export class AuthService {
 
     private setUserObservable(user) {
         
-        
-       
      }
 
      public getCurrentUser() {
