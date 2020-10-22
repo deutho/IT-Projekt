@@ -23,14 +23,14 @@
 						<input type="password" class="form-control" placeholder="Passwort" name = "password" formControlName ="password">
 					</div>
 
-					<div style="display: table;  margin-bottom: 35px;">
-						<div *ngIf = "error === true" class="alert alert-danger response" role="alert">
+					<div style="display: table; ">
+						<div *ngIf = "error === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px;">
 							{{errorMessage}}
 						</div>
 					</div>
 					
 					<div>
-						<input type="submit" value="Los geht's!" class="btn float-right login_btn login-button-style">
+						<input type="submit" value="Los geht's!" class="btn login-button-style center">
 					</div>
 				</form>
 			</div>
