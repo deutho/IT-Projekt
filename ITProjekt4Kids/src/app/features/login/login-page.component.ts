@@ -40,7 +40,7 @@ loginform: FormGroup;
     let username :string = this.loginform.get('username').value
     let password :string = this.loginform.get('password').value
     username = username+'@derdiedaz.at'
-    this.fireauth.signInWithEmailAndPassword(username, password).then(() => this.router.navigate([''])).then(() => this.auth.setUserObservable()).catch((error) => {
+    this.fireauth.signInWithEmailAndPassword(username, password).then(() => this.router.navigate([''])).catch((error) => {
       this.error = true;
       this.loginform.get("username").setValue('');
       this.loginform.get("password").setValue('');
