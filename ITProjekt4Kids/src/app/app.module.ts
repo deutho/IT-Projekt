@@ -8,7 +8,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
 import { DashboardModule } from './features/dashboard/dashboard.module';
-
+import * as firebase from 'firebase';
+firebase.initializeApp(environment.firebase)
 
 @NgModule({
   declarations: [

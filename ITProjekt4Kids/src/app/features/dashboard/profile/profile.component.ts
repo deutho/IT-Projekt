@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { auth } from 'firebase';
-import { Observable } from 'rxjs/internal/Observable';
-import { tap } from 'rxjs/internal/operators/tap';
-import { User } from 'src/app/interfaces/users.model';
-import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/models/users.model';
+import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,13 +9,20 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class ProfileComponent implements OnInit {
 
-
-  private user$: Observable<User>;
+  currentUser: User;
   
-  constructor(public authService: AuthService) {}
+  constructor(public afs: FirestoreDataService) {}
   
 
-  ngOnInit(): void {}
+  ngOnInit() {
+
+    this.currentUser = this.afs.getCurrentUser();
+    this.currentUser.email = this.currentUser.email.substring(0, this.currentUser.email.lastIndexOf('@')) //get the Username without de @derdiedaz.at
+    
+  }
    
 
+  changeData() {
+    //To do
+  }
 }
