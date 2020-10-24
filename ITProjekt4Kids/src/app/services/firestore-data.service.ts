@@ -25,8 +25,6 @@ export class FirestoreDataService {
     addUser(user: User) {
         this.db.collection("users").doc(user.uid).set(JSON.parse(JSON.stringify(user)));
     }
-
-
 }
 
 

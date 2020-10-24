@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {AngularFireAuth} from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { first } from 'rxjs/operators';
 import * as firebase from 'firebase';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { User } from 'src/app/models/users.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-user',
@@ -21,7 +22,7 @@ export class AddUserComponent implements OnInit {
   errorMessage = '';
   firebaseErrors;
   newUser: User;
-  constructor(private fb: FormBuilder, private router: Router, private afs: FirestoreDataService, private auth: AngularFireAuth) { }
+  constructor(private fb: FormBuilder, private router: Router, private afs: FirestoreDataService, private auth: AngularFireAuth, private auth_service: AuthService) { }
 
   ngOnInit(): void {
     this.adduserform = this.fb.group({
@@ -57,9 +58,13 @@ export class AddUserComponent implements OnInit {
 
       this.newUser = new User("", username, firstname,lastname,1, 1) 
 
-      await this.auth.createUserWithEmailAndPassword(username, password).then(firebaseUser =>{
+      //secondary App to Create User Without Logging out the current one
+      var secondaryApp = this.auth_service.GetSecondaryFirebaseApp();
+
+      await secondaryApp.auth().createUserWithEmailAndPassword(username, password).then(firebaseUser =>{
         this.newUser.uid = firebaseUser.user.uid;
         this.afs.addUser(this.newUser);
+        secondaryApp.auth().signOut(); //Maybe not necessary - just for safety
       }).catch( (error) => {
         // registration failed 
         console.log(error.code + " \n\n" + error.message);
@@ -69,7 +74,6 @@ export class AddUserComponent implements OnInit {
       
       if(this.success == true || this.success == undefined) {
         //successfull registered
-        
         this.adduserform.get('firstname').setValue('')
         this.adduserform.get('lastname').setValue('')
         this.adduserform.get('username').setValue('')
@@ -92,10 +96,6 @@ export class AddUserComponent implements OnInit {
         password: this.password
       })
     }
-  }
-
-  private generateUser(uid, firstname, lastname, username, role) {
-    
   }
 
 }
