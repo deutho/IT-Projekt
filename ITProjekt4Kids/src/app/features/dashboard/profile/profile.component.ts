@@ -20,11 +20,10 @@ export class ProfileComponent implements OnInit {
     
   }
    
-
   getCurrentUser() {
     this.afs.getCurrentUser().valueChanges().subscribe(data => {
-      data.email = data.email.substring(0, data.email.lastIndexOf('@'));
-      this.currentUser = data;
+      data[0].username = data[0].username.substring(0, data[0].username.lastIndexOf('@'));
+      this.currentUser = data[0];
     });
   }
 
