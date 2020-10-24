@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {AngularFireAuth} from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { first } from 'rxjs/operators';
-
+import * as firebase from 'firebase';
+import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { User } from 'src/app/models/users.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-user',
@@ -18,7 +21,8 @@ export class AddUserComponent implements OnInit {
   response;
   errorMessage = '';
   firebaseErrors;
-  constructor(private fb: FormBuilder, private auth: AngularFireAuth, private router: Router) { }
+  newUser: User;
+  constructor(private fb: FormBuilder, private router: Router, private afs: FirestoreDataService, private auth: AngularFireAuth, private auth_service: AuthService) { }
 
   ngOnInit(): void {
     this.adduserform = this.fb.group({
@@ -50,11 +54,19 @@ export class AddUserComponent implements OnInit {
       let username :string = this.adduserform.get('username').value
       let password :string = this.adduserform.get('password').value
       let role :string = this.adduserform.get('role').value
-
       username = username + '@derdiedaz.at'
 
-      await this.auth.createUserWithEmailAndPassword(username, password).catch( (error) => {
-        // registration failed
+      this.newUser = new User("", username, firstname,lastname,1, 1) 
+
+      //secondary App to Create User Without Logging out the current one
+      var secondaryApp = this.auth_service.GetSecondaryFirebaseApp();
+
+      await secondaryApp.auth().createUserWithEmailAndPassword(username, password).then(firebaseUser =>{
+        this.newUser.uid = firebaseUser.user.uid;
+        this.afs.addUser(this.newUser);
+        secondaryApp.auth().signOut(); //Maybe not necessary - just for safety
+      }).catch( (error) => {
+        // registration failed 
         console.log(error.code + " \n\n" + error.message);
         this.success = false;
         this.errorMessage = this.firebaseErrors[error.code] || error.message;
