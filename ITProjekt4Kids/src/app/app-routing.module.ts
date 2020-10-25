@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './features/dashboard/main/main.component';
 import { LoginPageComponent } from './features/login/login-page.component';
-import {AngularFireAuthGuard, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
+import {AngularFireAuthGuard, AngularFireAuthGuardModule, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
+import { VocabularyGameComponent } from './games/vocabulary-game/vocabulary-game.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
@@ -10,6 +11,12 @@ const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const routes: Routes = [
   { path: 'login',
   component: LoginPageComponent
+},
+{
+  path: 'game',
+  component: VocabularyGameComponent,
+  canActivate: [AngularFireAuthGuard],
+  data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
   { path: '',
   component: MainComponent,

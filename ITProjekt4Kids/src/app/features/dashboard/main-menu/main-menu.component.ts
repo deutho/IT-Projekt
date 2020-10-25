@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-menu',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   dummyList = ['Wortschatz', 'Verbklammern', 'Satzstellung']
   creating = false;
@@ -25,6 +26,10 @@ export class MainMenuComponent implements OnInit {
     
     (<HTMLInputElement>document.getElementById('newElement')).value = '';
     this.creating = false;
+  }
+
+  goToGame() {
+    this.router.navigate(['game'])
   }
 
 }

@@ -3,6 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreCollectio
 import { User } from '../models/users.model';
 import { AuthService } from './auth.service';
 import * as firebase from 'firebase';
+import { Game } from '../models/game.model';
 
 
 
@@ -23,6 +24,10 @@ export class FirestoreDataService {
 
     addUser(user: User) {
         this.db.collection("users/1lPEcyUVfRVxXsPWbCrOxPjMsrv1/users/x4PEJU0ktfOpWBfrvxPgoqPLYgn1/classes/1A/users/").doc(user.uid).set(JSON.parse(JSON.stringify(user)));
+    }
+
+    getTasksofTeacherbyClass(teacherUID, classname): AngularFirestoreCollection<Game> {
+        return this._afs.collection("tasks/"+teacherUID+"/classes/"+classname+"/class-tasks");
     }
 
     

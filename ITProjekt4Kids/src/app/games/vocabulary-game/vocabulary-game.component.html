@@ -1,1 +1,18 @@
-<p>vocabulary-game works!</p>
+<div *ngIf = "this.loaded==true">
+
+<h1>{{currentGame.question}}</h1>
+<p>{{currentGame.photoID}}</p>
+<button (click) = "evaluateGame()">{{currentGame.answer1}}</button>
+<button (click) = "evaluateGame()">{{currentGame.answer2}}</button>
+<button (click) = "evaluateGame()">{{currentGame.answer3}}</button>
+<button (click) = "evaluateGame()">{{currentGame.rightAnswer}}</button>
+<button (click) = "returnToMainMenu()">Zurück zum Hauptmenü</button>
+</div>
+
+
+<div *ngIf = "this.loaded==false">
+
+<h1>{{response}}</h1>
+<button (click) = "returnToMainMenu()">Zurück zum Hauptmenü</button>
+</div>
+
