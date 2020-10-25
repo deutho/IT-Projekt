@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreCollectionGroup, AngularFirestoreDocument, fromDocRef } from '@angular/fire/firestore';
-import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { User } from '../models/users.model';
 import { AuthService } from './auth.service';
 import * as firebase from 'firebase';
@@ -15,7 +13,7 @@ export class FirestoreDataService {
     constructor(public _afs: AngularFirestore, public _auth: AuthService) {
     }
     
-    getAllStudents(): AngularFirestoreCollection<User> {
+    getAllStudents(teacher_uid): AngularFirestoreCollection<User> {
     return null        
     }
 
