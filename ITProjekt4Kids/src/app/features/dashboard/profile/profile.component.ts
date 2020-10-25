@@ -11,6 +11,7 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 export class ProfileComponent implements OnInit {
 
   currentUser: User;
+  accountTyp: String; 
   
   constructor(public afs: FirestoreDataService) {}
   
@@ -18,6 +19,10 @@ export class ProfileComponent implements OnInit {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
     this.currentUser.username = this.currentUser.username.substring(0, this.currentUser.username.lastIndexOf('@'));
+
+    if(this.currentUser.role == 1) this.accountTyp = "Adminaccount";
+    else if(this.currentUser.role == 2) this.accountTyp = "Lehreraccount";
+    else if (this.currentUser.role == 3) this.accountTyp = "Schüleraccount";
   }
    
 }
