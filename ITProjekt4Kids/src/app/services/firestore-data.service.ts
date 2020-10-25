@@ -16,14 +16,11 @@ export class FirestoreDataService {
     }
     
     getAllStudents(): AngularFirestoreCollection<User> {
-
     return null        
     }
 
     getCurrentUser(): AngularFirestoreCollectionGroup<User> {
-        console.log(this._auth.getCurrentUser().uid)
         return this._afs.collectionGroup('users', ref => ref.where('uid', "==", this._auth.getCurrentUser().uid));
-        
     }
 
     addUser(user: User) {
