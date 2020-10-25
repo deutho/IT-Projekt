@@ -7,6 +7,7 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { User } from 'src/app/models/users.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-user',
@@ -22,6 +23,8 @@ export class AddUserComponent implements OnInit {
   errorMessage = '';
   firebaseErrors;
   newUser: User;
+  currentUser: User;
+  roleAddingUser: Number;
   constructor(private fb: FormBuilder, private router: Router, private afs: FirestoreDataService, private auth: AngularFireAuth, private auth_service: AuthService) { }
 
   ngOnInit(): void {
@@ -48,6 +51,10 @@ export class AddUserComponent implements OnInit {
     this.success = undefined; 
     this.formSubmitted = true;
 
+    await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
+    then(data => this.currentUser = data[0]);
+
+
     if (this.adduserform.valid) {
       let firstname :string = this.adduserform.get('firstname').value
       let lastname :string = this.adduserform.get('lastname').value
@@ -56,7 +63,7 @@ export class AddUserComponent implements OnInit {
       let role :string = this.adduserform.get('role').value
       username = username + '@derdiedaz.at'
 
-      this.newUser = new User("", username, firstname,lastname,1, 1) 
+      this.newUser = new User("", username, firstname,lastname,1, 1, "x4PEJU0ktfOpWBfrvxPgoqPLYgn1"); 
 
       //secondary App to Create User Without Logging out the current one
       var secondaryApp = this.auth_service.GetSecondaryFirebaseApp();

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { tap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { User } from 'src/app/models/users.model';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 
@@ -14,17 +14,10 @@ export class ProfileComponent implements OnInit {
   
   constructor(public afs: FirestoreDataService) {}
   
-
-  ngOnInit() {
-    this.getCurrentUser();
-    
+  async ngOnInit() {
+    await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
+    then(data => this.currentUser = data[0]);
+    this.currentUser.username = this.currentUser.username.substring(0, this.currentUser.username.lastIndexOf('@'));
   }
    
-  getCurrentUser() {
-    this.afs.getCurrentUser().valueChanges().subscribe(data => {
-      data[0].username = data[0].username.substring(0, data[0].username.lastIndexOf('@'));
-      this.currentUser = data[0];
-    });
-  }
-
 }
