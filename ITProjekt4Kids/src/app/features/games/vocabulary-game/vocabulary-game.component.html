@@ -20,23 +20,23 @@
         </div>        
     </div>
     <div class="item-ans1">
-        <div type=button (click) = "evaluateGame(currentGame.answer1)" class="button-style">
-            {{currentGame.answer1}}
+        <div type=button (click) = "evaluateGame(answers[0])" class="button-style">
+            {{answers[0]}}
         </div>
     </div>
     <div class="item-ans2">
-        <div type=button (click) = "evaluateGame(currentGame.answer2)" class="button-style">
-            {{currentGame.answer2}}
+        <div type=button (click) = "evaluateGame(answers[1])" class="button-style">
+            {{answers[1]}}
         </div>
     </div>
     <div class="item-ans3">
-        <div type=button (click) = "evaluateGame(currentGame.answer3)" class="button-style">
-            {{currentGame.answer3}}
+        <div type=button (click) = "evaluateGame(answers[2])" class="button-style">
+            {{answers[2]}}
         </div>
     </div>
     <div class="item-ans4" >
-        <div type=button class="button-style" (click) = "evaluateGame(currentGame.rightAnswer)">
-            {{currentGame.rightAnswer}}
+        <div type=button class="button-style" (click) = "evaluateGame(answers[3])">
+            {{answers[3]}}
         </div>
     </div>
 </div>

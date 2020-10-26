@@ -20,6 +20,7 @@ export class VocabularyGameComponent implements OnInit {
   playedGames: Game[];
   loaded = undefined;
   selection: string;
+  answers: string[];
   response;
   evaluated = false;
   private roundsWon = 0;
@@ -34,7 +35,7 @@ export class VocabularyGameComponent implements OnInit {
     await this.afs.getTasksofTeacherbyClass(this.currentUser.parent, '1A').valueChanges().pipe(take(1)).toPromise()
       .then(data => this.Games = data);
 
-    this.shuffleArrayofGames();
+    this.shuffleArray(this.Games);
 
     this.loadNextGame();
   }
@@ -43,6 +44,7 @@ export class VocabularyGameComponent implements OnInit {
     this.evaluated = false;
     if (this.Games.length > 0) {
         this.currentGame = this.Games.pop();
+        this.shuffleAnswers()
         
         this.loaded = true;
 
@@ -51,9 +53,15 @@ export class VocabularyGameComponent implements OnInit {
     }
   }
 
-  shuffleArrayofGames() {
+  shuffleAnswers() {
+    this.answers = [this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3, this.currentGame.rightAnswer];
+    this.shuffleArray(this.answers);
 
-    var currentIndex = this.Games.length, temporaryValue, randomIndex;
+  }
+
+  shuffleArray(arr) {
+
+    var currentIndex = arr.length, temporaryValue, randomIndex;
 
     
     while (0 !== currentIndex) {
@@ -61,9 +69,9 @@ export class VocabularyGameComponent implements OnInit {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
 
-        temporaryValue = this.Games[currentIndex];
-        this.Games[currentIndex] = this.Games[randomIndex];
-        this.Games[randomIndex] = temporaryValue;
+        temporaryValue = arr[currentIndex];
+        arr[currentIndex] = arr[randomIndex];
+        arr[randomIndex] = temporaryValue;
     }
 
   }

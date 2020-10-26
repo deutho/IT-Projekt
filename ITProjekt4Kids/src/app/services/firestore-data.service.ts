@@ -30,8 +30,6 @@ export class FirestoreDataService {
         return this._afs.collection("tasks/"+teacherUID+"/classes/"+classname+"/class-tasks");
     }
 
-    
-
 }
 
 
