@@ -98,7 +98,6 @@ export class VocabularyGameComponent implements OnInit {
     }
 
     this.evaluated = true;
-    
   }
 
   returnToMainMenu() {
