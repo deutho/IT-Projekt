@@ -19,13 +19,17 @@
 
 .container {
     display: grid;
-    grid-template-columns: 20% 30% 30% 20%;
+    grid-template-columns: 10% 40% 40% 10%;
     grid-template-rows: auto;
     grid-template-areas: 
-        ". question question. "
+        ". . . ."    
+        ". . . ."
+        ". question question . "
         ". image image ."
         ". ans1 ans2 ."
         ". ans3 ans4 ."
+        ". . . ."
+        ". . . ."
     }
 
 .button-style {
@@ -37,9 +41,10 @@
     min-height: 50px;
     padding: 10px 0px 10px 0px;
     text-align: center;
-    font-size: larger;
+    font-size: 150%;
     font-weight: bold;
     filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
+    vertical-align: middle;
 }
 
 .img-style {
@@ -47,7 +52,7 @@
     border-radius: 10px;
     width: 75%;
     height: 75%;
-    margin: 10px auto;
+    margin: 60px auto;
     min-height: 50px;
     text-align: center;
     font-size: larger;
@@ -56,10 +61,7 @@
 }
 
 .question {
-    padding-top: 25%;
-    font-size: larger;
+    font-size: 200%;
     font-weight: bold;
-    text-align: center;
-    
-    
+    text-align: center;  
 }
