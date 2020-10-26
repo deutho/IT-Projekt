@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VocabularyGameComponent } from './vocabulary-game/vocabulary-game.component';
+import { VocabularyGameComponent } from '../games/vocabulary-game/vocabulary-game.component';
 
 
 
