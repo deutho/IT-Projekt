@@ -69,6 +69,7 @@ export class VocabularyGameComponent implements OnInit {
   finishGames() {
     //TODO - Save Result in Firstore 
     //Inlay No More Questions
+    //To the next session? Back To Game Menu in Folder where left off?
     this.router.navigate(['']);
   }
 
