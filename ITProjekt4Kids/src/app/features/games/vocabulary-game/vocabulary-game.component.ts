@@ -21,6 +21,7 @@ export class VocabularyGameComponent implements OnInit {
   loaded = undefined;
   selection: string;
   answers: string[];
+  imageURL = "";
   response;
   evaluated = false;
   private roundsWon = 0;
@@ -44,10 +45,11 @@ export class VocabularyGameComponent implements OnInit {
     this.evaluated = false;
     if (this.Games.length > 0) {
         this.currentGame = this.Games.pop();
-        this.shuffleAnswers()
-        
-        this.loaded = true;
 
+        this.shuffleAnswers();
+
+        this.loaded = true;
+        
     }else {
       this.finishGames() 
     }
@@ -55,15 +57,13 @@ export class VocabularyGameComponent implements OnInit {
 
   shuffleAnswers() {
     this.answers = [this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3, this.currentGame.rightAnswer];
+    this.imageURL = this.currentGame.photoID; //in the meantime set the URL
     this.shuffleArray(this.answers);
-
   }
 
   shuffleArray(arr) {
-
     var currentIndex = arr.length, temporaryValue, randomIndex;
 
-    
     while (0 !== currentIndex) {
 
         randomIndex = Math.floor(Math.random() * currentIndex);
