@@ -8,7 +8,7 @@
 </div>
 
 
-<div class="container" id="full" >    
+<div *ngIf = "this.loaded == true"  class="container" id="full" >    
     <div class="item-question" >
         <div class="question">
             {{currentGame.question}}

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
 import { Game } from 'src/app/models/game.model';
 import { User } from 'src/app/models/users.model';
+import { AppService } from 'src/app/services/app.service';
+import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 
 @Component({
@@ -23,7 +25,7 @@ export class VocabularyGameComponent implements OnInit {
   private roundsWon = 0;
   private totalrounds = 0;
   
-  constructor(private afs: FirestoreDataService, private router: Router) { }
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) { }
 
   async ngOnInit(){
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
@@ -70,11 +72,14 @@ export class VocabularyGameComponent implements OnInit {
     //TODO - Save Result in Firstore 
     //Inlay No More Questions
     //To the next session? Back To Game Menu in Folder where left off?
-    this.router.navigate(['']);
+    var data = "mainMenu";
+    this.appService.myComponent(data);
+    this.dashboardService.changes();
+    var header = "Hauptmenü"
+    this.appService.myHeader(header);
   }
 
   evaluateGame(selection) {
-    console.log(selection)
     if (selection === this.currentGame.rightAnswer) {
       this.response = "Richtig!!";
       this.roundsWon++
@@ -89,7 +94,11 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   returnToMainMenu() {
-    this.router.navigate(['']);
+    var data = "mainMenu";
+    this.appService.myComponent(data);
+    this.dashboardService.changes();
+    var header = "Hauptmenü"
+    this.appService.myHeader(header);
   }
 
   nextOne() {

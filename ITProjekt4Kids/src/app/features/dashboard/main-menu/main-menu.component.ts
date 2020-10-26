@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppService } from 'src/app/services/app.service';
+import { DashboardService } from 'src/app/services/dashboard.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -8,9 +10,11 @@ import { Router } from '@angular/router';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private appService: AppService, private dashboardService: DashboardService) { }
 
   dummyList = [['Wortschatz', 'folder'],['Personalform', 'folder'],['Satzstellung', 'folder']]
+
+  data;
 
   creating = false;
   ngOnInit(): void {
@@ -30,7 +34,11 @@ export class MainMenuComponent implements OnInit {
   }
 
   goToGame() {
-    this.router.navigate(['game'])
+    var data = "vocabular-game";
+    this.appService.myComponent(data);
+    this.dashboardService.changes();
+    var header = "Wortschatz"
+    this.appService.myHeader(header);
   }
 
   itemclick(item) {

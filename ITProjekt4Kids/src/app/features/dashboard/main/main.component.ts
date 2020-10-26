@@ -19,12 +19,17 @@ export class MainComponent implements OnInit {
   public currentUser: User;
   constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) {
     this.appService.myComponent(this.data);
-   }
+
+    this.appService.myheader$.subscribe((header) => {
+      this.header = header;
+   });
+  }
 
   async ngOnInit() {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
     this.currentUser.username = this.currentUser.username.substring(0, this.currentUser.username.lastIndexOf('@'));
+    
   }
   
   logout() {
