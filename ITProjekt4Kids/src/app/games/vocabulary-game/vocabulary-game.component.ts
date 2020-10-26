@@ -95,5 +95,5 @@ export class VocabularyGameComponent implements OnInit {
   nextOne() {
     this.loadNextGame();
   }
-
+ 
 }

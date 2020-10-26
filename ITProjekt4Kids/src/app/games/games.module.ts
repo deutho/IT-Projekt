@@ -10,4 +10,4 @@ import { VocabularyGameComponent } from './vocabulary-game/vocabulary-game.compo
     CommonModule
   ]
 })
-export class GamesModule { }
+export class GamesModule { } 

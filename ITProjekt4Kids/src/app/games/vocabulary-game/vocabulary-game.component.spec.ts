@@ -6,7 +6,7 @@ describe('VocabularyGameComponent', () => {
   let component: VocabularyGameComponent;
   let fixture: ComponentFixture<VocabularyGameComponent>;
 
-  beforeEach(async () => {
+  beforeEach(async () => { 
     await TestBed.configureTestingModule({
       declarations: [ VocabularyGameComponent ]
     })

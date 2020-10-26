@@ -10,7 +10,8 @@ export class MainMenuComponent implements OnInit {
 
   constructor(private router: Router) { }
 
-  dummyList = ['Wortschatz', 'Verbklammern', 'Satzstellung']
+  dummyList = [['Wortschatz', 'folder'],['Personalform', 'folder'],['Satzstellung', 'folder']]
+
   creating = false;
   ngOnInit(): void {
   }
@@ -21,7 +22,7 @@ export class MainMenuComponent implements OnInit {
 
   submit() {
     if((<HTMLInputElement>document.getElementById('newElement')).value != ''){
-      this.dummyList.push((<HTMLInputElement>document.getElementById('newElement')).value);
+      this.dummyList.push([(<HTMLInputElement>document.getElementById('newElement')).value, 'folder']);
     }
     
     (<HTMLInputElement>document.getElementById('newElement')).value = '';
@@ -30,6 +31,21 @@ export class MainMenuComponent implements OnInit {
 
   goToGame() {
     this.router.navigate(['game'])
+  }
+
+  itemclick(item) {
+
+
+    //dummy values for the moment, delete later - change out with actual database request result
+    if(item[0] == 'Wortschatz'){
+      this.dummyList = [['Tiere', 'task'],['Schulutensilien', 'task'],['Musikinstrumente', 'task']]
+    }
+    else if(item[0] == 'Tiere'){
+      this.goToGame()
+    }
+    else {
+      this.dummyList = [[item[0] + ' 1', 'task'],[item[0] + ' 2', 'task'],[item[0] + ' 3', 'task']]
+    }
   }
 
 }

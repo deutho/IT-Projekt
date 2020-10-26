@@ -1,0 +1,65 @@
+.item-question {
+    grid-area: question;
+    }
+.item-image {
+    grid-area: image;
+    }
+.item-ans1 {
+    grid-area: ans1;
+    }
+.item-ans2 {
+    grid-area: ans2;
+    }
+.item-ans3 {
+    grid-area: ans3;
+    }
+.item-ans4 {
+    grid-area: ans4;
+    }
+
+.container {
+    display: grid;
+    grid-template-columns: 20% 30% 30% 20%;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        ". question question. "
+        ". image image ."
+        ". ans1 ans2 ."
+        ". ans3 ans4 ."
+    }
+
+.button-style {
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 90%;
+    height: 75%;
+    margin: 10px auto;
+    min-height: 50px;
+    padding: 10px 0px 10px 0px;
+    text-align: center;
+    font-size: larger;
+    font-weight: bold;
+    filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.img-style {
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 75%;
+    height: 75%;
+    margin: 10px auto;
+    min-height: 50px;
+    text-align: center;
+    font-size: larger;
+    font-weight: bold;
+    filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.question {
+    padding-top: 25%;
+    font-size: larger;
+    font-weight: bold;
+    text-align: center;
+    
+    
+}
