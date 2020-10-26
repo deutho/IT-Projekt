@@ -50,6 +50,13 @@ export class DashboardService {
       );
   }
 
+  private vocabularGame() {
+    return () =>
+    import('../features/games/vocabulary-game/vocabulary-game.component').then(
+      m => m.VocabularyGameComponent
+    );
+  }
+
   changes() {
     this.hasChanged.next(!this.hasChanged);
   }
@@ -76,6 +83,10 @@ export class DashboardService {
     } else  if (this.data == "addTask") {
         return this.appService.forChild(vcr, {
           loadChildren: this.addTask()
+        });
+    } else if (this.data == "vocabular-game") {
+        return this.appService.forChild(vcr, {
+          loadChildren: this.vocabularGame()
         });
     }
 

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
 import { Game } from 'src/app/models/game.model';
 import { User } from 'src/app/models/users.model';
+import { AppService } from 'src/app/services/app.service';
+import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 
 @Component({
@@ -18,12 +20,13 @@ export class VocabularyGameComponent implements OnInit {
   playedGames: Game[];
   loaded = undefined;
   selection: string;
+  answers: string[];
   response;
   evaluated = false;
   private roundsWon = 0;
   private totalrounds = 0;
   
-  constructor(private afs: FirestoreDataService, private router: Router) { }
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) { }
 
   async ngOnInit(){
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
@@ -32,7 +35,7 @@ export class VocabularyGameComponent implements OnInit {
     await this.afs.getTasksofTeacherbyClass(this.currentUser.parent, '1A').valueChanges().pipe(take(1)).toPromise()
       .then(data => this.Games = data);
 
-    this.shuffleArrayofGames();
+    this.shuffleArray(this.Games);
 
     this.loadNextGame();
   }
@@ -41,6 +44,7 @@ export class VocabularyGameComponent implements OnInit {
     this.evaluated = false;
     if (this.Games.length > 0) {
         this.currentGame = this.Games.pop();
+        this.shuffleAnswers()
         
         this.loaded = true;
 
@@ -49,9 +53,15 @@ export class VocabularyGameComponent implements OnInit {
     }
   }
 
-  shuffleArrayofGames() {
+  shuffleAnswers() {
+    this.answers = [this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3, this.currentGame.rightAnswer];
+    this.shuffleArray(this.answers);
 
-    var currentIndex = this.Games.length, temporaryValue, randomIndex;
+  }
+
+  shuffleArray(arr) {
+
+    var currentIndex = arr.length, temporaryValue, randomIndex;
 
     
     while (0 !== currentIndex) {
@@ -59,9 +69,9 @@ export class VocabularyGameComponent implements OnInit {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
 
-        temporaryValue = this.Games[currentIndex];
-        this.Games[currentIndex] = this.Games[randomIndex];
-        this.Games[randomIndex] = temporaryValue;
+        temporaryValue = arr[currentIndex];
+        arr[currentIndex] = arr[randomIndex];
+        arr[randomIndex] = temporaryValue;
     }
 
   }
@@ -70,11 +80,14 @@ export class VocabularyGameComponent implements OnInit {
     //TODO - Save Result in Firstore 
     //Inlay No More Questions
     //To the next session? Back To Game Menu in Folder where left off?
-    this.router.navigate(['']);
+    var data = "mainMenu";
+    this.appService.myComponent(data);
+    this.dashboardService.changes();
+    var header = "Hauptmenü"
+    this.appService.myHeader(header);
   }
 
   evaluateGame(selection) {
-    console.log(selection)
     if (selection === this.currentGame.rightAnswer) {
       this.response = "Richtig!!";
       this.roundsWon++
@@ -89,7 +102,11 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   returnToMainMenu() {
-    this.router.navigate(['']);
+    var data = "mainMenu";
+    this.appService.myComponent(data);
+    this.dashboardService.changes();
+    var header = "Hauptmenü"
+    this.appService.myHeader(header);
   }
 
   nextOne() {

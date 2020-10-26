@@ -17,9 +17,12 @@ import {
 
     myComponent$: Observable<any>;
     private myMethodSubject = new Subject<any>();
+    myheader$: Observable<any>;
+    private myHeaderSubject = new Subject<any>();
 
     constructor(private cfr: ComponentFactoryResolver) {
         this.myComponent$ = this.myMethodSubject.asObservable();
+        this.myheader$ = this.myHeaderSubject.asObservable();
     }
   
     forChild(vcr: ViewContainerRef, cl: ComponentLoader) {
@@ -31,5 +34,9 @@ import {
 
     myComponent(data) {
         this.myMethodSubject.next(data);
+    }
+
+    myHeader(data) {
+      this.myHeaderSubject.next(data);
     }
   }
