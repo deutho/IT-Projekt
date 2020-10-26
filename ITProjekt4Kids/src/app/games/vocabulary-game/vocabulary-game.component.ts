@@ -17,9 +17,11 @@ export class VocabularyGameComponent implements OnInit {
   currentUser: User;
   playedGames: Game[];
   loaded = undefined;
-  selection;
+  selection: string;
   response;
-  private roundsplayed;
+  evaluated = false;
+  private roundsWon = 0;
+  private totalrounds = 0;
   
   constructor(private afs: FirestoreDataService, private router: Router) { }
 
@@ -36,7 +38,8 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   loadNextGame() {
-    if (this.Games.length >= 0) {
+    this.evaluated = false;
+    if (this.Games.length > 0) {
         this.currentGame = this.Games.pop();
         
         this.loaded = true;
@@ -44,22 +47,18 @@ export class VocabularyGameComponent implements OnInit {
     }else {
       this.finishGames() 
     }
-
-
   }
 
   shuffleArrayofGames() {
 
     var currentIndex = this.Games.length, temporaryValue, randomIndex;
 
-    // While there remain elements to shuffle...
+    
     while (0 !== currentIndex) {
 
-        // Pick a remaining element...
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
 
-        // And swap it with the current element.
         temporaryValue = this.Games[currentIndex];
         this.Games[currentIndex] = this.Games[randomIndex];
         this.Games[randomIndex] = temporaryValue;
@@ -68,19 +67,32 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   finishGames() {
-
+    //TODO - Save Result in Firstore 
+    //Inlay No More Questions
     this.router.navigate(['']);
-
   }
 
-  evaluateGame() {
-    this.response = "fertig";
-    this.loaded = false;
-    //this.loadNextGame();
+  evaluateGame(selection) {
+    console.log(selection)
+    if (selection === this.currentGame.rightAnswer) {
+      this.response = "Richtig!!";
+      this.roundsWon++
+      this.totalrounds++;
+    }else{
+      this.response = "Falsch!";
+      this.totalrounds++;
+    }
+
+    this.evaluated = true;
+    
   }
 
   returnToMainMenu() {
     this.router.navigate(['']);
+  }
+
+  nextOne() {
+    this.loadNextGame();
   }
 
 }

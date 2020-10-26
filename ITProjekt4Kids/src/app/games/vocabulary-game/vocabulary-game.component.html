@@ -2,17 +2,20 @@
 
 <h1>{{currentGame.question}}</h1>
 <p>{{currentGame.photoID}}</p>
-<button (click) = "evaluateGame()">{{currentGame.answer1}}</button>
-<button (click) = "evaluateGame()">{{currentGame.answer2}}</button>
-<button (click) = "evaluateGame()">{{currentGame.answer3}}</button>
-<button (click) = "evaluateGame()">{{currentGame.rightAnswer}}</button>
+<button (click) = "evaluateGame(currentGame.answer1)">{{currentGame.answer1}}</button>
+<button (click) = "evaluateGame(currentGame.answer2)">{{currentGame.answer2}}</button>
+<button (click) = "evaluateGame(currentGame.answer3)">{{currentGame.answer3}}</button>
+<button (click) = "evaluateGame(currentGame.rightAnswer)">{{currentGame.rightAnswer}}</button>
 <button (click) = "returnToMainMenu()">Zurück zum Hauptmenü</button>
+
+<div *ngIf = "this.evaluated == true">
+
+    <h1>{{response}}</h1>
+    <button (click) = "returnToMainMenu()">Zurück zum Hauptmenü</button>
+    <button (click) = "nextOne()">Nächste Frage</button>
+</div>
+    
+    
 </div>
 
-
-<div *ngIf = "this.loaded==false">
-
-<h1>{{response}}</h1>
-<button (click) = "returnToMainMenu()">Zurück zum Hauptmenü</button>
-</div>
 
