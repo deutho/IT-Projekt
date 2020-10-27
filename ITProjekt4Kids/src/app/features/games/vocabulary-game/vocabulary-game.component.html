@@ -1,11 +1,3 @@
-<div *ngIf = "this.evaluated == true">
-
-<h1>{{response}}</h1>
-<button (click) = "returnToMainMenu()">Zurück zum Hauptmenü</button>
-<button (click) = "nextOne()">Nächste Frage</button>
-</div>
-
-
 <div *ngIf = "this.loaded == true"  class="container" id="full" >    
     <div class="item-question" >
         <div class="question">
@@ -37,6 +29,20 @@
             {{answers[3]}}
         </div>
     </div>
+</div>
+
+
+<div *ngIf ="this.finished == true">
+    
+<h1>Super!!</h1>
+<h3>Aus {{totalrounds}} hattest du {{roundsWon}} richtig!! Du kannst stolz sein!</h3>
+</div>
+
+<div *ngIf = "this.evaluated == true">
+
+    <h1>{{response}}</h1>
+    <button (click) = "returnToMainMenu()">Zurück zum Hauptmenü</button>
+    <button (click) = "nextOne()">Nächste Frage</button>
 </div>
 
 

@@ -24,8 +24,9 @@ export class VocabularyGameComponent implements OnInit {
   imageURL = "";
   response;
   evaluated = false;
-  private roundsWon = 0;
-  private totalrounds = 0;
+  finished = false;
+  roundsWon = 0;
+  totalrounds = 0;
   
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) { }
 
@@ -80,11 +81,16 @@ export class VocabularyGameComponent implements OnInit {
     //TODO - Save Result in Firstore 
     //Inlay No More Questions
     //To the next session? Back To Game Menu in Folder where left off?
+    this.finished = true;
+  }
+
+  goBack() {
     var data = "mainMenu";
     this.appService.myComponent(data);
     this.dashboardService.changes();
     var header = "Hauptmenü"
     this.appService.myHeader(header);
+  
   }
 
   evaluateGame(selection) {

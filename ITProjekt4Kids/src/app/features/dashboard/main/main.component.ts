@@ -14,8 +14,8 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 })
 export class MainComponent implements OnInit {
 
-  public data: string = "mainMenu";
-  public header: string = "Hauptmenü"
+  public data: string;
+  public header: string;
   public currentUser: User;
   constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) {
     this.appService.myComponent(this.data);
@@ -30,46 +30,20 @@ export class MainComponent implements OnInit {
     then(data => this.currentUser = data[0]);
     this.currentUser.username = this.currentUser.username.substring(0, this.currentUser.username.lastIndexOf('@'));
     
+    if (this.currentUser.role == 1) this.navigate("Lehreraccounts", "statistics");
+    else this.navigate("Hauptmenü", "mainMenu");
+    
   }
   
   logout() {
     this.auth.signOut().then(() => this.router.navigate(['login']))
   }
 
-  profile() {
-    this.data = "profile";
+  navigate(header, data) {
+    this.data = data;
     this.appService.myComponent(this.data);
     this.dashboardService.changes();
-    this.header = "Profil"
-  }
-
-  addUser() {
-    this.data = "addUser";
-    this.appService.myComponent(this.data);
-    this.dashboardService.changes();
-    this.header = "Benutzer hinzufügen"
-  }
-
-  addTask() {
-    this.data = "addTask";
-    this.appService.myComponent(this.data);
-    this.dashboardService.changes();
-    this.header = "Aufgabe hinzufügen"
-  }
-
-
-  statistics() {
-    this.data = "statistics";
-    this.appService.myComponent(this.data);
-    this.dashboardService.changes();
-    this.header = "Statistik"
-  }
-
-  mainMenu() {
-    this.data = "mainMenu";
-    this.appService.myComponent(this.data);
-    this.dashboardService.changes();
-    this.header = "Hauptmenü"
+    this.header = header;
   }
 
 

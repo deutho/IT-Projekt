@@ -57,6 +57,13 @@ export class DashboardService {
     );
   }
 
+  private vocabularGameEdit() {
+    return () =>
+    import('../features/games/vocabulary-game-edit/vocabulary-game-edit.component').then(
+      m => m.VocabularyGameEditComponent
+    );
+  }
+
   changes() {
     this.hasChanged.next(!this.hasChanged);
   }
@@ -88,6 +95,10 @@ export class DashboardService {
         return this.appService.forChild(vcr, {
           loadChildren: this.vocabularGame()
         });
+    } else if (this.data = "vocabular-game-edit") {
+      return this.appService.forChild(vcr, {
+        loadChildren: this.vocabularGameEdit()
+      });
     }
 
   }
