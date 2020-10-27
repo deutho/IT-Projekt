@@ -14,8 +14,8 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 })
 export class MainComponent implements OnInit {
 
-  public data: string;
-  public header: string;
+  public data: string = "loading";
+  public header: string = "";
   public currentUser: User;
   constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) {
     this.appService.myComponent(this.data);

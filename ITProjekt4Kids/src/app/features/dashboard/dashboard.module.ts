@@ -10,10 +10,11 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardHostDirective } from 'src/app/directives/dashboard-host.directive';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { AddTaskComponent } from './add-task/add-task.component';
+import { LoadingComponent } from './loading/loading.component';
 
 
 @NgModule({
-declarations: [MainComponent, ProfileComponent, StatisticsComponent, AddUserComponent, DashboardComponent, DashboardHostDirective, MainMenuComponent, AddTaskComponent],
+declarations: [MainComponent, ProfileComponent, StatisticsComponent, AddUserComponent, DashboardComponent, DashboardHostDirective, MainMenuComponent, AddTaskComponent, LoadingComponent],
 imports: [
   CommonModule,
   RouterModule,
