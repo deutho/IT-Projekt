@@ -6,5 +6,5 @@ export class Game {
         public answer3: string,
         public rightAnswer: string,
         public question: string,
-        public photoID: number) {}
+        public photoID: string) {}
     }
