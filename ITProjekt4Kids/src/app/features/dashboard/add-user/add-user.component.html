@@ -15,14 +15,6 @@
         <h6>Passwort</h6>
         <input type="text" class="form-control" [ngClass]="{'form-submitted': formSubmitted}" name = "password" formControlName ="password" value={{username}}>
     </div>
-    <div>
-        <h6>Rolle</h6>
-        <select class="custom-select" formControlName ="role" [ngClass]="{'form-submitted': formSubmitted}">
-            <option value="" disabled>Rolle</option>
-            <option>Lehrer</option>
-            <option>Schüler</option>
-        </select>
-    </div>
     <div style="display: table; margin: 0 auto;">
         <div *ngIf="success === false" class="alert alert-danger response" id="hideMe">        
                 {{errorMessage}}
