@@ -23,7 +23,7 @@ export class FirestoreDataService {
     }
 
     addUser(user: User) {
-        this.db.collection("users/1lPEcyUVfRVxXsPWbCrOxPjMsrv1/users/x4PEJU0ktfOpWBfrvxPgoqPLYgn1/classes/1A/users/").doc(user.uid).set(JSON.parse(JSON.stringify(user)));
+        this.db.collection("users/1lPEcyUVfRVxXsPWbCrOxPjMsrv1/users/x4PEJU0ktfOpWBfrvxPgoqPLYgn1/users/").doc(user.uid).set(JSON.parse(JSON.stringify(user)));
     }
 
     getTasksofTeacherbyClass(teacherUID, classname): AngularFirestoreCollection<Game> {
