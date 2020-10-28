@@ -1,7 +1,11 @@
 <div class="pos-f-t">
     <nav class="navbar navbar-default bg-primary">
-        <img type=button (click)="navigate('Hauptmenü', 'mainMenu')" src="https://firebasestorage.googleapis.com/v0/b/kids-8b916.appspot.com/o/pictures%2Flogos%2Ftabular-icon.png?alt=media&token=d176987e-35ae-4fd2-81fc-7e0aaa2e44c2" style="height: 50px;"> 
-        <h4 class = "align-center text-white"> {{header}}</h4>
+        <!-- <img type=button (click)="navigate('Hauptmenü', 'mainMenu')" src="https://firebasestorage.googleapis.com/v0/b/kids-8b916.appspot.com/o/pictures%2Flogos%2Ftabular-icon.png?alt=media&token=d176987e-35ae-4fd2-81fc-7e0aaa2e44c2" style="height: 50px;"> 
+        -->
+        <img type=button (click)="navigate('Hauptmenü', 'mainMenu')" src="./../../../../assets/Images/logo.png" style="height: 50px;"> 
+
+        
+            <h4 class = "align-center text-white"> {{header}}</h4>
 
     <div *ngIf = "currentUser">
         <div *ngIf = "currentUser.role == 3" class="nav-item dropdown">
