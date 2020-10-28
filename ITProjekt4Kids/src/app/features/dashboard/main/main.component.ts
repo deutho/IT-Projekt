@@ -66,10 +66,15 @@ export class MainComponent implements OnInit {
   }
 
   mainMenu() {
-    this.data = "mainMenu";
-    this.appService.myComponent(this.data);
-    this.dashboardService.changes();
-    this.header = "Hauptmenü"
+    if(this.data === "mainMenu") {
+      window.location.reload();
+    }
+    else{
+      this.data = "mainMenu";
+      this.appService.myComponent(this.data);
+      this.dashboardService.changes();
+      this.header = "Hauptmenü"
+    }
   }
 
 
