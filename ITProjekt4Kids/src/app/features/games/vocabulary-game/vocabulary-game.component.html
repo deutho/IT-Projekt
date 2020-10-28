@@ -1,6 +1,8 @@
 <div *ngIf = "this.loaded == true"  class="container" id="full" >    
-    <div class="item-question" style="margin: 0 auto;">
-            <button role="text" class="question" id="question" value="{{currentGame.question}}" style="background:transparent; outline:0;border:transparent; margin: 0 auto; cursor: default"></button>
+    <div class="item-question question" style="margin: 0 auto;">
+            <button role="text" class="question" id="question" value="{{currentGame.question}}" style="background:transparent; outline:0;border:transparent; margin: 0 auto; cursor: default; display: none"></button>
+            
+            {{currentGame.question}}
     </div>
     <div class="item-image">
         <div id="myimg" class="img-style" style="width: 50%; min-width: 340px; max-height: 350px;">
@@ -39,7 +41,7 @@
             </svg>
         </div>
     </div>
-    <div class="item-final" *ngIf = "this.evaluated == true && this.finished == true" style="padding-top: 0; width: 90%">
+    <div class="item-final" *ngIf = "this.evaluated == true && this.Games.length == 0" style="padding-top: 0; width: 90%">
         <div type=button class="btn" (click) = "returnToMainMenu()" style="width: 100%; margin: 0 auto" >
             <svg  style="width: 5%; min-width: 75px; min-height: 100px; opacity: 0.6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="home" class="svg-inline--fa fa-home fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                 <path fill="currentColor" d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z">
@@ -48,7 +50,7 @@
         </div>
     </div>
     <div class="slidecontainer item-final">
-        <input type="range" class="input" min="0" max="24" value="1" id="progressRange" style="width: 95%;"  >
+        <input type="range" class="input" min="1" id="progressRange" style="width: 95%;"  >
     </div>
 </div>
 
