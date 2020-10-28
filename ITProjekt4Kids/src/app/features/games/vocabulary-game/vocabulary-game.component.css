@@ -33,7 +33,7 @@
     grid-template-rows: auto;
     grid-template-areas:  
         ". question question . "
-        ". image image ."
+        "image image image image"
         ". ans1 ans2 ."
         ". ans3 ans4 ."
         ". . . ."
