@@ -16,10 +16,10 @@
         <input type="text" class="form-control" [ngClass]="{'form-submitted': formSubmitted}" name = "password" formControlName ="password" value={{username}}>
     </div>
     <div style="display: table; margin: 0 auto;">
-        <div *ngIf="success === false" class="alert alert-danger response" id="hideMe">        
+        <div *ngIf="success == false" class="alert alert-danger response" id="hideMe">        
                 {{errorMessage}}
         </div>
-        <div *ngIf="success === true" class="alert alert-success response" id="hideMe">        
+        <div *ngIf="success == true" class="alert alert-success response" id="hideMe">        
             Benutzer erfolgreich angelegt
         </div>
     </div>
