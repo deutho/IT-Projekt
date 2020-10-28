@@ -18,11 +18,13 @@ export class MainMenuComponent implements OnInit {
 
   data;
   currentUser;
+  loaded = false;
 
   creating = false;
   async ngOnInit() {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
+    this.loaded = true;
   }
 
   addElement() {

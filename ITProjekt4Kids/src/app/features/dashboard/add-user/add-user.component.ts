@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { take } from 'rxjs/operators';
 
+
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -54,7 +55,6 @@ export class AddUserComponent implements OnInit {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
 
-
     if (this.adduserform.valid) {
       let firstname :string = this.adduserform.get('firstname').value
       let lastname :string = this.adduserform.get('lastname').value
@@ -64,6 +64,7 @@ export class AddUserComponent implements OnInit {
       username = username + '@derdiedaz.at'
 
       this.newUser = new User("", username, firstname,lastname, "1", 3, "x4PEJU0ktfOpWBfrvxPgoqPLYgn1"); 
+      
 
       //secondary App to Create User Without Logging out the current one
       var secondaryApp = this.auth_service.GetSecondaryFirebaseApp();
