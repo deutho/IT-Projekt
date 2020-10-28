@@ -60,7 +60,6 @@ export class AddUserComponent implements OnInit {
       let lastname :string = this.adduserform.get('lastname').value
       let username :string = this.adduserform.get('username').value
       let password :string = this.adduserform.get('password').value
-      let role :string = this.adduserform.get('role').value
       username = username + '@derdiedaz.at'
 
       this.newUser = new User("", username, firstname,lastname, "1", 3, "x4PEJU0ktfOpWBfrvxPgoqPLYgn1"); 
