@@ -17,20 +17,27 @@
     grid-area: ans4;
     }
 
+.item-backToHome {
+    grid-area: home;
+}
+
+.item-nextQuestion {
+    grid-area: next;
+}
+
 .container {
     display: grid;
     width: 100%;
-    margin: 5% auto;
+    margin: 2% auto;
     grid-template-columns: 10% 40% 40% 10%;
     grid-template-rows: auto;
-    grid-template-areas: 
-        ". . . ."    
-        ". . . ."
+    grid-template-areas:  
         ". question question . "
-        ". image image ."
+        "image image image image"
         ". ans1 ans2 ."
         ". ans3 ans4 ."
         ". . . ."
+        ". home next ."
         ". . . ."
     }
 
