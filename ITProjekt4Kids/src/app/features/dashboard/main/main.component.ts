@@ -14,12 +14,11 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 })
 export class MainComponent implements OnInit {
 
-  public data: string = "loading";
-  public header: string = "";
+  public data: string = "mainMenu";
+  public header: string = "Hauptmenü";
   public currentUser: User;
   constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) {
     this.appService.myComponent(this.data);
-
     this.appService.myheader$.subscribe((header) => {
       this.header = header;
    });
@@ -29,9 +28,6 @@ export class MainComponent implements OnInit {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
     this.currentUser.username = this.currentUser.username.substring(0, this.currentUser.username.lastIndexOf('@'));
-    
-    if (this.currentUser.role == 1) this.navigate("Lehreraccounts", "statistics");
-    else this.navigate("Hauptmenü", "mainMenu");
     
   }
   
@@ -45,7 +41,6 @@ export class MainComponent implements OnInit {
     this.dashboardService.changes();
     this.header = header;
   }
-
 
 } 
 

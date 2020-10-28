@@ -6,6 +6,7 @@ import { AppService } from '../services/app.service';
 export class DashboardService {
 
     public data = "";
+   
     private hasChanged = new BehaviorSubject(false);
     hasChanged$ = this.hasChanged.asObservable();
 
@@ -63,13 +64,7 @@ export class DashboardService {
       m => m.VocabularyGameEditComponent
     );
   }
-  private loading() {
-    return () =>
-    import('../features/dashboard/loading/loading.component').then(
-      m => m.LoadingComponent
-    );
-  }
-
+ 
   changes() {
     this.hasChanged.next(!this.hasChanged);
   }
@@ -104,10 +99,6 @@ export class DashboardService {
     } else if (this.data = "vocabular-game-edit") {
       return this.appService.forChild(vcr, {
         loadChildren: this.vocabularGameEdit()
-      });
-    } else if (this.data = "loading") {
-        return this.appService.forChild(vcr, {
-          loadChildren: this.loading()
       });
     }
 
