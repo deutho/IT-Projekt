@@ -25,6 +25,10 @@
     grid-area: next;
 }
 
+.item-final {
+    grid-area: final;
+}
+
 .container {
     display: grid;
     width: 100%;
@@ -37,7 +41,9 @@
         ". ans1 ans2 ."
         ". ans3 ans4 ."
         ". . . ."
+        ". final final ."
         ". home next ."
+        
         ". . . ."
     }
 
@@ -75,3 +81,9 @@
     text-align: center;  
 }
 
+.input{
+    color: green;
+    background-color: green;
+    background: green;
+
+}

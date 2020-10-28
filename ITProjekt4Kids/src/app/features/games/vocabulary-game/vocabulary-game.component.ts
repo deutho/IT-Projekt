@@ -43,6 +43,7 @@ export class VocabularyGameComponent implements OnInit {
     
     this.updateColorhelper();
     
+    (<HTMLInputElement>document.getElementById('progressRange')).max = String(this.Games.length);
   }
 
   updateColorhelper() {
@@ -53,6 +54,7 @@ export class VocabularyGameComponent implements OnInit {
       this.updateColor("button3");
       this.updateColor("button4");
       this.updateColor("question");
+      (<HTMLInputElement>document.getElementById('progressRange')).value = String(this.totalrounds+1);
     }) 
   }
 
