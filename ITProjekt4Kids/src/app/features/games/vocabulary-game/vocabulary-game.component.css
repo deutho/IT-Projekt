@@ -48,6 +48,7 @@
     }
 
 .button-style {
+    display: block;
     background-color: #ffffff;
     border-radius: 10px;
     width: 90%;
@@ -82,8 +83,6 @@
 }
 
 .input{
-    color: green;
-    background-color: green;
-    background: green;
-
+    width: 97.5%;
+    padding: 0 0 0 2.5%;
 }
