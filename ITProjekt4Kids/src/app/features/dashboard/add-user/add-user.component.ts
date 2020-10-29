@@ -63,7 +63,7 @@ export class AddUserComponent implements OnInit {
       let password :string = this.adduserform.get('password').value
       username = username + '@derdiedaz.at'
 
-      this.newUser = new User("", username, firstname,lastname, "1", 3, "x4PEJU0ktfOpWBfrvxPgoqPLYgn1"); 
+      this.newUser = new User("", username, firstname,lastname, "1", 3, "x4PEJU0ktfOpWBfrvxPgoqPLYgn1", "1A", "Testschule"); 
       
       //secondary App to Create User Without Logging out the current one
       var secondaryApp = this.auth_service.GetSecondaryFirebaseApp();
