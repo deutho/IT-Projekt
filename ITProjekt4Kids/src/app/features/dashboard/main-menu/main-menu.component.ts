@@ -31,18 +31,14 @@ export class MainMenuComponent implements OnInit {
     then(data => this.currentUser = data[0]);
     
     this.currentPath = this.currentUser.uid;
-    this.renewDocument();
+    this.getUserDocument();
     this.loaded = true;
 
     console.log(this.currentID[0]);
   }
 
-  async renewDocument() {
-    await this.afs.getTasks(this.currentPath).snapshotChanges().pipe(
-      map(actions => actions  => {
-        this.currentData = actions.payload.doc.data() as Task[];
-        this.currentID = actions.payload.doc.id;
-      }));
+  async getUserDocument() {
+    var docRef = this.afs.getTasks(this.currentPath);
   }
 
 
