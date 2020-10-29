@@ -1,1 +1,48 @@
-<p>vocabulary-game-edit works!</p>
+<div *ngIf = "this.loaded == true"  class="container" id="full" >   
+    <div id ="question" class="item-question question" style="margin: 0 auto;" contenteditable="true">
+            {{currentGame.question}}
+    </div>
+    <div class="item-image">
+        <div id="myimg" class="img-style" >
+            <img class="image" *ngIf = "this.editingPicture == false" (click)="this.editingPicture = true" src = "{{imageURL}}">
+            <div class="imageEditing-container"  *ngIf = "this.editingPicture == true">
+                <div class="centerImageEditing">
+                    <label class="imageEditingItem1">URL: </label>
+                    <input id="URL" class="imageEditingItem2" value="{{imageURL}}">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-square" class="svg-inline--fa fa-check-square fa-w-14 imageEditingItem3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path style="color: green; " (click)="pictureEdited()" fill="currentColor" d="M400 480H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48v352c0 26.51-21.49 48-48 48zm-204.686-98.059l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.248-16.379-6.249-22.628 0L184 302.745l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.25 16.379 6.25 22.628.001z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <div class="item-ans1" >
+        <div id="button1" type=button class="btn button-style" contenteditable="true" style=" border-color: green;">
+            {{answers[0]}}
+        </div>
+    </div>
+    <div class="item-ans2">
+        <div id="button2" type=button class="btn button-style" contenteditable="true" style=" border-color: red;" >
+            {{answers[1]}}
+        </div>
+    </div>
+    <div class="item-ans3">
+        <div id="button3" type=button class="btn button-style" contenteditable="true" style=" border-color: red;">    
+            {{answers[2]}}     
+        </div>
+    </div>
+    <div class="item-ans4" >
+        <div id="button4" type=button class="btn button-style" contenteditable="true" style=" border-color: red;">
+            {{answers[3]}}
+        </div>
+    </div>
+    <div class="item-final" style="padding-top: 0;">
+        <div type=button class="btn"  style="width: 100%; margin: 0 auto" (click) = "returnToMainMenu()"> 
+            <svg  style="width: 5%; min-width: 75px; min-height: 100px; opacity: 0.6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="home" class="svg-inline--fa fa-home fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                <path fill="currentColor" d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z">
+                </path>
+            </svg>
+        </div>
+    </div>
+</div>
