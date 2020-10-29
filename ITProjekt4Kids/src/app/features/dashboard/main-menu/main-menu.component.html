@@ -1,54 +1,9 @@
 <div *ngIf = "loaded == true"> 
     <div *ngIf= "currentUser.role != 1">
-        <ul *ngFor="let item of dummyList;  index as i">
-            <li type="button" (click)=itemclick(item) style="display:block; width: 40%; margin: 0 auto; border-radius: 20px; margin-top: 30px; min-width: 300px;">
-                <div style="width: 68px; padding: 30px 0px 30px 20px; border-radius: 20px 0px 0px 20px;" class="colouring-{{i%4}}">
-                    <svg *ngIf="item[1] == 'folder'" style="display:inline-block; margin: 0 auto;" width="30px" height="24" viewBox="0 0 30 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15.8668 4.57071L15.8961 4.6H15.9375H27.1875C28.6856 4.6 29.9 5.81441 29.9 7.3125V20.4375C29.9 21.9356 28.6856 23.15 27.1875 23.15H2.8125C1.31441 23.15 0.1 21.9356 0.1 20.4375V3.5625C0.1 2.06441 1.31441 0.85 2.8125 0.85H12.1461L15.8668 4.57071Z" fill="white" stroke="black" stroke-width="0.2"/>
-                    </svg>    
-                    
-                    <svg *ngIf="item[1] == 'task'" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M26.1859 3.98434L26.1861 3.98453C27.1381 4.93146 27.1384 6.47112 26.1859 7.42358L23.7549 9.85463C23.5461 10.0634 23.2086 10.0634 22.9998 9.85463L17.1463 4.00112C16.9375 3.79232 16.9375 3.45486 17.1463 3.24606L19.5774 0.815009C20.5243 -0.131933 22.0642 -0.132237 23.0167 0.815098C23.0167 0.815131 23.0168 0.815165 23.0168 0.815198L26.1859 3.98434ZM0.119782 25.5363L0.119821 25.5361L1.23235 19.16L15.058 5.33434C15.2663 5.12605 15.6041 5.12489 15.8188 5.33476C15.8189 5.33487 15.819 5.33497 15.8191 5.33508L21.6719 11.1879C21.8807 11.3966 21.8807 11.7341 21.6719 11.9429L7.84617 25.7686L1.4705 26.8863C1.47046 26.8863 1.47043 26.8863 1.47039 26.8863C0.672857 27.0224 -0.0209257 26.332 0.119782 25.5363ZM7.27209 22.3601V22.2601H7.17209H4.74084V19.8288V19.7288H4.64084H2.72658H2.64258L2.62808 19.8116L2.03218 23.213L2.02321 23.2642L2.05997 23.3009L3.70001 24.941L3.73677 24.9777L3.78798 24.9688L7.18935 24.3729L7.27209 24.3584V24.2744V22.3601ZM6.47384 16.8103C6.14475 17.1394 6.14475 17.6668 6.47384 17.9959C6.80293 18.3249 7.33031 18.3249 7.6594 17.9959L15.7805 9.87477C16.1096 9.54567 16.1096 9.0183 15.7805 8.68921C15.4514 8.36011 14.924 8.36011 14.5949 8.68921L6.47384 16.8103Z" fill="white" stroke="black" stroke-width="0.2"/>
-                    </svg>                    
-                </div>
-                <div style="width: auto; padding: 0px 0px 0px 20px;">
-                    <h4>{{item[0]}}</h4>
-                </div>
-            </li>
-        </ul>
-        <ul *ngIf="creating === false">
-            <li type="button" (click)="addElement()" style="display:block; width: 40%; margin: 0 auto; border-radius: 20px; margin-top: 30px; min-width: 300px;">
-                <div style="width: 68px; background-color: #85898C; padding: 25px 0px 25px 20px; border-radius: 20px 0px 0px 20px;">
-                    <svg  width="34px" height="34px" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0.5375 14C0.5375 6.56304 6.56304 0.5375 14 0.5375C21.437 0.5375 27.4625 6.56304 27.4625 14C27.4625 21.437 21.437 27.4625 14 27.4625C6.56304 27.4625 0.5375 21.437 0.5375 14ZM21.2188 16.2875C21.6349 16.2875 21.975 15.9474 21.975 15.5312V12.4688C21.975 12.0526 21.6349 11.7125 21.2188 11.7125H16.2875V6.78125C16.2875 6.36508 15.9474 6.025 15.5312 6.025H12.4688C12.0526 6.025 11.7125 6.36508 11.7125 6.78125V11.7125H6.78125C6.36508 11.7125 6.025 12.0526 6.025 12.4688V15.5312C6.025 15.9474 6.36508 16.2875 6.78125 16.2875H11.7125V21.2188C11.7125 21.6349 12.0526 21.975 12.4688 21.975H15.5312C15.9474 21.975 16.2875 21.6349 16.2875 21.2188V16.2875H21.2188Z" fill="white" stroke="black" stroke-width="0.2"/>
-                    </svg>                                                
-                </div>
-                <div style="width: auto; padding: 0px 0px 0px 20px;">
-                    <h4 class="color: global-dark" style="opacity: 0.6;">           
-                        neues Element
-                    </h4>
-                </div>
-            </li>
-        </ul>
-
-        <ul *ngIf="creating === true">
-            <li type="button" style="display:block; width: 40%; margin: 0 auto; border-radius: 20px; margin-top: 30px; min-width: 300px;">
-                <div type="button" (click)="submit()" style=" width: 68px; background-color: green; padding: 25px 0px 25px 20px; border-radius: 20px 0px 0px 20px;">
-                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" class="svg-inline--fa fa-check fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" width="34px" height="34px" viewBox="0 0 520 520">
-                        <path fill="#ffffff" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z">
-                        </path>
-                    </svg>                                              
-                </div>
-                <div style="width: auto; padding: 0px 0px 0px 20px; ">                
-                        <input type="text" id="newElement"  style="opacity: 1; font-size: 29px; ">            
-                </div>
-            </li>
-        </ul>
+        <p>LehrerAccount der Volksschule xxx</p>
     </div>
 
     <div *ngIf = "currentUser.role == 1">
-
         <p>Adminaccount der Volksschule xxx</p>
-
     </div>
 </div>

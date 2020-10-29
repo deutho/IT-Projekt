@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
+import { map } from 'rxjs/operators';
+import { Task } from 'src/app/models/task.model';
 import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
@@ -19,26 +21,31 @@ export class MainMenuComponent implements OnInit {
   data;
   currentUser;
   loaded = false;
+  currentPath: string = "";
+  currentData: Task[];
+  currentID: string[];
 
   creating = false;
   async ngOnInit() {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
-    this.loaded = true;
-  }
-
-  addElement() {
-    this.creating = true;
-  }
-
-  submit() {
-    if((<HTMLInputElement>document.getElementById('newElement')).value != ''){
-      this.dummyList.push([(<HTMLInputElement>document.getElementById('newElement')).value, 'folder']);
-    }
     
-    (<HTMLInputElement>document.getElementById('newElement')).value = '';
-    this.creating = false;
+    this.currentPath = this.currentUser.uid;
+    this.renewDocument();
+    this.loaded = true;
+
+    console.log(this.currentID[0]);
   }
+
+  async renewDocument() {
+    await this.afs.getTasks(this.currentPath).snapshotChanges().pipe(
+      map(actions => actions  => {
+        this.currentData = actions.payload.doc.data() as Task[];
+        this.currentID = actions.payload.doc.id;
+      }));
+  }
+
+
 
   navigate(header, data) {
     var data = data;
@@ -46,24 +53,6 @@ export class MainMenuComponent implements OnInit {
     this.dashboardService.changes();
     var header = header;
     this.appService.myHeader(header);
-  }
-
-  
-
-  itemclick(item) {
-
-
-    //dummy values for the moment, delete later - change out with actual database request result
-    if(item[0] == 'Wortschatz'){
-      this.dummyList = [['Tiere', 'task'],['Schulutensilien', 'task'],['Musikinstrumente', 'task']]
-    }
-    else if(item[0] == 'Tiere'){
-      if (this.currentUser.role == 2) this.navigate("Wortschatzspiel-Ordner bearbeiten", "vocabular-game-edit");
-      else if (this.currentUser.role == 3) this.navigate("Wortschatz", "vocabular-game");
-    }
-    else {
-      this.dummyList = [[item[0] + ' 1', 'task'],[item[0] + ' 2', 'task'],[item[0] + ' 3', 'task']]
-    }
   }
 
 }

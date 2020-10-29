@@ -4,6 +4,7 @@ import { User } from '../models/users.model';
 import { AuthService } from './auth.service';
 import * as firebase from 'firebase';
 import { Game } from '../models/game.model';
+import { Task } from '../models/task.model';
 
 
 
@@ -30,6 +31,10 @@ export class FirestoreDataService {
         return this._afs.collection("tasks/"+teacherUID+"/classes/"+classname+"/class-tasks");
     }
 
+    getTasks(path: string): AngularFirestoreDocument<Task> {
+        return this._afs.collection('tasks').doc('path');
+
+    }
 }
 
 
