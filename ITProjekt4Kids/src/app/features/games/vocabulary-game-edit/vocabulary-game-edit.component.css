@@ -28,23 +28,36 @@
 .item-final {
     grid-area: final;
 }
+.item-left {
+    grid-area: left-arrow;
+}
+.item-right {
+    grid-area: right-arrow;
+}
+
+.item-mid {
+    display: flex;
+    align-items: center;
+    grid-area: mid;
+    grid-template-columns: 10% 40% 40% 10%;
+    grid-template-rows: auto;
+    grid-template-areas: 
+    "left-arrow image image arrow";
+}
 
 .container {
     display: grid;
     width: 100%;
-    margin: 2% auto;
+    margin: 1% auto;
     grid-template-columns: 10% 40% 40% 10%;
     grid-template-rows: auto;
     grid-template-areas:  
         ". question question . "
-        "image image image image"
+        "mid mid mid mid"
         ". ans1 ans2 ."
         ". ans3 ans4 ."
-        ". . . ."
         ". final final ."
         ". home next ."
-        
-        ". . . ."
     }
 
 .button-style {
@@ -67,6 +80,7 @@
 
 
 .img-style {
+    display: block;
     background-color: #ffffff;
     border-radius: 10px;
     margin: 60px auto;
@@ -74,7 +88,7 @@
     font-size: larger;
     font-weight: bold;
     filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
-    width: 50%; 
+    width: 60%; 
     height: 100%; 
     min-width: 340px; 
     max-height: 350px; 
@@ -100,6 +114,7 @@
     display:flex; 
     height: 100%; 
     width: 100%; 
+    min-width: 60%;
     min-height: 100px; 
     align-items: center;
 }
@@ -111,7 +126,7 @@
     vertical-align: middle;
 }
 
-.imageEditingItem1 {
+.imageEditingItem1 {    
     padding-top: 5px;
     padding-right: 5px; 
     vertical-align: middle;
@@ -133,4 +148,12 @@
     background-repeat: no-repeat;
     background-size: contain;
     background-image: url('./../../../../assets/Images/Logo-derdiedaz.png');
+}
+
+.arrow {
+    display: inline-block;
+    padding: 10% 0px 10% 0px;
+    width: 50px;  
+    opacity: 0.6;
+
 }
