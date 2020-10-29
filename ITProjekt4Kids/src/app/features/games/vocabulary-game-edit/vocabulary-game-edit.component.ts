@@ -22,7 +22,7 @@ export class VocabularyGameEditComponent implements OnInit {
   answers: string[];
   imageURL = "";
   editingPicture = false;
-
+  image;
 
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) { }
@@ -78,9 +78,9 @@ export class VocabularyGameEditComponent implements OnInit {
     }
   }
 
-  pictureEdited() {
+  pictureEdited() {  
     this.imageURL = (<HTMLInputElement>document.getElementById('URL')).value;
-    this.editingPicture = false;
+    this.editingPicture = false;       
   }
 
 }
