@@ -23,7 +23,7 @@ export class VocabularyGameEditComponent implements OnInit {
   imageURL = "";
   editingPicture = false;
   previousGames: Game[];
-
+  question: string;
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) { }
 
@@ -35,6 +35,8 @@ export class VocabularyGameEditComponent implements OnInit {
     await this.afs.getTasksofTeacherbyClass(this.currentUser.uid, '1A').valueChanges().pipe(take(1)).toPromise()
       .then(data => this.Games = data);
     //init second stack
+    console.log(this.currentUser)
+    console.log(this.Games)
     let previousGames = [];
     this.previousGames = previousGames;
 
@@ -52,6 +54,7 @@ export class VocabularyGameEditComponent implements OnInit {
         //get next Game
         this.currentGame = this.Games.pop();   
         //set values of HTML elements
+        this.question = this.currentGame.question;
         this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
         this.imageURL = this.currentGame.photoID; //in the meantime set the URL  
         //makes the HTML elements load new Data
@@ -61,7 +64,9 @@ export class VocabularyGameEditComponent implements OnInit {
       if(this.currentGame != undefined) {
         this.previousGames.push(this.currentGame);
       }
+      console.log("i am here")
       //fill with placeholder text
+      this.question = "Hier die Frage eingeben!"
       this.answers = ['Richtige Antwort', 'Falsche Antwort 1', 'Falsche Antwort 2', 'Falsche Antwort 3'];
       this.imageURL = 'https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png';
       this.loaded = true;  
@@ -74,6 +79,7 @@ export class VocabularyGameEditComponent implements OnInit {
       this.checkForChanges();
       if(this.currentGame != undefined)this.Games.push(this.currentGame);
       this.currentGame = this.previousGames.pop();   
+      this.question = this.currentGame.question;
       this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
       this.imageURL = this.currentGame.photoID; 
       this.loaded = true;  
