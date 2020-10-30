@@ -22,7 +22,7 @@ export class VocabularyGameEditComponent implements OnInit {
   answers: string[];
   imageURL = "";
   editingPicture = false;
-
+  previousGames: Game[];
 
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) { }
@@ -32,20 +32,42 @@ export class VocabularyGameEditComponent implements OnInit {
       .then(data => this.currentUser = data[0]);
     await this.afs.getTasksofTeacherbyClass(this.currentUser.uid, '1A').valueChanges().pipe(take(1)).toPromise()
       .then(data => this.Games = data);
+    let previousGames = [];
+    this.previousGames = previousGames;
     this.loadNextGame();
   }
 
   loadNextGame() {    
+    //check for change - beware of undefined if first game
     if (this.Games.length > 0) {
+        if(this.currentGame != undefined) {
+          this.previousGames.push(this.currentGame);
+        }
         this.currentGame = this.Games.pop();   
-        console.log(this.Games)
         this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
         this.imageURL = this.currentGame.photoID; //in the meantime set the URL  
         this.loaded = true;  
     }else {
+      if(this.currentGame != undefined) {
+        this.previousGames.push(this.currentGame);
+      }
+      this.answers = ['Richtige Antwort', 'Falsche Antwort 1', 'Falsche Antwort 2', 'Falsche Antwort 3'];
+        this.imageURL = 'https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png'; //in the meantime set the URL  
+        this.loaded = true;  
       //this.finishGames() 
     }
     
+  }
+
+  loadPreviousGame() {
+    if(this.previousGames.length > 0) {
+      //check for change
+      if(this.currentGame != undefined)this.Games.push(this.currentGame);
+      this.currentGame = this.previousGames.pop();   
+      this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
+      this.imageURL = this.currentGame.photoID; //in the meantime set the URL  
+      this.loaded = true;  
+    }
   }
   
   returnToMainMenu() {
@@ -78,9 +100,9 @@ export class VocabularyGameEditComponent implements OnInit {
     }
   }
 
-  pictureEdited() {
+  pictureEdited() {  
     this.imageURL = (<HTMLInputElement>document.getElementById('URL')).value;
-    this.editingPicture = false;
+    this.editingPicture = false;       
   }
 
 }
