@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { take } from 'rxjs/operators';
 
+
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -33,7 +34,6 @@ export class AddUserComponent implements OnInit {
       lastname:  ['', Validators.required],
       username: ['', Validators.required],
       password: ['', Validators.required],
-      role: ['', Validators.required]
     });
 
     this.firebaseErrors = {
@@ -54,17 +54,17 @@ export class AddUserComponent implements OnInit {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
 
+    console.log(this.adduserform.valid);
 
     if (this.adduserform.valid) {
       let firstname :string = this.adduserform.get('firstname').value
       let lastname :string = this.adduserform.get('lastname').value
       let username :string = this.adduserform.get('username').value
       let password :string = this.adduserform.get('password').value
-      let role :string = this.adduserform.get('role').value
       username = username + '@derdiedaz.at'
 
-      this.newUser = new User("", username, firstname,lastname, "1", 3, "x4PEJU0ktfOpWBfrvxPgoqPLYgn1"); 
-
+      this.newUser = new User("", username, firstname,lastname, "1", 3, "x4PEJU0ktfOpWBfrvxPgoqPLYgn1", "1A", "Testschule"); 
+      
       //secondary App to Create User Without Logging out the current one
       var secondaryApp = this.auth_service.GetSecondaryFirebaseApp();
 
@@ -85,7 +85,6 @@ export class AddUserComponent implements OnInit {
         this.adduserform.get('lastname').setValue('')
         this.adduserform.get('username').setValue('')
         this.adduserform.get('password').setValue('')
-        this.adduserform.get('role').setValue('')
         this.formSubmitted = false;
         this.success = true;
       }
