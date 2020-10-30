@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
 import { map } from 'rxjs/operators';
+import { Game } from 'src/app/models/game.model';
 import { Task } from 'src/app/models/task.model';
 import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { GamesModule } from '../../games/games.module';
 
 @Component({
   selector: 'app-main-menu',
@@ -21,6 +23,7 @@ export class MainMenuComponent implements OnInit {
   data;
   currentUser;
   loaded = false;
+  startDocument: Game;
   currentPath: string = "";
   currentData: Task[];
   currentID: string[];
@@ -34,15 +37,14 @@ export class MainMenuComponent implements OnInit {
     this.getUserDocument();
     this.loaded = true;
 
-    console.log(this.currentID[0]);
+    console.log(this.startDocument);
   }
 
   async getUserDocument() {
     var docRef = this.afs.getTasks(this.currentPath);
+    docRef.ref
   }
-
-
-
+    
   navigate(header, data) {
     var data = data;
     this.appService.myComponent(data);

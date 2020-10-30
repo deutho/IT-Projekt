@@ -31,7 +31,7 @@ export class FirestoreDataService {
         return this._afs.collection("tasks/"+teacherUID+"/classes/"+classname+"/class-tasks");
     }
 
-    getTasks(path: string): AngularFirestoreDocument<Task> {
+    getTasks(path: string): AngularFirestoreDocument<Game> {
         return this._afs.collection('tasks').doc('path');
 
     }
