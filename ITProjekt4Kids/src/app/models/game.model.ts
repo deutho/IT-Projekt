@@ -1,6 +1,4 @@
-import { Task } from './task.model';
-
-export class Game extends Task {
+export class Game{
     
     public constructor(public uid: string,
         public answer1: string,
@@ -9,6 +7,6 @@ export class Game extends Task {
         public rightAnswer: string,
         public question: string,
         public photoID: string) {
-        super();
+        
     }
     }

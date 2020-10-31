@@ -4,7 +4,8 @@ import { User } from '../models/users.model';
 import { AuthService } from './auth.service';
 import * as firebase from 'firebase';
 import { Game } from '../models/game.model';
-import { Task } from '../models/task.model';
+import { Folder } from '../models/folder.model';
+
 
 
 
@@ -31,9 +32,19 @@ export class FirestoreDataService {
         return this._afs.collection("tasks/"+teacherUID+"/classes/"+classname+"/class-tasks");
     }
 
-    getTasks(path: string): AngularFirestoreDocument<Game> {
-        return this._afs.collection('tasks').doc('path');
+    getFolders(path: string): AngularFirestoreDocument {
+        return this._afs.doc("folders/"+path);
+    }
 
+    updateFolders(folder: Folder, currentPath: string) {
+        return this.db.doc("folders/"+currentPath).update({
+            folders: firebase.firestore.FieldValue.arrayUnion(JSON.parse(JSON.stringify(folder)))
+        });
+    }
+    addFolderDocument(uid: string, path: string): void{
+        this.db.doc("folders/"+path).collection(uid).add({
+            folders: []
+        });
     }
 }
 
