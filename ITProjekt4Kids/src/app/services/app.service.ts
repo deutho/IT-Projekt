@@ -19,6 +19,8 @@ import {
     private myMethodSubject = new Subject<any>();
     myheader$: Observable<any>;
     private myHeaderSubject = new Subject<any>();
+    myGameData$: Observable<any>;
+    private myGameDataSubject = new Subject<any>();
 
     constructor(private cfr: ComponentFactoryResolver) {
         this.myComponent$ = this.myMethodSubject.asObservable();
@@ -38,5 +40,9 @@ import {
 
     myHeader(data) {
       this.myHeaderSubject.next(data);
+    }
+
+    myGameData(data) {
+      this.myGameDataSubject.next(data);
     }
   }
