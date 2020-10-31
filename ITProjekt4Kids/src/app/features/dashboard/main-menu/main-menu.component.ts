@@ -27,8 +27,10 @@ export class MainMenuComponent implements OnInit {
   async ngOnInit() {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
-    this.currentPath = this.currentUser.uid;
-
+    
+    if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
+    else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
+    
     this.getFolders();
   }
 
@@ -42,6 +44,7 @@ export class MainMenuComponent implements OnInit {
   }
 
   addFolder(newUid: string, newName: string, newType: string) {
+    
     //create Folder
     var uniqueID = newUid;
     var name = newName;
@@ -54,7 +57,7 @@ export class MainMenuComponent implements OnInit {
     this.afs.updateFolders(newFolder, this.currentPath);
 
     //If it is Type Folder, generate a Collection for it
-    if (newFolder.type == "folder") this.afs.addFolderDocument(newFolder.uid, newFolder.name, this.currentPath);
+    if (newFolder.type == "folder") this.afs.addFolderDocument(newFolder.uid, newFolder.name, this.currentPath); 
   }
     
   navigate(header, data) {
