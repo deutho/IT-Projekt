@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import * as firebase from 'firebase';
 import { Game } from '../models/game.model';
 import { Folder } from '../models/folder.model';
+import { Folderelement } from '../models/folderelement.model';
 
 
 
@@ -41,11 +42,17 @@ export class FirestoreDataService {
             folders: firebase.firestore.FieldValue.arrayUnion(JSON.parse(JSON.stringify(folder)))
         });
     }
-    addFolderDocument(uid: string, path: string): void{
+    addFolderDocument(uid: string, name: string, path: string): void{
         this.db.doc("folders/"+path).collection(uid).add({
+            parent: name,
             folders: []
         });
     }
+
+    getSubFolder(path: string, name: string): AngularFirestoreCollection<Folderelement> {
+        return this._afs.collection("folders/"+path, ref => ref.where('parent', '==', name));
+    }
+    
 }
 
 
