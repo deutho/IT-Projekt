@@ -27,14 +27,21 @@ export class VocabularyGameComponent implements OnInit {
   finished = false;
   roundsWon = 0;
   totalrounds = 0;
+  folderID;
+
+
   
-  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) { }
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) {
+    this.appService.myGameData$.subscribe((data) => {
+      this.folderID = data;
+    });
+   }
 
   async ngOnInit(){
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
       .then(data => this.currentUser = data[0]);
 
-    await this.afs.getTasksofTeacherbyClass(this.currentUser.parent, '1A').valueChanges().pipe(take(1)).toPromise()
+    await this.afs.getTasksPerID(this.folderID).valueChanges().pipe(take(1)).toPromise()
       .then(data => this.Games = data);
 
     this.shuffleArray(this.Games);
@@ -59,9 +66,7 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   loadNextGame() {
-    
     this.evaluated = false;
-    
 
     if (this.Games.length > 0) {
         this.currentGame = this.Games.pop();
@@ -71,7 +76,6 @@ export class VocabularyGameComponent implements OnInit {
     }else {
       this.finishGames() 
     }
-    
   }
 
   shuffleAnswers() {

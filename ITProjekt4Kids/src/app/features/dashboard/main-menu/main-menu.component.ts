@@ -35,6 +35,10 @@ export class MainMenuComponent implements OnInit {
   }
 
   async getFolders() {
+
+    await this.afs.getFolders()
+
+
     await this.afs.getFolders(this.currentPath).valueChanges().pipe(take(1)).toPromise().
     then(data => {
       this.currentFolders = data.folders
@@ -43,13 +47,12 @@ export class MainMenuComponent implements OnInit {
     this.loaded = true;
   }
 
-  addFolder(newUid: string, newName: string, newType: string) {
+  addFolder(newUid: string, newName: string, newType: string, gameType?: string) {
     
     //create Folder
-    var uniqueID = newUid;
-    var name = newName;
-    var type = newType;
-    var newFolder = new Folder(uniqueID, name, type);
+    if (gameType != null || gameType != undefined)
+    var newFolder = new Folder(newUid, newName, newType, gameType);
+    else newFolder = new Folder(newUid, newName, newType);
 
     //Add the Folder
     console.log(this.currentFolders); //Just Output Check
@@ -88,8 +91,10 @@ export class MainMenuComponent implements OnInit {
       this.getFolders();
     }
 
-    else if (item.type == "tasks"){
-      this.openGame();
+    else if (item.type == "task") {
+      var data = item.uid;
+      this.appService.myGameData(data);
+      this.navigate(item.name, item.gameType);
     }
   }
 
@@ -102,7 +107,12 @@ export class MainMenuComponent implements OnInit {
       var name = (<HTMLInputElement>document.getElementById('newElement')).value;
       var type = 'folder';
       var uid = uuidv4();
-      this.addFolder(uid, name, type);
+      if (type ="folder") this.addFolder(uid, name, type);
+      else {
+        var gameType = 'vocabular-game';
+        this.addFolder(uid, name, type, gameType)
+      }
+      
     }
     
     (<HTMLInputElement>document.getElementById('newElement')).value = '';
