@@ -7,9 +7,8 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
-import { DashboardModule } from './features/dashboard/dashboard.module';
 import * as firebase from 'firebase';
-import { GamesModule } from './features/games/games.module';
+import {FeaturesModule} from '../app/features/features.module'
 firebase.initializeApp(environment.firebase)
 
 @NgModule({
@@ -20,8 +19,6 @@ firebase.initializeApp(environment.firebase)
     BrowserModule,
     AppRoutingModule, 
     LoginModule,
-    DashboardModule,
-    GamesModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,

@@ -3,7 +3,7 @@ import {
     ComponentFactoryResolver,
     ViewContainerRef
   } from '@angular/core';
-  import { from, Observable, Subject } from 'rxjs';
+  import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
   import { map } from 'rxjs/operators';
   
   export interface ComponentLoader {
@@ -20,11 +20,13 @@ import {
     myheader$: Observable<any>;
     private myHeaderSubject = new Subject<any>();
     myGameData$: Observable<any>;
-    private myGameDataSubject = new Subject<any>();
+    myGameDataSubject: BehaviorSubject<any> = new BehaviorSubject<any>([])
 
     constructor(private cfr: ComponentFactoryResolver) {
         this.myComponent$ = this.myMethodSubject.asObservable();
         this.myheader$ = this.myHeaderSubject.asObservable();
+        this.myGameData$ = this.myGameDataSubject.asObservable();
+        
     }
   
     forChild(vcr: ViewContainerRef, cl: ComponentLoader) {

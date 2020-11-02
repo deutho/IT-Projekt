@@ -23,14 +23,19 @@ export class VocabularyGameEditComponent implements OnInit {
   imageURL = "";
   editingPicture = false;
   previousGames: Game[];
+  folderID = "";
 
 
-  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) { }
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) {
+    this.appService.myGameData$.subscribe((data) => {
+      this.folderID = data;
+    });
+  }
 
   async ngOnInit(): Promise<void> {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
       .then(data => this.currentUser = data[0]);
-    await this.afs.getTasksofTeacherbyClass(this.currentUser.uid, '1A').valueChanges().pipe(take(1)).toPromise()
+      await this.afs.getTasksPerID(this.folderID).valueChanges().pipe(take(1)).toPromise()
       .then(data => this.Games = data);
     let previousGames = [];
     this.previousGames = previousGames;

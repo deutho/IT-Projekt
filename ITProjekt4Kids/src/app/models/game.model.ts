@@ -6,7 +6,8 @@ export class Game{
         public answer3: string,
         public rightAnswer: string,
         public question: string,
-        public photoID: string) {
+        public photoID: string,
+        public folderUID: string) {
         
     }
-    }
+}

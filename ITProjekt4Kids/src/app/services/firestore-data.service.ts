@@ -29,8 +29,8 @@ export class FirestoreDataService {
         this.db.collection("users/1lPEcyUVfRVxXsPWbCrOxPjMsrv1/users/x4PEJU0ktfOpWBfrvxPgoqPLYgn1/users").doc(user.uid).set(JSON.parse(JSON.stringify(user)));
     }
 
-    getTasksofTeacherbyClass(teacherUID, classname): AngularFirestoreCollection<Game> {
-        return this._afs.collection("tasks/"+teacherUID+"/classes/"+classname+"/class-tasks");
+    getTasksPerID(id): AngularFirestoreCollection<Game> {
+        return this._afs.collection('games', ref => ref.where('folderUID', '==', id));
     }
 
     getFolders(path: string): AngularFirestoreDocument {
@@ -48,7 +48,6 @@ export class FirestoreDataService {
             folders: []
         });
     }
-
     getSubFolder(path: string, name: string): AngularFirestoreCollection<Folderelement> {
         return this._afs.collection("folders/"+path, ref => ref.where('parent', '==', name));
     }
