@@ -41,15 +41,20 @@ export class VocabularyGameComponent implements OnInit {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
       .then(data => this.currentUser = data[0]);
 
+      console.log(this.folderID);
     await this.afs.getTasksPerID(this.folderID).valueChanges().pipe(take(1)).toPromise()
       .then(data => this.Games = data);
 
     this.shuffleArray(this.Games);
 
-    await this.loadNextGame();
+    this.loadNextGame();
     setTimeout(() => (<HTMLInputElement>document.getElementById('progressRange')).max = String(this.Games.length + 1));
     this.updateColorhelper();
     console.log(this.Games.length);
+    
+  }
+
+  startSubscription() {
     
   }
 

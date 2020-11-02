@@ -30,7 +30,7 @@ export class FirestoreDataService {
     }
 
     getTasksPerID(id): AngularFirestoreCollection<Game> {
-        return this._afs.collection("games", ref => ref.where('folderUID', '==', id));
+        return this._afs.collection('games', ref => ref.where('folderUID', '==', id));
     }
 
     getFolders(path: string): AngularFirestoreDocument {

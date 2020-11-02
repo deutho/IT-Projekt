@@ -20,11 +20,15 @@ export class MainMenuComponent implements OnInit {
   data;
   currentUser;
   loaded = false;
+  level;
   currentPath: string = "";
+  ownFolders: Folder[] = [];
+  derdiedazFolder: Folder[] = [];
   currentFolders: Folder[] = [];
 
   creating = false;
   async ngOnInit() {
+    this.level = 0;
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
     
@@ -35,15 +39,27 @@ export class MainMenuComponent implements OnInit {
   }
 
   async getFolders() {
-
-    await this.afs.getFolders()
-
+    if (this.level == 0){
+    await this.afs.getFolders("derdiedaz").valueChanges().pipe(take(1)).toPromise().
+    then(data => {
+      this.derdiedazFolder = data.folders
+      });
+    }
 
     await this.afs.getFolders(this.currentPath).valueChanges().pipe(take(1)).toPromise().
     then(data => {
-      this.currentFolders = data.folders
+      this.ownFolders = data.folders
       });
+
+    if (this.level == 0) {
+      this.currentFolders = this.derdiedazFolder.concat(this.ownFolders);
+    } else {
+      this.currentFolders = this.ownFolders;
+    }
     
+    console.log(this.currentFolders);
+    console.log(this.ownFolders);
+    console.log(this.derdiedazFolder);
     this.loaded = true;
   }
 
@@ -73,9 +89,16 @@ export class MainMenuComponent implements OnInit {
 
   async itemclick(item) {
     if (item.type == "folder") {
-      this.currentPath = this.currentPath + "/"+item.uid;
       
-      console.log(this.currentPath);
+
+      if (this.level == 0 && item.name == "derdiedaz") {
+        this.currentPath = "derdiedaz/"+item.uid;
+      }
+      else this.currentPath = this.currentUser.uid + "/"+item.uid;
+      
+      if (this.level != 0) this.currentPath = this.currentPath+ "/" + item.uid;
+      
+      this.level++
       
       var folderElement: Folderelement;
       var docname: string;
@@ -93,8 +116,10 @@ export class MainMenuComponent implements OnInit {
 
     else if (item.type == "task") {
       var data = item.uid;
+      console.log(data);
       this.appService.myGameData(data);
       this.navigate(item.name, item.gameType);
+      
     }
   }
 
@@ -117,10 +142,6 @@ export class MainMenuComponent implements OnInit {
     
     (<HTMLInputElement>document.getElementById('newElement')).value = '';
     this.creating = false;
-  }
-
-  openGame(){
-    console.log("Game Open");
   }
 
 }

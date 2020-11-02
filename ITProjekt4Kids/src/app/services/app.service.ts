@@ -25,6 +25,7 @@ import {
     constructor(private cfr: ComponentFactoryResolver) {
         this.myComponent$ = this.myMethodSubject.asObservable();
         this.myheader$ = this.myHeaderSubject.asObservable();
+        this.myGameData$ = this.myGameDataSubject.asObservable();
     }
   
     forChild(vcr: ViewContainerRef, cl: ComponentLoader) {
