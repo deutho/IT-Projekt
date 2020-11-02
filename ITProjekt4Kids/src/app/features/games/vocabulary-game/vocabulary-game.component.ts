@@ -48,14 +48,13 @@ export class VocabularyGameComponent implements OnInit {
     this.shuffleArray(this.Games);
 
     this.loadNextGame();
-    setTimeout(() => (<HTMLInputElement>document.getElementById('progressRange')).max = String(this.Games.length + 1));
+    setTimeout(() => (<HTMLInputElement>document.getElementById('progressRange')).max = String(this.Games.length+1));
     this.updateColorhelper();
     
     
   }
 
   updateColorhelper() {
-    console.log(this.answers);
     setTimeout(() => {      
       this.updateColor("button1");
       this.updateColor("button2");

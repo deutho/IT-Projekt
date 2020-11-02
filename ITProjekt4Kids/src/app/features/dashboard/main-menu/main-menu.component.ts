@@ -114,12 +114,14 @@ export class MainMenuComponent implements OnInit {
     }
 
     else if (item.type == "task") {
+      var standard = false;
       var data = item.uid;
       this.appService.myGameData(data);
       var type = item.gameType;
-      if (this.currentUser.role == 2) type = type+"-edit";
-      if (this.currentPath.substring(0,9) == "derdiedaz") var standard = true;
-      
+      if (this.currentUser.role == 2) { 
+        type = type+"-edit";
+        if (this.currentPath.substring(0,9) == "derdiedaz") standard = true;
+      }
       if (standard == false) this.navigate(item.name, type);
       else {
         this.errorMessage = "Diese Übung ist standardmäßig inkludiert und kann daher nicht verändert oder gelöscht werden."
