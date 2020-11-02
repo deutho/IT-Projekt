@@ -38,10 +38,10 @@ export class VocabularyGameComponent implements OnInit {
    }
 
   async ngOnInit(){
+
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
       .then(data => this.currentUser = data[0]);
 
-      console.log(this.folderID);
     await this.afs.getTasksPerID(this.folderID).valueChanges().pipe(take(1)).toPromise()
       .then(data => this.Games = data);
 
@@ -50,11 +50,7 @@ export class VocabularyGameComponent implements OnInit {
     this.loadNextGame();
     setTimeout(() => (<HTMLInputElement>document.getElementById('progressRange')).max = String(this.Games.length + 1));
     this.updateColorhelper();
-    console.log(this.Games.length);
     
-  }
-
-  startSubscription() {
     
   }
 

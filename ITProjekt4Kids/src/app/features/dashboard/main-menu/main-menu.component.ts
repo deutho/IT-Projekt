@@ -21,10 +21,13 @@ export class MainMenuComponent implements OnInit {
   currentUser;
   loaded = false;
   level;
+  error;
+  errorMessage;
   currentPath: string = "";
   ownFolders: Folder[] = [];
   derdiedazFolder: Folder[] = [];
   currentFolders: Folder[] = [];
+  currentPathForHTML: string = "";
 
   creating = false;
   async ngOnInit() {
@@ -34,6 +37,8 @@ export class MainMenuComponent implements OnInit {
     
     if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
     else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
+
+    this.currentPathForHTML = "Meine Ordner";
     
     this.getFolders();
   }
@@ -57,9 +62,6 @@ export class MainMenuComponent implements OnInit {
       this.currentFolders = this.ownFolders;
     }
     
-    console.log(this.currentFolders);
-    console.log(this.ownFolders);
-    console.log(this.derdiedazFolder);
     this.loaded = true;
   }
 
@@ -90,14 +92,13 @@ export class MainMenuComponent implements OnInit {
   async itemclick(item) {
     if (item.type == "folder") {
       
-
-      if (this.level == 0 && item.name == "derdiedaz") {
-        this.currentPath = "derdiedaz/"+item.uid;
+      if (item.name == "derdiedaz") {
+        this.currentPath = "derdiedaz/derdiedaz";
+        this.currentPathForHTML = "derdieDAZ Standard Übungen"
+      } else {
+        this.currentPath = this.currentPath + "/"+item.uid;
+        this.currentPathForHTML = this.currentPathForHTML + "/" + item.name;
       }
-      else this.currentPath = this.currentUser.uid + "/"+item.uid;
-      
-      if (this.level != 0) this.currentPath = this.currentPath+ "/" + item.uid;
-      
       this.level++
       
       var folderElement: Folderelement;
@@ -108,18 +109,23 @@ export class MainMenuComponent implements OnInit {
         docname = data.payload.doc.id;
       });
 
-      console.log(folderElement.parent);
-      console.log(docname);
       this.currentPath = this.currentPath + "/" + docname;
       this.getFolders();
     }
 
     else if (item.type == "task") {
       var data = item.uid;
-      console.log(data);
       this.appService.myGameData(data);
-      this.navigate(item.name, item.gameType);
+      var type = item.gameType;
+      if (this.currentUser.role == 2) type = type+"-edit";
+      if (this.currentPath.substring(0,9) == "derdiedaz") var standard = true;
       
+      if (standard == false) this.navigate(item.name, type);
+      else {
+        this.errorMessage = "Diese Übung ist standardmäßig inkludiert und kann daher nicht verändert oder gelöscht werden."
+        this.error = true
+        setTimeout(() => this.error = false, 4000);
+      }
     }
   }
 
@@ -142,6 +148,26 @@ export class MainMenuComponent implements OnInit {
     
     (<HTMLInputElement>document.getElementById('newElement')).value = '';
     this.creating = false;
+  }
+
+  goUpOneLevel() {
+    if (this.level != 0) {
+      if (this.level == 1) {
+        if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
+        else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
+
+        this.currentPathForHTML = "Meine Ordner";
+      }else {
+
+        for (let i = 0; i<=1; i++) {
+        this.currentPath = this.currentPath.substring(0, this.currentPath.lastIndexOf('/'));
+        }
+        this.currentPathForHTML = this.currentPathForHTML.substring(0, this.currentPathForHTML.lastIndexOf('/'))
+      }
+      this.level--;
+      this.getFolders();
+
+    }
   }
 
 }
