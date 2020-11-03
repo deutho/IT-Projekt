@@ -301,6 +301,5 @@ export class VocabularyGameComponent implements OnInit {
 
 
     document.getElementById(id).innerHTML = str;
-  }
-
+  }  
 }
