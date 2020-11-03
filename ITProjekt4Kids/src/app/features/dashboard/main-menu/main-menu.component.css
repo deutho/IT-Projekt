@@ -32,3 +32,10 @@ input {
     border-bottom: 1px solid black;
     text-align:left
   }
+
+.navigationBar {
+    display: block;
+    width:40%;
+    margin: 0 auto;
+    background-color: transparent;
+}
