@@ -61,33 +61,33 @@
     <!-- overlay new Element -->
     <div *ngIf="creating == true" class="fullscreen">
         <div *ngIf="creating == true" class="overlay" (click)="creating = false;"></div>
-        <div *ngIf="creating == true" class="superOverlay">
+        <div *ngIf="creating == true" class="superOverlay" style="border-radius: 15px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));">
             <div class="content">
                 <form [formGroup]="addElementForm" (ngSubmit) = "onSubmit()">
                     <div>
-                        <h6>Name</h6>
-                        <input type="text"  name = "name" formControlName ="name" style="width: 100%;">
+                        <h6>Name:</h6>
+                        <input placeholder="Tiere im Winter" type="text" name = "name" formControlName ="name" style="width: 100%;">
                     </div>
                         <div *ngIf="gameSelected == false"  style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
-                            <div  class="btn" style="display: inline-block; background-color: #40d04f; width: 25%;">
+                            <div class="btn dropshadow" style="display: inline-block; background-color: #40d04f; width: 25%;">
                                 Ordner
                             </div>
-                            <div (click)="gameSelected = true" class="btn" style="display: inline-block; background-color: lightgray; width: 25%;">
+                            <div (click)="gameSelected = true" class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 25%;">
                                 Spiel
                             </div>
                         </div>
                         <div *ngIf="gameSelected == true"  style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
-                            <div (click)="gameSelected = false" class="btn" style="display: inline-block; background-color: lightgray; width: 25%;">
+                            <div (click)="gameSelected = false" class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 25%;">
                                 Ordner
                             </div>
-                            <div  class="btn" style="display: inline-block; background-color: #40d04f; width: 25%;">
+                            <div  class="btn dropshadow" style="display: inline-block; background-color: #40d04f; width: 25%;">
                                 Spiel
                             </div>
                         </div>                      
-                    <div *ngIf="gameSelected" style="padding: 20px 0px;">
-                        <select class="custom-select">
-                            <option value="Spielart">Spiel wählen</option>
-                            <option>Multiple Choice</option>
+                    <div *ngIf="gameSelected"  style="padding: 20px 0px;">
+                        <select formControlName="game" class="form-control custom-select drop-shadow">                            
+                            <option value="" selected disabled hidden>Choose here</option>
+                            <option value="vocabular-game">Single Choice</option>
                          </select>
                     </div>
 

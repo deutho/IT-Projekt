@@ -98,3 +98,19 @@ input {
     filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));
     background-color: #40d04f;
 }
+
+.ng-valid:not(form) {
+    border: solid 2px lightgreen;
+  }
+  
+.ng-invalid:not(form).form-submitted {
+border: solid 2px lightcoral;
+}
+
+.dropshadow {
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));
+}
+
+.form {
+    margin: 0 auto;
+}

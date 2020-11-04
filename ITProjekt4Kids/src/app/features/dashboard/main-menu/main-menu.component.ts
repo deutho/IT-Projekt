@@ -37,6 +37,7 @@ export class MainMenuComponent implements OnInit {
   async ngOnInit() {
     this.addElementForm = this.fb.group({
       name:  ['', Validators.required],
+      game:  []
     });
 
 
@@ -149,10 +150,10 @@ export class MainMenuComponent implements OnInit {
       var name = (<HTMLInputElement>document.getElementById('newElement')).value;
       var type = 'folder';
       var uid = uuidv4();
-      if (type ="folder") this.addFolder(uid, name, type);
+      if (type ="folder") this.addFolder(uid, name, "Folder");
       else {
         var gameType = 'vocabular-game';
-        this.addFolder(uid, name, type, gameType)
+        this.addFolder(uid, name, "Task", gameType)
       }
       
     }
@@ -182,7 +183,17 @@ export class MainMenuComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.addElementForm.valid) {
+      let name :string = this.addElementForm.get('name').value;
+      let game :string = this.addElementForm.get('game').value;
+      let createFolder = !this.gameSelected;
+      var uid = uuidv4();
+      if (createFolder) this.addFolder(uid, name, 'folder');
+      else {
+        this.addFolder(uid, name, 'task', game)
+      }
 
+    }
   }
 
 
