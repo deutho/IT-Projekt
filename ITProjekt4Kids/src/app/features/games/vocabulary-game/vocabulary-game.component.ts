@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
-import { Game } from 'src/app/models/game.model';
+import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
@@ -14,10 +14,10 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 })
 export class VocabularyGameComponent implements OnInit {
 
-  Games: Game[];
-  currentGame: Game;
+  Games: VocabularyGame[];
+  currentGame: VocabularyGame;
   currentUser: User;
-  playedGames: Game[];
+  playedGames: VocabularyGame[];
   loaded = undefined;
   selection: string;
   answers: string[];

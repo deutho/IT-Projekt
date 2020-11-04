@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { take } from 'rxjs/internal/operators/take';
 import { Router } from '@angular/router';
-import { Game } from 'src/app/models/game.model';
+import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import {v4 as uuidv4} from 'uuid';
 
 @Component({
   selector: 'app-vocabulary-game-edit',
@@ -14,15 +15,15 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 })
 export class VocabularyGameEditComponent implements OnInit {
 
-  Games: Game[];
-  currentGame: Game;
+  Games: VocabularyGame[];
+  currentGame: VocabularyGame;
   currentUser: User;
-  playedGames: Game[];
+  playedGames: VocabularyGame[];
   loaded = undefined;
   answers: string[];
   imageURL = "";
   editingPicture = false;
-  previousGames: Game[];
+  previousGames: VocabularyGame[];
   folderID = "";
   question: string;
 
@@ -38,6 +39,8 @@ export class VocabularyGameEditComponent implements OnInit {
       .then(data => this.currentUser = data[0]);
       await this.afs.getTasksPerID(this.folderID).valueChanges().pipe(take(1)).toPromise()
       .then(data => this.Games = data);
+
+      console.log(this.Games);
     //init second stack
     console.log(this.currentUser)
     console.log(this.Games)
@@ -58,23 +61,28 @@ export class VocabularyGameEditComponent implements OnInit {
         //get next Game
         this.currentGame = this.Games.pop();   
         //set values of HTML elements
-        this.question = this.currentGame.question;
-        this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
-        this.imageURL = this.currentGame.photoID; //in the meantime set the URL  
+        
         //makes the HTML elements load new Data
         this.loaded = true;  
     }else {
       //check if first game or already playing
       if(this.currentGame != undefined) {
         this.previousGames.push(this.currentGame);
-      }
-      console.log("i am here")
-      //fill with placeholder text
-      this.question = "Hier die Frage eingeben!"
-      this.answers = ['Richtige Antwort', 'Falsche Antwort 1', 'Falsche Antwort 2', 'Falsche Antwort 3'];
-      this.imageURL = 'https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png';
-      this.loaded = true;  
+      } else {
+        console.log("i am here")
+        //fill with placeholder text
+        let uid = uuidv4();
+        var newGame = new VocabularyGame(uid, 'Falsche Antwort 1', 'Falsche Antwort 2', 'Falsche Antwort 3', 'Richtige Antwort', "Hier die Frage eingeben", 'https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png', this.folderID);
+        this.currentGame = newGame;
+        
+     }
+    
+     this.question = this.currentGame.question;
+     this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
+     this.imageURL = this.currentGame.photoID; //in the meantime set the URL  
+     this.loaded = true;  
     }
+    
     
   }
 
@@ -110,14 +118,13 @@ export class VocabularyGameEditComponent implements OnInit {
        this.currentGame.answer1 == valueButton2 &&
        this.currentGame.answer2 == valueButton3 &&
        this.currentGame.answer3 == valueButton4 &&
-       this.currentGame.answer1 == valueButton2 &&
        this.currentGame.question == question &&
        this.currentGame.photoID == this.imageURL) {
          //no changes have been made in this game instance
        }
     else {
-      //this game instance has been modified
-      console.log("different input")
+      var newTask = new VocabularyGame(this.currentGame.uid, valueButton2, valueButton3, valueButton4, valueButton1, question, this.imageURL, this.folderID)
+      this.afs.updateTask(newTask);
     }
   }
 
