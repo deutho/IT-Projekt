@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
 import { Folder } from 'src/app/models/folder.model';
@@ -15,7 +16,7 @@ import {v4 as uuidv4} from 'uuid';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor(private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) { }
+  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) { }
 
   data;
   currentUser;
@@ -28,9 +29,17 @@ export class MainMenuComponent implements OnInit {
   derdiedazFolder: Folder[] = [];
   currentFolders: Folder[] = [];
   currentPathForHTML: string = "";
+  addElementForm: FormGroup;
+  formSubmitted = false;
+  gameSelected = false;
 
   creating = false;
   async ngOnInit() {
+    this.addElementForm = this.fb.group({
+      name:  ['', Validators.required],
+    });
+
+
     this.level = 0;
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
@@ -171,5 +180,11 @@ export class MainMenuComponent implements OnInit {
 
     }
   }
+
+  onSubmit() {
+
+  }
+
+
 
 }
