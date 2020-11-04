@@ -28,6 +28,7 @@ export class MainMenuComponent implements OnInit {
   derdiedazFolder: Folder[] = [];
   currentFolders: Folder[] = [];
   currentPathForHTML: string = "";
+  emptyMessage: string = "Keine Elemente in diesem Ordner";
 
   creating = false;
   async ngOnInit() {
@@ -61,7 +62,7 @@ export class MainMenuComponent implements OnInit {
     } else {
       this.currentFolders = this.ownFolders;
     }
-    
+    console.log(this.currentFolders.length);
     this.loaded = true;
   }
 
