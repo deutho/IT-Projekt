@@ -1,11 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+
 html, body {
     background-color: #F5F4F4;
     height: 100%; 
     margin: 0px; 
-    padding: 0px;
+    padding: 0px;   
+    font-family: 'Schulschrift'; 
 }
 
 #full {
     height: 100%;
+}
+
+@font-face{
+    font-family: Schulschrift;
+    src: url('./assets/Fonts/DURCKSCHRIFT.ttf'); 
+    /*src: url('./assets/Fonts/DRUCKSCHRIFT_BOLD.ttf'); */
+    /*src: url('./assets/Fonts/Schulschrift.ttf'); */
+    /*src: url('./assets/Fonts/Schulschrift_alternatives_r.ttf'); */
+}
+
+* {
+    font-family: 'Schulschrift'
 }
