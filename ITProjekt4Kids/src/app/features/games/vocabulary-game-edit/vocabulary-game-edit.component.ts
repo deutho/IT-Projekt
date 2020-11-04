@@ -82,8 +82,6 @@ export class VocabularyGameEditComponent implements OnInit {
      this.imageURL = this.currentGame.photoID; //in the meantime set the URL  
      this.loaded = true;  
     }
-    
-    
   }
 
   loadPreviousGame() {
