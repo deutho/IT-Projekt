@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 import { Game } from '../models/game.model';
 import { Folder } from '../models/folder.model';
 import { Folderelement } from '../models/folderelement.model';
+import { take } from 'rxjs/operators';
 
 
 
@@ -13,6 +14,7 @@ import { Folderelement } from '../models/folderelement.model';
 @Injectable({ providedIn: 'root' })
 export class FirestoreDataService {
     db = firebase.firestore();
+    
 
     constructor(public _afs: AngularFirestore, public _auth: AuthService) {
     }
@@ -24,9 +26,16 @@ export class FirestoreDataService {
     getCurrentUser(): AngularFirestoreCollectionGroup<User> {
         return this._afs.collectionGroup('users', ref => ref.where('uid', "==", this._auth.getCurrentUser().uid));
     }
+    getUserPerID(uid: string): AngularFirestoreCollectionGroup<User> {
+        return this._afs.collectionGroup('users', ref => ref.where('uid', "==", uid));
+    }
 
-    addUser(user: User) {
-        this.db.collection("users/1lPEcyUVfRVxXsPWbCrOxPjMsrv1/users/x4PEJU0ktfOpWBfrvxPgoqPLYgn1/users").doc(user.uid).set(JSON.parse(JSON.stringify(user)));
+    addUser(user: User, parent: User) {
+        if (user.role == 2){
+            this.db.collection("users/"+user.parent+"/users").doc(user.uid).set(JSON.parse(JSON.stringify(user)));
+        } else {
+            this.db.collection("users/"+parent.parent+"/users/"+parent.uid+"/users").doc(user.uid).set(JSON.parse(JSON.stringify(user)));
+        }
     }
 
     getTasksPerID(id): AngularFirestoreCollection<Game> {
@@ -50,6 +59,13 @@ export class FirestoreDataService {
     }
     getSubFolder(path: string, name: string): AngularFirestoreCollection<Folderelement> {
         return this._afs.collection("folders/"+path, ref => ref.where('parent', '==', name));
+    }
+
+    initializeFolderDocument(uid: string) {
+        this.db.collection("folders").doc(uid).set({
+            parent: "folders",
+            folders: []
+        });
     }
     
 }

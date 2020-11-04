@@ -32,8 +32,11 @@ export class MainMenuComponent implements OnInit {
   addElementForm: FormGroup;
   formSubmitted = false;
   gameSelected = false;
-
+  emptyMessage: string = "Keine Elemente in diesem Ordner";
   creating = false;
+
+
+
   async ngOnInit() {
     this.addElementForm = this.fb.group({
       name:  ['', Validators.required],
@@ -45,32 +48,36 @@ export class MainMenuComponent implements OnInit {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
     
-    if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
-    else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
+    if (this.currentUser.role != 1){
+      if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
+      else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
 
-    this.currentPathForHTML = "Meine Ordner";
-    
-    this.getFolders();
+      this.currentPathForHTML = "Meine Ordner";
+      
+      this.getFolders();
+    }
   }
 
   async getFolders() {
-    if (this.level == 0){
-    await this.afs.getFolders("derdiedaz").valueChanges().pipe(take(1)).toPromise().
-    then(data => {
-      this.derdiedazFolder = data.folders
-      });
-    }
+    if (this.currentUser.role != 1) {
+      if (this.level == 0){
+      await this.afs.getFolders("derdiedaz").valueChanges().pipe(take(1)).toPromise().
+      then(data => {
+        this.derdiedazFolder = data.folders
+        });
+      }
 
-    await this.afs.getFolders(this.currentPath).valueChanges().pipe(take(1)).toPromise().
-    then(data => {
-      this.ownFolders = data.folders
-      });
+      await this.afs.getFolders(this.currentPath).valueChanges().pipe(take(1)).toPromise().
+      then(data => {
+        this.ownFolders = data.folders
+        });
 
-    if (this.level == 0) {
-      this.currentFolders = this.derdiedazFolder.concat(this.ownFolders);
-    } else {
-      this.currentFolders = this.ownFolders;
-    }
+      if (this.level == 0) {
+        this.currentFolders = this.derdiedazFolder.concat(this.ownFolders);
+      } else {
+        this.currentFolders = this.ownFolders;
+      }
+   }
     
     this.loaded = true;
   }

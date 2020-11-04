@@ -63,14 +63,25 @@ export class AddUserComponent implements OnInit {
       let password :string = this.adduserform.get('password').value
       username = username + '@derdiedaz.at'
 
-      this.newUser = new User("", username, firstname,lastname, "1", 3, "x4PEJU0ktfOpWBfrvxPgoqPLYgn1", "1A", "Testschule"); 
+      if (this.currentUser.role == 1){
+        var role = 2;
+        var classid = "-1";
+      } 
+      else{
+        var role = 3;
+        var classid = "1A";
+      } 
+      this.newUser = new User("", username, firstname,lastname, "1", role, this.currentUser.uid, classid, "Testschule"); 
       
       //secondary App to Create User Without Logging out the current one
       var secondaryApp = this.auth_service.GetSecondaryFirebaseApp();
 
       await secondaryApp.auth().createUserWithEmailAndPassword(username, password).then(firebaseUser =>{
         this.newUser.uid = firebaseUser.user.uid;
-        this.afs.addUser(this.newUser);
+        console.log(this.currentUser);
+        console.log(this.newUser);
+        this.afs.addUser(this.newUser, this.currentUser);
+
         secondaryApp.auth().signOut(); //Maybe not necessary - just for safety
       }).catch( (error) => {
         // registration failed 
@@ -78,6 +89,13 @@ export class AddUserComponent implements OnInit {
         this.success = false;
         this.errorMessage = this.firebaseErrors[error.code] || error.message;
       })
+
+      if (this.newUser.role == 2) {
+        this.afs.initializeFolderDocument(this.newUser.uid);
+      }
+
+      //Delete the second App
+      secondaryApp.delete();
       
       if(this.success == true || this.success == undefined) {
         //successfull registered
