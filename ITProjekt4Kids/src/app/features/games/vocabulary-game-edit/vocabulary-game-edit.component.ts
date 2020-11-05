@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { take } from 'rxjs/internal/operators/take';
 import { Router } from '@angular/router';
 import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
@@ -7,6 +7,8 @@ import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import {v4 as uuidv4} from 'uuid';
+
+
 
 @Component({
   selector: 'app-vocabulary-game-edit',
@@ -51,43 +53,65 @@ export class VocabularyGameEditComponent implements OnInit {
     this.loadNextGame();
   }
 
-  loadNextGame() {    
-    this.checkForChanges();
+  loadNextGame() {   
     if (this.Games.length > 0) {
-        //check if first game or already playing
-        if(this.currentGame != undefined) {
-          this.previousGames.push(this.currentGame);
-        }
-        //get next Game
-        this.currentGame = this.Games.pop();   
-        //set values of HTML elements
-        
-        //makes the HTML elements load new Data
-        this.loaded = true;  
+        this.currentGame = this.Games.pop();     
+       
     }else {
-      //check if first game or already playing
-      if(this.currentGame != undefined) {
-        this.previousGames.push(this.currentGame);
-      } else {
-        console.log("i am here")
-        //fill with placeholder text
         let uid = uuidv4();
         var newGame = new VocabularyGame(uid, 'Falsche Antwort 1', 'Falsche Antwort 2', 'Falsche Antwort 3', 'Richtige Antwort', "Hier die Frage eingeben", 'https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png', this.folderID);
         this.currentGame = newGame;
-        
+       
      }
-    
+
+     if (this.currentGame.question == "") this.currentGame.question = "Hier die Frage eingeben";
+     if (this.currentGame.rightAnswer == "") this.currentGame.rightAnswer = "Richtige Antwort";
+     if (this.currentGame.answer1 == "") this.currentGame.answer1 = "Falsche Antwort 1";
+     if (this.currentGame.answer2 == "") this.currentGame.answer2 = "Falsche Antwort 2";
+     if (this.currentGame.answer3 == "") this.currentGame.answer3 = "Falsche Antwort 3";
+
      this.question = this.currentGame.question;
      this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
-     this.imageURL = this.currentGame.photoID; //in the meantime set the URL  
-     this.loaded = true;  
+     this.imageURL = this.currentGame.photoID;
+     
+     console.log(this.currentGame);
+
+     this.loaded = true;
+    
     }
+    
+    reloadFields() {
+
+    }
+
+  saveChanges(forward: boolean, mainMenu: boolean) {
+    this.loaded = false;
+    if (this.checkForChanges()) {
+      this.currentGame.rightAnswer = document.getElementById('button1').innerText;
+      this.currentGame.answer1 = document.getElementById('button2').innerText;
+      this.currentGame.answer2 = document.getElementById('button3').innerText;
+      this.currentGame.answer3 = document.getElementById('button4').innerText;
+      this.currentGame.question = document.getElementById('question').innerText;
+      this.currentGame.photoID == this.imageURL
+
+      this.afs.updateTask(this.currentGame);
+    }
+
+    if(mainMenu) {
+      this.returnToMainMenu()
+    } else {
+      if(forward) {
+        this.previousGames.push(this.currentGame);
+        this.loadNextGame();
+      } else {
+        this.Games.push(this.currentGame);
+        this.loadPreviousGame();
+      }
+   }
   }
 
   loadPreviousGame() {
     if(this.previousGames.length > 0) {
-      this.checkForChanges();
-      if(this.currentGame != undefined)this.Games.push(this.currentGame);
       this.currentGame = this.previousGames.pop();   
       this.question = this.currentGame.question;
       this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
@@ -97,7 +121,6 @@ export class VocabularyGameEditComponent implements OnInit {
   }
   
   returnToMainMenu() {
-    this.checkForChanges();
     var data = "mainMenu";
     this.appService.myComponent(data);
     this.dashboardService.changes();
@@ -105,7 +128,7 @@ export class VocabularyGameEditComponent implements OnInit {
     this.appService.myHeader(header);
   }
 
-  checkForChanges(){
+  checkForChanges(): boolean{
     if(this.currentGame == undefined) return;
     let valueButton1 = document.getElementById('button1').innerText;
     let valueButton2 = document.getElementById('button2').innerText;
@@ -118,11 +141,10 @@ export class VocabularyGameEditComponent implements OnInit {
        this.currentGame.answer3 == valueButton4 &&
        this.currentGame.question == question &&
        this.currentGame.photoID == this.imageURL) {
-         //no changes have been made in this game instance
+        return false;
        }
     else {
-      var newTask = new VocabularyGame(this.currentGame.uid, valueButton2, valueButton3, valueButton4, valueButton1, question, this.imageURL, this.folderID)
-      this.afs.updateTask(newTask);
+      return true;
     }
   }
 
