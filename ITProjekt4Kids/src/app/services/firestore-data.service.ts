@@ -71,6 +71,15 @@ export class FirestoreDataService {
     updateTask(task) {
         this.db.collection("games").doc(task.uid).set(JSON.parse(JSON.stringify(task)));
     }
+
+    createResult(uid: string, totalRounds: number, roundsWon: number, folderID: number, duration: number) {
+        this.db.collection('results/'+uid+"/results").add({
+            totalRounds: totalRounds,
+            roundsWon: roundsWon,
+            folderUID: folderID,
+            duration: duration, 
+        });
+    }
     
 }
 

@@ -28,6 +28,9 @@ export class VocabularyGameComponent implements OnInit {
   roundsWon = 0;
   totalrounds = 0;
   folderID;
+  starttime: number;
+  endtime: number;
+  duration: number;
 
 
   
@@ -47,6 +50,7 @@ export class VocabularyGameComponent implements OnInit {
 
     this.shuffleArray(this.Games);
 
+    this.starttime = Date.now();
     this.loadNextGame();
     setTimeout(() => (<HTMLInputElement>document.getElementById('progressRange')).max = String(this.Games.length+1));
     this.updateColorhelper();
@@ -100,9 +104,9 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   finishGames() {
-    //TODO - Save Result in Firstore 
-    //Inlay No More Questions
-    //To the next session? Back To Game Menu in Folder where left off?
+    this.endtime = Date.now();
+    this.duration = this.endtime-this.starttime;
+    this.afs.createResult(this.currentUser.uid, this.totalrounds, this.roundsWon, this.folderID, this.duration);
     this.finished = true;
   }
 
