@@ -61,7 +61,6 @@ export class VocabularyGameEditComponent implements OnInit {
         let uid = uuidv4();
         var newGame = new VocabularyGame(uid, 'Falsche Antwort 1', 'Falsche Antwort 2', 'Falsche Antwort 3', 'Richtige Antwort', "Hier die Frage eingeben", 'https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png', this.folderID);
         this.currentGame = newGame;
-       
      }
 
      if (this.currentGame.question == "") this.currentGame.question = "Hier die Frage eingeben";
@@ -129,7 +128,7 @@ export class VocabularyGameEditComponent implements OnInit {
   }
 
   checkForChanges(): boolean{
-    if(this.currentGame == undefined) return;
+    if(this.currentGame == undefined) return false;
     let valueButton1 = document.getElementById('button1').innerText;
     let valueButton2 = document.getElementById('button2').innerText;
     let valueButton3 = document.getElementById('button3').innerText;
