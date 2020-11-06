@@ -9,7 +9,6 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import {v4 as uuidv4} from 'uuid';
 
 
-
 @Component({
   selector: 'app-vocabulary-game-edit',
   templateUrl: './vocabulary-game-edit.component.html',
@@ -28,6 +27,7 @@ export class VocabularyGameEditComponent implements OnInit {
   previousGames: VocabularyGame[];
   folderID = "";
   question: string;
+  saved;
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) {
     this.appService.myGameData$.subscribe((data) => {
@@ -83,8 +83,7 @@ export class VocabularyGameEditComponent implements OnInit {
 
     }
 
-  saveChanges(forward: boolean, mainMenu: boolean) {
-    this.loaded = false;
+  saveChanges() { 
     if (this.checkForChanges()) {
       this.currentGame.rightAnswer = document.getElementById('button1').innerText;
       this.currentGame.answer1 = document.getElementById('button2').innerText;
@@ -94,19 +93,11 @@ export class VocabularyGameEditComponent implements OnInit {
       this.currentGame.photoID == this.imageURL
 
       this.afs.updateTask(this.currentGame);
-    }
 
-    if(mainMenu) {
-      this.returnToMainMenu()
-    } else {
-      if(forward) {
-        this.previousGames.push(this.currentGame);
-        this.loadNextGame();
-      } else {
-        this.Games.push(this.currentGame);
-        this.loadPreviousGame();
-      }
-   }
+      this.saved = true;
+      setTimeout(() => this.saved = false, 4000);
+      
+    }
   }
 
   loadPreviousGame() {

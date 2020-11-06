@@ -35,6 +35,10 @@
     grid-area: right-arrow;
 }
 
+.item-save {
+    grid-area: save;
+}
+
 .item-mid {
     display: flex;
     align-items: center;
@@ -54,6 +58,7 @@
     grid-template-areas:  
         ". question question . "
         "mid mid mid mid"
+        ". save . ."
         ". ans1 ans2 ."
         ". ans3 ans4 ."
         ". final final ."
