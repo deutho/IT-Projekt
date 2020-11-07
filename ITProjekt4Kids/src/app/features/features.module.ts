@@ -14,12 +14,14 @@ import { VocabularyGameComponent } from './games/vocabulary-game/vocabulary-game
 import { VocabularyGameEditComponent } from './games/vocabulary-game-edit/vocabulary-game-edit.component';
 import { PersonalFormsGameComponent } from './games/personal-forms-game/personal-forms-game.component';
 import { PersonalFormsGameEditComponent } from './games/personal-forms-game-edit/personal-forms-game-edit.component';
+import { BugReportComponent } from './dashboard/bug-report/bug-report.component';
+
 
 
 
 @NgModule({
 declarations: [MainComponent, ProfileComponent, StatisticsComponent, AddUserComponent, DashboardComponent, DashboardHostDirective, MainMenuComponent, AddTaskComponent, VocabularyGameComponent, VocabularyGameEditComponent,
-PersonalFormsGameComponent, PersonalFormsGameEditComponent],
+PersonalFormsGameComponent, PersonalFormsGameEditComponent, BugReportComponent],
 imports: [
   CommonModule,
   RouterModule,
