@@ -80,6 +80,14 @@ export class FirestoreDataService {
             duration: duration, 
         });
     }
+
+    addBugReport(description: string, user: string, affected: string) {
+        this.db.collection("bugreports").add({
+            description: description,
+            user: user,
+            affected: affected,
+        });
+    }
     
 }
 
