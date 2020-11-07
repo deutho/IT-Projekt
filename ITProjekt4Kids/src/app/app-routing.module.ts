@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './features/dashboard/main/main.component';
 import { LoginPageComponent } from './features/login/login-page.component';
 import {AngularFireAuthGuard, AngularFireAuthGuardModule, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
-import { VocabularyGameComponent } from '../app/features/games/vocabulary-game/vocabulary-game.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 

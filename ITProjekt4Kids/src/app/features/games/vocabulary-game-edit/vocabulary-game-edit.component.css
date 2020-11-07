@@ -35,6 +35,10 @@
     grid-area: right-arrow;
 }
 
+.item-save {
+    grid-area: save;
+}
+
 .item-mid {
     display: flex;
     align-items: center;
@@ -54,6 +58,7 @@
     grid-template-areas:  
         ". question question . "
         "mid mid mid mid"
+        ". save . ."
         ". ans1 ans2 ."
         ". ans3 ans4 ."
         ". final final ."
@@ -71,7 +76,6 @@
     padding: 10px 0px 10px 0px;
     text-align: center;
     font-size: 150%;
-    font-weight: bold;
     filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
     border-width: 5px;
     border-style: solid;
@@ -107,7 +111,6 @@
 
 .question {
     font-size: 200%;
-    font-weight: bold;
     text-align: center;  
 }
 .imageEditing-container {

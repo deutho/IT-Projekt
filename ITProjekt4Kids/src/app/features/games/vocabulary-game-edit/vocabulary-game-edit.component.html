@@ -1,6 +1,6 @@
 <div *ngIf = "this.loaded == true"  class="container" id="full" >   
     <div id ="question" class="item-question question" style="margin: 0 auto;" contenteditable="true">
-            {{currentGame.question}}
+            {{question}}
     </div>
     <div class="item-mid">        
         <div type="button" (click)="loadPreviousGame()" class="item-left-arrow arrow" >
@@ -23,7 +23,14 @@
                         </svg>
                     </div>
                 </div>
-            </div>  
+            </div> 
+            
+            <div type = "button" class = "btn item-save" (click) = "saveChanges()">
+                Änderungen speichern
+            </div>
+            <div *ngIf = "this.saved == true">
+                <img src="../../../../assets/Images/checkbox.png" alt="checkbox">
+            </div>
 
         </div>
         <div type="button" (click)="loadNextGame()" class="item-right-arrow arrow">
@@ -32,7 +39,9 @@
                 </path>
             </svg>
         </div>  
-    </div>    
+    </div>
+    
+    
     <div class="item-ans1" >
         <div id="button1" type=button class="btn button-style" contenteditable="true" style=" border-color: green;">
             {{answers[0]}}

@@ -1,0 +1,27 @@
+<div class="content">
+    <div class="d-flex justify-content-center h-100">
+        <div>
+            
+            <div>
+                <form [formGroup]="bugreportform" (ngSubmit) = "onSubmit()">
+                    <div style= "margin-bottom: 35px">
+                        <input type="text" class="form-control" placeholder="Betroffener Benutzer" name = "username" formControlName ="username">
+                    </div>
+                    <div style = "margin-bottom: 35px; height: 30%">
+                        <input type="text" class="form-control" placeholder="Beschreibung" name = "description" formControlName ="description">
+                    </div>
+
+                    <div style="display: table; ">
+                        <div *ngIf = "posted === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px;">
+                            {{response}}
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <input type="submit" value="Absenden" class="btn login-button-style center">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

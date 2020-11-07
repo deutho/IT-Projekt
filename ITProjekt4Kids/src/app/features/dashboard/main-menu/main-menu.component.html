@@ -1,9 +1,21 @@
 <div *ngIf = "loaded == true"> 
     <div *ngIf= "currentUser.role != 1">
         
-        <button (click)= goUpOneLevel()>Eine Ebene nach oben</button>
-        <p>{{currentPathForHTML}}</p>
-        <ul *ngFor="let item of currentFolders;  index as i">
+        
+        <ul>
+            <li class="navigationBar" style="padding: 20px 20px 0px 15px">
+                <div  style="display: inline;">
+                    <div style="display: inline; cursor: pointer" class ="btn" (click)= goUpOneLevel()>
+                        <i class="fas fa-reply"></i>                        
+                    </div>
+                </div>
+                <div style="display: inline;">
+                    {{currentPathForHTML}}
+                </div>
+            </li>
+        </ul>
+        
+        <ul *ngFor="let item of currentFolders;  index as i" style="padding-top: -50px;">
             <li type="button" (click)=itemclick(item) style="display:block; width: 40%; margin: 0 auto; border-radius: 20px; margin-top: 30px; min-width: 300px;">
                 <div style="width: 68px; padding: 30px 0px 30px 20px; border-radius: 20px 0px 0px 20px;" class="colouring-{{i%4}}">
                     <svg *ngIf="item.type == 'folder'" style="display:inline-block; margin: 0 auto;" width="30px" height="24" viewBox="0 0 30 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,6 +31,10 @@
                 </div>
             </li>
         </ul>
+
+        <div *ngIf="currentFolders.length == 0 && currentUser.role == 3" style = "margin: 0 auto; font-weight: 400; font-size: x-large;" class = "btn">
+            {{emptyMessage}}
+        </div>
         <ul *ngIf="creating === false && currentUser.role == 2 && currentPath.substring(0,9) != 'derdiedaz'">
             <li type="button" (click)="addElement()" style="display:block; width: 40%; margin: 0 auto; border-radius: 20px; margin-top: 30px; min-width: 300px;">
                 <div style="width: 68px; background-color: #85898C; padding: 25px 0px 25px 20px; border-radius: 20px 0px 0px 20px;">
@@ -30,20 +46,6 @@
                     <h4 class="color: global-dark" style="opacity: 0.6;">           
                         neues Element
                     </h4>
-                </div>
-            </li>
-        </ul>
-
-        <ul *ngIf="creating === true && currentUser.role == 2">
-            <li type="button" style="display:block; width: 40%; margin: 0 auto; border-radius: 20px; margin-top: 30px; min-width: 300px;">
-                <div type="button" (click)="submit()" style=" width: 68px; background-color: green; padding: 25px 0px 25px 20px; border-radius: 20px 0px 0px 20px;">
-                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" class="svg-inline--fa fa-check fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" width="34px" height="34px" viewBox="0 0 520 520">
-                        <path fill="#ffffff" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z">
-                        </path>
-                    </svg>                                              
-                </div>
-                <div style="width: auto; padding: 0px 0px 0px 20px; ">                
-                        <input type="text" id="newElement"  style="opacity: 1; font-size: 29px; ">            
                 </div>
             </li>
         </ul>
@@ -60,7 +62,57 @@
         <p>Adminaccount der Volksschule xxx</p>
 
     </div>
+    <!-- overlay new Element -->
+    <div *ngIf="creating == true" class="fullscreen">
+        <div *ngIf="creating == true" class="overlay" (click)="creating = false;"></div>
+        <div *ngIf="creating == true" class="superOverlay" style="border-radius: 15px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));">
+            <div class="content">
+                <form [formGroup]="addElementForm" (ngSubmit) = "onSubmit()">
+                    <div>
+                        <h6>Name:</h6>
+                        <input placeholder="Tiere im Winter" type="text" name = "name" formControlName ="name" style="width: 100%;">
+                    </div>
+                        <div *ngIf="gameSelected == false"  style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
+                            <div class="btn dropshadow" style="display: inline-block; background-color: #40d04f; width: 25%;">
+                                Ordner
+                            </div>
+                            <div (click)="gameSelected = true" class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 25%;">
+                                Spiel
+                            </div>
+                        </div>
+                        <div *ngIf="gameSelected == true"  style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
+                            <div (click)="gameSelected = false" class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 25%;">
+                                Ordner
+                            </div>
+                            <div  class="btn dropshadow" style="display: inline-block; background-color: #40d04f; width: 25%;">
+                                Spiel
+                            </div>
+                        </div>                      
+                    <div *ngIf="gameSelected"  style="padding: 20px 0px;">
+                        <select formControlName="game" class="form-control custom-select drop-shadow">                            
+                            <option value="" selected disabled hidden>Choose here</option>
+                            <option value="vocabular-game">Single Choice</option>
+                         </select>
+                    </div>
 
-    
+                    <!-- Response vom Server
+                    <div style="display: table; margin: 0 auto;">
+                        <div *ngIf="success == false" class="alert alert-danger response" id="hideMe">        
+                                {{errorMessage}}
+                        </div>
+                        <div *ngIf="success == true" class="alert alert-success response" id="hideMe">        
+                            Benutzer erfolgreich angelegt
+                        </div>
+                    </div>-->
+                    <div style="padding: 20px 0px;">
+                        <input type="submit" value="Element anlegen" style="text-align: center; "  class="btn submit-button">
+                    </div>    
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
 
 </div>

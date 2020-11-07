@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
 import { Folder } from 'src/app/models/folder.model';
@@ -15,7 +16,7 @@ import {v4 as uuidv4} from 'uuid';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor(private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) { }
+  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) { }
 
   data;
   currentUser;
@@ -28,39 +29,55 @@ export class MainMenuComponent implements OnInit {
   derdiedazFolder: Folder[] = [];
   currentFolders: Folder[] = [];
   currentPathForHTML: string = "";
-
+  addElementForm: FormGroup;
+  formSubmitted = false;
+  gameSelected = false;
+  emptyMessage: string = "Keine Elemente in diesem Ordner";
   creating = false;
+
+
+
   async ngOnInit() {
+    this.addElementForm = this.fb.group({
+      name:  ['', Validators.required],
+      game:  []
+    });
+
+
     this.level = 0;
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
     
-    if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
-    else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
+    if (this.currentUser.role != 1){
+      if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
+      else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
 
-    this.currentPathForHTML = "Meine Ordner";
-    
-    this.getFolders();
+      this.currentPathForHTML = "Meine Ordner";
+      
+      this.getFolders();
+    }
   }
 
   async getFolders() {
-    if (this.level == 0){
-    await this.afs.getFolders("derdiedaz").valueChanges().pipe(take(1)).toPromise().
-    then(data => {
-      this.derdiedazFolder = data.folders
-      });
-    }
+    if (this.currentUser.role != 1) {
+      if (this.level == 0){
+      await this.afs.getFolders("derdiedaz").valueChanges().pipe(take(1)).toPromise().
+      then(data => {
+        this.derdiedazFolder = data.folders
+        });
+      }
 
-    await this.afs.getFolders(this.currentPath).valueChanges().pipe(take(1)).toPromise().
-    then(data => {
-      this.ownFolders = data.folders
-      });
+      await this.afs.getFolders(this.currentPath).valueChanges().pipe(take(1)).toPromise().
+      then(data => {
+        this.ownFolders = data.folders
+        });
 
-    if (this.level == 0) {
-      this.currentFolders = this.derdiedazFolder.concat(this.ownFolders);
-    } else {
-      this.currentFolders = this.ownFolders;
-    }
+      if (this.level == 0) {
+        this.currentFolders = this.derdiedazFolder.concat(this.ownFolders);
+      } else {
+        this.currentFolders = this.ownFolders;
+      }
+   }
     
     this.loaded = true;
   }
@@ -68,7 +85,7 @@ export class MainMenuComponent implements OnInit {
   addFolder(newUid: string, newName: string, newType: string, gameType?: string) {
     
     //create Folder
-    if (gameType != null || gameType != undefined)
+    if (gameType != null && gameType != undefined)
     var newFolder = new Folder(newUid, newName, newType, gameType);
     else newFolder = new Folder(newUid, newName, newType);
 
@@ -140,10 +157,10 @@ export class MainMenuComponent implements OnInit {
       var name = (<HTMLInputElement>document.getElementById('newElement')).value;
       var type = 'folder';
       var uid = uuidv4();
-      if (type ="folder") this.addFolder(uid, name, type);
+      if (type ="folder") this.addFolder(uid, name, "Folder");
       else {
         var gameType = 'vocabular-game';
-        this.addFolder(uid, name, type, gameType)
+        this.addFolder(uid, name, "Task", gameType)
       }
       
     }
@@ -171,5 +188,23 @@ export class MainMenuComponent implements OnInit {
 
     }
   }
+
+  onSubmit() {
+    if (this.addElementForm.valid) {
+      let name :string = this.addElementForm.get('name').value;
+      let game :string = this.addElementForm.get('game').value;
+      let createFolder = !this.gameSelected;
+      console.log(createFolder);
+      var uid = uuidv4();
+      if (createFolder) this.addFolder(uid, name, 'folder');
+      else {
+        this.addFolder(uid, name, 'task', game)
+      }
+
+    }
+    this.creating = false;
+  }
+
+
 
 }
