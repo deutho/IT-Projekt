@@ -23,18 +23,22 @@ export class BugReportComponent implements OnInit {
     this.posted = false;
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
+    
   } 
 
   public async onSubmit() {
     let user = this.currentUser.firstname + " " + this.currentUser.lastname;
     let description = (<HTMLInputElement>document.getElementById("textarea")).value;
 
-    this.success = this.afs.addBugReport(description, user);
-    if (this.success == true) {
-     this.response = "Bug Report erfolgreich abgesendet. Danke.";
-     (<HTMLInputElement>document.getElementById("textarea")).value = "";
-     this.posted = true;
+    if (description != "") {
+      this.success = this.afs.addBugReport(description, user);
+      if (this.success == true) {
+        this.response = "Bug Report erfolgreich abgesendet. Danke.";
+        (<HTMLInputElement>document.getElementById("textarea")).value = "";
+        this.posted = true;
+      }
+      else "Da hat was nicht funktioniert, versuchen Sie es bitte noch einmal"
+      }
     }
-    else "Da hat was nicht funktioniert, versuchen Sie es bitte noch einmal"
-  }
+
 }

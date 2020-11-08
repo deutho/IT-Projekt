@@ -1,7 +1,8 @@
 <div class="content">
-    <p>Beschreiben Sie bitte den Bug. Erwähnen Sie dabei auch, für welche Nutzer der Bug auftritt (Lehrer, Schüler, beide)</p>
-    <div class="d-flex justify-content-center h-100">
-       <textarea id ="textarea" rows = "20" cols = "150"></textarea>    
+    
+    <div style = "margin: auto; ">
+        <label for="textarea">Beschreiben Sie bitte den Bug. Erwähnen Sie dabei auch, für welche Nutzer der Bug auftritt (Lehrer, Schüler, beide):</label>
+       <textarea style="max-width: 90%; box-sizing: border-box;" id ="textarea" rows = "20" cols = "150"></textarea>    
     </div>
     <div style = "margin-top: 35px">
         <button (click)="onSubmit()" class = "btn login-button-style">Bug-Report Absenden</button>
@@ -18,3 +19,4 @@
         </div>
     </div>
 </div>
+
