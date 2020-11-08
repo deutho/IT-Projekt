@@ -81,12 +81,15 @@ export class FirestoreDataService {
         });
     }
 
-    addBugReport(description: string, user: string, affected: string) {
+    addBugReport(description: string, user: string): boolean {
+        let success = true;
         this.db.collection("bugreports").add({
             description: description,
             user: user,
-            affected: affected,
+        }).catch(()=>{
+            success = false;
         });
+    return success;
     }
     
 }

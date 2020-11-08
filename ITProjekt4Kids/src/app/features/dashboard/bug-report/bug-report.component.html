@@ -1,27 +1,20 @@
 <div class="content">
+    <p>Beschreiben Sie bitte den Bug. Erwähnen Sie dabei auch, für welche Nutzer der Bug auftritt (Lehrer, Schüler, beide)</p>
     <div class="d-flex justify-content-center h-100">
-        <div>
-            
-            <div>
-                <form [formGroup]="bugreportform" (ngSubmit) = "onSubmit()">
-                    <div style= "margin-bottom: 35px">
-                        <input type="text" class="form-control" placeholder="Betroffener Benutzer" name = "username" formControlName ="username">
-                    </div>
-                    <div style = "margin-bottom: 35px; height: 30%">
-                        <input type="text" class="form-control" placeholder="Beschreibung" name = "description" formControlName ="description">
-                    </div>
+       <textarea id ="textarea" rows = "20" cols = "150"></textarea>    
+    </div>
+    <div style = "margin-top: 35px">
+        <button (click)="onSubmit()" class = "btn login-button-style">Bug-Report Absenden</button>
+    </div>
 
-                    <div style="display: table; ">
-                        <div *ngIf = "posted === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px;">
-                            {{response}}
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <input type="submit" value="Absenden" class="btn login-button-style center">
-                    </div>
-                </form>
-            </div>
+    <div style="display: table" class ="d-flex justify-content-center">
+        <div *ngIf = "posted === true && success === true" class="alert alert-success response" role="alert" style="margin-top: 35px;">
+            {{response}}
+        </div>
+    </div>
+    <div style="display: table" class ="d-flex justify-content-center">
+        <div *ngIf = "posted === true && success === false" class="alert alert-danger response" role="alert" style="margin-top: 35px;">
+            {{response}}
         </div>
     </div>
 </div>
