@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit {
 
     if(this.currentUser.role == 1) this.accountTyp = "Adminaccount";
     else if(this.currentUser.role == 2) this.accountTyp = "Lehreraccount";
-    else if (this.currentUser.role == 3) this.accountTyp = "Schüleraccount";
+    else if (this.currentUser.role == 3) this.accountTyp = "Schüler";
   }
    
 }
