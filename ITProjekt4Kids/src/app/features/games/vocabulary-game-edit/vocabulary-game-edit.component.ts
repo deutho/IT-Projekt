@@ -30,6 +30,7 @@ export class VocabularyGameEditComponent implements OnInit {
   folderID = "";
   question: string;
   saved;
+  unsavedChanges = false;
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) {
     // get folder where game created in
@@ -159,5 +160,19 @@ export class VocabularyGameEditComponent implements OnInit {
     this.imageURL = (<HTMLInputElement>document.getElementById('URL')).value;
     this.editingPicture = false;        
     
+  }
+
+  rightArrowClicked() {
+    if(this.checkForChanges()) {
+      this.unsavedChanges = true;
+    }
+    else this.loadNextGame();
+  }
+
+  leftArrowClicked() {
+    if(this.checkForChanges()) {
+      this.unsavedChanges = true;
+    }
+    else this.loadPreviousGame();
   }
 }

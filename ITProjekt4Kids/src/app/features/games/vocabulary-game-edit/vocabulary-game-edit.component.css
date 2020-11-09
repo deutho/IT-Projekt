@@ -158,3 +158,44 @@
     opacity: 0.6;
 
 }
+
+.overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: block; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: black; /* Black background with opacity */
+    opacity: 0.5;
+    z-index: 3; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: default; /* Add a pointer on hover */
+  }
+
+  .superOverlay {
+    position: fixed; /* Sit on top of the page content */
+    display: flex; /* Hidden by default */
+    width: 30%; /* Full width (cover the whole page) */
+    background-color: white; /* Black background with opacity */
+    z-index: 4; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: default; /* Add a pointer on hover */
+  }
+
+.fullscreen {
+    position: fixed; /* Sit on top of the page content */
+    display: flex; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: default; /* Add a pointer on hover */
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+}
