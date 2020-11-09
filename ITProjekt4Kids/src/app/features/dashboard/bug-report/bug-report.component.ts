@@ -12,31 +12,33 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 })
 export class BugReportComponent implements OnInit {
 
-  bugreportform: FormGroup;
   response;
+  success;
   posted;
   currentUser: User;
 
-  constructor(private fb: FormBuilder, private afs: FirestoreDataService) { }
+  constructor(private afs: FirestoreDataService) { }
 
   async ngOnInit() {
-    this.bugreportform = this.fb.group({
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required)
-    });
-
+    this.posted = false;
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
+    
   } 
 
   public async onSubmit() {
-    let username :string = this.bugreportform.get('username').value
-    let password :string = this.bugreportform.get('description').value
     let user = this.currentUser.firstname + " " + this.currentUser.lastname;
-    this.response = "Bug-Report erfolgreich abbgesendet";
-    this.posted = true;
-  }
+    let description = (<HTMLInputElement>document.getElementById("textarea")).value;
 
-
+    if (description != "") {
+      this.success = this.afs.addBugReport(description, user);
+      if (this.success == true) {
+        this.response = "Bug Report erfolgreich abgesendet. Danke.";
+        (<HTMLInputElement>document.getElementById("textarea")).value = "";
+        this.posted = true;
+      }
+      else "Da hat was nicht funktioniert, versuchen Sie es bitte noch einmal"
+      }
+    }
 
 }
