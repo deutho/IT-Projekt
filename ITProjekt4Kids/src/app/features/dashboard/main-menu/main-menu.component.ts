@@ -85,7 +85,7 @@ export class MainMenuComponent implements OnInit {
   addFolder(newUid: string, newName: string, newType: string, gameType?: string) {
     
     //create Folder
-    if (gameType != null || gameType != undefined)
+    if (gameType != null && gameType != undefined)
     var newFolder = new Folder(newUid, newName, newType, gameType);
     else newFolder = new Folder(newUid, newName, newType);
 
@@ -194,6 +194,7 @@ export class MainMenuComponent implements OnInit {
       let name :string = this.addElementForm.get('name').value;
       let game :string = this.addElementForm.get('game').value;
       let createFolder = !this.gameSelected;
+      console.log(createFolder);
       var uid = uuidv4();
       if (createFolder) this.addFolder(uid, name, 'folder');
       else {
@@ -201,6 +202,7 @@ export class MainMenuComponent implements OnInit {
       }
 
     }
+    this.creating = false;
   }
 
 

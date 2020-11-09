@@ -1,4 +1,4 @@
-export class Game{
+export class VocabularyGame{
     
     public constructor(public uid: string,
         public answer1: string,

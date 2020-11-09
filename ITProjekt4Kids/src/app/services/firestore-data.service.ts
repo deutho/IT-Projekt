@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreCollectio
 import { User } from '../models/users.model';
 import { AuthService } from './auth.service';
 import * as firebase from 'firebase';
-import { Game } from '../models/game.model';
+import { VocabularyGame } from '../models/VocabularyGame.model';
 import { Folder } from '../models/folder.model';
 import { Folderelement } from '../models/folderelement.model';
 import { take } from 'rxjs/operators';
@@ -38,7 +38,7 @@ export class FirestoreDataService {
         }
     }
 
-    getTasksPerID(id): AngularFirestoreCollection<Game> {
+    getTasksPerID(id): AngularFirestoreCollection<VocabularyGame> {
         return this._afs.collection('games', ref => ref.where('folderUID', '==', id));
     }
 
@@ -66,6 +66,30 @@ export class FirestoreDataService {
             parent: "folders",
             folders: []
         });
+    }
+
+    updateTask(task) {
+        this.db.collection("games").doc(task.uid).set(JSON.parse(JSON.stringify(task)));
+    }
+
+    createResult(uid: string, totalRounds: number, roundsWon: number, folderID: number, duration: number) {
+        this.db.collection('results/'+uid+"/results").add({
+            totalRounds: totalRounds,
+            roundsWon: roundsWon,
+            folderUID: folderID,
+            duration: duration, 
+        });
+    }
+
+    addBugReport(description: string, user: string): boolean {
+        let success = true;
+        this.db.collection("bugreports").add({
+            description: description,
+            user: user,
+        }).catch(()=>{
+            success = false;
+        });
+    return success;
     }
     
 }

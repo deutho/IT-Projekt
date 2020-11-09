@@ -1,5 +1,6 @@
 import { Injectable, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { MainMenuComponent } from '../features/dashboard/main-menu/main-menu.component';
 import { AppService } from '../services/app.service';
 
 @Injectable({ providedIn: 'root' })
@@ -64,6 +65,13 @@ export class DashboardService {
       m => m.VocabularyGameEditComponent
     );
   }
+
+  private bugReport() {
+    return () =>
+    import('../features/dashboard/bug-report/bug-report.component').then(
+      m => m.BugReportComponent
+    );
+  }
  
   changes() {
     this.hasChanged.next(!this.hasChanged);
@@ -96,11 +104,14 @@ export class DashboardService {
         return this.appService.forChild(vcr, {
           loadChildren: this.vocabularGame()
         });
-    } else if (this.data = "vocabular-game-edit") {
+    } else if (this.data == "vocabular-game-edit") {
       return this.appService.forChild(vcr, {
         loadChildren: this.vocabularGameEdit()
       });
+    } else if (this.data == "bug-report") {
+      return this.appService.forChild(vcr, {
+        loadChildren: this.bugReport()
+      });
     }
-
   }
 }

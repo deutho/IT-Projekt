@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
-import { Game } from 'src/app/models/game.model';
+import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
@@ -14,10 +14,10 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 })
 export class VocabularyGameComponent implements OnInit {
 
-  Games: Game[];
-  currentGame: Game;
+  Games: VocabularyGame[];
+  currentGame: VocabularyGame;
   currentUser: User;
-  playedGames: Game[];
+  playedGames: VocabularyGame[];
   loaded = undefined;
   selection: string;
   answers: string[];
@@ -28,6 +28,9 @@ export class VocabularyGameComponent implements OnInit {
   roundsWon = 0;
   totalrounds = 0;
   folderID;
+  starttime: number;
+  endtime: number;
+  duration: number;
 
 
   
@@ -47,6 +50,7 @@ export class VocabularyGameComponent implements OnInit {
 
     this.shuffleArray(this.Games);
 
+    this.starttime = Date.now();
     this.loadNextGame();
     setTimeout(() => (<HTMLInputElement>document.getElementById('progressRange')).max = String(this.Games.length+1));
     this.updateColorhelper();
@@ -100,9 +104,9 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   finishGames() {
-    //TODO - Save Result in Firstore 
-    //Inlay No More Questions
-    //To the next session? Back To Game Menu in Folder where left off?
+    this.endtime = Date.now();
+    this.duration = this.endtime-this.starttime;
+    this.afs.createResult(this.currentUser.uid, this.totalrounds, this.roundsWon, this.folderID, this.duration);
     this.finished = true;
   }
 

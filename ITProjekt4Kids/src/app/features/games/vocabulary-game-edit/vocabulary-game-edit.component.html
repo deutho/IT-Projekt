@@ -33,7 +33,15 @@
                         </svg>
                     </div>
                 </div>
-            </div>  
+            </div> 
+            
+            <div type = "button" class = "btn item-save" (click) = "saveChanges()">
+                Änderungen speichern
+            </div>
+            <div *ngIf = "this.saved == true">
+                <img src="../../../../assets/Images/checkbox.png" alt="checkbox">
+            </div>
+
         </div>
 
         <!-- arrow right -->
