@@ -14,6 +14,7 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 })
 export class VocabularyGameEditComponent implements OnInit {
 
+  // global variables
   Games: Game[];
   currentGame: Game;
   currentUser: User;
@@ -36,11 +37,10 @@ export class VocabularyGameEditComponent implements OnInit {
     //get user
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
       .then(data => this.currentUser = data[0]);
-      await this.afs.getTasksPerID(this.folderID).valueChanges().pipe(take(1)).toPromise()
+    // get games
+    await this.afs.getTasksPerID(this.folderID).valueChanges().pipe(take(1)).toPromise()
       .then(data => this.Games = data);
-    //init second stack
-    console.log(this.currentUser)
-    console.log(this.Games)
+    //init second stack for going back and forwards between games
     let previousGames = [];
     this.previousGames = previousGames;
 
