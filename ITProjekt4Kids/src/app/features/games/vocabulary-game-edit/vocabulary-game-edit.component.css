@@ -46,7 +46,7 @@
     grid-template-columns: 10% 40% 40% 10%;
     grid-template-rows: auto;
     grid-template-areas: 
-    "left-arrow image image arrow";
+    "left-arrow image image right-arrow";
 }
 
 .container {
@@ -58,11 +58,9 @@
     grid-template-areas:  
         ". question question . "
         "mid mid mid mid"
-        ". save . ."
         ". ans1 ans2 ."
         ". ans3 ans4 ."
-        ". final final ."
-        ". home next ."
+        ". home save ."
     }
 
 .button-style {
