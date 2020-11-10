@@ -3,8 +3,15 @@
 
 <div class="example-boundary">
     <div class="example-box" cdkDragBoundary=".example-boundary" cdkDrag>
-      I can only be dragged within the dotted container
+      {{this.currentGame.ich}}
     </div>
   </div>
 
-  <!-- ab hier selber -->
+  <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+    <div class="example-box" *ngFor="let answer of answers" cdkDrag>{{answer}}</div> 
+    <!-- for-Schleife, Zeile wird 8x (1x für jede answer, ausgegeben mit dem jeweiligen Wert) -->
+  </div>
+
+  <button (click)="this.loadNextGame()">Weiter</button>
+
+  
