@@ -8,7 +8,7 @@
     </div>
 
     <!-- middle section containing arrows laft and right and image -->
-    <div class="item-mid">        
+    <div class="item-mid" style="width: 100%; display: flex; justify-content: space-between;">        
 
         <!-- arrow left -->
         <div type="button" (click)="leftArrowClicked()" class="item-left-arrow arrow" >
@@ -91,9 +91,14 @@
         </div>
     </div>
 
-    <!-- <div *ngIf = "this.saved == true">
-        <img src="../../../../assets/Images/checkbox.png" alt="checkbox">
-    </div>  -->
+    <!-- speicher Button Feedback -->
+    <div *ngIf = "this.saved == true" class="item-final alert alert-success text-center" role="alert" style="width: 80%; margin:0 auto;">
+        Erfolgreich gespeichert!
+    </div>
+    <div *ngIf = "this.noChanges == true" class="item-final alert alert-primary text-center" role="alert" style="width: 80%; margin:0 auto;">
+        Es gibt keine zu speichernden Änderungen!
+    </div>
+
        
     
 </div>
@@ -102,13 +107,26 @@
 <!-- overlay which appeares when unsaved changed would be lost -->
 <div *ngIf="unsavedChanges == true" class="fullscreen">
     <div *ngIf="unsavedChanges == true" class="overlay" (click)="unsavedChanges = false;"></div>
-    <div *ngIf="unsavedChanges == true" class="superOverlay" style="border-radius: 15px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));">
-        <p>Es gibt ungespeicherte Änderungen!</p>
-        <div style="padding: 20px 0px;">
-            <input type="submit" value="Speichern" style="text-align: center; background-color:green"  class="btn submit-button">
-        </div>    
-        <div style="padding: 20px 0px;">
-            <input type="submit" value="Verwerfen" style="text-align: center; "  class="btn submit-button">
-        </div>    
+    <div *ngIf="unsavedChanges == true" class="superOverlay" style=" min-width: 260px; ;display:block; border-radius: 15px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));">
+        <div style="padding: 20px 10%; width: 100%; display: flex; justify-content: space-around;">
+            <div>Es gibt ungespeicherte Änderungen!</div>
+        </div>
+        <div  style="padding: 20px 10%; width: 100%; display: flex; justify-content: space-between;">
+            <div (click)="discardChanges()" class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 25%; min-width: 100px;">
+                Verwerfen
+            </div>
+            <div (click)="saveAndContinue()" class="btn dropshadow" style="display: inline-block; background-color: #40d04f; width: 25%; min-width: 100px;">
+                Speichern
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- <div *ngIf = "this.saved == true" class="fullscreen">
+    <div *ngIf = "this.saved == true" class="overlay" (click)="unsavedChanges = false;"></div>
+    <div *ngIf = "this.saved == true" class="superOverlay" style=" min-width: 260px; ;display:block; border-radius: 15px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));">
+        <div style="padding: 20px 10%; width: 100%; display: flex; justify-content: space-around;" class="success">
+            <div>Speicherung war erfolgreich!</div>
+        </div>
+    </div>
+</div> -->

@@ -30,7 +30,10 @@ export class VocabularyGameEditComponent implements OnInit {
   folderID = "";
   question: string;
   saved;
+  noChanges;
   unsavedChanges = false;
+  isDefault = false;
+  
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) {
     // get folder where game created in
@@ -56,7 +59,7 @@ export class VocabularyGameEditComponent implements OnInit {
 
   loadNextGame() {   
 
-    if(this.currentGame != undefined) this.previousGames.push(this.currentGame)
+    if(this.currentGame != undefined && !this.isDefaultPage()) this.previousGames.push(this.currentGame)
 
     // if game has some pages to be played left
     if (this.Games.length > 0) {
@@ -87,7 +90,9 @@ export class VocabularyGameEditComponent implements OnInit {
 
     //  lets the html know, that content can now be loaded
      this.loaded = true;
-    
+
+    // necessary because the content is mutable
+    this.loadInnerTextValues();
     }
 
     // makes changes persitant in the database
@@ -109,13 +114,19 @@ export class VocabularyGameEditComponent implements OnInit {
       this.afs.updateTask(this.currentGame);
 
       this.saved = true;
-      setTimeout(() => this.saved = false, 4000);
+      setTimeout(() => this.saved = false, 2500);
       
+    }
+    else {
+      this.noChanges = true;
+      setTimeout(() => this.noChanges = false, 2500);
     }
   }
 
   // activated on click of left arrow - loades the previous game
   loadPreviousGame() {
+    if(this.currentGame != undefined && this.previousGames.length != 0) this.Games.push(this.currentGame)
+
     if(this.previousGames.length > 0) {
       this.currentGame = this.previousGames.pop();   
       this.question = this.currentGame.question;
@@ -123,6 +134,7 @@ export class VocabularyGameEditComponent implements OnInit {
       this.imageURL = this.currentGame.photoID; 
       this.loaded = true;  
     }
+    this.loadInnerTextValues();
   }
   
   // activates on Home-Button click, return, the user to the home menu, and saves changed if any were made
@@ -158,10 +170,15 @@ export class VocabularyGameEditComponent implements OnInit {
   pictureEdited() {  
     //toggle to refresh correct image after inputting a new URL
     this.imageURL = (<HTMLInputElement>document.getElementById('URL')).value;
-    this.editingPicture = false;        
-    
+
+    //dropbox share link - probably will be deleted later on
+    if(this.imageURL.substring(this.imageURL.length-4, this.imageURL.length) == "dl=0"){
+      this.imageURL = this.imageURL.substring(0,this.imageURL.length-4) + "raw=1"
+    }
+    this.editingPicture = false;            
   }
 
+  //navigating to the next question
   rightArrowClicked() {
     if(this.checkForChanges()) {
       this.unsavedChanges = true;
@@ -169,10 +186,45 @@ export class VocabularyGameEditComponent implements OnInit {
     else this.loadNextGame();
   }
 
+  //navigating to previous question
   leftArrowClicked() {
     if(this.checkForChanges()) {
       this.unsavedChanges = true;
     }
     else this.loadPreviousGame();
+  }
+
+  //save button from warning of unsaved changes
+  saveAndContinue() {
+    this.unsavedChanges=false;
+    this.saveChanges();    
+  }
+
+  //discard button from warning of unsaved changes
+  discardChanges() {
+    this.unsavedChanges=false;
+    this.loadInnerTextValues();
+  }
+
+  //As content is mutable, this is necessary to avoid bugs
+  loadInnerTextValues() {
+    document.getElementById('button1').innerText = this.currentGame.rightAnswer;
+    document.getElementById('button2').innerText = this.currentGame.answer1;
+    document.getElementById('button3').innerText = this.currentGame.answer2;
+    document.getElementById('button4').innerText = this.currentGame.answer3;
+    document.getElementById('question').innerText = this.currentGame.question;
+    this.imageURL = this.currentGame.photoID;
+  }
+
+  //checks if the Page is the default one, or if any changes have been made
+  isDefaultPage() {
+    this.isDefault = false;
+    if (document.getElementById('question').innerText == "Hier die Frage eingeben") this.isDefault = true;
+    if (document.getElementById('button1').innerText == "Richtige Antwort") this.isDefault = true;
+    if (document.getElementById('button2').innerText == "Falsche Antwort 1") this.isDefault = true;
+    if (document.getElementById('button3').innerText = "Falsche Antwort 2") this.isDefault = true;
+    if (document.getElementById('button4').innerText = "Falsche Antwort 3") this.isDefault = true;
+    if (this.imageURL = "https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png") this.isDefault = true;
+    return this.isDefault;
   }
 }
