@@ -66,6 +66,20 @@ export class DashboardService {
     );
   }
 
+  private personalFormGame() {
+    return () =>
+    import('../features/games/personal-forms-game/personal-forms-game.component').then(
+      m => m.PersonalFormsGameComponent
+    );
+  }
+
+  private personalFormGameEdit() {
+    return () =>
+    import('../features/games/personal-forms-game-edit/personal-forms-game-edit.component').then(
+      m => m.PersonalFormsGameEditComponent
+    );
+  }
+
   private bugReport() {
     return () =>
     import('../features/dashboard/bug-report/bug-report.component').then(
@@ -107,6 +121,14 @@ export class DashboardService {
     } else if (this.data == "vocabular-game-edit") {
       return this.appService.forChild(vcr, {
         loadChildren: this.vocabularGameEdit()
+      });
+    } else if (this.data == "personal-forms-game") {
+        return this.appService.forChild(vcr, {
+          loadChildren: this.personalFormGame()
+        });
+    } else if (this.data == "personal-forms-game-edit") {
+      return this.appService.forChild(vcr, {
+        loadChildren: this.personalFormGameEdit()
       });
     } else if (this.data == "bug-report") {
       return this.appService.forChild(vcr, {

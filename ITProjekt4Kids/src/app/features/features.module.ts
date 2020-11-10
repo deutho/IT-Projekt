@@ -15,6 +15,7 @@ import { VocabularyGameEditComponent } from './games/vocabulary-game-edit/vocabu
 import { PersonalFormsGameComponent } from './games/personal-forms-game/personal-forms-game.component';
 import { PersonalFormsGameEditComponent } from './games/personal-forms-game-edit/personal-forms-game-edit.component';
 import { BugReportComponent } from './dashboard/bug-report/bug-report.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 
@@ -27,6 +28,7 @@ imports: [
   RouterModule,
   ReactiveFormsModule,
   FormsModule,
+  DragDropModule
 ],
 exports: [MainComponent]
 })
