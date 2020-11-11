@@ -1,4 +1,4 @@
-<div class="content">
+<div *ngIf ="write === true" class="content">
     
     <div style = "margin: auto; ">
         <label for="textarea">Beschreiben Sie bitte den Bug. Erwähnen Sie dabei auch, für welche Nutzer der Bug auftritt (Lehrer, Schüler, beide):</label>
@@ -6,6 +6,7 @@
     </div>
     <div style = "margin-top: 35px">
         <button (click)="onSubmit()" class = "btn login-button-style">Bug-Report Absenden</button>
+        <button style="margin-top: 20px;" (click)="changeView();" class = "btn login-button-style">Meine Bug-Reports ansehen</button>
     </div>
 
     <div style="display: table" class ="d-flex justify-content-center">
@@ -17,6 +18,18 @@
         <div *ngIf = "posted === true && success === false" class="alert alert-danger response" role="alert" style="margin-top: 35px;">
             {{response}}
         </div>
+        
     </div>
+    
+</div>
+
+<div *ngIf = "write === false">
+    Bug Reports von {{currentUser.firstname}} {{currentUser.lastname}}
+    <ul *ngFor="let bugreport of bugreports;  index as i" style="padding-top: -50px;">
+        <li style="margin-top: 30px;">
+            {{i+1}}    {{bugreport.description}}
+        </li>
+    </ul>
+    <button (click)="changeView();" class = "btn login-button-style">Bug-Report erstellen</button>
 </div>
 
