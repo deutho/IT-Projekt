@@ -7,6 +7,7 @@ import { VocabularyGame } from '../models/VocabularyGame.model';
 import { Folder } from '../models/folder.model';
 import { Folderelement } from '../models/folderelement.model';
 import { take } from 'rxjs/operators';
+import { BugReport } from '../models/bugreport.model';
 
 
 
@@ -86,10 +87,15 @@ export class FirestoreDataService {
         this.db.collection("bugreports").add({
             description: description,
             user: user,
+            time: firebase.firestore.FieldValue.serverTimestamp(),
         }).catch(()=>{
             success = false;
         });
     return success;
+    }
+
+    getBugReportsByUser(user: string): AngularFirestoreCollection<BugReport> {
+        return this._afs.collection("bugreports", ref => ref.where('user', "==", user));
     }
     
 }
