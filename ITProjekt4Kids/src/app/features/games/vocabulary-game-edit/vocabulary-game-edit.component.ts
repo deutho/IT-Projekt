@@ -33,7 +33,8 @@ export class VocabularyGameEditComponent implements OnInit {
   noChanges;
   unsavedChanges = false;
   isDefault = false;
-  
+  finalScreen = false;
+  noMoreGames = false;
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) {
     // get folder where game created in
@@ -58,8 +59,13 @@ export class VocabularyGameEditComponent implements OnInit {
   }
 
   loadNextGame() {   
+    if(this.finalScreen && this.Games.length == 0) {
+      this.noMoreGames = true;
+      setTimeout(() => this.noMoreGames = false, 2500);
+      return; //maybe add some feedback here
+    }
 
-    if(this.currentGame != undefined && !this.isDefaultPage()) this.previousGames.push(this.currentGame)
+    if(this.currentGame != undefined) this.previousGames.push(this.currentGame)
 
     // if game has some pages to be played left
     if (this.Games.length > 0) {
@@ -68,9 +74,11 @@ export class VocabularyGameEditComponent implements OnInit {
     }
     // if game is empty, or you clicked past the last page in the game
     else {
+        this.finalScreen = true;
         let uid = uuidv4();
         var newGame = new VocabularyGame(uid, 'Falsche Antwort 1', 'Falsche Antwort 2', 'Falsche Antwort 3', 'Richtige Antwort', "Hier die Frage eingeben", 'https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png', this.folderID);
         this.currentGame = newGame;
+        
      }
 
     //  to prevent disappearing of content - text is filled to have some clickable element
@@ -84,9 +92,7 @@ export class VocabularyGameEditComponent implements OnInit {
      this.question = this.currentGame.question;
      this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
      this.imageURL = this.currentGame.photoID;
-     
-    //  debugging
-     console.log(this.currentGame);
+
 
     //  lets the html know, that content can now be loaded
      this.loaded = true;
@@ -105,14 +111,9 @@ export class VocabularyGameEditComponent implements OnInit {
       this.currentGame.answer3 = document.getElementById('button4').innerText;
       this.currentGame.question = document.getElementById('question').innerText;
       this.currentGame.photoID = this.imageURL;
-      console.log("image: ")
-      console.log(this.imageURL)
-
-      console.log("currentgame: ")
-      console.log(this.currentGame)
 
       this.afs.updateTask(this.currentGame);
-
+      this.finalScreen = false;
       this.saved = true;
       setTimeout(() => this.saved = false, 2500);
       
@@ -125,15 +126,20 @@ export class VocabularyGameEditComponent implements OnInit {
 
   // activated on click of left arrow - loades the previous game
   loadPreviousGame() {
-    if(this.currentGame != undefined && this.previousGames.length != 0) this.Games.push(this.currentGame)
-
-    if(this.previousGames.length > 0) {
-      this.currentGame = this.previousGames.pop();   
-      this.question = this.currentGame.question;
-      this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
-      this.imageURL = this.currentGame.photoID; 
-      this.loaded = true;  
+    if(this.previousGames.length == 0) {
+      this.noMoreGames = true;
+      setTimeout(() => this.noMoreGames = false, 2500);
+      return; //maybe add some feedback here
     }
+    if(this.currentGame != undefined) this.Games.push(this.currentGame)
+
+
+    this.currentGame = this.previousGames.pop();   
+    this.question = this.currentGame.question;
+    this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
+    this.imageURL = this.currentGame.photoID; 
+    this.loaded = true;  
+    
     this.loadInnerTextValues();
   }
   
@@ -214,17 +220,5 @@ export class VocabularyGameEditComponent implements OnInit {
     document.getElementById('button4').innerText = this.currentGame.answer3;
     document.getElementById('question').innerText = this.currentGame.question;
     this.imageURL = this.currentGame.photoID;
-  }
-
-  //checks if the Page is the default one, or if any changes have been made
-  isDefaultPage() {
-    this.isDefault = false;
-    if (document.getElementById('question').innerText == "Hier die Frage eingeben") this.isDefault = true;
-    if (document.getElementById('button1').innerText == "Richtige Antwort") this.isDefault = true;
-    if (document.getElementById('button2').innerText == "Falsche Antwort 1") this.isDefault = true;
-    if (document.getElementById('button3').innerText = "Falsche Antwort 2") this.isDefault = true;
-    if (document.getElementById('button4').innerText = "Falsche Antwort 3") this.isDefault = true;
-    if (this.imageURL = "https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png") this.isDefault = true;
-    return this.isDefault;
   }
 }
