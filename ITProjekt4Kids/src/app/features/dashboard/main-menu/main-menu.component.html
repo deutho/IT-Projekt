@@ -79,7 +79,7 @@
         <div *ngIf="creating == true" class="overlay" (click)="creating = false;"></div>
         <!-- white div, which contains all the input fields -->
         <div *ngIf="creating == true" class="superOverlay" style="border-radius: 15px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));">
-            <div class="content">
+            <div class="content">               
                 <!-- formular -->
                 <form [formGroup]="addElementForm" (ngSubmit) = "onSubmit()">
                     <div>
