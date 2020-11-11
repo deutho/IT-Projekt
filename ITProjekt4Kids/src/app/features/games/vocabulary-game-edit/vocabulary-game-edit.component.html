@@ -110,6 +110,10 @@
 <div *ngIf="unsavedChanges == true" class="fullscreen">
     <div *ngIf="unsavedChanges == true" class="overlay" (click)="unsavedChanges = false;"></div>
     <div *ngIf="unsavedChanges == true" class="superOverlay" style=" min-width: 260px; ;display:block; border-radius: 15px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));">
+        <div style="display: flex; justify-content: flex-end;" (click)="unsavedChanges = false;">
+            <i class="fas fa-times" style="display: flex; opacity: 0.6; align-content: flex-end; cursor: pointer; padding: 10px 10px 0px 0px;">
+            </i>
+        </div>
         <div style="padding: 20px 10%; width: 100%; display: flex; justify-content: space-around;">
             <div>Es gibt ungespeicherte Änderungen!</div>
         </div>

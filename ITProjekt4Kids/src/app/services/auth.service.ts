@@ -29,14 +29,11 @@ export class AuthService {
         return firebase.initializeApp(environment.firebase, "Secondary");
     }
 
-    changePassword(currentPassword, newPassword): Promise<any> {
-        this.reauthenticate(currentPassword).then(() => {
+    async changePassword(currentPassword, newPassword): Promise<any> {
+        return this.reauthenticate(currentPassword).then(() => {
             var user = firebase.auth().currentUser;
-            user.updatePassword(newPassword).then(() => {
-                return
-            }).catch((error) => {return error;});
-        }).catch((error) => {return error;});
-        return
+            return user.updatePassword(newPassword);
+        });
     }
 
     reauthenticate(currentPassword) {

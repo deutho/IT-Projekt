@@ -31,8 +31,9 @@ export class VocabularyGameComponent implements OnInit {
   starttime: number;
   endtime: number;
   duration: number;
-
-
+  speakerMode = false;
+  totalNumberOfRounds = 0;
+  audio = new Audio("");
   
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) {
     this.appService.myGameData$.subscribe((data) => {
@@ -52,7 +53,8 @@ export class VocabularyGameComponent implements OnInit {
 
     this.starttime = Date.now();
     this.loadNextGame();
-    setTimeout(() => (<HTMLInputElement>document.getElementById('progressRange')).max = String(this.Games.length+1));
+    this.totalNumberOfRounds = this.Games.length+1;
+    // setTimeout(() => (<HTMLInputElement>document.getElementById('progressRange')).max = String(this.Games.length+1));
     this.updateColorhelper();
     
     
@@ -65,7 +67,7 @@ export class VocabularyGameComponent implements OnInit {
       this.updateColor("button3");
       this.updateColor("button4");
       this.updateColor("question");
-      (<HTMLInputElement>document.getElementById('progressRange')).value = String(this.totalrounds+1);
+      // (<HTMLInputElement>document.getElementById('progressRange')).value = String(this.totalrounds+1);
     }) 
   }
 
@@ -150,6 +152,26 @@ export class VocabularyGameComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('button2')).setAttribute("style", "background-color:white;");
     (<HTMLInputElement>document.getElementById('button3')).setAttribute("style", "background-color:white;");
     (<HTMLInputElement>document.getElementById('button4')).setAttribute("style", "background-color:white;");
+  }
+
+  readQuestion(Text) {
+    this.playSound("./../../../../assets/Audio/"+Text.substring(0,Text.length-1)+".ogg");
+  }
+
+  readButtonOne(Text) {
+    this.playSound("./../../../../assets/Audio/"+Text+".ogg");
+  }
+
+  readButtonTwo(Text) {
+    this.playSound("./../../../../assets/Audio/"+Text+".ogg");
+  }
+
+  readButtonThree(Text) {
+    this.playSound("./../../../../assets/Audio/"+Text+".ogg");
+  }
+
+  readButtonFour(Text) {
+    this.playSound("./../../../../assets/Audio/"+Text+".ogg");
   }
 
   buttonOne(answer:string) {
@@ -306,4 +328,19 @@ export class VocabularyGameComponent implements OnInit {
 
     document.getElementById(id).innerHTML = str;
   }  
+
+  switchMode() {
+    this.loaded = false;
+    this.speakerMode = !this.speakerMode;
+    this.loaded = true;
+    this.updateColorhelper();
+    
+  }
+
+  playSound(soundfile) {
+    this.audio = new Audio(soundfile);
+    this.audio.play();
+  }
 }
+
+

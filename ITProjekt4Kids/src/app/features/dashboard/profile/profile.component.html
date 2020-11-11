@@ -3,7 +3,7 @@
     <link rel="stylesheet" type="text/css" href="profile.component.css">
 </head>
 
-    <div class="grid-container">
+    <div *ngIf = "passwordChange == false" class="grid-container">
         <div class="item-image">
                 <div id="profile_image">
                     <img class = "img-style" src = "./../../../assets/Images/profile_image.png">
@@ -24,6 +24,7 @@
                     <p><span style="font-weight: bold">Lehrerin:   </span>Frau Schlau</p>
                     <p><span style="font-weight: bold">Rolle:   </span> {{accountTyp}}</p>
                     <p><span style="font-weight: bold">Sprachausgabe:</span></p>
+                    <button style="margin-top: 20px;" (click)="changePassword();" class = "btn login-button-style">Mein Passwort ändern</button>
                 </div>
         </div>
 
@@ -37,8 +38,48 @@
                     <p class="symbol"><span style="color: #ffffff00;">placeholder</span></p>
                     <p class="symbol"><img style="max-height: 40px; margin: -30%" src = "./../../../assets/Images/volume_button.PNG"></p>
         </div>
+
+
+        
     </div>
 
+    <div *ngIf = "passwordChange == true">
+        <div style= "display: flex; justify-content: center; padding-top: 100px">
+            <h4>Passwort ändern</h4>
+        </div>
+
+        <div style= "display: flex; justify-content: center; padding-top: 50px">
+
+            <form style="width: 25%;" [formGroup]="passwordChangeForm" (ngSubmit) = "onSubmit()">
+                <div style= "margin-bottom: 35px">
+                    <input type="password" class="form-control" placeholder="Altes Passwort" name = "oldPassword" formControlName ="oldPassword">
+                </div>
+                <div style = "margin-bottom: 35px">
+                    <input type="password" class="form-control" placeholder="Neues Passwort" name = "newPassword" formControlName ="newPassword">
+                </div>
+
+                <div style= "margin-bottom: 35px">
+                    <input type="password" class="form-control" placeholder="Neues Passwort bestätigen" name = "newPasswordConfirm" formControlName ="newPasswordConfirm">
+                </div>
+
+                <div style = "display: flex; justify-content: center; padding-top: 20px">
+                    <div *ngIf = "error === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px;">
+                        {{errorMessage}}
+                    </div>
+                    <div *ngIf = "error === false" class="alert alert-success response" role="alert" style="margin-bottom: 35px;">
+                        {{errorMessage}}
+                    </div>
+                </div>
+                
+                <div style = "display: flex; justify-content: center; padding-top: 30px;">
+                    <button class = "btn login-button-style center" style="background-color: lightgrey" (click) = "passwordChange = false">Zurück</button>
+                    <input type="submit" value="Passwort ändern" class="btn login-button-style center bg-primary" style="color: white" >
+                </div>
+            </form>
+        </div>
+
+
+    </div>
     
 
    
