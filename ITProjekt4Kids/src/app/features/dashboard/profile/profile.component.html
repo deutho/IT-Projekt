@@ -44,8 +44,12 @@
     </div>
 
     <div *ngIf = "passwordChange == true">
-
         <div style= "display: flex; justify-content: center; padding-top: 100px">
+            <h4>Passwort ändern</h4>
+        </div>
+
+        <div style= "display: flex; justify-content: center; padding-top: 50px">
+
             <form style="width: 25%;" [formGroup]="passwordChangeForm" (ngSubmit) = "onSubmit()">
                 <div style= "margin-bottom: 35px">
                     <input type="password" class="form-control" placeholder="Altes Passwort" name = "oldPassword" formControlName ="oldPassword">
@@ -66,8 +70,10 @@
                         {{errorMessage}}
                     </div>
                 </div>
-                <div>
-                    <input type="submit" value="Passwort ändern" class="btn login-button-style center">
+                
+                <div style = "display: flex; justify-content: center; padding-top: 30px;">
+                    <button class = "btn login-button-style center" style="background-color: lightgrey" (click) = "passwordChange = false">Zurück</button>
+                    <input type="submit" value="Passwort ändern" class="btn login-button-style center bg-primary" style="color: white" >
                 </div>
             </form>
         </div>
