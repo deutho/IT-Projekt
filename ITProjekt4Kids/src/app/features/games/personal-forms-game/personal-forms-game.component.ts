@@ -26,6 +26,13 @@ export class PersonalFormsGameComponent implements OnInit {
     {value:'sie', disabled: true},
   ];
 
+  items1 = [];
+  items2 = [];
+  items3 = [];
+  items4 = [];
+  items5 = [];
+  items6 = [];
+
   ngOnInit(): void {
     this.Games.push(this.currentGame1)
     this.Games.push(this.currentGame2)
@@ -34,7 +41,14 @@ export class PersonalFormsGameComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.answers, event.previousIndex, event.currentIndex);
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+    }
   }
 
   showList() {
