@@ -114,3 +114,30 @@ border: solid 2px lightcoral;
 .form {
     margin: 0 auto;
 }
+
+.container {
+    display: flex;
+    border-radius: 20px;
+    width: 40%;
+    margin-top: 30px;
+    min-width: 300px;  
+}
+  
+.item-left {
+    width: 68px; /* A fixed width as the default */
+    border-radius: 20px 0px 0px 20px;
+}
+
+.item-center { 
+    flex-grow: 0.9; /* Set the middle element to grow and stretch */
+    background-color: white;
+    padding: 20px 20px;
+    vertical-align: middle;
+    overflow-wrap: break-word;
+}
+
+.item-right {
+    width: 68px; /* A fixed width as the default */
+    border-radius: 0px 20px 20px 0px;
+    background-color: white;
+}

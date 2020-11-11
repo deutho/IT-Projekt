@@ -1,7 +1,6 @@
 <div *ngIf = "loaded == true"> 
-    <div *ngIf= "currentUser.role != 1">
-        
-        
+    <div *ngIf= "currentUser.role != 1">        
+        <!-- Pfad des Ordners -->
         <ul>
             <li class="navigationBar" style="padding: 20px 20px 0px 15px">
                 <div  style="display: inline;">
@@ -15,7 +14,8 @@
             </li>
         </ul>
         
-        <ul *ngFor="let item of currentFolders;  index as i" style="padding-top: -50px;">
+        <!-- alle Ordern/Items anzeigen -->
+        <!-- <ul *ngFor="let item of currentFolders;  index as i" style="padding-top: -50px;">
             <li type="button" (click)=itemclick(item) style="display:block; width: 40%; margin: 0 auto; border-radius: 20px; margin-top: 30px; min-width: 300px;">
                 <div style="width: 68px; padding: 30px 0px 30px 20px; border-radius: 20px 0px 0px 20px;" class="colouring-{{i%4}}">
                     <svg *ngIf="item.type == 'folder'" style="display:inline-block; margin: 0 auto;" width="30px" height="24" viewBox="0 0 30 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -30,11 +30,21 @@
                     <h4>{{item.name}}</h4>
                 </div>
             </li>
-        </ul>
+        </ul> -->
+        <div class="container" *ngFor="let item of currentFolders;  index as i">
+            <div class="item-left colouring-{{i%4}}"></div>
+            <div class="item-center"> <h4>{{item.name}}</h4></div>
+            <div class="item-right"></div>
+        </div>
 
+
+
+        <!-- error message if folder length = 0 -->
         <div *ngIf="currentFolders.length == 0 && currentUser.role == 3" style = "margin: 0 auto; font-weight: 400; font-size: x-large;" class = "btn">
             {{emptyMessage}}
         </div>
+
+        <!-- teacher can also add Elements -->
         <ul *ngIf="creating === false && currentUser.role == 2 && currentPath.substring(0,9) != 'derdiedaz'">
             <li type="button" (click)="addElement()" style="display:block; width: 40%; margin: 0 auto; border-radius: 20px; margin-top: 30px; min-width: 300px;">
                 <div style="width: 68px; background-color: #85898C; padding: 25px 0px 25px 20px; border-radius: 20px 0px 0px 20px;">
@@ -50,6 +60,7 @@
             </li>
         </ul>
 
+        <!-- error message -->
         <div style="display: table; ">
             <div *ngIf = "error === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px; width: 30%; display: block">
                 {{errorMessage}}
@@ -57,37 +68,44 @@
         </div>
     </div>
 
+    <!-- Admin View -->
     <div *ngIf = "currentUser.role == 1">
-
         <p>Adminaccount der Volksschule xxx</p>
 
     </div>
     <!-- overlay new Element -->
     <div *ngIf="creating == true" class="fullscreen">
+        <!-- grey background -->
         <div *ngIf="creating == true" class="overlay" (click)="creating = false;"></div>
+        <!-- white div, which contains all the input fields -->
         <div *ngIf="creating == true" class="superOverlay" style="border-radius: 15px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));">
             <div class="content">
+                <!-- formular -->
                 <form [formGroup]="addElementForm" (ngSubmit) = "onSubmit()">
                     <div>
+                        <!-- Name of element -->
                         <h6>Name:</h6>
                         <input placeholder="Tiere im Winter" type="text" name = "name" formControlName ="name" style="width: 100%;">
                     </div>
-                        <div *ngIf="gameSelected == false"  style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
-                            <div class="btn dropshadow" style="display: inline-block; background-color: #40d04f; width: 25%;">
-                                Ordner
-                            </div>
-                            <div (click)="gameSelected = true" class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 25%;">
-                                Spiel
-                            </div>
+                    <!-- Choice to create Folder or Task -->
+                    <div *ngIf="gameSelected == false"  style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
+                        <div class="btn dropshadow" style="display: inline-block; background-color: #40d04f; width: 25%;">
+                            Ordner
                         </div>
-                        <div *ngIf="gameSelected == true"  style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
-                            <div (click)="gameSelected = false" class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 25%;">
-                                Ordner
-                            </div>
-                            <div  class="btn dropshadow" style="display: inline-block; background-color: #40d04f; width: 25%;">
-                                Spiel
-                            </div>
-                        </div>                      
+                        <div (click)="gameSelected = true" class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 25%;">
+                            Spiel
+                        </div>
+                    </div>
+                    <!-- Choice to create Folder or Task (just changed the active choice(coloring) in this one) -->
+                    <div *ngIf="gameSelected == true"  style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
+                        <div (click)="gameSelected = false" class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 25%;">
+                            Ordner
+                        </div>
+                        <div  class="btn dropshadow" style="display: inline-block; background-color: #40d04f; width: 25%;">
+                            Spiel
+                        </div>
+                    </div>         
+                    <!-- dropdown Menue -->
                     <div *ngIf="gameSelected"  style="padding: 20px 0px;">
                         <select formControlName="game" class="form-control custom-select drop-shadow">                            
                             <option value="" selected disabled hidden>Choose here</option>
@@ -95,16 +113,7 @@
                             <option value="personal-forms-game">Drag&Drop</option>
                          </select>
                     </div>
-
-                    <!-- Response vom Server
-                    <div style="display: table; margin: 0 auto;">
-                        <div *ngIf="success == false" class="alert alert-danger response" id="hideMe">        
-                                {{errorMessage}}
-                        </div>
-                        <div *ngIf="success == true" class="alert alert-success response" id="hideMe">        
-                            Benutzer erfolgreich angelegt
-                        </div>
-                    </div>-->
+                    <!-- add button -->
                     <div style="padding: 20px 0px;">
                         <input type="submit" value="Element anlegen" style="text-align: center; "  class="btn submit-button">
                     </div>    
