@@ -1,3 +1,4 @@
+import { ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -19,7 +20,8 @@ export class BugReportComponent implements OnInit {
   currentUser: User;
   write;
   bugreports: BugReport[];
-  ids: String[];
+  ids: String[] = [];
+  dates: String[] = [];
 
   constructor(private afs: FirestoreDataService) { }
 
@@ -59,17 +61,13 @@ export class BugReportComponent implements OnInit {
         this.bugreports =  data;
       });
 
-      this.bugreports = this.bugreports.sort((n1, n2) => {
-        if (n1 > n2) {
-            return 1;
-        }
-    
-        if (n1 < n2) {
-            return -1;
-        }
-    
-        return 0;
+      this.bugreports = this.bugreports.sort((n1, n2) => {return n1.time.seconds - n2.time.seconds });
+    let i = 0;
+    this.bugreports.forEach((m) => {
+      var date = new Date(m.time.seconds*1000).toLocaleDateString("de-DE")
+      this.dates[i] = date;
+      i++;
     });
-
+    
   }
 }
