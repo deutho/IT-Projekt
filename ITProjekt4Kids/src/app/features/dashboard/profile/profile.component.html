@@ -3,7 +3,7 @@
     <link rel="stylesheet" type="text/css" href="profile.component.css">
 </head>
 
-    <div class="grid-container">
+    <div *ngIf = "passwordChange == false" class="grid-container">
         <div class="item-image">
                 <div id="profile_image">
                     <img class = "img-style" src = "./../../../assets/Images/profile_image.png">
@@ -37,8 +37,40 @@
                     <p class="symbol"><span style="color: #ffffff00;">placeholder</span></p>
                     <p class="symbol"><img style="max-height: 40px; margin: -30%" src = "./../../../assets/Images/volume_button.PNG"></p>
         </div>
+
+
+        <button style="margin-top: 20px;" (click)="changeView();" class = "btn login-button-style">Meine Bug-Reports ansehen</button>
     </div>
 
+    <div *ngIf = "passwordChange == true">
+
+        <div>
+            <form [formGroup]="passwordChangeForm" (ngSubmit) = "onSubmit()">
+                <div style= "margin-bottom: 35px">
+                    <input type="password" class="form-control" placeholder="Altes Passwort eingeben" name = "oldPassword" formControlName ="oldPassword">
+                </div>
+                <div style = "margin-bottom: 35px">
+                    <input type="password" class="form-control" placeholder="Neues Passwort" name = "newPassword" formControlName ="newPassword">
+                </div>
+
+                <div style="display: table; ">
+                    <div *ngIf = "error === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px;">
+                        {{error}}
+                    </div>
+                    <div *ngIf = "error === false" class="alert alert-success response" role="alert" style="margin-bottom: 35px;">
+                        {{error}}
+                    <div>
+                    </div>
+                </div>
+                
+                <div>
+                    <input type="submit" value="Passwort ändern" class="btn login-button-style center">
+                </div>
+            </form>
+        </div>
+
+
+    </div>
     
 
    
