@@ -24,6 +24,7 @@
                     <p><span style="font-weight: bold">Lehrerin:   </span>Frau Schlau</p>
                     <p><span style="font-weight: bold">Rolle:   </span> {{accountTyp}}</p>
                     <p><span style="font-weight: bold">Sprachausgabe:</span></p>
+                    <button style="margin-top: 20px;" (click)="changePassword();" class = "btn login-button-style">Mein Passwort ändern</button>
                 </div>
         </div>
 
@@ -39,30 +40,32 @@
         </div>
 
 
-        <button style="margin-top: 20px;" (click)="changeView();" class = "btn login-button-style">Meine Bug-Reports ansehen</button>
+        
     </div>
 
     <div *ngIf = "passwordChange == true">
 
-        <div>
-            <form [formGroup]="passwordChangeForm" (ngSubmit) = "onSubmit()">
+        <div style= "display: flex; justify-content: center; padding-top: 100px">
+            <form style="width: 25%;" [formGroup]="passwordChangeForm" (ngSubmit) = "onSubmit()">
                 <div style= "margin-bottom: 35px">
-                    <input type="password" class="form-control" placeholder="Altes Passwort eingeben" name = "oldPassword" formControlName ="oldPassword">
+                    <input type="password" class="form-control" placeholder="Altes Passwort" name = "oldPassword" formControlName ="oldPassword">
                 </div>
                 <div style = "margin-bottom: 35px">
                     <input type="password" class="form-control" placeholder="Neues Passwort" name = "newPassword" formControlName ="newPassword">
                 </div>
 
-                <div style="display: table; ">
+                <div style= "margin-bottom: 35px">
+                    <input type="password" class="form-control" placeholder="Neues Passwort bestätigen" name = "newPasswordConfirm" formControlName ="newPasswordConfirm">
+                </div>
+
+                <div style = "display: flex; justify-content: center; padding-top: 20px">
                     <div *ngIf = "error === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px;">
-                        {{error}}
+                        {{errorMessage}}
                     </div>
                     <div *ngIf = "error === false" class="alert alert-success response" role="alert" style="margin-bottom: 35px;">
-                        {{error}}
-                    <div>
+                        {{errorMessage}}
                     </div>
                 </div>
-                
                 <div>
                     <input type="submit" value="Passwort ändern" class="btn login-button-style center">
                 </div>

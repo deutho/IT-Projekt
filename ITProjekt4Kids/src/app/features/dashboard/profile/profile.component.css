@@ -86,3 +86,11 @@ p.symbol{
     max-height: 18px;
     text-align: left;
 }
+
+.login-button-style {
+    display: block;
+    border-radius: 23px;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));
+    background-color: #40d04f;
+    margin: 0 auto;
+}
