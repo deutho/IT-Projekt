@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {CdkDragDrop, DragDropModule, moveItemInArray} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { PersonalFormsGame } from 'src/app/models/PersonalFormsGame.model';
 
 @Component({
@@ -17,6 +17,14 @@ export class PersonalFormsGameComponent implements OnInit {
   currentGame1 = new PersonalFormsGame("1","gehe","gehst","geht","gehen","geht","gehen","folder")
   currentGame2 = new PersonalFormsGame("1","sehe","siehst","sieht","sehen","seht","sehen","folder")
   answers: string[]
+  Person = [
+    {value:'ich', disabled: true},
+    {value:'du', disabled: true},
+    {value:'er/sie/es', disabled: true},
+    {value:'wir', disabled: true},
+    {value:'ihr', disabled: true},
+    {value:'sie', disabled: true},
+  ];
 
   ngOnInit(): void {
     this.Games.push(this.currentGame1)
@@ -27,6 +35,10 @@ export class PersonalFormsGameComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.answers, event.previousIndex, event.currentIndex);
+  }
+
+  showList() {
+    console.log(this.answers);
   }
 
   shuffleAnswers() {

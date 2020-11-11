@@ -1,4 +1,4 @@
-<p>personal-forms-gamrks!</p>
+<p>personal-forms-game-works!</p>
 
 
 <div class="example-boundary">
@@ -7,11 +7,39 @@
     </div>
   </div>
 
-  <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+  <!-- <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)"> 
     <div class="example-box" *ngFor="let answer of answers" cdkDrag>{{answer}}</div> 
-    <!-- for-Schleife, Zeile wird 8x (1x für jede answer, ausgegeben mit dem jeweiligen Wert) -->
+    <!-- for-Schleife, Zeile wird 8x (1x für jede answer, ausgegeben mit dem jeweiligen Wert) 
+  </div> -->
+
+  <div class="example-container">
+    <h2>Person</h2>
+  
+    <div
+      cdkDropList
+      [cdkDropListData]="Person"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let p of Person, index as i"
+      cdkDrag
+      [cdkDragDisabled]="p.disabled">{{p.value}}
+      </div>
+    </div>
+  </div>
+  
+  <div class="example-container">
+    <h2>Verb</h2>
+  
+    <div
+      cdkDropList
+      [cdkDropListData]="currentGame"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let answer of answers, index as i" cdkDrag>{{answer}}</div>
+    </div>
   </div>
 
   <button (click)="this.loadNextGame()">Weiter</button>
+  <button (click)="showList()">Anzeigen</button>
 
   

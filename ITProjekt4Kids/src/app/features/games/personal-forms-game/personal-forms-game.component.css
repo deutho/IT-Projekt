@@ -34,15 +34,21 @@
     border: dotted #ccc 2px;
   }
 
-  .example-list {
-    width: 500px;
+  .example-container {
+    width: 400px;
     max-width: 100%;
+    margin: 0 25px 25px 0;
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  .example-list {
     border: solid 1px #ccc;
     min-height: 60px;
-    display: block;
     background: white;
     border-radius: 4px;
     overflow: hidden;
+    display: block;
   }
   
   .example-box {
