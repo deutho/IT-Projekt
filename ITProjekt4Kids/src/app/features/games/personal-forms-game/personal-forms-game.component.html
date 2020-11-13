@@ -1,17 +1,84 @@
-<p>personal-forms-gamrks!</p>
+<p>personal-forms-game-works!</p>
 
-
-<div class="example-boundary">
-    <div class="example-box" cdkDragBoundary=".example-boundary" cdkDrag>
-      {{this.currentGame.ich}}
+  <div cdkDropListGroup class ="wrapper">
+    <div class="example-container">
+      <h2>Person</h2>
+      <div
+      cdkDropList
+      [cdkDropListData]="Person"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let p of Person, index as i"
+      cdkDrag
+      [cdkDragDisabled]="p.disabled">{{p.value}}
+      </div>
+      </div>
+    </div>
+    <div class="example-container">
+      <h2>Leere Liste</h2>
+      <div
+        cdkDropList
+        [cdkDropListData]="items1"
+        class="example-list"
+        cdkDropListSortingDisabled
+        (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let item of items1" cdkDrag>{{item}}</div>
+      </div>
+      <div
+        cdkDropList
+        [cdkDropListData]="items2"
+        class="example-list"
+        cdkDropListSortingDisabled
+        (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let item of items2" cdkDrag>{{item}}</div>
+      </div>
+      <div
+        cdkDropList
+        [cdkDropListData]="items3"
+        class="example-list"
+        cdkDropListSortingDisabled
+        (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let item of items3" cdkDrag>{{item}}</div>
+      </div>
+      <div
+        cdkDropList
+        [cdkDropListData]="items4"
+        class="example-list"
+        cdkDropListSortingDisabled
+        (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let item of items4" cdkDrag>{{item}}</div>
+      </div>
+      <div
+        cdkDropList
+        [cdkDropListData]="items5"
+        class="example-list"
+        cdkDropListSortingDisabled
+        (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let item of items5" cdkDrag>{{item}}</div>
+      </div>
+      <div
+        cdkDropList
+        [cdkDropListData]="items6"
+        class="example-list"
+        cdkDropListSortingDisabled
+        (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let item of items6" cdkDrag>{{item}}</div>
+      </div>
+    </div>
+    <div class="example-container">
+      <h2>Verb</h2>
+      <div
+      cdkDropList
+      [cdkDropListData]="answers"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let answer of answers, index as i" cdkDrag>{{answer}}</div>
+      </div>
     </div>
   </div>
 
-  <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-    <div class="example-box" *ngFor="let answer of answers" cdkDrag>{{answer}}</div> 
-    <!-- for-Schleife, Zeile wird 8x (1x für jede answer, ausgegeben mit dem jeweiligen Wert) -->
-  </div>
 
   <button (click)="this.loadNextGame()">Weiter</button>
+  <button (click)="showList()">Anzeigen</button>
 
   

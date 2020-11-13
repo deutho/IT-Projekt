@@ -97,6 +97,10 @@
             <div class="content">               
                 <!-- formular -->
                 <form [formGroup]="addElementForm" (ngSubmit) = "onSubmit()">
+                    <div style="display: flex; justify-content: flex-end;" (click)="creating = false;">
+                        <i class="fas fa-times" style="display: flex; opacity: 0.6; align-content: flex-end; cursor: pointer;">
+                        </i>
+                    </div>
                     <div>
                         <!-- Name of element -->
                         <h6>Name:</h6>

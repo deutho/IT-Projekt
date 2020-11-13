@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {CdkDragDrop, DragDropModule, moveItemInArray} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { PersonalFormsGame } from 'src/app/models/PersonalFormsGame.model';
 
 @Component({
@@ -17,6 +17,21 @@ export class PersonalFormsGameComponent implements OnInit {
   currentGame1 = new PersonalFormsGame("1","gehe","gehst","geht","gehen","geht","gehen","folder")
   currentGame2 = new PersonalFormsGame("1","sehe","siehst","sieht","sehen","seht","sehen","folder")
   answers: string[]
+  Person = [
+    {value:'ich', disabled: true},
+    {value:'du', disabled: true},
+    {value:'er/sie/es', disabled: true},
+    {value:'wir', disabled: true},
+    {value:'ihr', disabled: true},
+    {value:'sie', disabled: true},
+  ];
+
+  items1 = [];
+  items2 = [];
+  items3 = [];
+  items4 = [];
+  items5 = [];
+  items6 = [];
 
   ngOnInit(): void {
     this.Games.push(this.currentGame1)
@@ -26,7 +41,18 @@ export class PersonalFormsGameComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.answers, event.previousIndex, event.currentIndex);
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+    }
+  }
+
+  showList() {
+    console.log(this.answers);
   }
 
   shuffleAnswers() {

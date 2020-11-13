@@ -1,7 +1,8 @@
+<span id="dummy"></span>
 <div id="overlay" *ngIf="this.evaluated  && this.finished == false" (click)="nextOne()"></div> 
-<div *ngIf = "this.loaded == true"  class="container" id="full" >    
+<div *ngIf = "this.loaded == true && speakerMode==false"  class="container" id="full" >    
     <div class="item-question question" style="margin: 0 auto;">
-            <button role="text" class="question" id="question" value="{{currentGame.question}}" style="background:transparent; outline:0;border:transparent; margin: 0 auto; cursor: default; display: none"></button>
+            <button role="text" class="question" id="question" value="{{currentGame.question}}" style="background:transparent; outline:0;border:transparent; margin: 0 auto; cursor: pointer; display: none"></button>
             {{currentGame.question}}
     </div>
     <div class="item-image">
@@ -52,21 +53,99 @@
             </svg>
         </div>
     </div>
-    <div class="slidecontainer item-final input">
+    <!-- <div class="slidecontainer item-final input">
         <progress type="range" min="1" id="progressRange" style="width: 100%" ></progress>
-    </div>
+    </div> -->
+
+        <!-- home button back - sits on the very bottom -->
+        <div class="item-backToHome" style="padding-top: 0;">
+            <div type=button class="btn"  style="width: 100%; margin: 0 auto"> 
+                <svg style="width: 5%; min-width: 45px; min-height: 60px;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="mouse-pointer" class="svg-inline--fa fa-mouse-pointer fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                    <path fill="#0275d8" d="M302.189 329.126H196.105l55.831 135.993c3.889 9.428-.555 19.999-9.444 23.999l-49.165 21.427c-9.165 4-19.443-.571-23.332-9.714l-53.053-129.136-86.664 89.138C18.729 472.71 0 463.554 0 447.977V18.299C0 1.899 19.921-6.096 30.277 5.443l284.412 292.542c11.472 11.179 3.007 31.141-12.5 31.141z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+    
+        <!-- activate Speakermode -->    
+        <div class="item-nextQuestion" style="display: flex; padding-top: 0; justify-content: center; align-items: center;">
+            <div type=button class="btn"  style="display:block; width: 100%; margin: 0 auto" (click) = "switchMode()"> 
+                <svg style="width: 5%; min-width: 75px; min-height: 60px; opacity: 0.6;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="volume-up" class="svg-inline--fa fa-volume-up fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                    <path fill="grey" d="M215.03 71.05L126.06 160H24c-13.26 0-24 10.74-24 24v144c0 13.25 10.74 24 24 24h102.06l88.97 88.95c15.03 15.03 40.97 4.47 40.97-16.97V88.02c0-21.46-25.96-31.98-40.97-16.97zm233.32-51.08c-11.17-7.33-26.18-4.24-33.51 6.95-7.34 11.17-4.22 26.18 6.95 33.51 66.27 43.49 105.82 116.6 105.82 195.58 0 78.98-39.55 152.09-105.82 195.58-11.17 7.32-14.29 22.34-6.95 33.5 7.04 10.71 21.93 14.56 33.51 6.95C528.27 439.58 576 351.33 576 256S528.27 72.43 448.35 19.97zM480 256c0-63.53-32.06-121.94-85.77-156.24-11.19-7.14-26.03-3.82-33.12 7.46s-3.78 26.21 7.41 33.36C408.27 165.97 432 209.11 432 256s-23.73 90.03-63.48 115.42c-11.19 7.14-14.5 22.07-7.41 33.36 6.51 10.36 21.12 15.14 33.12 7.46C447.94 377.94 480 319.54 480 256zm-141.77-76.87c-11.58-6.33-26.19-2.16-32.61 9.45-6.39 11.61-2.16 26.2 9.45 32.61C327.98 228.28 336 241.63 336 256c0 14.38-8.02 27.72-20.92 34.81-11.61 6.41-15.84 21-9.45 32.61 6.43 11.66 21.05 15.8 32.61 9.45 28.23-15.55 45.77-45 45.77-76.88s-17.54-61.32-45.78-76.86z">
+                    </path>
+                </svg>
+            </div>
+        </div>
 </div>
 
 
 
+<!-- Speaker Mode from here -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
 
 
-<!--
-<div *ngIf ="this.finished == true">
-<h1>Super!!</h1>
-<h3>Aus {{totalrounds}} hattest du {{roundsWon}} richtig!! Du kannst stolz sein!</h3>
-<button (click) = "returnToMainMenu()">Zurück zum Hauptmenü</button>
-</div>-->
+<div *ngIf = "speakerMode==true"  class=" container " id="full" >    
+    <div class="item-question question" style="margin: 0 auto; cursor: pointer;" (click) = "readQuestion(currentGame.question)">
+            <button role="text" class="question" id="question" value="{{currentGame.question}}" style="background:transparent; outline:0;border:transparent; margin: 0 auto; cursor: default; display: none"></button>
+            {{currentGame.question}}
+    </div>
+    <div class="item-image">
+        <div id="myimg" class="img-style" style="width: 50%; min-width: 340px; max-height: 350px;">
+            <img style="display: block; width: 100%; height: 100%; margin: 0 auto; padding: 20px 20px; min-width: 300px; max-height: 330px;" src = "{{imageURL}}">
+        </div>        
+    </div>
+    <div class="item-ans1">
+        <button id="button1" type=button (click) = "readButtonOne(answers[0])"  class="btn button-style" value="{{answers[0]}}">
+        </button>
+    </div>
+    <div class="item-ans2">
+        <button id="button2" type=button (click) = "readButtonTwo(answers[1])" class="btn button-style" value="{{answers[1]}}">
+        </button>
+    </div>
+    <div class="item-ans3">
+        <button id="button3" type=button (click) = "readButtonThree(answers[2])" class="btn button-style" value="{{answers[2]}}">         
+        </button>
+    </div>
+    <div class="item-ans4" >
+        <button id="button4" type=button class="btn button-style" (click) = "readButtonFour(answers[3])" value="{{answers[3]}}">
+        </button>
+    </div>
+    <div class="item-final" *ngIf = "this.evaluated == true && this.Games.length == 0" style="padding-top: 0;">
+        <div type=button class="btn" (click) = "returnToMainMenu()" style="width: 100%; margin: 0 auto" >
+            <svg  style="width: 5%; min-width: 75px; min-height: 100px; opacity: 0.6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="home" class="svg-inline--fa fa-home fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                <path fill="currentColor" d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z">
+                </path>
+            </svg>
+        </div>
+    </div>
+    <!-- <div class="slidecontainer item-final input">
+        <progress type="range" min="1" id="progressRange2" style="width: 100%" ></progress>
+    </div> -->
+
+        <!-- home button back - sits on the very bottom -->
+        <div class="item-backToHome" style="padding-top: 0;">
+            <div type=button class="btn"  style="width: 100%; margin: 0 auto" (click) = "switchMode()"> 
+                <svg style="width: 5%; min-width: 45px; min-height: 60px;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="mouse-pointer" class="svg-inline--fa fa-mouse-pointer fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                    <path fill="grey" d="M302.189 329.126H196.105l55.831 135.993c3.889 9.428-.555 19.999-9.444 23.999l-49.165 21.427c-9.165 4-19.443-.571-23.332-9.714l-53.053-129.136-86.664 89.138C18.729 472.71 0 463.554 0 447.977V18.299C0 1.899 19.921-6.096 30.277 5.443l284.412 292.542c11.472 11.179 3.007 31.141-12.5 31.141z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+    
+        <!-- activate Speakermode -->    
+        <div class="item-nextQuestion" style="display: flex; padding-top: 0; justify-content: center; align-items: center;">
+            <div type=button class="btn"  style="display:block; width: 100%; margin: 0 auto" > 
+                <svg style="width: 5%; min-width: 75px; min-height: 60px; opacity: 0.6;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="volume-up" class="svg-inline--fa fa-volume-up fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                    <path fill="#0275d8" d="M215.03 71.05L126.06 160H24c-13.26 0-24 10.74-24 24v144c0 13.25 10.74 24 24 24h102.06l88.97 88.95c15.03 15.03 40.97 4.47 40.97-16.97V88.02c0-21.46-25.96-31.98-40.97-16.97zm233.32-51.08c-11.17-7.33-26.18-4.24-33.51 6.95-7.34 11.17-4.22 26.18 6.95 33.51 66.27 43.49 105.82 116.6 105.82 195.58 0 78.98-39.55 152.09-105.82 195.58-11.17 7.32-14.29 22.34-6.95 33.5 7.04 10.71 21.93 14.56 33.51 6.95C528.27 439.58 576 351.33 576 256S528.27 72.43 448.35 19.97zM480 256c0-63.53-32.06-121.94-85.77-156.24-11.19-7.14-26.03-3.82-33.12 7.46s-3.78 26.21 7.41 33.36C408.27 165.97 432 209.11 432 256s-23.73 90.03-63.48 115.42c-11.19 7.14-14.5 22.07-7.41 33.36 6.51 10.36 21.12 15.14 33.12 7.46C447.94 377.94 480 319.54 480 256zm-141.77-76.87c-11.58-6.33-26.19-2.16-32.61 9.45-6.39 11.61-2.16 26.2 9.45 32.61C327.98 228.28 336 241.63 336 256c0 14.38-8.02 27.72-20.92 34.81-11.61 6.41-15.84 21-9.45 32.61 6.43 11.66 21.05 15.8 32.61 9.45 28.23-15.55 45.77-45 45.77-76.88s-17.54-61.32-45.78-76.86z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+</div>
 
 
 
