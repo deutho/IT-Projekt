@@ -16,8 +16,13 @@ export class UploaderComponent {
   }
 
   onDrop(files: FileList) {
+    console.log(files)
     for (let i = 0; i < files.length; i++) {
       this.files.push(files.item(i));
     }
+  }
+
+  test(event) {
+    console.log(event)
   }
 }
