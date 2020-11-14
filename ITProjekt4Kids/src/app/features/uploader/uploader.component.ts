@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class UploaderComponent {
 
   isHovering: boolean;
-
+  tooManyFiles: boolean = false;
   files: File[] = [];
 
   toggleHover(event: boolean) {
@@ -16,10 +16,15 @@ export class UploaderComponent {
   }
 
   onDrop(files: FileList) {
-    console.log(files)
-    for (let i = 0; i < files.length; i++) {
-      this.files.push(files.item(i));
+    if (files.length > 1) {
+      this.tooManyFiles = true;
+      setTimeout(() => this.tooManyFiles = false, 3500);
     }
+    else{
+      for (let i = 0; i < files.length; i++) {
+        this.files.push(files.item(i));
+      }
+    }    
   }
 
   test(event) {

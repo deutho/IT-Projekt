@@ -23,14 +23,11 @@
 
         <!-- image -->
         <div class="item-image" style="display: block">          
-            <div id="myimg" class="img-style" >
-
-                <uploader></uploader>
-
-
-                <!-- <img *ngIf = "this.editingPicture == false" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';" id="image" class="image" (click)="this.editingPicture = true" src = "{{imageURL}}">
-                <img *ngIf = "this.editingPicture == true" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';" id="image" class="image"  (click)="this.editingPicture = true" src = "{{imageURL}}">
+            <div id="myimg" class="img-style" >              
+                <img *ngIf = "this.editingPicture == false" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';" id="image" class="image" (click)="this.editingPicture = true" src = "{{imageURL}}">
+                <!-- <img *ngIf = "this.editingPicture == true" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';" id="image" class="image"  (click)="this.editingPicture = true" src = "{{imageURL}}"> -->
                 <div class="imageEditing-container"  *ngIf = "this.editingPicture == true">
+                    <uploader></uploader>
                     <div class="centerImageEditing" >
                         <label class="imageEditingItem1" >URL des Bildes: </label>
                         <input id="URL" class="imageEditingItem2" value="{{imageURL}}">
@@ -41,7 +38,7 @@
                             </svg>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>         
 
         </div>
