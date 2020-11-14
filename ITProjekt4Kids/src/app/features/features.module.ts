@@ -16,13 +16,33 @@ import { PersonalFormsGameComponent } from './games/personal-forms-game/personal
 import { PersonalFormsGameEditComponent } from './games/personal-forms-game-edit/personal-forms-game-edit.component';
 import { BugReportComponent } from './dashboard/bug-report/bug-report.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { UploaderComponent } from './uploader/uploader.component';
+import { UploadTaskComponent } from './upload-task/upload-task.component';
+import { DropzoneDirective } from './dropzone.directive';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AppComponent } from '../app.component';
 
 
 
 
 @NgModule({
-declarations: [MainComponent, ProfileComponent, StatisticsComponent, AddUserComponent, DashboardComponent, DashboardHostDirective, MainMenuComponent, AddTaskComponent, VocabularyGameComponent, VocabularyGameEditComponent,
-PersonalFormsGameComponent, PersonalFormsGameEditComponent, BugReportComponent],
+declarations: [
+  MainComponent, 
+  ProfileComponent, 
+  StatisticsComponent, 
+  AddUserComponent, 
+  DashboardComponent, 
+  DashboardHostDirective, 
+  MainMenuComponent, 
+  AddTaskComponent, 
+  VocabularyGameComponent, 
+  VocabularyGameEditComponent,
+  PersonalFormsGameComponent, 
+  PersonalFormsGameEditComponent, 
+  BugReportComponent,
+  UploaderComponent,
+  UploadTaskComponent,
+  DropzoneDirective],
 imports: [
   CommonModule,
   RouterModule,
@@ -30,6 +50,8 @@ imports: [
   FormsModule,
   DragDropModule
 ],
-exports: [MainComponent]
+exports: [MainComponent],
+providers: [AngularFirestore],
+bootstrap: [AppComponent]
 })
 export class FeaturesModule { }
