@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, copyArrayItem, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { PersonalFormsGame } from 'src/app/models/PersonalFormsGame.model';
 
 @Component({
@@ -38,6 +38,10 @@ export class PersonalFormsGameComponent implements OnInit {
     this.Games.push(this.currentGame2)
     this.shuffleArray(this.Games)
     this.loadNextGame()
+  }
+
+  canDrop() {
+    return false;
   }
 
   drop(event: CdkDragDrop<string[]>) {
