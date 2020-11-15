@@ -1,0 +1,19 @@
+<div class="dropzone" 
+     dropzone
+     (hovered)="toggleHover($event)"
+     (dropped)="onDrop($event)"
+     [class.hovering]="isHovering"
+     >
+        <!-- <button type="file">Klick mich!</button>
+     <p>Datei zum Hochladen reinziehen!</p> -->
+
+     <input style="display: none;" type="file" id="file" (change)="onDrop($event.target.files)"/>
+     <label for="file"><strong>Wähle eine Datei</strong><span> oder zieh sie hier her!</span></label>
+     <div *ngIf = "this.tooManyFiles == true" class="item-final alert alert-danger text-center" role="alert" style="width: 80%; margin:0 auto; font-size: 80%;">
+        Man darf nur eine Datei wählen!
+    </div>
+     <div *ngFor="let file of files">
+        <upload-task [file]="file"></upload-task>
+      </div>
+
+</div>  

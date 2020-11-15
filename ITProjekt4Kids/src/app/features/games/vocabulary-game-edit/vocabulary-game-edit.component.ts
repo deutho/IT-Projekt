@@ -7,7 +7,7 @@ import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import {v4 as uuidv4} from 'uuid';
-import { CombineLatestOperator } from 'rxjs/internal/observable/combineLatest';
+
 
 
 @Component({
@@ -76,21 +76,21 @@ export class VocabularyGameEditComponent implements OnInit {
     else {
         this.finalScreen = true;
         let uid = uuidv4();
-        var newGame = new VocabularyGame(uid, 'Falsche Antwort 1', 'Falsche Antwort 2', 'Falsche Antwort 3', 'Richtige Antwort', "Hier die Frage eingeben", 'https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png', this.folderID);
+        var newGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png', this.folderID);
         this.currentGame = newGame;
         
      }
 
     //  to prevent disappearing of content - text is filled to have some clickable element
-     if (this.currentGame.question == "") this.currentGame.question = "Hier die Frage eingeben";
-     if (this.currentGame.rightAnswer == "") this.currentGame.rightAnswer = "Richtige Antwort";
-     if (this.currentGame.answer1 == "") this.currentGame.answer1 = "Falsche Antwort 1";
-     if (this.currentGame.answer2 == "") this.currentGame.answer2 = "Falsche Antwort 2";
-     if (this.currentGame.answer3 == "") this.currentGame.answer3 = "Falsche Antwort 3";
+     if (this.currentGame.question[0] == "") this.currentGame.question[0] = "Hier die Frage eingeben";
+     if (this.currentGame.rightAnswer[0] == "") this.currentGame.rightAnswer[0] = "Richtige Antwort";
+     if (this.currentGame.answer1[0] == "") this.currentGame.answer1[0] = "Falsche Antwort 1";
+     if (this.currentGame.answer2[0] == "") this.currentGame.answer2[0] = "Falsche Antwort 2";
+     if (this.currentGame.answer3[0] == "") this.currentGame.answer3[0] = "Falsche Antwort 3";
 
     // set values for question, answers and photo-url
-     this.question = this.currentGame.question;
-     this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
+     this.question = this.currentGame.question[0];
+     this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
      this.imageURL = this.currentGame.photoID;
 
 
@@ -105,11 +105,11 @@ export class VocabularyGameEditComponent implements OnInit {
   saveChanges() { 
     //checks if changes have been made - if so, update the game
     if (this.checkForChanges()) {
-      this.currentGame.rightAnswer = document.getElementById('button1').innerText;
-      this.currentGame.answer1 = document.getElementById('button2').innerText;
-      this.currentGame.answer2 = document.getElementById('button3').innerText;
-      this.currentGame.answer3 = document.getElementById('button4').innerText;
-      this.currentGame.question = document.getElementById('question').innerText;
+      this.currentGame.rightAnswer[0] = document.getElementById('button1').innerText;
+      this.currentGame.answer1[0] = document.getElementById('button2').innerText;
+      this.currentGame.answer2[0] = document.getElementById('button3').innerText;
+      this.currentGame.answer3[0] = document.getElementById('button4').innerText;
+      this.currentGame.question[0] = document.getElementById('question').innerText;
       this.currentGame.photoID = this.imageURL;
 
       this.afs.updateTask(this.currentGame);
@@ -124,6 +124,26 @@ export class VocabularyGameEditComponent implements OnInit {
     }
   }
 
+  uploadTextToSpeechElement(element) {
+
+    //TO DO Switch Case for the specific Element
+
+    this.currentGame.answer1; //Example
+    
+    if(this.currentGame.answer1[1] == ""){
+    //Upload the Element
+    
+    //Set the Download URL
+
+    }else {
+      //Delete Current TextToSpeech Element on Firebase Storage
+
+      //upload the new Element
+
+      //Set the DownloadURL
+    }
+  }
+
   // activated on click of left arrow - loades the previous game
   loadPreviousGame() {
     if(this.previousGames.length == 0) {
@@ -135,8 +155,8 @@ export class VocabularyGameEditComponent implements OnInit {
 
 
     this.currentGame = this.previousGames.pop();   
-    this.question = this.currentGame.question;
-    this.answers = [this.currentGame.rightAnswer, this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3];
+    this.question = this.currentGame.question[0];
+    this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
     this.imageURL = this.currentGame.photoID; 
     this.loaded = true;  
     
@@ -160,11 +180,11 @@ export class VocabularyGameEditComponent implements OnInit {
     let valueButton3 = document.getElementById('button3').innerText;
     let valueButton4 = document.getElementById('button4').innerText;
     let question = document.getElementById('question').innerText;
-    if(this.currentGame.rightAnswer == valueButton1 && 
-       this.currentGame.answer1 == valueButton2 &&
-       this.currentGame.answer2 == valueButton3 &&
-       this.currentGame.answer3 == valueButton4 &&
-       this.currentGame.question == question &&
+    if(this.currentGame.rightAnswer[0] == valueButton1 && 
+       this.currentGame.answer1[0] == valueButton2 &&
+       this.currentGame.answer2[0] == valueButton3 &&
+       this.currentGame.answer3[0] == valueButton4 &&
+       this.currentGame.question[0] == question &&
        this.currentGame.photoID == this.imageURL) {
         return false;
        }
@@ -214,11 +234,11 @@ export class VocabularyGameEditComponent implements OnInit {
 
   //As content is mutable, this is necessary to avoid bugs
   loadInnerTextValues() {
-    document.getElementById('button1').innerText = this.currentGame.rightAnswer;
-    document.getElementById('button2').innerText = this.currentGame.answer1;
-    document.getElementById('button3').innerText = this.currentGame.answer2;
-    document.getElementById('button4').innerText = this.currentGame.answer3;
-    document.getElementById('question').innerText = this.currentGame.question;
+    document.getElementById('button1').innerText = this.currentGame.rightAnswer[0];
+    document.getElementById('button2').innerText = this.currentGame.answer1[0];
+    document.getElementById('button3').innerText = this.currentGame.answer2[0];
+    document.getElementById('button4').innerText = this.currentGame.answer3[0];
+    document.getElementById('question').innerText = this.currentGame.question[0];
     this.imageURL = this.currentGame.photoID;
   }
 }

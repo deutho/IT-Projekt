@@ -205,6 +205,8 @@ export class MainMenuComponent implements OnInit {
     this.creating = false;
   }
 
-
+  settingOfItem(item) {
+    console.log(item)
+  }
 
 }

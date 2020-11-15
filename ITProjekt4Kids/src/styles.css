@@ -6,6 +6,22 @@ html, body {
     margin: 0px; 
     padding: 0px;   
     font-family: 'Schulschrift'; 
+
+      /* Location of the image */
+    background: url(./assets/Images/Background/bg-red-left-top.svg) left top no-repeat, url(./assets/Images/Background/bg-blue-right-bottom.svg) right bottom no-repeat, url(./assets/Images/Background/bg-green-right-top.svg) right top no-repeat, url(./assets/Images/Background/bg-yellow-left-bottom.svg) left bottom no-repeat;
+    
+    /* background:  url(./assets/Images/Background/bg-red-left-top.svg) left top no-repeat, url(./assets/Images/Background/bg-yellow-left-bottom.svg) left bottom no-repeat; */
+    background-attachment: fixed;
+    background-color: #F5F4F4;
+    background-size: contain;
+    
+    
+/* 
+ url(./assets/Images/Background/bg-red-left-top.svg) left top no-repeat,
+ url(./assets/Images/Background/Background-color.svg) left top repeat
+
+
+*/
 }
 
 #full {
@@ -23,8 +39,3 @@ html, body {
 * {
     font-family: 'Schulschrift'
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

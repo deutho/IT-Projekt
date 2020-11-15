@@ -5,7 +5,6 @@ li {
 }
 
 div {
-    display: inline-block;
     width: 100%;
     margin: 0 auto;
 }
@@ -35,10 +34,12 @@ input {
   }
 
 .navigationBar {
-    display: block;
+    display: flex;
     width:40%;
-    margin: 0 auto;
     background-color: transparent;
+    flex-direction: row; 
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .overlay {
@@ -56,14 +57,14 @@ input {
     cursor: default; /* Add a pointer on hover */
   }
 
-  .superOverlay {
+.superOverlay {
     position: fixed; /* Sit on top of the page content */
     display: flex; /* Hidden by default */
     width: 30%; /* Full width (cover the whole page) */
     background-color: white; /* Black background with opacity */
     z-index: 4; /* Specify a stack order in case you're using a different order for other elements */
     cursor: default; /* Add a pointer on hover */
-  }
+}
 
 .fullscreen {
     position: fixed; /* Sit on top of the page content */
@@ -113,4 +114,42 @@ border: solid 2px lightcoral;
 
 .form {
     margin: 0 auto;
+}
+
+.container {
+    display: flex;
+    border-radius: 20px;
+    width: 40%;
+    margin-top: 30px;
+    min-width: 300px;  
+    cursor: pointer;
+}
+  
+.item-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 68px; /* A fixed width as the default */
+    width: 68px;
+    border-radius: 20px 0px 0px 20px;
+
+}
+
+.item-center { 
+    flex-grow: 1; /* Set the middle element to grow and stretch */
+    background-color: white;
+    padding: 20px 20px;
+    vertical-align: middle;
+    overflow-wrap: break-word;
+    max-width: calc(100% - 136px);
+}
+
+.item-right {
+    min-width: 68px;
+    width: 68px; /* A fixed width as the default */
+    border-radius: 0px 20px 20px 0px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

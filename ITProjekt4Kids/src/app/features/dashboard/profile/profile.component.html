@@ -50,7 +50,7 @@
 
         <div style= "display: flex; justify-content: center; padding-top: 50px">
 
-            <form style="width: 25%;" [formGroup]="passwordChangeForm" (ngSubmit) = "onSubmit()">
+            <form [formGroup]="passwordChangeForm" (ngSubmit) = "onSubmit()">
                 <div style= "margin-bottom: 35px">
                     <input type="password" class="form-control" placeholder="Altes Passwort" name = "oldPassword" formControlName ="oldPassword">
                 </div>
@@ -59,7 +59,7 @@
                 </div>
 
                 <div style= "margin-bottom: 35px">
-                    <input type="password" class="form-control" placeholder="Neues Passwort bestätigen" name = "newPasswordConfirm" formControlName ="newPasswordConfirm">
+                    <input type="password" class="form-control" placeholder="Passwort bestätigen" name = "newPasswordConfirm" formControlName ="newPasswordConfirm">
                 </div>
 
                 <div style = "display: flex; justify-content: center; padding-top: 20px">
