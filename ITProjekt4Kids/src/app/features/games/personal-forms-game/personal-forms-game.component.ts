@@ -17,6 +17,7 @@ export class PersonalFormsGameComponent implements OnInit {
   currentGame1 = new PersonalFormsGame("1","gehe","gehst","geht","gehen","geht","gehen","folder")
   currentGame2 = new PersonalFormsGame("1","sehe","siehst","sieht","sehen","seht","sehen","folder")
   answers: string[]
+  listOneEmpty = true;
   Person = [
     {value:'ich', disabled: true},
     {value:'du', disabled: true},
@@ -48,11 +49,19 @@ export class PersonalFormsGameComponent implements OnInit {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+      if(event.container.data.length > 0 && event.container.id != "selection") {}
+      else{
+        transferArrayItem(event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex);
+        this.listOneEmpty = false;
+      }
     }
+  }
+
+  switchAcceptDrop() {
+
   }
 
   showList() {
