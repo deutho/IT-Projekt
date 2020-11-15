@@ -136,7 +136,7 @@
 }
 
 .imageEditingItem2 {
-    width: 50%; 
+    width: 90%; 
     vertical-align: middle;
 }
 
@@ -200,4 +200,15 @@
     align-items: center;
     justify-content: center;
     justify-items: center;
+}
+
+.buttonsEditImage {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px 0px;
+}
+
+.button {
+    font-weight: 800;
 }

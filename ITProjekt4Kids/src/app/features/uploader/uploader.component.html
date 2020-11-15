@@ -8,7 +8,8 @@
      <p>Datei zum Hochladen reinziehen!</p> -->
 
      <input style="display: none;" type="file" id="file" (change)="onDrop($event.target.files)"/>
-     <label for="file"><strong>Wähle eine Datei</strong><span> oder zieh sie hier her!</span></label>
+     <label for="file"><span class="chooseAFile">Klicke hier,</span><span> zieh eine Datei in diese Box oder gib die URL des Bildes unten ein!</span></label>
+     <!-- <label for="file" class="chooseAFile">Choose a file or drag it here.</label> -->
      <div *ngIf = "this.tooManyFiles == true" class="item-final alert alert-danger text-center" role="alert" style="width: 80%; margin:0 auto; font-size: 80%;">
         Man darf nur eine Datei wählen!
     </div>
