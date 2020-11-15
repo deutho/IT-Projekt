@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {CdkDragDrop, copyArrayItem, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { PersonalFormsGame } from 'src/app/models/PersonalFormsGame.model';
+import { supportsPassiveEventListeners } from '@angular/cdk/platform';
 
 @Component({
   selector: 'app-personal-forms-game',
@@ -14,10 +15,19 @@ export class PersonalFormsGameComponent implements OnInit {
   test = "Hallo Welt!"
   Games: PersonalFormsGame[] = []
   currentGame: PersonalFormsGame
-  currentGame1 = new PersonalFormsGame("1","gehe","gehst","geht","gehen","geht","gehen","folder")
-  currentGame2 = new PersonalFormsGame("1","sehe","siehst","sieht","sehen","seht","sehen","folder")
+  currentGame1 = new PersonalFormsGame("1","Ordne zu!","gehe","gehst","geht","gehen","geht","gehen","folder")
+  currentGame2 = new PersonalFormsGame("1","Frage Nummer 2", "sehe","siehst","sieht","sehen","seht","sehen","folder")
   answers: string[]
+
+  // boolean to detect if list already contains a string
   listOneEmpty = true;
+  listTwoEmpty = true;
+  listThreeEmpty = true;
+  listFourEmpty = true;
+  listFiveEmpty = true;
+  listSixEmpty = true;
+
+
   Person = [
     {value:'ich', disabled: true},
     {value:'du', disabled: true},
@@ -46,22 +56,84 @@ export class PersonalFormsGameComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
+    
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      //list is full, don't insert
       if(event.container.data.length > 0 && event.container.id != "selection") {}
+      
       else{
+        // insert
         transferArrayItem(event.previousContainer.data,
           event.container.data,
           event.previousIndex,
           event.currentIndex);
-        this.listOneEmpty = false;
+
+        if(event.container.id == "selection") {
+          let index = event.container.data.indexOf("", 0);
+          if(index != -1 && event.currentIndex > index) {
+            let temp = this.answers[event.currentIndex]
+            this.answers[event.currentIndex] = this.answers[index]
+            this.answers[index] = temp
+            this.answers.pop()
+          }
+          else if(index != -1) {
+            this.answers.pop()
+          }
+          
+        }
+
+        if(event.container.data[0] == "") {
+          event.container.data.pop()
+          event.previousContainer.data.push("")
+        }
+        else{          
+
+          if(event.previousContainer.id == "selection"){
+            this.answers.push("")
+          }
+            
+
+          if(event.previousContainer.id == "listOne") {
+            this.listOneEmpty = true;
+          }
+          if(event.container.id == "listOne") {
+            this.listOneEmpty = false;
+          }
+          if(event.previousContainer.id == "listTwo") {
+            this.listTwoEmpty = true;
+          }
+          if(event.container.id == "listTwo") {
+            this.listTwoEmpty = false;
+          }
+          if(event.previousContainer.id == "listThree") {
+            this.listThreeEmpty = true;
+          }
+          if(event.container.id == "listThree") {
+            this.listThreeEmpty = false;
+          }
+          if(event.previousContainer.id == "listFour") {
+            this.listFourEmpty = true;
+          }
+          if(event.container.id == "listFour") {
+            this.listFourEmpty = false;
+          }
+          if(event.previousContainer.id == "listFive") {
+            this.listFiveEmpty = true;
+          }
+          if(event.container.id == "listFive") {
+            this.listFiveEmpty = false;
+          }
+          if(event.previousContainer.id == "listSix") {
+            this.listSixEmpty = true;
+          }
+          if(event.container.id == "listSix") {
+            this.listSixEmpty = false;
+          }
+        }
       }
     }
-  }
-
-  switchAcceptDrop() {
-
   }
 
   showList() {
