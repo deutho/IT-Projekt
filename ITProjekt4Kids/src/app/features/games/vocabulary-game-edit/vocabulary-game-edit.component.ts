@@ -197,10 +197,6 @@ export class VocabularyGameEditComponent implements OnInit {
     //toggle to refresh correct image after inputting a new URL
     this.imageURL = (<HTMLInputElement>document.getElementById('URL')).value;
 
-    //dropbox share link - probably will be deleted later on
-    if(this.imageURL.substring(this.imageURL.length-4, this.imageURL.length) == "dl=0"){
-      this.imageURL = this.imageURL.substring(0,this.imageURL.length-4) + "raw=1"
-    }
     this.editingPicture = false;            
   }
 
