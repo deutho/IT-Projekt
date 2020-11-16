@@ -109,8 +109,10 @@
 }
 
 .question {
+    overflow-wrap: break-word;
     font-size: 200%;
     text-align: center;  
+    width: 100%
 }
 .imageEditing-container {
     display:flex; 

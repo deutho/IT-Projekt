@@ -41,6 +41,9 @@ export class VocabularyGameEditComponent implements OnInit {
     this.appService.myGameData$.subscribe((data) => {
       this.folderID = data;
     });
+    this.appService.myImageURL$.subscribe((data) => {
+      this.imageURL = data;
+    });
   }
 
   async ngOnInit(): Promise<void> {
@@ -237,4 +240,5 @@ export class VocabularyGameEditComponent implements OnInit {
     document.getElementById('question').innerText = this.currentGame.question[0];
     this.imageURL = this.currentGame.photoID;
   }
+
 }
