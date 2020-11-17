@@ -233,6 +233,7 @@ export class VocabularyGameEditComponent implements OnInit {
 
   //As content is mutable, this is necessary to avoid bugs
   loadInnerTextValues() {
+    console.log(this.currentGame)
     document.getElementById('button1').innerText = this.currentGame.rightAnswer[0];
     document.getElementById('button2').innerText = this.currentGame.answer1[0];
     document.getElementById('button3').innerText = this.currentGame.answer2[0];
