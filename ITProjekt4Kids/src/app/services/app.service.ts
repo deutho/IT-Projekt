@@ -21,11 +21,16 @@ import {
     private myHeaderSubject = new Subject<any>();
     myGameData$: Observable<any>;
     myGameDataSubject: BehaviorSubject<any> = new BehaviorSubject<any>([])
+    myRedirect$: Observable<any>;
+    private myRedirectSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+
+
 
     constructor(private cfr: ComponentFactoryResolver) {
         this.myComponent$ = this.myMethodSubject.asObservable();
         this.myheader$ = this.myHeaderSubject.asObservable();
         this.myGameData$ = this.myGameDataSubject.asObservable();
+        this.myRedirect$ = this.myRedirectSubject.asObservable();
         
     }
   
@@ -46,5 +51,9 @@ import {
 
     myGameData(data) {
       this.myGameDataSubject.next(data);
+    }
+
+    myRedirectData(data) {
+      this.myRedirectSubject.next(data);
     }
   }

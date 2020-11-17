@@ -21,34 +21,38 @@ import { UploadTaskComponent } from './upload-task/upload-task.component';
 import { DropzoneDirective } from './dropzone.directive';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AppComponent } from '../app.component';
+import { RedirectComponent } from './redirect/redirect.component';
+import { ClipboardModule } from 'ngx-clipboard';
 
 
 
 
 @NgModule({
 declarations: [
-  MainComponent, 
-  ProfileComponent, 
-  StatisticsComponent, 
-  AddUserComponent, 
-  DashboardComponent, 
-  DashboardHostDirective, 
-  MainMenuComponent, 
-  AddTaskComponent, 
-  VocabularyGameComponent, 
+  MainComponent,
+  ProfileComponent,
+  StatisticsComponent,
+  AddUserComponent,
+  DashboardComponent,
+  DashboardHostDirective,
+  MainMenuComponent,
+  AddTaskComponent,
+  VocabularyGameComponent,
   VocabularyGameEditComponent,
-  PersonalFormsGameComponent, 
-  PersonalFormsGameEditComponent, 
+  PersonalFormsGameComponent,
+  PersonalFormsGameEditComponent,
   BugReportComponent,
   UploaderComponent,
   UploadTaskComponent,
-  DropzoneDirective],
+  DropzoneDirective,
+  RedirectComponent],
 imports: [
   CommonModule,
   RouterModule,
   ReactiveFormsModule,
   FormsModule,
-  DragDropModule
+  DragDropModule,
+  ClipboardModule
 ],
 exports: [MainComponent],
 providers: [AngularFirestore],

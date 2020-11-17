@@ -85,7 +85,7 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   shuffleAnswers() {
-    this.answers = [this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3, this.currentGame.rightAnswer];
+    this.answers = [this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0], this.currentGame.rightAnswer[0]];
     this.imageURL = this.currentGame.photoID; //in the meantime set the URL
     this.shuffleArray(this.answers);
   }
@@ -187,16 +187,16 @@ export class VocabularyGameComponent implements OnInit {
         let button2 = (<HTMLInputElement>document.getElementById('button2'))
         let button3 = (<HTMLInputElement>document.getElementById('button3'))
         let button4 = (<HTMLInputElement>document.getElementById('button4'))        
-        if(button1.value == this.currentGame.rightAnswer){
+        if(button1.value == this.currentGame.rightAnswer[0]){
           button1.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button2.value == this.currentGame.rightAnswer){
+        else if(button2.value == this.currentGame.rightAnswer[0]){
           button2.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button3.value == this.currentGame.rightAnswer){
+        else if(button3.value == this.currentGame.rightAnswer[0]){
           button3.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button4.value == this.currentGame.rightAnswer){
+        else if(button4.value == this.currentGame.rightAnswer[0]){
           button4.setAttribute("style", "background-color:#52FF82;");
         }
       }
@@ -216,16 +216,16 @@ export class VocabularyGameComponent implements OnInit {
         let button2 = (<HTMLInputElement>document.getElementById('button2'))
         let button3 = (<HTMLInputElement>document.getElementById('button3'))
         let button4 = (<HTMLInputElement>document.getElementById('button4'))
-        if(button1.value == this.currentGame.rightAnswer){
+        if(button1.value == this.currentGame.rightAnswer[0]){
           button1.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button2.value == this.currentGame.rightAnswer){
+        else if(button2.value == this.currentGame.rightAnswer[0]){
           button2.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button3.value == this.currentGame.rightAnswer){
+        else if(button3.value == this.currentGame.rightAnswer[0]){
           button3.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button4.value == this.currentGame.rightAnswer){
+        else if(button4.value == this.currentGame.rightAnswer[0]){
           button4.setAttribute("style", "background-color:#52FF82;");
         }
       }
@@ -244,16 +244,16 @@ export class VocabularyGameComponent implements OnInit {
         let button2 = (<HTMLInputElement>document.getElementById('button2'))
         let button3 = (<HTMLInputElement>document.getElementById('button3'))
         let button4 = (<HTMLInputElement>document.getElementById('button4'))
-        if(button1.value == this.currentGame.rightAnswer){
+        if(button1.value == this.currentGame.rightAnswer[0]){
           button1.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button2.value == this.currentGame.rightAnswer){
+        else if(button2.value == this.currentGame.rightAnswer[0]){
           button2.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button3.value == this.currentGame.rightAnswer){
+        else if(button3.value == this.currentGame.rightAnswer[0]){
           button3.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button4.value == this.currentGame.rightAnswer){
+        else if(button4.value == this.currentGame.rightAnswer[0]){
           button4.setAttribute("style", "background-color:#52FF82;");
         }
       }
@@ -272,16 +272,16 @@ export class VocabularyGameComponent implements OnInit {
         let button2 = (<HTMLInputElement>document.getElementById('button2'))
         let button3 = (<HTMLInputElement>document.getElementById('button3'))
         let button4 = (<HTMLInputElement>document.getElementById('button4'))
-        if(button1.value == this.currentGame.rightAnswer){
+        if(button1.value == this.currentGame.rightAnswer[0]){
           button1.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button2.value == this.currentGame.rightAnswer){
+        else if(button2.value == this.currentGame.rightAnswer[0]){
           button2.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button3.value == this.currentGame.rightAnswer){
+        else if(button3.value == this.currentGame.rightAnswer[0]){
           button3.setAttribute("style", "background-color:#52FF82;");
         }
-        else if(button4.value == this.currentGame.rightAnswer){
+        else if(button4.value == this.currentGame.rightAnswer[0]){
           button4.setAttribute("style", "background-color:#52FF82;");
           console.log(button4.value)
         }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ClipboardService } from 'ngx-clipboard';
 import { take } from 'rxjs/internal/operators/take';
 import { Folder } from 'src/app/models/folder.model';
 import { Folderelement } from 'src/app/models/folderelement.model';
@@ -16,7 +17,11 @@ import {v4 as uuidv4} from 'uuid';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) { }
+  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService, private cboardService: ClipboardService) {
+    this.appService.myRedirect$.subscribe((redirect) => {
+      this.redirectdata = redirect;
+   });
+   }
 
   data;
   currentUser;
@@ -34,6 +39,10 @@ export class MainMenuComponent implements OnInit {
   gameSelected = false;
   emptyMessage: string = "Keine Elemente in diesem Ordner";
   creating = false;
+  redirectdata: string[] = [];
+  redirected;
+  redirectitem;
+
 
 
 
@@ -48,19 +57,34 @@ export class MainMenuComponent implements OnInit {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
     
-    if (this.currentUser.role != 1){
-      if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
-      else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
+    console.log(this.redirectdata);
+    if (this.redirectdata.length != 0) {
+      this.redirected = true;
+      this.currentPath = this.redirectdata[1];
+      console.log(this.redirectdata[2]);
+      this.redirectitem = this.redirectdata[2];
+      this.currentPathForHTML = "Geteilt von "+this.redirectdata[0];
+      console.log(this.redirectdata);
+      this.appService.myRedirectData([]);
+    } else {
 
-      this.currentPathForHTML = "Meine Ordner";
-      
-      this.getFolders();
+      if (this.currentUser.role != 1){
+        if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
+        else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
+
+        this.currentPathForHTML = "Meine Ordner";
+      }
     }
+
+    if (this.redirected == true) {
+      this.itemclick(this.redirectitem);
+    } else this.getFolders();
+    
   }
 
   async getFolders() {
     if (this.currentUser.role != 1) {
-      if (this.level == 0){
+      if (this.level == 0 && this.redirected != true){
       await this.afs.getFolders("derdiedaz").valueChanges().pipe(take(1)).toPromise().
       then(data => {
         this.derdiedazFolder = data.folders
@@ -206,7 +230,11 @@ export class MainMenuComponent implements OnInit {
   }
 
   settingOfItem(item) {
-    console.log(item)
+    var directurl = 'localhost:4200/direct?user='+this.currentUser.uid+'&path='+this.currentPath+'&item='+JSON.stringify(item);
+    console.log(directurl);
+    this.cboardService.copy(directurl);
+    
+    //Hier fügt Thomas danach no ein sickes Overlay ein mit "Link ist in der Zwischenablage" :) Dankeeee
   }
 
 }
