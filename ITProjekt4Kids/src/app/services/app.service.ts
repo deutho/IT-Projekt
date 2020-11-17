@@ -20,11 +20,11 @@ import {
     myheader$: Observable<any>;
     private myHeaderSubject = new Subject<any>();
     myGameData$: Observable<any>;
-    myGameDataSubject: BehaviorSubject<any> = new BehaviorSubject<any>([])
+    private myGameDataSubject: BehaviorSubject<any> = new BehaviorSubject<any>([])
     myRedirect$: Observable<any>;
     private myRedirectSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
-
-
+    myImageURL$: Observable<any>;
+    private myImageURLSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
     constructor(private cfr: ComponentFactoryResolver) {
         this.myComponent$ = this.myMethodSubject.asObservable();
@@ -32,6 +32,7 @@ import {
         this.myGameData$ = this.myGameDataSubject.asObservable();
         this.myRedirect$ = this.myRedirectSubject.asObservable();
         
+        this.myImageURL$ = this.myImageURLSubject.asObservable();
     }
   
     forChild(vcr: ViewContainerRef, cl: ComponentLoader) {
@@ -55,5 +56,10 @@ import {
 
     myRedirectData(data) {
       this.myRedirectSubject.next(data);
+    }
+
+    
+    myImageURL(data) {
+      this.myImageURLSubject.next(data);
     }
   }

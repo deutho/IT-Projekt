@@ -3,11 +3,13 @@ import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
+import { VocabularyGameEditComponent } from '../games/vocabulary-game-edit/vocabulary-game-edit.component';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'upload-task',
   templateUrl: './upload-task.component.html',
-  styleUrls: ['./upload-task.component.scss']
+  styleUrls: ['./upload-task.component.css']
 })
 export class UploadTaskComponent implements OnInit {
 
@@ -18,17 +20,17 @@ export class UploadTaskComponent implements OnInit {
   percentage: Observable<number>;
   snapshot: Observable<any>;
   downloadURL: string;
+  
 
-  constructor(private storage: AngularFireStorage, private db: AngularFirestore) { }
+  constructor(private storage: AngularFireStorage, private db: AngularFirestore, private app: AppService) { }
 
   ngOnInit() {
     this.startUpload();
   }
 
   startUpload() {
-
     // The storage path
-    const path = `test/${Date.now()}_${this.file.name}`;
+    const path = `/pictures/games/wordquiz/${Date.now()}_${this.file.name}`;
 
     // Reference to storage bucket
     const ref = this.storage.ref(path);
@@ -44,10 +46,14 @@ export class UploadTaskComponent implements OnInit {
       // The file's download URL
       finalize( async() =>  {
         this.downloadURL = await ref.getDownloadURL().toPromise();
+        
 
-        this.db.collection('files').add( { downloadURL: this.downloadURL, path });
+        // this.db.collection('files').add( { downloadURL: this.downloadURL, path });
+        console.log(this.downloadURL)
+        this.app.myImageURL(this.downloadURL)
       }),
     );
+    
   }
 
   isActive(snapshot) {

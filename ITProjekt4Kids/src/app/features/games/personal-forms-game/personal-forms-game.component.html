@@ -1,83 +1,181 @@
-  <div cdkDropListGroup class ="wrapper">
-    <div class="example-container">
-      <h2>Person</h2>
-      <div
-      cdkDropList
-      [cdkDropListData]="Person"
-      class="example-list"
-      (cdkDropListDropped)="drop($event)"
-      [cdkDropListEnterPredicate]="canDrop">
-      <div class="example-box" *ngFor="let p of Person, index as i"
-      cdkDrag
-      [cdkDragDisabled]="p.disabled">{{p.value}}
-      </div>
-      </div>
-    </div>
-    <div class="example-container">
-      <h2>Leere Liste</h2>
-      <div
-        cdkDropList
-        [cdkDropListData]="items1"
-        class="example-list"
-        cdkDropListSortingDisabled
-        (cdkDropListDropped)="drop($event)">
-        <div class="example-box" *ngFor="let item of items1" cdkDrag>{{item}}</div>
-      </div>
-      <div
-        cdkDropList
-        [cdkDropListData]="items2"
-        class="example-list"
-        cdkDropListSortingDisabled
-        (cdkDropListDropped)="drop($event)">
-        <div class="example-box" *ngFor="let item of items2" cdkDrag>{{item}}</div>
-      </div>
-      <div
-        cdkDropList
-        [cdkDropListData]="items3"
-        class="example-list"
-        cdkDropListSortingDisabled
-        (cdkDropListDropped)="drop($event)">
-        <div class="example-box" *ngFor="let item of items3" cdkDrag>{{item}}</div>
-      </div>
-      <div
-        cdkDropList
-        [cdkDropListData]="items4"
-        class="example-list"
-        cdkDropListSortingDisabled
-        (cdkDropListDropped)="drop($event)">
-        <div class="example-box" *ngFor="let item of items4" cdkDrag>{{item}}</div>
-      </div>
-      <div
-        cdkDropList
-        [cdkDropListData]="items5"
-        class="example-list"
-        cdkDropListSortingDisabled
-        (cdkDropListDropped)="drop($event)">
-        <div class="example-box" *ngFor="let item of items5" cdkDrag>{{item}}</div>
-      </div>
-      <div
-        cdkDropList
-        [cdkDropListData]="items6"
-        class="example-list"
-        cdkDropListSortingDisabled
-        (cdkDropListDropped)="drop($event)">
-        <div class="example-box" *ngFor="let item of items6" cdkDrag>{{item}}</div>
-      </div>
-    </div>
-    <div class="example-container">
-      <h2>Verb</h2>
-      <div
-      cdkDropList
-      [cdkDropListData]="answers"
-      class="example-list"
-      (cdkDropListDropped)="drop($event)">
-      <div class="example-box" *ngFor="let answer of answers, index as i" cdkDrag>{{answer}}</div>
-      </div>
-    </div>
-  </div>
+  <div class="content">
+    <div class="row">
+      <h4>{{currentGame.question}}</h4>
+      <!-- first column -->
+      <div cdkDropListGroup class ="wrapper">
+        <div class="example-container">
+          <div
+          cdkDropList
+          [cdkDropListData]="Person"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)"
+          [cdkDropListEnterPredicate]="canDrop">
+          <div class="example-box" *ngFor="let p of Person, index as i"
+          cdkDrag
+          [cdkDragDisabled]="p.disabled">{{p.value}}
+          </div>
+          </div>
+        </div>
+
+    <!-- second column -->
+
+        <div class="example-container">
+          <!-- row one -->
+          <!-- accepting input -->
+          <div *ngIf="listOneEmpty == true"
+            cdkDropList
+            id="listOne"
+            [cdkDropListData]="items1"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of items1" cdkDrag>{{item}}</div>
+          </div>
+          <!-- not accepting input -->
+          <div *ngIf="listOneEmpty == false"
+          id="listOne"
+          cdkDropList
+          [cdkDropListData]="items1"
+          class="example-list"
+          cdkDropListSortingDisabled
+          (cdkDropListDropped)="drop($event)"
+          [cdkDropListEnterPredicate]="canDrop">
+          <div class="example-box" *ngFor="let item of items1" cdkDrag>{{item}}</div>
+        </div>
 
 
-  <button (click)="this.loadNextGame()">Weiter</button>
-  <button (click)="showList()">Anzeigen</button>
+          <!-- row two -->
+          <!-- accepting input -->
+          <div *ngIf="listTwoEmpty == true"
+            id="listTwo"
+            cdkDropList
+            [cdkDropListData]="items2"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of items2" cdkDrag>{{item}}</div>
+          </div>
+          <!-- not accepting input -->
+          <div *ngIf="listTwoEmpty == false"
+          id="listTwo"
+          cdkDropList
+          [cdkDropListData]="items2"
+          class="example-list"
+          cdkDropListSortingDisabled
+          (cdkDropListDropped)="drop($event)"
+          [cdkDropListEnterPredicate]="canDrop">
+          <div class="example-box" *ngFor="let item of items2" cdkDrag>{{item}}</div>
+          </div>
 
-  
+          <!-- row three -->
+          <!-- accepting input -->
+          <div *ngIf="listThreeEmpty == true"
+          id="listThree"
+            cdkDropList
+            [cdkDropListData]="items3"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of items3" cdkDrag>{{item}}</div>
+          </div>
+          <!-- not accepting input -->
+          <div *ngIf="listThreeEmpty == false"
+          id="listThree"
+            cdkDropList
+            [cdkDropListData]="items3"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)"
+            [cdkDropListEnterPredicate]="canDrop">
+            <div class="example-box" *ngFor="let item of items3" cdkDrag>{{item}}</div>
+          </div>
+
+          <!-- row four -->
+          <!-- accepting input -->
+          <div *ngIf="listFourEmpty == true"
+          id="listFour"
+            cdkDropList
+            [cdkDropListData]="items4"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of items4" cdkDrag>{{item}}</div>
+          </div>
+          <!-- not accepting input -->
+          <div *ngIf="listFourEmpty == false"
+          id="listFour"
+            cdkDropList
+            [cdkDropListData]="items4"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)"
+            [cdkDropListEnterPredicate]="canDrop">
+            <div class="example-box" *ngFor="let item of items4" cdkDrag>{{item}}</div>
+          </div>
+
+          <!-- row five -->
+          <!-- accepting input -->
+          <div *ngIf="listFiveEmpty == true"
+          id="listFive"
+            cdkDropList
+            [cdkDropListData]="items5"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of items5" cdkDrag>{{item}}</div>
+          </div>
+          <!-- not accepting input -->
+          <div *ngIf="listFiveEmpty == false"
+          id="listFive"
+            cdkDropList
+            [cdkDropListData]="items5"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)"
+            [cdkDropListEnterPredicate]="canDrop">
+            <div class="example-box" *ngFor="let item of items5" cdkDrag>{{item}}</div>
+          </div>
+
+          <!-- row six -->
+          <!-- accepting input -->
+          <div *ngIf="listSixEmpty == true"
+          id="listSix"
+            cdkDropList
+            [cdkDropListData]="items6"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of items6" cdkDrag>{{item}}</div>
+          </div>
+          <!-- not accepting input -->
+          <div *ngIf="listSixEmpty == false"
+          id="listSix"
+            cdkDropList
+            [cdkDropListData]="items6"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)"
+            [cdkDropListEnterPredicate]="canDrop">
+            <div class="example-box" *ngFor="let item of items6" cdkDrag>{{item}}</div>
+          </div>
+        </div>
+
+
+
+        <!-- third column -->
+        <div class="example-container">
+          <div
+          cdkDropList
+          [cdkDropListData]="answers"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)"
+          id="selection">
+          <div class="example-box" *ngFor="let answer of answers, index as i" cdkDrag>{{answer}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button (click)="this.loadNextGame()">Weiter</button>
+
+</div>

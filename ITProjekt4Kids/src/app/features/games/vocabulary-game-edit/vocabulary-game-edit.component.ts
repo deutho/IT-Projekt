@@ -41,6 +41,9 @@ export class VocabularyGameEditComponent implements OnInit {
     this.appService.myGameData$.subscribe((data) => {
       this.folderID = data;
     });
+    this.appService.myImageURL$.subscribe((data) => {
+      this.imageURL = data;
+    });
   }
 
   async ngOnInit(): Promise<void> {
@@ -197,10 +200,6 @@ export class VocabularyGameEditComponent implements OnInit {
     //toggle to refresh correct image after inputting a new URL
     this.imageURL = (<HTMLInputElement>document.getElementById('URL')).value;
 
-    //dropbox share link - probably will be deleted later on
-    if(this.imageURL.substring(this.imageURL.length-4, this.imageURL.length) == "dl=0"){
-      this.imageURL = this.imageURL.substring(0,this.imageURL.length-4) + "raw=1"
-    }
     this.editingPicture = false;            
   }
 
@@ -241,4 +240,5 @@ export class VocabularyGameEditComponent implements OnInit {
     document.getElementById('question').innerText = this.currentGame.question[0];
     this.imageURL = this.currentGame.photoID;
   }
+
 }
