@@ -1,8 +1,10 @@
 <div *ngIf ="write === true" class="content">
     
     <div style = "margin: auto; ">
-        <label for="textarea">Beschreiben Sie bitte den Bug. Erwähnen Sie dabei auch, für welche Nutzer der Bug auftritt (Lehrer, Schüler, beide):</label>
-       <textarea style="max-width: 90%; box-sizing: border-box;" id ="textarea" rows = "20" cols = "150"></textarea>    
+        <label for="textarea">Beschreiben Sie bitte den Bug. Erwähnen Sie dabei auch, für welche Nutzer der Bug auftritt (Lehrer, Schüler, beide):</label>  
+       <div class="col-75">
+        <textarea id="textarea" name="subject" placeholder="Hier den Text zur Fehlerbeschreibung eingeben..." style="height:200px"></textarea>
+      </div>
     </div>
     <div style = "margin-top: 35px">
         <button (click)="onSubmit()" class = "btn login-button-style">Bug-Report Absenden</button>

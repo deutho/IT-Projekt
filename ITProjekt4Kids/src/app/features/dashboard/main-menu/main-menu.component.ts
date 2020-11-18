@@ -42,9 +42,9 @@ export class MainMenuComponent implements OnInit {
   redirectdata: string[] = [];
   redirected;
   redirectitem;
-
-
-
+  shareGameOverlay = false;
+  directurl = "";
+  linkCopied = false;
 
   async ngOnInit() {
     this.addElementForm = this.fb.group({
@@ -230,11 +230,17 @@ export class MainMenuComponent implements OnInit {
   }
 
   settingOfItem(item) {
-    var directurl = 'localhost:4200/direct?user='+this.currentUser.uid+'&path='+this.currentPath+'&item='+JSON.stringify(item);
-    console.log(directurl);
-    this.cboardService.copy(directurl);
+    this.directurl = 'localhost:4200/direct?user='+this.currentUser.uid+'&path='+this.currentPath+'&item='+JSON.stringify(item);
+    console.log(this.directurl);
+    this.cboardService.copy(this.directurl);
+    this.shareGameOverlay = true;
     
     //Hier fügt Thomas danach no ein sickes Overlay ein mit "Link ist in der Zwischenablage" :) Dankeeee
+  }
+
+  copied() {
+    this.linkCopied = true
+    setTimeout(() => this.linkCopied = false, 2500);
   }
 
 }

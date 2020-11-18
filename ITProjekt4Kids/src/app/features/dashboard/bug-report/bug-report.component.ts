@@ -1,4 +1,4 @@
-import { ThrowStmt } from '@angular/compiler';
+import { createUrlResolverWithoutPackagePrefix, ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -68,6 +68,7 @@ export class BugReportComponent implements OnInit {
       this.dates[i] = date;
       i++;
     });
-    
   }
 }
+
+
