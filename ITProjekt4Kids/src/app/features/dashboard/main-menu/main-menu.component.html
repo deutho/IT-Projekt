@@ -20,10 +20,12 @@
         </ul>
 
 
-        <!-- Button für den Student Mode - Muss Thomas noch schön verpacken-->
+        <!-- Button für den Student Mode - Muss Thomas noch schön verpacken - Thoooomass Bitteee, Dankeeee-->
 
-        <button *ngIf = "studentMode == false" (click) = toggleStudentMode()>Hier in den Schülermodus wechseln</button>
-        <button *ngIf = "studentMode == true" (click) = toggleStudentMode()>Hier in den Lehrermodus wechseln</button>
+        <div *ngIf = "currentUser.role == 2">
+            <button *ngIf = "studentMode == false" (click) = toggleStudentMode()>Hier in den Schülermodus wechseln</button>
+            <button *ngIf = "studentMode == true" (click) = toggleStudentMode()>Hier in den Lehrermodus wechseln</button>
+        </div>
 
         
         <!-------------------------
