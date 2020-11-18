@@ -29,7 +29,8 @@
     Bug Reports von {{currentUser.firstname}} {{currentUser.lastname}}
     <ul *ngFor="let bugreport of bugreports;  index as i" style="padding-top: -50px;">
         <li style="margin-top: 30px;">
-             {{i+1}} vom {{dates[i]}}: {{bugreport.description}}
+             {{i+1}} Status: {{bugreport.status}} vom {{dates[i]}}: {{bugreport.description}}
+             
         </li>
     </ul>
     <button (click)="changeView();" class = "btn login-button-style">Bug-Report erstellen</button>

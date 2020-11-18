@@ -36,9 +36,10 @@ export class BugReportComponent implements OnInit {
   public async onSubmit() {
     let user = this.currentUser.firstname + " " + this.currentUser.lastname;
     let description = (<HTMLInputElement>document.getElementById("textarea")).value;
+    let status = "offen";
 
     if (description != "") {
-      this.success = this.afs.addBugReport(description, user);
+      this.success = this.afs.addBugReport(description, user, status);
       if (this.success == true) {
         this.response = "Bug Report erfolgreich abgesendet. Danke.";
         (<HTMLInputElement>document.getElementById("textarea")).value = "";
@@ -61,7 +62,7 @@ export class BugReportComponent implements OnInit {
         this.bugreports =  data;
       });
 
-      this.bugreports = this.bugreports.sort((n1, n2) => {return n1.time.seconds - n2.time.seconds });
+    this.bugreports = this.bugreports.sort((n1, n2) => {return n1.time.seconds - n2.time.seconds });
     let i = 0;
     this.bugreports.forEach((m) => {
       var date = new Date(m.time.seconds*1000).toLocaleDateString("de-DE")

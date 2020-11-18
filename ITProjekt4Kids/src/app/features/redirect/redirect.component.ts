@@ -13,16 +13,15 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 export class RedirectComponent implements OnInit {
 
   redirectionUser;
-  userAsString
   data: string[] = []
-  uid;
+  user: string;
   path;
   item;
 
   constructor(private app: AppService, private router: Router, private afs: FirestoreDataService, private activatedRoute: ActivatedRoute, private auth: AuthService) {
 
   console.log(this.activatedRoute);
-  this.uid = this.activatedRoute.snapshot.queryParamMap.get('user');
+  this.user = this.activatedRoute.snapshot.queryParamMap.get('user');
   this.path = this.activatedRoute.snapshot.queryParamMap.get('path');
   this.item = JSON.parse(this.activatedRoute.snapshot.queryParamMap.get('item'));
 
@@ -30,23 +29,12 @@ export class RedirectComponent implements OnInit {
   
 
   async ngOnInit() {
-      
-  await this.afs.getUserPerID(this.uid).valueChanges().pipe(take(1)).toPromise().
-    then(data => {
-      this.redirectionUser = data[0];
-      this.userAsString = this.redirectionUser.firstname + " " + this.redirectionUser.lastname;
-    }).catch((err) => {
-      if (err.code = 'permission-denied') {
-        this.router.navigate(['login'])
-      }
-    }).then(() => {
-        this.data[0] = this.userAsString;
-        this.data[1] = this.path;
-        this.data[2] = this.item;
-        console.log(this.data);
-        this.app.myRedirectData(this.data);
-        this.router.navigate(['']);
-      });
-    
+    this.data[0] = this.user.substring(0, this.user.indexOf("-"))+" "+this.user.substring(this.user.indexOf("-")+1);
+    console.log(this.data[0]);
+    this.data[1] = this.path;
+    this.data[2] = this.item;
+    console.log(this.data);
+    this.app.myRedirectData(this.data);
+    this.router.navigate(['']);
   }
 }

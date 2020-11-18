@@ -236,7 +236,7 @@ export class MainMenuComponent implements OnInit {
   }
 
   settingOfItem(item) {
-    this.directurl = 'localhost:4200/direct?user='+this.currentUser.uid+'&path='+this.currentPath+'&item='+JSON.stringify(item);
+    this.directurl = 'localhost:4200/direct?user='+this.currentUser.firstname+"-"+this.currentUser.lastname+'&path='+this.currentPath+'&item='+JSON.stringify(item);
     console.log(this.directurl);
     this.cboardService.copy(this.directurl);
     this.shareGameOverlay = true;

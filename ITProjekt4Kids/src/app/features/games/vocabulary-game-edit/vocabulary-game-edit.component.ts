@@ -127,6 +127,7 @@ export class VocabularyGameEditComponent implements OnInit {
       }
       
 
+
       this.afs.updateTask(this.currentGame);
       this.finalScreen = false;
       this.saved = true;
@@ -137,6 +138,10 @@ export class VocabularyGameEditComponent implements OnInit {
       this.noChanges = true;
       setTimeout(() => this.noChanges = false, 2500);
     }
+  }
+
+  deletePictureOnAbort() {
+
   }
 
   uploadTextToSpeechElement(element) {
@@ -215,6 +220,17 @@ export class VocabularyGameEditComponent implements OnInit {
     this.editingPicture = false;            
   }
 
+  abortPictureEdit() {
+    //Delete the Uploaded Picture in case the Process was aborted
+    if ((<HTMLInputElement>document.getElementById('URL')).value.search("firebasestorage.googleapis.com") != -1) {
+      this.afs.deleteFromStorageByUrl((<HTMLInputElement>document.getElementById('URL')).value).catch((err) => {
+        console.log(err.errorMessage);
+        //Give Warning that Delete Operation was not successful
+      });
+    }
+    this.editingPicture = false;
+  }
+
   //navigating to the next question
   rightArrowClicked() {
     if(this.checkForChanges()) {
@@ -240,6 +256,12 @@ export class VocabularyGameEditComponent implements OnInit {
   //discard button from warning of unsaved changes
   discardChanges() {
     this.unsavedChanges=false;
+    //Hier vielleicht auch noch das firebase bild löschen? nicht sicher
+    if (this.imageURL != this.currentGame.photoID) {
+      if (this.imageURL.search("firebasestorage.googleapis.com") != -1) {
+        this.afs.deleteFromStorageByUrl(this.imageURL);
+      }
+    }
     this.loadInnerTextValues();
   }
 

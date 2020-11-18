@@ -84,12 +84,13 @@ export class FirestoreDataService {
         });
     }
 
-    addBugReport(description: string, user: string): boolean {
+    addBugReport(description: string, user: string, status: string): boolean {
         let success = true;
         this.db.collection("bugreports").add({
             description: description,
             user: user,
             time: firebase.firestore.FieldValue.serverTimestamp(),
+            status: status
         }).catch(()=>{
             success = false;
         });
