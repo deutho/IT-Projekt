@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import {HttpClientModule} from '@angular/common/http';
 import {AngularFireStorageModule} from '@angular/fire/storage'
 firebase.initializeApp(environment.firebase)
+import { CommonModule } from '@angular/common';  
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ firebase.initializeApp(environment.firebase)
     AngularFireAuthModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    CommonModule
   ],
   providers: [AngularFirestore],
   bootstrap: [AppComponent]

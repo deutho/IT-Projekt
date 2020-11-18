@@ -9,7 +9,6 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import {v4 as uuidv4} from 'uuid';
 
 
-
 @Component({
   selector: 'app-vocabulary-game-edit',
   templateUrl: './vocabulary-game-edit.component.html',
@@ -98,10 +97,14 @@ export class VocabularyGameEditComponent implements OnInit {
 
 
     //  lets the html know, that content can now be loaded
+    console.log(this.currentGame.question[0])
+    console.log(this.currentGame.answer1[0])
+    console.log(this.currentGame.answer2[0])
+    console.log(this.currentGame.answer3[0])
+    console.log(this.currentGame.rightAnswer[0])
+    console.log(this.currentGame.photoID)
      this.loaded = true;
 
-    // necessary because the content is mutable
-    this.loadInnerTextValues();
     }
 
     // makes changes persitant in the database
@@ -233,7 +236,6 @@ export class VocabularyGameEditComponent implements OnInit {
 
   //As content is mutable, this is necessary to avoid bugs
   loadInnerTextValues() {
-    console.log(this.currentGame)
     document.getElementById('button1').innerText = this.currentGame.rightAnswer[0];
     document.getElementById('button2').innerText = this.currentGame.answer1[0];
     document.getElementById('button3').innerText = this.currentGame.answer2[0];
