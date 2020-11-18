@@ -3,13 +3,12 @@ import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
-import { VocabularyGameEditComponent } from '../games/vocabulary-game-edit/vocabulary-game-edit.component';
 import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'upload-task',
   templateUrl: './upload-task.component.html',
-  styleUrls: ['./upload-task.component.css']
+  styleUrls: ['./upload-task.component.scss']
 })
 export class UploadTaskComponent implements OnInit {
 
@@ -49,8 +48,9 @@ export class UploadTaskComponent implements OnInit {
         
 
         // this.db.collection('files').add( { downloadURL: this.downloadURL, path });
-        console.log(this.downloadURL)
+        // console.log(this.downloadURL)
         this.app.myImageURL(this.downloadURL)
+        
       }),
     );
     
