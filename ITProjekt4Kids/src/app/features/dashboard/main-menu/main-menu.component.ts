@@ -237,17 +237,16 @@ export class MainMenuComponent implements OnInit {
 
   settingOfItem(item) {
     this.directurl = 'www.derdiedaz.at/direct?user='+this.currentUser.firstname+"-"+this.currentUser.lastname+'&path='+this.currentPath+'&item='+JSON.stringify(item);
-    console.log(this.directurl);
-    this.cboardService.copy(this.directurl);
     this.shareGameOverlay = true;
-    
-    //Hier fügt Thomas danach no ein sickes Overlay ein mit "Link ist in der Zwischenablage" :) Dankeeee
   }
+
+  
 
   toggleStudentMode() {
     this.appService.myStudentMode();
   }
   copied() {
+    this.cboardService.copy(this.directurl);
     this.linkCopied = true
     setTimeout(() => this.linkCopied = false, 2500);
   }
