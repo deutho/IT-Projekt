@@ -15,20 +15,15 @@ export class UploaderComponent {
     this.isHovering = event;
   }
 
-  // onDrop(files: FileList) {
-  //   if (files.length > 1) {
-  //     this.tooManyFiles = true;
-  //     setTimeout(() => this.tooManyFiles = false, 3500);
-  //   }
-  //   else{
-  //     for (let i = 0; i < files.length; i++) {
-  //       this.files.push(files.item(i));
-  //     }
-  //   }    
-  // }
   onDrop(files: FileList) {
-    for (let i = 0; i < files.length; i++) {
-      this.files.push(files.item(i));
+    if (files.length > 1) {
+      this.tooManyFiles = true;
+      setTimeout(() => this.tooManyFiles = false, 3500);
     }
+    else{
+      for (let i = 0; i < files.length; i++) {
+        this.files.push(files.item(i));
+      }
+    }    
   }
 }
