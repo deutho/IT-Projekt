@@ -76,9 +76,10 @@
 }
 
 .question {
+    overflow-wrap: break-word;
     font-size: 200%;
-    font-weight: bold;
     text-align: center;  
+    width: 100%
 }
 
 .input{
