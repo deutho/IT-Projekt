@@ -116,7 +116,13 @@ export class VocabularyGameEditComponent implements OnInit {
       this.currentGame.answer2[0] = document.getElementById('button3').innerText;
       this.currentGame.answer3[0] = document.getElementById('button4').innerText;
       this.currentGame.question[0] = document.getElementById('question').innerText;
-      this.currentGame.photoID = this.imageURL;
+      if(this.currentGame.photoID != this.imageURL) {
+        if(this.currentGame.photoID.search("firebasestorage.googleapis.com") != -1) {
+          // delete from DB
+        }
+        this.currentGame.photoID = this.imageURL;
+      }
+      
 
       this.afs.updateTask(this.currentGame);
       this.finalScreen = false;
