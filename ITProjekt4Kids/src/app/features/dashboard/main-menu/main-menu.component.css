@@ -1,8 +1,3 @@
-li {
-    margin-top: 30px;
-    background-color: #ffffff;
-    filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
-}
 
 div {
     width: 100%;
@@ -40,6 +35,8 @@ input {
     flex-direction: row; 
     align-items: center;
     justify-content: flex-start;
+    margin-top: 30px;
+    filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .overlay {
@@ -64,6 +61,8 @@ input {
     background-color: white; /* Black background with opacity */
     z-index: 4; /* Specify a stack order in case you're using a different order for other elements */
     cursor: default; /* Add a pointer on hover */
+    justify-content: center;
+    align-items: center;
 }
 
 .fullscreen {
@@ -152,4 +151,23 @@ border: solid 2px lightcoral;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.icon{
+    height:28px; 
+    width: 28px; 
+    opacity:0.5;
+    padding: 0px 5px 0px 5px;
+}
+
+.selectionOfDropdown {
+    padding: 0px 10px 0px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.textOfDropwdown {
+    padding: 0px 10px 0px 5px;
 }
