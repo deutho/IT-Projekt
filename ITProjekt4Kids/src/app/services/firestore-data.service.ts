@@ -15,6 +15,8 @@ import { BugReport } from '../models/bugreport.model';
 @Injectable({ providedIn: 'root' })
 export class FirestoreDataService {
     db = firebase.firestore();
+    storage = firebase.storage();
+    storageRef = this.storage.ref();
     
 
     constructor(public _afs: AngularFirestore, public _auth: AuthService) {
@@ -96,6 +98,10 @@ export class FirestoreDataService {
 
     getBugReportsByUser(user: string): AngularFirestoreCollection<BugReport> {
         return this._afs.collection("bugreports", ref => ref.where('user', "==", user));
+    }
+
+    deleteFromStorageByUrl(url: string): Promise<any> {
+        return this.storage.refFromURL(url).delete();
     }
     
 }

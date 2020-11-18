@@ -18,6 +18,13 @@
                 </div>
             </li>
         </ul>
+
+
+        <!-- Button für den Student Mode - Muss Thomas noch schön verpacken-->
+
+        <button *ngIf = "studentMode == false" (click) = toggleStudentMode()>Hier in den Schülermodus wechseln</button>
+        <button *ngIf = "studentMode == true" (click) = toggleStudentMode()>Hier in den Lehrermodus wechseln</button>
+
         
         <!-------------------------
            
@@ -147,6 +154,7 @@
 
     ------------------------->
 
+    
 
 
 

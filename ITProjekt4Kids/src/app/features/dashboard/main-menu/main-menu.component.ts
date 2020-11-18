@@ -21,6 +21,12 @@ export class MainMenuComponent implements OnInit {
     this.appService.myRedirect$.subscribe((redirect) => {
       this.redirectdata = redirect;
    });
+
+   this.appService.myStudentMode$.subscribe((studentMode) => {
+     this.studentMode = studentMode;
+   });
+
+
    }
 
   data;
@@ -42,6 +48,7 @@ export class MainMenuComponent implements OnInit {
   redirectdata: string[] = [];
   redirected;
   redirectitem;
+  studentMode;
 
 
 
@@ -51,7 +58,6 @@ export class MainMenuComponent implements OnInit {
       name:  ['', Validators.required],
       game:  []
     });
-
 
     this.level = 0;
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
@@ -67,7 +73,7 @@ export class MainMenuComponent implements OnInit {
       console.log(this.redirectdata);
       this.appService.myRedirectData([]);
     } else {
-
+      this.redirected = false;
       if (this.currentUser.role != 1){
         if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
         else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
@@ -159,7 +165,7 @@ export class MainMenuComponent implements OnInit {
       var data = item.uid;
       this.appService.myGameData(data);
       var type = item.gameType;
-      if (this.currentUser.role == 2) { 
+      if (this.currentUser.role == 2 && this.redirected == false && this.studentMode == false) { 
         type = type+"-edit";
         if (this.currentPath.substring(0,9) == "derdiedaz") standard = true;
       }
@@ -235,6 +241,10 @@ export class MainMenuComponent implements OnInit {
     this.cboardService.copy(directurl);
     
     //Hier fügt Thomas danach no ein sickes Overlay ein mit "Link ist in der Zwischenablage" :) Dankeeee
+  }
+
+  toggleStudentMode() {
+    this.appService.myStudentMode();
   }
 
 }

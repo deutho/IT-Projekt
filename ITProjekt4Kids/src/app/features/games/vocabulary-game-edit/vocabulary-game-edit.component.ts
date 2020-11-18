@@ -118,7 +118,10 @@ export class VocabularyGameEditComponent implements OnInit {
       this.currentGame.question[0] = document.getElementById('question').innerText;
       if(this.currentGame.photoID != this.imageURL) {
         if(this.currentGame.photoID.search("firebasestorage.googleapis.com") != -1) {
-          // delete from DB
+          this.afs.deleteFromStorageByUrl(this.currentGame.photoID).catch((err) => {
+            console.log(err.errorMessage);
+            //Give Warning that Delete Operation was not successful
+          });
         }
         this.currentGame.photoID = this.imageURL;
       }

@@ -25,14 +25,17 @@ import {
     private myRedirectSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
     myImageURL$: Observable<any>;
     private myImageURLSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+    myStudentMode$: Observable<any>;
+    private myStudentModeSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
 
     constructor(private cfr: ComponentFactoryResolver) {
         this.myComponent$ = this.myMethodSubject.asObservable();
         this.myheader$ = this.myHeaderSubject.asObservable();
         this.myGameData$ = this.myGameDataSubject.asObservable();
         this.myRedirect$ = this.myRedirectSubject.asObservable();
-        
         this.myImageURL$ = this.myImageURLSubject.asObservable();
+        this.myStudentMode$ = this.myStudentModeSubject.asObservable();
     }
   
     forChild(vcr: ViewContainerRef, cl: ComponentLoader) {
@@ -57,9 +60,13 @@ import {
     myRedirectData(data) {
       this.myRedirectSubject.next(data);
     }
-
     
     myImageURL(data) {
       this.myImageURLSubject.next(data);
     }
+
+    myStudentMode() {
+      this.myStudentModeSubject.next(!this.myStudentModeSubject.value)
+    }
+
   }
