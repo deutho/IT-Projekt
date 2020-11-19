@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { take, tap } from 'rxjs/operators';
 import { User } from 'src/app/models/users.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-profile',
@@ -21,9 +22,10 @@ export class ProfileComponent implements OnInit {
   passwordChange = undefined;
   
   
-  constructor(public afs: FirestoreDataService, public auth: AuthService, private fb: FormBuilder) {}
+  constructor(public afs: FirestoreDataService, public auth: AuthService, private fb: FormBuilder, private nav: NavigationService) {}
   
   async ngOnInit() {
+    history.pushState(null, "");
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
     this.currentUser.username = this.currentUser.username.substring(0, this.currentUser.username.lastIndexOf('@'));
@@ -69,6 +71,12 @@ export class ProfileComponent implements OnInit {
 
     setTimeout(() => this.error = undefined, 4000);
 
+  }
+
+  @HostListener('window:popstate', ['$event'])
+  onBrowserBackBtnClose(event: Event) {
+    event.preventDefault();
+    this.nav.navigate('Hauptmenü', 'mainMenu');
   }
 
 }

@@ -8,6 +8,7 @@ import { Folderelement } from 'src/app/models/folderelement.model';
 import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 import { environment } from 'src/environments/environment';
 import {v4 as uuidv4} from 'uuid';
 
@@ -19,16 +20,18 @@ import {v4 as uuidv4} from 'uuid';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService, private cboardService: ClipboardService) {
-    this.appService.myRedirect$.subscribe((redirect) => {
-      this.redirectdata = redirect;
-   });
+  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService, private nav: NavigationService) {
+      this.appService.myRedirect$.subscribe((redirect) => {
+        this.redirectdata = redirect;
+      });
 
-   this.appService.myStudentMode$.subscribe((studentMode) => {
-     this.studentMode = studentMode;
-   });
+    this.appService.myStudentMode$.subscribe((studentMode) => {
+      this.studentMode = studentMode;
+    });
 
-   
+    this.appService.myLastPath$.subscribe((lastpath) => {
+      this.lastpath = lastpath;
+    });
 
    }
 
@@ -55,6 +58,7 @@ export class MainMenuComponent implements OnInit {
   shareGameOverlay = false;
   directurl = "";
   linkCopied = false;
+  lastpath;
 
   async ngOnInit() {
     
@@ -75,14 +79,20 @@ export class MainMenuComponent implements OnInit {
       this.redirectitem = this.redirectdata[2];
       this.currentPathForHTML = "Geteilt von "+this.redirectdata[0];
       console.log(this.redirectdata);
-      this.appService.myRedirectData([]);
+      this.appService.myRedirectData([])
     } else {
       this.redirected = false;
       if (this.currentUser.role != 1){
-        if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
+        if (this.lastpath.length != 0){
+          this.currentPath = this.lastpath[0];
+          this.currentPathForHTML = this.lastpath[1];
+          this.level = parseInt(this.lastpath[2]);
+          this.appService.myLastPath([]);
+        }
+        else if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
         else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
 
-        this.currentPathForHTML = "Meine Ordner";
+        if (this.currentPathForHTML == "") this.currentPathForHTML = "Meine Ordner";
       }
     }
 
@@ -132,12 +142,8 @@ export class MainMenuComponent implements OnInit {
   }
     
   navigate(header, data) {
-    var data = data;
-    this.appService.myComponent(data);
-    this.dashboardService.changes();
-    var header = header;
-    this.appService.myHeader(header);
-  }
+    this.nav.navigate(header, data);
+    }
 
   async itemclick(item) {
     if (item.type == "folder") {
@@ -169,6 +175,7 @@ export class MainMenuComponent implements OnInit {
       var standard = false;
       var data = item.uid;
       this.appService.myGameData(data);
+      this.appService.myLastPath([this.currentPath, this.currentPathForHTML, this.level]);
       var type = item.gameType;
       if (this.currentUser.role == 2 && this.redirected == false && this.studentMode == false) { 
         type = type+"-edit";
@@ -263,13 +270,10 @@ export class MainMenuComponent implements OnInit {
 
   @HostListener('window:popstate', ['$event'])
   onBrowserBackBtnClose(event: Event) {
-    console.log('back button pressed');
-    console.log(event.cancelable);
     event.preventDefault();
-    console.log(event)
     if (this.level > 0) {
       this.goUpOneLevel();
-    }
+    } 
   }
 
 }

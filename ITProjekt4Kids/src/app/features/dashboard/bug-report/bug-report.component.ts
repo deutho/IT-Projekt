@@ -7,7 +7,7 @@ import { take } from 'rxjs/operators';
 import { BugReport } from 'src/app/models/bugreport.model';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
-import { DashboardService } from 'src/app/services/dashboard.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class BugReportComponent implements OnInit {
   ids: String[] = [];
   dates: String[] = [];
 
-  constructor(private afs: FirestoreDataService, private app: AppService, private dashboard: DashboardService) { }
+  constructor(private afs: FirestoreDataService, private nav: NavigationService) { }
 
   async ngOnInit() {
     this.write = true;
@@ -79,23 +79,9 @@ export class BugReportComponent implements OnInit {
 
   @HostListener('window:popstate', ['$event'])
   onBrowserBackBtnClose(event: Event) {
-    console.log('back button pressed');
-    console.log(event.cancelable);
     event.preventDefault();
-    console.log(event)
-    this.navigate('Hauptmenü', 'mainMenu')
-    
+    this.nav.navigate('Hauptmenü', 'mainMenu');
   }
-  
-
-  navigate(header, data) {
-    var data = data;
-    this.app.myComponent(data);
-    this.dashboard.changes();
-    var header = header;
-    this.app.myHeader(header);
-  }
-
 }
 
 

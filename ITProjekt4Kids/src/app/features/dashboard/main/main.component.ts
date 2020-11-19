@@ -6,6 +6,7 @@ import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +21,7 @@ export class MainComponent implements OnInit {
   studentMode;
   changedToStudent = false;
   changedToTeacher = false;
-  constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) {
+  constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private afs: FirestoreDataService, private nav: NavigationService) {
     this.appService.myComponent(this.data);
     this.appService.myheader$.subscribe((header) => {
       this.header = header;
@@ -42,10 +43,7 @@ export class MainComponent implements OnInit {
   }
 
   navigate(header, data) {
-    this.data = data;
-    this.appService.myComponent(this.data);
-    this.dashboardService.changes();
-    this.header = header;
+    this.nav.navigate(header, data);
   }
 
   toggleStudentMode() {

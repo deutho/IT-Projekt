@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { Navigation } from '@angular/router';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-statistics',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StatisticsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private nav: NavigationService) { }
 
   ngOnInit(): void {
+    history.pushState(null, "");
+  }
+
+
+  @HostListener('window:popstate', ['$event'])
+  onBrowserBackBtnClose(event: Event) {
+    event.preventDefault();
+    this.nav.navigate('Hauptmenü', 'mainMenu');
   }
 
 }

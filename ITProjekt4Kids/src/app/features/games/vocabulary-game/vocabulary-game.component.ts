@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
 import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
@@ -6,6 +6,7 @@ import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-vocabulary-game',
@@ -35,14 +36,14 @@ export class VocabularyGameComponent implements OnInit {
   totalNumberOfRounds = 0;
   audio = new Audio("");
   
-  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) {
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, private nav: NavigationService) {
     this.appService.myGameData$.subscribe((data) => {
       this.folderID = data;
     });
    }
 
   async ngOnInit(){
-
+    history.pushState(null, "");
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
       .then(data => this.currentUser = data[0]);
 
@@ -113,12 +114,7 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   goBack() {
-    var data = "mainMenu";
-    this.appService.myComponent(data);
-    this.dashboardService.changes();
-    var header = "Hauptmenü"
-    this.appService.myHeader(header);
-  
+    this.nav.navigate("Hauptmenü", "mainMenu");
   }
 
   evaluateGame(selection) {
@@ -138,13 +134,6 @@ export class VocabularyGameComponent implements OnInit {
     return correctAnswer;
   }
 
-  returnToMainMenu() {
-    var data = "mainMenu";
-    this.appService.myComponent(data);
-    this.dashboardService.changes();
-    var header = "Hauptmenü"
-    this.appService.myHeader(header);
-  }
 
   nextOne() {
     this.loadNextGame();  
@@ -340,6 +329,12 @@ export class VocabularyGameComponent implements OnInit {
   playSound(soundfile) {
     this.audio = new Audio(soundfile);
     this.audio.play();
+  }
+
+  @HostListener('window:popstate', ['$event'])
+  onBrowserBackBtnClose(event: Event) {
+    event.preventDefault();
+    this.nav.navigate('Hauptmenü', 'mainMenu');
   }
 }
 

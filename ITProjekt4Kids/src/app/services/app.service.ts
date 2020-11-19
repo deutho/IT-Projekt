@@ -28,6 +28,8 @@ import { DashboardService } from './dashboard.service';
     private myImageURLSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
     myStudentMode$: Observable<any>;
     private myStudentModeSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    myLastPath$: Observable<string[]>;
+    private myLastPathSubject: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
 
     constructor(private cfr: ComponentFactoryResolver) {
@@ -37,6 +39,7 @@ import { DashboardService } from './dashboard.service';
         this.myRedirect$ = this.myRedirectSubject.asObservable();
         this.myImageURL$ = this.myImageURLSubject.asObservable();
         this.myStudentMode$ = this.myStudentModeSubject.asObservable();
+        this.myLastPath$ = this.myLastPathSubject.asObservable();
     }
   
     forChild(vcr: ViewContainerRef, cl: ComponentLoader) {
@@ -70,5 +73,8 @@ import { DashboardService } from './dashboard.service';
       this.myStudentModeSubject.next(!this.myStudentModeSubject.value)
     }
 
+    myLastPath(data) {
+      this.myLastPathSubject.next(data);
+    }
 
   }
