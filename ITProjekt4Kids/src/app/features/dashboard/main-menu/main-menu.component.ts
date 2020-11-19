@@ -71,7 +71,7 @@ export class MainMenuComponent implements OnInit {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
     
-    console.log(this.redirectdata);
+    
     if (this.redirectdata.length != 0) {
       this.redirected = true;
       this.currentPath = this.redirectdata[1];
@@ -209,6 +209,10 @@ export class MainMenuComponent implements OnInit {
     
     (<HTMLInputElement>document.getElementById('newElement')).value = '';
     this.creating = false;
+  }
+
+  backButtonClicked() {
+    history.back();
   }
 
   goUpOneLevel() {
