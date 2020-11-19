@@ -1,10 +1,13 @@
 import { createUrlResolverWithoutPackagePrefix, ThrowStmt } from '@angular/compiler';
+import { HostListener } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { take } from 'rxjs/operators';
 import { BugReport } from 'src/app/models/bugreport.model';
 import { User } from 'src/app/models/users.model';
+import { AppService } from 'src/app/services/app.service';
+import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 
 @Component({
@@ -23,13 +26,15 @@ export class BugReportComponent implements OnInit {
   ids: String[] = [];
   dates: String[] = [];
 
-  constructor(private afs: FirestoreDataService) { }
+  constructor(private afs: FirestoreDataService, private app: AppService, private dashboard: DashboardService) { }
 
   async ngOnInit() {
     this.write = true;
     this.posted = false;
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
+
+    history.pushState(null, "");
     
   } 
 
@@ -70,6 +75,27 @@ export class BugReportComponent implements OnInit {
       i++;
     });
   }
+
+
+  @HostListener('window:popstate', ['$event'])
+  onBrowserBackBtnClose(event: Event) {
+    console.log('back button pressed');
+    console.log(event.cancelable);
+    event.preventDefault();
+    console.log(event)
+    this.navigate('Hauptmenü', 'mainMenu')
+    
+  }
+  
+
+  navigate(header, data) {
+    var data = data;
+    this.app.myComponent(data);
+    this.dashboard.changes();
+    var header = header;
+    this.app.myHeader(header);
+  }
+
 }
 
 

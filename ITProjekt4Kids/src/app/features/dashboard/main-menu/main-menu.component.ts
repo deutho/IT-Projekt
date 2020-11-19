@@ -28,6 +28,7 @@ export class MainMenuComponent implements OnInit {
      this.studentMode = studentMode;
    });
 
+   
 
    }
 
@@ -56,6 +57,7 @@ export class MainMenuComponent implements OnInit {
   linkCopied = false;
 
   async ngOnInit() {
+    
     this.addElementForm = this.fb.group({
       name:  ['', Validators.required],
       game:  []
@@ -86,8 +88,7 @@ export class MainMenuComponent implements OnInit {
 
     if (this.redirected == true) {
       this.itemclick(this.redirectitem);
-    } else this.getFolders();
-    
+    } else this.getFolders();    
   }
 
   async getFolders() {
@@ -160,6 +161,8 @@ export class MainMenuComponent implements OnInit {
 
       this.currentPath = this.currentPath + "/" + docname;
       this.getFolders();
+      history.pushState(null, 'placeholder');
+      
     }
 
     else if (item.type == "task") {
@@ -261,7 +264,12 @@ export class MainMenuComponent implements OnInit {
   @HostListener('window:popstate', ['$event'])
   onBrowserBackBtnClose(event: Event) {
     console.log('back button pressed');
+    console.log(event.cancelable);
     event.preventDefault();
-    this.goUpOneLevel();
+    console.log(event)
+    if (this.level > 0) {
+      this.goUpOneLevel();
+    }
   }
+
 }

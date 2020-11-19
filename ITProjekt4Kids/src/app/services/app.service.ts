@@ -5,6 +5,7 @@ import {
   } from '@angular/core';
   import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
   import { map } from 'rxjs/operators';
+import { DashboardService } from './dashboard.service';
   
   export interface ComponentLoader {
     loadChildren: () => Promise<any>;
@@ -68,5 +69,6 @@ import {
     myStudentMode() {
       this.myStudentModeSubject.next(!this.myStudentModeSubject.value)
     }
+
 
   }
