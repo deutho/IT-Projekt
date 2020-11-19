@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
@@ -258,4 +258,10 @@ export class MainMenuComponent implements OnInit {
     setTimeout(() => this.linkCopied = false, 2500);
   }
 
+  @HostListener('window:popstate', ['$event'])
+  onBrowserBackBtnClose(event: Event) {
+    console.log('back button pressed');
+    event.preventDefault();
+    this.goUpOneLevel();
+  }
 }
