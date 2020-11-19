@@ -48,7 +48,7 @@ export class MainComponent implements OnInit {
 
   toggleStudentMode() {
     this.appService.myStudentMode();
-    this.appService.
+    
   }
 
 } 
