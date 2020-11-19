@@ -8,7 +8,9 @@ import { Folderelement } from 'src/app/models/folderelement.model';
 import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { environment } from 'src/environments/environment';
 import {v4 as uuidv4} from 'uuid';
+
 
 @Component({
   selector: 'app-main-menu',
@@ -235,17 +237,23 @@ export class MainMenuComponent implements OnInit {
     this.creating = false;
   }
 
-  settingOfItem(item) {
-    this.directurl = 'https:derdiedaz.at/direct?user='+this.currentUser.uid+'&path='+this.currentPath+'&item='+JSON.stringify(item);
-    console.log(this.directurl);
-    this.cboardService.copy(this.directurl);
+  createLink(item) {
+    var url = environment.shareableURL;
+    this.directurl = url+'/direct?user='+this.currentUser.firstname+"-"+this.currentUser.lastname+'&path='+this.currentPath+'&item='+JSON.stringify(item);
     this.shareGameOverlay = true;
-    
-    //Hier fügt Thomas danach no ein sickes Overlay ein mit "Link ist in der Zwischenablage" :) Dankeeee
   }
 
+  deleteElement(item) {
+    //here to delete
 
+  }
+  
+
+  toggleStudentMode() {
+    this.appService.myStudentMode();
+  }
   copied() {
+    this.cboardService.copy(this.directurl);
     this.linkCopied = true
     setTimeout(() => this.linkCopied = false, 2500);
   }

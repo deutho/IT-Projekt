@@ -2,8 +2,8 @@
 <div id="overlay" *ngIf="this.evaluated  && this.finished == false" (click)="nextOne()"></div> 
 <div *ngIf = "this.loaded == true && speakerMode==false"  class="container" id="full" >    
     <div class="item-question question" style="margin: 0 auto;">
-            <button role="text" class="question" id="question" value="{{currentGame.question}}" style="background:transparent; outline:0;border:transparent; margin: 0 auto; cursor: pointer; display: none"></button>
-            {{currentGame.question}}
+            <button role="text" class="question" id="question" value="{{currentGame.question[0]}}" style="background:transparent; outline:0;border:transparent; margin: 0 auto; cursor: pointer; display: none"></button>
+            {{currentGame.question[0]}}
     </div>
     <div class="item-image">
         <div id="myimg" class="img-style" style="width: 50%; min-width: 340px; max-height: 350px;">
