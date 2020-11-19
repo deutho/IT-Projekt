@@ -6,11 +6,27 @@ import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+
+const starAnimation = trigger('starAnimation', [
+  transition('* <=> *', [
+    query(':enter',
+      [style({ opacity: 0 }), stagger('200ms', animate('600ms ease-out', style({ opacity: 1 })))],
+      { optional: true }
+    ),
+    query(':leave',
+      animate('200ms', style({ opacity: 0 })),
+      { optional: true}
+    )
+  ])
+]);
+
 
 @Component({
   selector: 'app-vocabulary-game',
   templateUrl: './vocabulary-game.component.html',
-  styleUrls: ['./vocabulary-game.component.css']
+  styleUrls: ['./vocabulary-game.component.css'],
+  animations: [starAnimation]
 })
 export class VocabularyGameComponent implements OnInit {
 
@@ -34,7 +50,12 @@ export class VocabularyGameComponent implements OnInit {
   speakerMode = false;
   totalNumberOfRounds = 0;
   audio = new Audio("");
-  
+  roundsWonAnimation = [];
+  roundsLostAnimation = [];
+// [].constructor(totalrounds - roundsWon);
+
+
+
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) {
     this.appService.myGameData$.subscribe((data) => {
       this.folderID = data;
@@ -73,7 +94,6 @@ export class VocabularyGameComponent implements OnInit {
 
   loadNextGame() {
     this.evaluated = false;
-
     if (this.Games.length > 0) {
         this.currentGame = this.Games.pop();
         this.shuffleAnswers();        
@@ -110,6 +130,7 @@ export class VocabularyGameComponent implements OnInit {
     this.duration = this.endtime-this.starttime;
     this.afs.createResult(this.currentUser.uid, this.totalrounds, this.roundsWon, this.folderID, this.duration);
     this.finished = true;
+    this.finalScreen()
   }
 
   goBack() {
@@ -123,7 +144,7 @@ export class VocabularyGameComponent implements OnInit {
 
   evaluateGame(selection) {
     let correctAnswer;
-    if (selection === this.currentGame.rightAnswer) {
+    if (selection == this.currentGame.rightAnswer[0]) {
       this.response = "Richtig!!";
       this.roundsWon++
       this.totalrounds++;
@@ -133,7 +154,6 @@ export class VocabularyGameComponent implements OnInit {
       this.totalrounds++;
       correctAnswer = false;
     }
-
     this.evaluated = true;
     return correctAnswer;
   }
@@ -283,7 +303,6 @@ export class VocabularyGameComponent implements OnInit {
         }
         else if(button4.value == this.currentGame.rightAnswer[0]){
           button4.setAttribute("style", "background-color:#52FF82;");
-          console.log(button4.value)
         }
       }
     }
@@ -341,6 +360,20 @@ export class VocabularyGameComponent implements OnInit {
     this.audio = new Audio(soundfile);
     this.audio.play();
   }
+
+  finalScreen() {
+    this.roundsWonAnimation = [].constructor(this.roundsWon);
+    this.roundsLostAnimation = [].constructor(this.totalrounds - this.roundsWon);
+  }
+
+  happyFace() {
+    
+    if((this.totalrounds - this.roundsWon) < (this.totalrounds / 2) ) {
+      return true; //more than 50% correct
+    }
+    else return false;
+  }
+
 }
 
 
