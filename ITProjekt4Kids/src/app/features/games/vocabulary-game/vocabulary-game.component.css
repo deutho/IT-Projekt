@@ -130,7 +130,7 @@
 
 .containerFinal {
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
 }
 
 /* Code frome Codepen */
@@ -331,4 +331,15 @@
 	}
 }
 
- 
+.endScreenContainer {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;    
+}
+.space{
+    min-height: 50px;
+  }

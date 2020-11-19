@@ -40,7 +40,7 @@
           cdkDropListSortingDisabled
           (cdkDropListDropped)="drop($event)"
           [cdkDropListEnterPredicate]="canDrop">
-          <div class="example-box" *ngFor="let item of items1" cdkDrag>{{item}}</div>
+          <div class="example-box" *ngFor="let item of items1" cdkDrag style="background-color: blue;">{{item}}</div>
         </div>
 
 
@@ -170,7 +170,7 @@
           class="example-list"
           (cdkDropListDropped)="drop($event)"
           id="selection">
-          <div class="example-box" *ngFor="let answer of answers, index as i" cdkDrag>{{answer}}</div>
+          <div class="example-box" *ngFor="let answer of answers, index as i" cdkDrag >{{answer}}</div>
           </div>
         </div>
       </div>
