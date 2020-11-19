@@ -1,6 +1,6 @@
 <span id="dummy"></span>
 <div id="overlay" *ngIf="this.evaluated  && this.finished == false" (click)="nextOne()"></div> 
-<div *ngIf = "this.loaded == true && speakerMode==false"  class="container" id="full" >    
+<div *ngIf = "this.loaded == true && speakerMode==false && finished == false"  class="container" id="full" >    
     <div class="item-question question" style="margin: 0 auto;">
             <button role="text" class="question" id="question" value="{{currentGame.question[0]}}" style="background:transparent; outline:0;border:transparent; margin: 0 auto; cursor: pointer; display: none"></button>
             {{currentGame.question[0]}}
@@ -45,14 +45,7 @@
         </div>
     </div>
     -->
-    <div class="item-final" *ngIf = "this.evaluated == true && this.Games.length == 0" style="padding-top: 0;">
-        <div type=button class="btn" (click) = "goBack()" style="width: 100%; margin: 0 auto" >
-            <svg  style="width: 5%; min-width: 75px; min-height: 100px; opacity: 0.6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="home" class="svg-inline--fa fa-home fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                <path fill="currentColor" d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z">
-                </path>
-            </svg>
-        </div>
-    </div>
+    
     <!-- <div class="slidecontainer item-final input">
         <progress type="range" min="1" id="progressRange" style="width: 100%" ></progress>
     </div> -->
@@ -147,6 +140,59 @@
         </div>
 </div>
 
+<!--              -->
+<!--              -->
+<!-- final Screen -->
+<!--              -->
+<!--              -->
+<div *ngIf = "this.finished == true" >
+    <h2> Du hast {{roundsWon}} von {{totalrounds}} richtig beantwortet!</h2>
+        <!-- Code from Codepen -->
+        <!-- Copyright (c) 2020 by Julie Park (https://codepen.io/juliepark/pen/vjMOKQ)
 
+            Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
+            The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+        -->
+        <div id="container">
+            <div *ngIf="happyFace() == true" id="success-box">
+              <div class="face">
+                <div class="eye"></div>
+                <div class="eye right"></div>
+                <div class="mouth happy"></div>
+              </div>
+              <div class="shadow scale"></div>
+              <div class="message"><h1 class="alert">Toll gemacht!</h1></div>
+              <button class="button-box"><h1 class="green">Hauptmenü</h1></button>
+            </div>
+            <div *ngIf="happyFace() == false" id="error-box">
+              <div class="dot"></div>
+              <div class="dot two"></div>
+              <div class="face2">
+                <div class="eye"></div>
+                <div class="eye right"></div>
+                <div class="mouth sad"></div>
+              </div>
+              <div class="shadow move"></div>
+              <div class="message"><h1 class="alert">Oje! Das musst du noch Üben!</h1></div>
+              <button class="button-box"><h1 class="red">Hauptmenü</h1></button>
+            </div>
+          </div>
+          
+    
+    <div [@starAnimation]="roundsWonAnimation.length" class="containerFinal"> 
+        <div *ngFor="let item of roundsWonAnimation">
+            <svg style="color: #FFD700" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="star" class="svg-inline--fa fa-star fa-w-18 star" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path></svg>
+        </div>
+    </div>
+    <div [@starAnimation]="roundsLostAnimation.length" class="containerFinal">
+        <div *ngFor="let item of roundsLostAnimation">
+            <svg  aria-hidden="true" focusable="false" data-prefix="fas" data-icon="star" class="svg-inline--fa fa-star fa-w-18 star" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path></svg>
+        </div>
+    </div>
+
+</div>
 
