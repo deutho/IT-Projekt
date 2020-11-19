@@ -1,3 +1,6 @@
+<!-- overlay - changed studentmode state -->
+
+
 <div class="pos-f-t">
     <nav class="navbar navbar-default bg-primary dropshadow">
         <!-- <img type=button (click)="navigate('Hauptmenü', 'mainMenu')" src="https://firebasestorage.googleapis.com/v0/b/kids-8b916.appspot.com/o/pictures%2Flogos%2Ftabular-icon.png?alt=media&token=d176987e-35ae-4fd2-81fc-7e0aaa2e44c2" style="height: 50px;"> 
@@ -6,8 +9,20 @@
 
         
             <h4 class = "align-center text-white"> {{header}}</h4>
+    
+    <div *ngIf = "currentUser" class="flex-center-row" >
 
-    <div *ngIf = "currentUser">
+        <!-- teacher/student vision change -->
+        <div *ngIf = "currentUser.role == 2 || studentMode == true" class="flex-center-row" >
+            <div *ngIf = "studentMode == false" class="flex-center-row" (click) = toggleStudentMode() > <!-- teacher icon -->
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-graduate" class="svg-inline--fa fa-user-graduate fa-w-14 mode" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M319.4 320.6L224 416l-95.4-95.4C57.1 323.7 0 382.2 0 454.4v9.6c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-9.6c0-72.2-57.1-130.7-128.6-133.8zM13.6 79.8l6.4 1.5v58.4c-7 4.2-12 11.5-12 20.3 0 8.4 4.6 15.4 11.1 19.7L3.5 242c-1.7 6.9 2.1 14 7.6 14h41.8c5.5 0 9.3-7.1 7.6-14l-15.6-62.3C51.4 175.4 56 168.4 56 160c0-8.8-5-16.1-12-20.3V87.1l66 15.9c-8.6 17.2-14 36.4-14 57 0 70.7 57.3 128 128 128s128-57.3 128-128c0-20.6-5.3-39.8-14-57l96.3-23.2c18.2-4.4 18.2-27.1 0-31.5l-190.4-46c-13-3.1-26.7-3.1-39.7 0L13.6 48.2c-18.1 4.4-18.1 27.2 0 31.6z"></path></svg>
+            </div>
+            <div *ngIf = "studentMode == true" class="flex-center-row" (click) = toggleStudentMode()> <!-- student icon -->
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="child" class="svg-inline--fa fa-child fa-w-12 mode" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M120 72c0-39.765 32.235-72 72-72s72 32.235 72 72c0 39.764-32.235 72-72 72s-72-32.236-72-72zm254.627 1.373c-12.496-12.497-32.758-12.497-45.254 0L242.745 160H141.254L54.627 73.373c-12.496-12.497-32.758-12.497-45.254 0-12.497 12.497-12.497 32.758 0 45.255L104 213.254V480c0 17.673 14.327 32 32 32h16c17.673 0 32-14.327 32-32V368h16v112c0 17.673 14.327 32 32 32h16c17.673 0 32-14.327 32-32V213.254l94.627-94.627c12.497-12.497 12.497-32.757 0-45.254z"></path></svg>
+            </div>
+        </div>
+        <div style = "width: 20px;"></div>
+        <!-- dropdown student -->
         <div *ngIf = "currentUser.role == 3" class="nav-item dropdown">
             <img src= "../../../assets/Images/burgerbutton.svg" style="padding: 0px 0px 0px 0px; height: 35px;" alt="Dropdown" class="btn navbar-toggler" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -37,7 +52,7 @@
                 </li>
             </ul>
         </div> 
-        
+        <!-- dropdown teacher -->
         <div *ngIf = "currentUser.role == 2" class="nav-item dropdown">
             <img src= "../../../assets/Images/burgerbutton.svg" style="padding: 0px 0px 0px 0px; height: 35px;" alt="Dropdown" class="btn navbar-toggler" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -73,6 +88,7 @@
             </ul>
         </div>  
 
+        <!-- dropdown admin of school -->
         <div *ngIf = "currentUser.role == 1" class="nav-item dropdown">
             <img src= "../../../assets/Images/burgerbutton.svg" style="padding: 0px 0px 0px 0px; height: 35px;" alt="Dropdown" class="btn navbar-toggler" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -107,11 +123,30 @@
     </nav>
 </div>
 
-<div>
+
+<div><div *ngIf="changedToStudent == true || changedToTeacher == true" >
+    <div style="  display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100% - 10vh);
+    justify-content: flex-start;
+    align-items: flex-start;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));"
+    >
+    <div style="height: 50px;"></div>
+        <div *ngIf="changedToStudent == true" class="item-final alert alert-primary text-center" role="alert" style="width: 80%; margin:0 auto; position: relative; z-index: 10; justify-self: flex-end; align-self: flex-end; max-width: 500px;">
+            Du bist nun im Leherermodus - Jetzt kannst du Lernspiele bearbeiten!
+        </div>
+        <div *ngIf="changedToTeacher == true" class="item-final alert alert-primary text-center" role="alert" style="width: 80%; margin:0 auto; position: relative; z-index: 10; align-self: flex-end; max-width: 500px;">
+            Du bist nun im Schülermodus - Jetzt kannst du Lernspiele ausprobieren!
+        </div>
+    </div>
+</div>
 
     <app-dashboard-container> </app-dashboard-container>
 
 </div>
+
 
 
 

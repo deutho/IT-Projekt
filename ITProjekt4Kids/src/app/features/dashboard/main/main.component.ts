@@ -17,11 +17,17 @@ export class MainComponent implements OnInit {
   public data: string = "mainMenu";
   public header: string = "Hauptmenü";
   public currentUser: User;
+  studentMode;
+  changedToStudent = false;
+  changedToTeacher = false;
   constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) {
     this.appService.myComponent(this.data);
     this.appService.myheader$.subscribe((header) => {
       this.header = header;
    });
+   this.appService.myStudentMode$.subscribe((studentMode) => {
+    this.studentMode = studentMode;
+  });
   }
 
   async ngOnInit() {
@@ -40,6 +46,20 @@ export class MainComponent implements OnInit {
     this.appService.myComponent(this.data);
     this.dashboardService.changes();
     this.header = header;
+  }
+
+  toggleStudentMode() {
+    this.appService.myStudentMode();
+    if(this.studentMode == false) {
+      this.changedToStudent = true;
+      this.changedToTeacher = false;
+      setTimeout(() => this.changedToStudent = false, 4000);
+    }
+    else {
+      this.changedToStudent = false;
+      this.changedToTeacher = true;
+      setTimeout(() => this.changedToTeacher = false, 4000);
+    }
   }
 
 } 
