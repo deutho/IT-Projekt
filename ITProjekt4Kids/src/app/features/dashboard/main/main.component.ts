@@ -18,6 +18,8 @@ export class MainComponent implements OnInit {
   public header: string = "Hauptmenü";
   public currentUser: User;
   studentMode;
+  changedToStudent = false;
+  changedToTeacher = false;
   constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private dashboardService: DashboardService, private afs: FirestoreDataService) {
     this.appService.myComponent(this.data);
     this.appService.myheader$.subscribe((header) => {
@@ -48,7 +50,16 @@ export class MainComponent implements OnInit {
 
   toggleStudentMode() {
     this.appService.myStudentMode();
-    
+    if(this.studentMode == false) {
+      this.changedToStudent = true;
+      this.changedToTeacher = false;
+      setTimeout(() => this.changedToStudent = false, 4000);
+    }
+    else {
+      this.changedToStudent = false;
+      this.changedToTeacher = true;
+      setTimeout(() => this.changedToTeacher = false, 4000);
+    }
   }
 
 } 
