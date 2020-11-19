@@ -54,6 +54,13 @@ export class FirestoreDataService {
             folders: firebase.firestore.FieldValue.arrayUnion(JSON.parse(JSON.stringify(folder)))
         });
     }
+
+    removeFolder(folder: Folder, currentPath: string) {
+        return this.db.doc("folders/"+currentPath).update({
+            folders: firebase.firestore.FieldValue.arrayRemove(JSON.parse(JSON.stringify(folder)))
+        });
+    }
+    
     addFolderDocument(uid: string, name: string, path: string): void{
         this.db.doc("folders/"+path).collection(uid).add({
             parent: name,
