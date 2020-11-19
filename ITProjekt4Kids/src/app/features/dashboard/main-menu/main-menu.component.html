@@ -74,6 +74,13 @@
                 <div class="item-center" > <h4 style="opacity: 0.6;">Neues Element</h4></div>
                 <div class="item-right"></div>
             </div>
+            <!-- error message generel -->
+            <div style="min-height: 15px"></div>
+            <div style="display: table; ">
+                <div *ngIf = "error === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px; width: 30%; display: block">
+                    {{errorMessage}}
+                </div>
+            </div>
         </div>
 
         <!-- Overlays for dropdown -->
@@ -92,6 +99,7 @@
                     </div>
                 </div>
             </div>
+            <!-- notification copied link to shared game -->
             <div style="  display: inline-flex;
             flex-direction: column;
             width: 100%;
@@ -117,21 +125,23 @@
                 </div>
                 <div class="item-center" (click)=itemclick(item)> <h4>{{item.name}}</h4></div>
                 <div class="item-right"></div>            
+            <!-- error message if folder length = 0 -->
+            <div *ngIf="currentFolders.length == 0" style = "margin: 0 auto; font-weight: 400; font-size: x-large;" class = "btn">
+                {{emptyMessage}}
+            </div>
+            <!-- error message general -->
+            <div style="display: table; ">
+                <div *ngIf = "error === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px; width: 30%; display: block">
+                    {{errorMessage}}
+                </div>
+            </div>
         </div>
         
 
 
-        <!-- error message if folder length = 0 -->
-        <div *ngIf="currentFolders.length == 0 && currentUser.role == 3" style = "margin: 0 auto; font-weight: 400; font-size: x-large;" class = "btn">
-            {{emptyMessage}}
-        </div>
 
-        <!-- error message -->
-        <div style="display: table; ">
-            <div *ngIf = "error === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px; width: 30%; display: block">
-                {{errorMessage}}
-            </div>
-        </div>
+
+
     </div>
 
 
