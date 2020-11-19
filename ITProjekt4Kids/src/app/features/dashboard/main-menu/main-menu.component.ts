@@ -244,9 +244,7 @@ export class MainMenuComponent implements OnInit {
     //Hier fügt Thomas danach no ein sickes Overlay ein mit "Link ist in der Zwischenablage" :) Dankeeee
   }
 
-  toggleStudentMode() {
-    this.appService.myStudentMode();
-  }
+
   copied() {
     this.linkCopied = true
     setTimeout(() => this.linkCopied = false, 2500);
