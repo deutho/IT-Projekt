@@ -1,3 +1,4 @@
+<!--<div id="overlay" *ngIf="this.evaluated == false" (click)="nextOne()"></div>-->
   <div class="content">
     <div class="row">
       <h4>{{currentGame.question}}</h4>
@@ -40,7 +41,7 @@
           cdkDropListSortingDisabled
           (cdkDropListDropped)="drop($event)"
           [cdkDropListEnterPredicate]="canDrop">
-          <div class="example-box" *ngFor="let item of items1" cdkDrag>{{item}}</div>
+          <div id ="box1" class="example-box" *ngFor="let item of items1" cdkDrag>{{item}}</div>
         </div>
 
 
@@ -64,7 +65,7 @@
           cdkDropListSortingDisabled
           (cdkDropListDropped)="drop($event)"
           [cdkDropListEnterPredicate]="canDrop">
-          <div class="example-box" *ngFor="let item of items2" cdkDrag>{{item}}</div>
+          <div id ="box2" class="example-box" *ngFor="let item of items2" cdkDrag>{{item}}</div>
           </div>
 
           <!-- row three -->
@@ -87,7 +88,7 @@
             cdkDropListSortingDisabled
             (cdkDropListDropped)="drop($event)"
             [cdkDropListEnterPredicate]="canDrop">
-            <div class="example-box" *ngFor="let item of items3" cdkDrag>{{item}}</div>
+            <div id ="box3" class="example-box" *ngFor="let item of items3" cdkDrag>{{item}}</div>
           </div>
 
           <!-- row four -->
@@ -110,7 +111,7 @@
             cdkDropListSortingDisabled
             (cdkDropListDropped)="drop($event)"
             [cdkDropListEnterPredicate]="canDrop">
-            <div class="example-box" *ngFor="let item of items4" cdkDrag>{{item}}</div>
+            <div id ="box4" class="example-box" *ngFor="let item of items4" cdkDrag>{{item}}</div>
           </div>
 
           <!-- row five -->
@@ -133,7 +134,7 @@
             cdkDropListSortingDisabled
             (cdkDropListDropped)="drop($event)"
             [cdkDropListEnterPredicate]="canDrop">
-            <div class="example-box" *ngFor="let item of items5" cdkDrag>{{item}}</div>
+            <div id ="box5" class="example-box" *ngFor="let item of items5" cdkDrag>{{item}}</div>
           </div>
 
           <!-- row six -->
@@ -156,7 +157,7 @@
             cdkDropListSortingDisabled
             (cdkDropListDropped)="drop($event)"
             [cdkDropListEnterPredicate]="canDrop">
-            <div class="example-box" *ngFor="let item of items6" cdkDrag>{{item}}</div>
+            <div id ="box6" class="example-box" *ngFor="let item of items6" cdkDrag>{{item}}</div>
           </div>
         </div>
 
@@ -176,6 +177,6 @@
       </div>
     </div>
 
-    <button (click)="this.loadNextGame()">Weiter</button>
+    <button (click)="this.evaluateGame()">Weiter</button>
 
 </div>

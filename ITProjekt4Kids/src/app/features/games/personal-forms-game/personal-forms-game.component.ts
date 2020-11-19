@@ -18,6 +18,8 @@ export class PersonalFormsGameComponent implements OnInit {
   currentGame1 = new PersonalFormsGame("1","Ordne zu!","gehe","gehst","geht","gehen","geht","gehen","folder")
   currentGame2 = new PersonalFormsGame("1","Frage Nummer 2", "sehe","siehst","sieht","sehen","seht","sehen","folder")
   answers: string[]
+  evaluated = false;
+  finished = false;
 
   // boolean to detect if list already contains a string
   listOneEmpty = true;
@@ -26,7 +28,6 @@ export class PersonalFormsGameComponent implements OnInit {
   listFourEmpty = true;
   listFiveEmpty = true;
   listSixEmpty = true;
-
 
   Person = [
     {value:'ich', disabled: true},
@@ -80,8 +81,7 @@ export class PersonalFormsGameComponent implements OnInit {
           }
           else if(index != -1) {
             this.answers.pop()
-          }
-          
+          } 
         }
 
         if(event.container.data[0] == "") {
@@ -136,10 +136,6 @@ export class PersonalFormsGameComponent implements OnInit {
     }
   }
 
-  showList() {
-    console.log(this.answers);
-  }
-
   shuffleAnswers() {
     this.answers = [
       this.currentGame.ich,
@@ -164,16 +160,103 @@ export class PersonalFormsGameComponent implements OnInit {
         arr[currentIndex] = arr[randomIndex];
         arr[randomIndex] = temporaryValue;
     }
-
   }
 
   loadNextGame() {
 
+    this.evaluated = false;
+
     if (this.Games.length > 0) {
         this.currentGame = this.Games.pop();
         this.shuffleAnswers();        
-        //this.loaded = true;     
     }
   }
 
+  evaluateGame(){
+
+    var correctAnswers = [this.currentGame.ich, this.currentGame.du, this.currentGame.erSieEs, this.currentGame.wir, this.currentGame.ihr, this.currentGame.sie];
+
+     var Result = []
+    
+     let ich = (<HTMLElement>document.getElementById('box1'))
+     let du = (<HTMLElement>document.getElementById('box2'))
+     let erSieEs = (<HTMLElement>document.getElementById('box3'))
+     let wir = (<HTMLElement>document.getElementById('box4'))
+     let ihr = (<HTMLElement>document.getElementById('box5'))
+     let sie = (<HTMLElement>document.getElementById('box6'))
+
+     if (ich.innerText == correctAnswers[0]) {
+       Result[0] = "richtig";
+       ich.setAttribute("style","background-color:#52FF82;")
+     }
+     else {
+      Result[0] = "falsch";
+      ich.setAttribute("style", "background-color:#FF7171;")
+     }
+
+     if (du.innerText == correctAnswers[1]) {
+      Result[1] = "richtig";
+      du.setAttribute("style","background-color:#52FF82;")
+    }
+    else {
+     Result[1] = "falsch";
+     du.setAttribute("style", "background-color:#FF7171;")
+    }
+
+    if (erSieEs.innerText == correctAnswers[2]) {
+      Result[2] = "richtig";
+      erSieEs.setAttribute("style","background-color:#52FF82;")
+    }
+    else {
+     Result[2] = "falsch";
+     erSieEs.setAttribute("style", "background-color:#FF7171;")
+    }
+
+    if (wir.innerText == correctAnswers[3]) {
+      Result[3] = "richtig";
+      wir.setAttribute("style","background-color:#52FF82;")
+    }
+    else {
+     Result[3] = "falsch";
+     wir.setAttribute("style", "background-color:#FF7171;")
+    }
+
+    if (ihr.innerText == correctAnswers[4]) {
+      Result[4] = "richtig";
+      ihr.setAttribute("style","background-color:#52FF82;")
+    }
+    else {
+     Result[4] = "falsch";
+     ihr.setAttribute("style", "background-color:#FF7171;")
+    }
+
+    if (sie.innerText == correctAnswers[5]) {
+      Result[5] = "richtig";
+      sie.setAttribute("style","background-color:#52FF82;")
+    }
+    else {
+     Result[5] = "falsch";
+     sie.setAttribute("style", "background-color:#FF7171;")
+    }
+
+    this.evaluated = true;
+     
+    //  for(var i = 0; i <= 5; i++){
+    //    if(correctAnswers[i] == Answers[i].toString()){
+    //      Result[i] = "richtig";
+    //    }else{
+    //      Result[i] = "falsch";
+    //    }
+    //  }
+  }
+
+  nextOne() {
+    this.loadNextGame();  
+    (<HTMLElement>document.getElementById('box1')).setAttribute("style", "background-color:white;");
+    (<HTMLElement>document.getElementById('box2')).setAttribute("style", "background-color:white;");
+    (<HTMLElement>document.getElementById('box3')).setAttribute("style", "background-color:white;");
+    (<HTMLElement>document.getElementById('box4')).setAttribute("style", "background-color:white;");
+    (<HTMLElement>document.getElementById('box5')).setAttribute("style", "background-color:white;");
+    (<HTMLElement>document.getElementById('box6')).setAttribute("style", "background-color:white;");
+  }
 }
