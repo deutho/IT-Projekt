@@ -38,13 +38,6 @@ export class DashboardService {
       );
   }
 
-  private addTask() {
-    return () =>
-      import('../features/dashboard/add-task/add-task.component').then(
-        m => m.AddTaskComponent
-      );
-  }
-
   private mainMenu() {
     return () =>
       import('../features/dashboard/main-menu/main-menu.component').then(
@@ -109,10 +102,6 @@ export class DashboardService {
     } else if (this.data == "mainMenu") {
         return this.appService.forChild(vcr, {
           loadChildren: this.mainMenu()
-        });
-    } else  if (this.data == "addTask") {
-        return this.appService.forChild(vcr, {
-          loadChildren: this.addTask()
         });
     } else if (this.data == "vocabular-game") {
         return this.appService.forChild(vcr, {

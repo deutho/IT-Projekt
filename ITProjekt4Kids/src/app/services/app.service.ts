@@ -5,6 +5,7 @@ import {
   } from '@angular/core';
   import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
   import { map } from 'rxjs/operators';
+import { DashboardService } from './dashboard.service';
   
   export interface ComponentLoader {
     loadChildren: () => Promise<any>;
@@ -27,6 +28,8 @@ import {
     private myImageURLSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
     myStudentMode$: Observable<any>;
     private myStudentModeSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    myLastPath$: Observable<string[]>;
+    private myLastPathSubject: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
 
     constructor(private cfr: ComponentFactoryResolver) {
@@ -36,6 +39,7 @@ import {
         this.myRedirect$ = this.myRedirectSubject.asObservable();
         this.myImageURL$ = this.myImageURLSubject.asObservable();
         this.myStudentMode$ = this.myStudentModeSubject.asObservable();
+        this.myLastPath$ = this.myLastPathSubject.asObservable();
     }
   
     forChild(vcr: ViewContainerRef, cl: ComponentLoader) {
@@ -67,6 +71,10 @@ import {
 
     myStudentMode() {
       this.myStudentModeSubject.next(!this.myStudentModeSubject.value)
+    }
+
+    myLastPath(data) {
+      this.myLastPathSubject.next(data);
     }
 
   }

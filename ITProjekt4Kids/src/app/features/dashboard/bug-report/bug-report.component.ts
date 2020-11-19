@@ -1,10 +1,13 @@
 import { createUrlResolverWithoutPackagePrefix, ThrowStmt } from '@angular/compiler';
+import { HostListener } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { take } from 'rxjs/operators';
 import { BugReport } from 'src/app/models/bugreport.model';
 import { User } from 'src/app/models/users.model';
+import { AppService } from 'src/app/services/app.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 
 @Component({
@@ -23,13 +26,15 @@ export class BugReportComponent implements OnInit {
   ids: String[] = [];
   dates: String[] = [];
 
-  constructor(private afs: FirestoreDataService) { }
+  constructor(private afs: FirestoreDataService, private nav: NavigationService) { }
 
   async ngOnInit() {
     this.write = true;
     this.posted = false;
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
+
+    history.pushState(null, "");
     
   } 
 
@@ -69,6 +74,13 @@ export class BugReportComponent implements OnInit {
       this.dates[i] = date;
       i++;
     });
+  }
+
+
+  @HostListener('window:popstate', ['$event'])
+  onBrowserBackBtnClose(event: Event) {
+    event.preventDefault();
+    this.nav.navigate('Hauptmenü', 'mainMenu');
   }
 }
 
