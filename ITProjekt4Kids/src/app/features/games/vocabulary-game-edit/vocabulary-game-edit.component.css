@@ -93,7 +93,7 @@
     filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
     width: 60%; 
     height: 100%; 
-    min-width: 340px; 
+    min-width: 280px; 
     max-height: 350px; 
     min-height: 100px
 }
@@ -104,7 +104,7 @@
     height: 100%;
     margin: 0 auto; 
     padding: 20px 20px; 
-    min-width: 300px; 
+    min-width: 260px; 
     max-height: 330px;
 }
 
