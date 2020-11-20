@@ -229,6 +229,7 @@ export class VocabularyGameEditComponent implements OnInit {
       });
     }
     this.editingPicture = false;
+    this.imageURL = this.currentGame.photoID;
   }
 
   //navigating to the next question
@@ -256,7 +257,6 @@ export class VocabularyGameEditComponent implements OnInit {
   //discard button from warning of unsaved changes
   discardChanges() {
     this.unsavedChanges=false;
-    //Hier vielleicht auch noch das firebase bild löschen? nicht sicher
     if (this.imageURL != this.currentGame.photoID) {
       if (this.imageURL.search("firebasestorage.googleapis.com") != -1) {
         this.afs.deleteFromStorageByUrl(this.imageURL);
