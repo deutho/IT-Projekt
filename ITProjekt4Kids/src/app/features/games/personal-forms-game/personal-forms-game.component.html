@@ -1,4 +1,4 @@
-<!--<div id="overlay" *ngIf="this.evaluated == false" (click)="nextOne()"></div>-->
+<div id="overlay" *ngIf="this.evaluated == true" (click)="nextOne()"></div>
   <div class="content">
     <div class="row">
       <h4>{{currentGame.question}}</h4>
@@ -19,7 +19,6 @@
         </div>
 
     <!-- second column -->
-
         <div class="example-container">
           <!-- row one -->
           <!-- accepting input -->
@@ -30,7 +29,7 @@
             class="example-list"
             cdkDropListSortingDisabled
             (cdkDropListDropped)="drop($event)">
-            <div class="example-box" *ngFor="let item of items1" cdkDrag>{{item}}</div>
+            <div class="example-box" *ngFor="let item of items1" cdkDrag >{{item}}</div>
           </div>
           <!-- not accepting input -->
           <div *ngIf="listOneEmpty == false"
@@ -38,10 +37,11 @@
           cdkDropList
           [cdkDropListData]="items1"
           class="example-list"
+          isPointerOverContainer 
           cdkDropListSortingDisabled
           (cdkDropListDropped)="drop($event)"
           [cdkDropListEnterPredicate]="canDrop">
-          <div id ="box1" class="example-box" *ngFor="let item of items1" cdkDrag>{{item}}</div>
+          <div id ="box1" class="example-box" *ngFor="let item of items1" cdkDrag >{{item}}</div>
         </div>
 
 
@@ -161,8 +161,6 @@
           </div>
         </div>
 
-
-
         <!-- third column -->
         <div class="example-container">
           <div
@@ -171,12 +169,29 @@
           class="example-list"
           (cdkDropListDropped)="drop($event)"
           id="selection">
-          <div class="example-box" *ngFor="let answer of answers, index as i" cdkDrag >{{answer}}</div>
+          <div class="example-box" *ngFor="let answer of answers, index as i" cdkDrag>{{answer}}</div>
           </div>
         </div>
       </div>
     </div>
 
+
     <button (click)="this.evaluateGame()">Weiter</button>
 
-</div>
+    <div style="display: table; margin: 0 auto;">
+      <div *ngIf="allItemsAllocated == false" class="alert alert-danger response" id="hideMe">        
+              nicht alle Personalformen zugeteilt!  :(((
+      </div>
+    </div>
+
+
+    <div *ngFor="let li of items1; let i = index" id="dragged{{i}}">
+          <button (click)="deleteItem1(i)" type="button"> delete1 </button>
+    </div>
+
+    <div>
+      <button (click)="this.deleteItem2()">delete2</button>
+    </div>
+    
+
+  </div>
