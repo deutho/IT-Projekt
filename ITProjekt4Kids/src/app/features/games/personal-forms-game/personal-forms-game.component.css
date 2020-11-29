@@ -90,5 +90,32 @@
   bottom: 0;
   background-color:transparent; /* Black background with opacity */
   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-  cursor: pointer; /* Add a pointer on hover */
+  cursor: pointer; /* Add a pointer on hover */ 
+}
+
+@keyframes cssAnimation {    
+  to {        
+      width:0;
+      height:0;
+      padding: 0 0 0 0;
+      overflow:hidden;
+  }
+}
+@-webkit-keyframes cssAnimation {
+  to {        
+      width:0;
+      height:0;
+      padding: 0 0 0 0;
+      visibility:hidden;
+  }
+}
+
+.response {
+  margin: 0 auto;
+  padding: 10px 20px 10px 20px; 
+  border-radius: 100px;
+}
+
+.columnOne {
+  justify-content: flex-end;
 }

@@ -145,54 +145,57 @@
 <!-- final Screen -->
 <!--              -->
 <!--              -->
-<div *ngIf = "this.finished == true" >
-    <h2> Du hast {{roundsWon}} von {{totalrounds}} richtig beantwortet!</h2>
-        <!-- Code from Codepen -->
-        <!-- Copyright (c) 2020 by Julie Park (https://codepen.io/juliepark/pen/vjMOKQ)
+<div *ngIf = "this.finished == true" class="endScreenContainer">
+    <div class="space"></div>
+    <div class="question"> Du hast {{roundsWon}} von {{totalrounds}} richtig beantwortet!</div>
+    <div class="space"></div>
+    <!-- Code from Codepen -->
+    <!-- Copyright (c) 2020 by Julie Park (https://codepen.io/juliepark/pen/vjMOKQ)
 
-            Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+        Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-            The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+        The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-        -->
-        <div id="container">
-            <div *ngIf="happyFace() == true" id="success-box">
-              <div class="face">
-                <div class="eye"></div>
-                <div class="eye right"></div>
-                <div class="mouth happy"></div>
-              </div>
-              <div class="shadow scale"></div>
-              <div class="message"><h1 class="alert">Toll gemacht!</h1></div>
-              <button class="button-box"><h1 class="green">Hauptmenü</h1></button>
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    -->
+    <div id="container">
+        <div *ngIf="happyFace() == true" id="success-box">
+            <div class="face">
+            <div class="eye"></div>
+            <div class="eye right"></div>
+            <div class="mouth happy"></div>
             </div>
-            <div *ngIf="happyFace() == false" id="error-box">
-              <div class="dot"></div>
-              <div class="dot two"></div>
-              <div class="face2">
-                <div class="eye"></div>
-                <div class="eye right"></div>
-                <div class="mouth sad"></div>
-              </div>
-              <div class="shadow move"></div>
-              <div class="message"><h1 class="alert">Oje! Das musst du noch Üben!</h1></div>
-              <button class="button-box"><h1 class="red">Hauptmenü</h1></button>
+            <div class="shadow scale"></div>
+            <div class="message"><h1 class="alert">Toll gemacht!</h1></div>
+            <button class="button-box" (click)="goBack()"><h1 class="green" >Hauptmenü</h1></button>
+        </div>
+        <div *ngIf="happyFace() == false" id="error-box">
+            <div class="dot"></div>
+            <div class="dot two"></div>
+            <div class="face2">
+            <div class="eye"></div>
+            <div class="eye right"></div>
+            <div class="mouth sad"></div>
             </div>
-          </div>
+            <div class="shadow move"></div>
+            <div class="message"><h1 class="alert">Oje! Das musst du noch Üben!</h1></div>
+            <button class="button-box" (click)="goBack()"><h1 class="red" >Hauptmenü</h1></button>
+        </div>
+    </div>
           
-    
-    <div [@starAnimation]="roundsWonAnimation.length" class="containerFinal"> 
-        <div *ngFor="let item of roundsWonAnimation">
-            <svg style="color: #FFD700" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="star" class="svg-inline--fa fa-star fa-w-18 star" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path></svg>
+    <div class="space"></div>
+    <div class=" flex-center-leftAlign">
+        <div [@starAnimation]="roundsWonAnimation.length" class="containerFinal"> 
+            <div *ngFor="let item of roundsWonAnimation">
+                <svg style="color: #FFD700" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="star" class="svg-inline--fa fa-star fa-w-18 star" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path></svg>
+            </div>
+        </div>
+        <div style="width: 100%;"></div>
+        <div [@starAnimation]="roundsLostAnimation.length" class="containerFinal">
+            <div *ngFor="let item of roundsLostAnimation">
+                <svg  aria-hidden="true" focusable="false" data-prefix="fas" data-icon="star" class="svg-inline--fa fa-star fa-w-18 star" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path></svg>
+            </div>
         </div>
     </div>
-    <div [@starAnimation]="roundsLostAnimation.length" class="containerFinal">
-        <div *ngFor="let item of roundsLostAnimation">
-            <svg  aria-hidden="true" focusable="false" data-prefix="fas" data-icon="star" class="svg-inline--fa fa-star fa-w-18 star" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path></svg>
-        </div>
-    </div>
-
 </div>
 

@@ -6,7 +6,7 @@
 
         ------------------------->
         <ul style="display: flex; justify-content: center;">
-            <li class="navigationBar" >
+            <li class="navigationBar">
                 <div class ="btn" (click)= backButtonClicked() style="display: flex;  width: 68px; cursor: pointer">
                     <svg width="20" height="20" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="reply" class="svg-inline--fa fa-reply fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <path fill="currentColor" d="M8.309 189.836L184.313 37.851C199.719 24.546 224 35.347 224 56.015v80.053c160.629 1.839 288 34.032 288 186.258 0 61.441-39.581 122.309-83.333 154.132-13.653 9.931-33.111-2.533-28.077-18.631 45.344-145.012-21.507-183.51-176.59-185.742V360c0 20.7-24.3 31.453-39.687 18.164l-176.004-152c-11.071-9.562-11.086-26.753 0-36.328z">
@@ -57,7 +57,7 @@
                     </li>
                     <li class="selectionOfDropdown" type="button" (click)="deleteElement(item)">                    
                         <div style="display: flex; flex-direction: row; align-items: flex-end;">
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="share-alt" class="svg-inline--fa fa-share-alt fa-w-14 icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M352 320c-22.608 0-43.387 7.819-59.79 20.895l-102.486-64.054a96.551 96.551 0 0 0 0-41.683l102.486-64.054C308.613 184.181 329.392 192 352 192c53.019 0 96-42.981 96-96S405.019 0 352 0s-96 42.981-96 96c0 7.158.79 14.13 2.276 20.841L155.79 180.895C139.387 167.819 118.608 160 96 160c-53.019 0-96 42.981-96 96s42.981 96 96 96c22.608 0 43.387-7.819 59.79-20.895l102.486 64.054A96.301 96.301 0 0 0 256 416c0 53.019 42.981 96 96 96s96-42.981 96-96-42.981-96-96-96z"></path></svg>
+                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14 icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"></path></svg>
                             <a class="textOfDropdown" > Löschen</a>
                         </div>
                         <div class="dropdown-divider"></div>
@@ -73,6 +73,13 @@
                 </div>
                 <div class="item-center" > <h4 style="opacity: 0.6;">Neues Element</h4></div>
                 <div class="item-right"></div>
+            </div>
+            <!-- error message generel -->
+            <div style="min-height: 15px"></div>
+            <div style="display: table; ">
+                <div *ngIf = "error === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px; width: 30%; display: block">
+                    {{errorMessage}}
+                </div>
             </div>
         </div>
 
@@ -92,6 +99,7 @@
                     </div>
                 </div>
             </div>
+            <!-- notification copied link to shared game -->
             <div style="  display: inline-flex;
             flex-direction: column;
             width: 100%;
@@ -107,31 +115,37 @@
         <!-- Ansicht Schüler -->
         <div *ngIf="currentUser.role == 3">
             <div class="container dropshadow" *ngFor="let item of currentFolders;  index as i">
-                <div class="item-left colouring-{{i%4}} dropshadow" (click)=itemclick(item)>
+                <div class="item-left colouring-{{i%4}} " (click)=itemclick(item)>
                     <svg *ngIf="item.type == 'folder'" style="display:inline-block; margin: 0 auto;" width="30px" height="24" viewBox="0 0 30 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15.8668 4.57071L15.8961 4.6H15.9375H27.1875C28.6856 4.6 29.9 5.81441 29.9 7.3125V20.4375C29.9 21.9356 28.6856 23.15 27.1875 23.15H2.8125C1.31441 23.15 0.1 21.9356 0.1 20.4375V3.5625C0.1 2.06441 1.31441 0.85 2.8125 0.85H12.1461L15.8668 4.57071Z" fill="white" stroke="black" stroke-width="0.2"/>
-                    </svg>                
+                    </svg>    
+                    
                     <svg *ngIf="item.type == 'task'" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M26.1859 3.98434L26.1861 3.98453C27.1381 4.93146 27.1384 6.47112 26.1859 7.42358L23.7549 9.85463C23.5461 10.0634 23.2086 10.0634 22.9998 9.85463L17.1463 4.00112C16.9375 3.79232 16.9375 3.45486 17.1463 3.24606L19.5774 0.815009C20.5243 -0.131933 22.0642 -0.132237 23.0167 0.815098C23.0167 0.815131 23.0168 0.815165 23.0168 0.815198L26.1859 3.98434ZM0.119782 25.5363L0.119821 25.5361L1.23235 19.16L15.058 5.33434C15.2663 5.12605 15.6041 5.12489 15.8188 5.33476C15.8189 5.33487 15.819 5.33497 15.8191 5.33508L21.6719 11.1879C21.8807 11.3966 21.8807 11.7341 21.6719 11.9429L7.84617 25.7686L1.4705 26.8863C1.47046 26.8863 1.47043 26.8863 1.47039 26.8863C0.672857 27.0224 -0.0209257 26.332 0.119782 25.5363ZM7.27209 22.3601V22.2601H7.17209H4.74084V19.8288V19.7288H4.64084H2.72658H2.64258L2.62808 19.8116L2.03218 23.213L2.02321 23.2642L2.05997 23.3009L3.70001 24.941L3.73677 24.9777L3.78798 24.9688L7.18935 24.3729L7.27209 24.3584V24.2744V22.3601ZM6.47384 16.8103C6.14475 17.1394 6.14475 17.6668 6.47384 17.9959C6.80293 18.3249 7.33031 18.3249 7.6594 17.9959L15.7805 9.87477C16.1096 9.54567 16.1096 9.0183 15.7805 8.68921C15.4514 8.36011 14.924 8.36011 14.5949 8.68921L6.47384 16.8103Z" fill="white" stroke="black" stroke-width="0.2"/>
                     </svg>   
                 </div>
-                <div class="item-center" (click)=itemclick(item)> <h4>{{item.name}}</h4></div>
-                <div class="item-right"></div>            
+                <div class="item-center " (click)=itemclick(item)> <h4>{{item.name}}</h4></div>
+                <div class="item-right " data-toggle="dropdown">
+                </div>
+                
+            </div>
+            <!-- error message if folder length = 0 -->
+            <div *ngIf="currentFolders.length == 0" style = "margin: 0 auto; font-weight: 400; font-size: x-large;" class = "btn">
+                {{emptyMessage}}
+            </div>
+            <!-- error message general -->
+            <div style="display: table; ">
+                <div *ngIf = "error === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px; width: 30%; display: block">
+                    {{errorMessage}}
+                </div>
+            </div>
         </div>
         
 
 
-        <!-- error message if folder length = 0 -->
-        <div *ngIf="currentFolders.length == 0 && currentUser.role == 3" style = "margin: 0 auto; font-weight: 400; font-size: x-large;" class = "btn">
-            {{emptyMessage}}
-        </div>
 
-        <!-- error message -->
-        <div style="display: table; ">
-            <div *ngIf = "error === true" class="alert alert-danger response" role="alert" style="margin-bottom: 35px; width: 30%; display: block">
-                {{errorMessage}}
-            </div>
-        </div>
+
+
     </div>
 
 

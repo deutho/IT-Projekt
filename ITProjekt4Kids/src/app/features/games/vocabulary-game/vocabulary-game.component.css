@@ -56,9 +56,8 @@
     margin: 10px auto;
     min-height: 50px;
     padding: 10px 0px 10px 0px;
-    text-align: center;
-    font-size: 150%;
-    font-weight: bold;
+	text-align: center;
+	font-size:calc(15px + 1vw);
     filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
@@ -130,7 +129,15 @@
 
 .containerFinal {
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
+}
+
+.flex-center-leftAlign {
+	display: flex;
+	justify-content: flex-start;
+	align-content: flex-start;
+	align-items: flex-start;
+	flex-direction: column;
 }
 
 /* Code frome Codepen */
@@ -331,4 +338,15 @@
 	}
 }
 
- 
+.endScreenContainer {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;    
+}
+.space{
+    min-height: 50px;
+  }
