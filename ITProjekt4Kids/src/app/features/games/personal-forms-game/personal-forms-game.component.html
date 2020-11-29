@@ -1,5 +1,5 @@
-<div id="overlay" *ngIf="this.evaluated == true" (click)="nextOne()"></div>
-  <div class="content">
+<div id="overlay" *ngIf="this.evaluated == true && this.answerIsCorrect == true" (click)="loadNextGame()"></div>
+  <div class="content" *ngIf="loaded == true">
     <div class="row">
       <h4>{{currentGame.question}}</h4>
       <!-- first column -->
@@ -11,7 +11,7 @@
           class="example-list"
           (cdkDropListDropped)="drop($event)"
           [cdkDropListEnterPredicate]="canDrop">
-          <div class="example-box" *ngFor="let p of Person, index as i"
+          <div class="example-box columnOne"*ngFor="let p of Person, index as i"
           cdkDrag
           [cdkDragDisabled]="p.disabled">{{p.value}}
           </div>
@@ -178,20 +178,19 @@
 
     <button (click)="this.evaluateGame()">Weiter</button>
 
-    <div style="display: table; margin: 0 auto;">
-      <div *ngIf="allItemsAllocated == false" class="alert alert-danger response" id="hideMe">        
-              nicht alle Personalformen zugeteilt!  :(((
+    <div style="display: table; margin: 0 auto; padding: 10px 0px;">
+      <div *ngIf="allItemsAllocated" class="alert alert-danger response">        
+              Du hast noch nicht alle Wörter zugeteilt!
+              <!-- Audio Feedback (vorlesen) -->
       </div>
     </div>
-
-
-    <div *ngFor="let li of items1; let i = index" id="dragged{{i}}">
-          <button (click)="deleteItem1(i)" type="button"> delete1 </button>
-    </div>
-
-    <div>
-      <button (click)="this.deleteItem2()">delete2</button>
-    </div>
-    
-
+    <!-- kurzes code example input für edit version dieses Spiels
+    <div style="display: flex; flex-direction: column;">
+      <input type="text" class="example-box">
+      <input type="text" class="example-box">
+      <input type="text" class="example-box">
+      <input type="text" class="example-box">
+      <input type="text" class="example-box">
+      <input type="text" class="example-box">
+    </div> -->
   </div>

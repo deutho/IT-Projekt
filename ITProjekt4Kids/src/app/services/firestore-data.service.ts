@@ -41,7 +41,7 @@ export class FirestoreDataService {
         }
     }
 
-    getTasksPerID(id): AngularFirestoreCollection<VocabularyGame> {
+    getTasksPerID(id): AngularFirestoreCollection<any> {
         return this._afs.collection('games', ref => ref.where('folderUID', '==', id));
     }
 

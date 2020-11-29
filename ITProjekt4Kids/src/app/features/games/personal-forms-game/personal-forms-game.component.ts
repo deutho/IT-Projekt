@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {CdkDragDrop, CdkDropList, CDK_DROP_LIST, copyArrayItem, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { PersonalFormsGame } from 'src/app/models/PersonalFormsGame.model';
 import { supportsPassiveEventListeners } from '@angular/cdk/platform';
+import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { take } from 'rxjs/internal/operators/take';
+import { User } from 'src/app/models/users.model';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-personal-forms-game',
@@ -10,18 +14,23 @@ import { supportsPassiveEventListeners } from '@angular/cdk/platform';
 })
 export class PersonalFormsGameComponent implements OnInit {
 
-  constructor() { }
+  constructor(private afs: FirestoreDataService, private appService: AppService) {
+    this.appService.myGameData$.subscribe((data) => {
+      this.folderID = data;
+    });
+   }
 
   test = "Hallo Welt!"
   Games: PersonalFormsGame[] = []
+  currentUser: User;
   currentGame: PersonalFormsGame
-  currentGame1 = new PersonalFormsGame("1","Frage 1: Ordne zu!","gehe","gehst","geht","gehen","geht","gehen","folder")
-  currentGame2 = new PersonalFormsGame("1","Frage 2: Ordne zu!", "sehe","siehst","sieht","sehen","seht","sehen","folder")
+  folderID;
   answers: string[]
   evaluated = false;
   finished = false;
-  allItemsAllocated = undefined;
-  checker = undefined;
+  allItemsAllocated = false;
+  answerIsCorrect = false;
+  loaded = false;
 
   // boolean to detect if list already contains a string
   listOneEmpty = true;
@@ -47,9 +56,12 @@ export class PersonalFormsGameComponent implements OnInit {
   items5 = [];
   items6 = [];
 
-  ngOnInit(): void {
-    this.Games.push(this.currentGame1)
-    this.Games.push(this.currentGame2)
+  async ngOnInit(): Promise<void> {
+    await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
+      .then(data => this.currentUser = data[0]);
+
+    await this.afs.getTasksPerID(this.folderID).valueChanges().pipe(take(1)).toPromise()
+      .then(data => this.Games = data);
     this.shuffleArray(this.Games)
     this.loadNextGame()
   }
@@ -85,18 +97,14 @@ export class PersonalFormsGameComponent implements OnInit {
             this.answers.pop()
           } 
         }
-
         if(event.container.data[0] == "") {
           event.container.data.pop()
           event.previousContainer.data.push("")
         }
         else{          
-
           if(event.previousContainer.id == "selection"){
             this.answers.push("")
-          }
-            
-
+          }          
           if(event.previousContainer.id == "listOne") {
             this.listOneEmpty = true;
           }
@@ -138,17 +146,6 @@ export class PersonalFormsGameComponent implements OnInit {
     }
   }
 
-  shuffleAnswers() {
-    this.answers = [
-      this.currentGame.ich,
-      this.currentGame.du,
-      this.currentGame.erSieEs,
-      this.currentGame.wir,
-      this.currentGame.ihr,
-      this.currentGame.sie,
-    ];
-    this.shuffleArray(this.answers);
-  }
 
   shuffleArray(arr) {
     var currentIndex = arr.length, temporaryValue, randomIndex;
@@ -168,45 +165,60 @@ export class PersonalFormsGameComponent implements OnInit {
     this.evaluated = false;
     
     if (this.Games.length > 0) {
-        this.currentGame = this.Games.pop();
-        this.shuffleAnswers();        
+        this.currentGame = this.Games.pop();      
+        console.log(this.currentGame)         
+        this.answers = [
+          this.currentGame.ich[0],
+          this.currentGame.du[0],
+          this.currentGame.erSieEs[0],
+          this.currentGame.wir[0],
+          this.currentGame.ihr[0],
+          this.currentGame.sie[0],
+        ];
+        this.shuffleArray(this.answers); 
+        this.loaded = true;
+        //clear second column
+        this.items1 = [];
+        this.items2 = [];
+        this.items3 = [];
+        this.items4 = [];
+        this.items5 = [];
+        this.items6 = [];
+    
+        // boolean to show moveable list again
+        this.listOneEmpty = true;
+        this.listTwoEmpty = true;
+        this.listThreeEmpty = true;
+        this.listFourEmpty = true;
+        this.listFiveEmpty = true;
+        this.listSixEmpty = true;
+        this.answerIsCorrect = false;
+    }
+    else {
+      this.finishGame() 
     }
   }
-
-  //Delete Option 1
-  deleteItem1(i) { 
-      if (i > -1) {
-       this.items1.splice(i, 1);   
-     }
-  }
      
-  //Delete Option 2
-  deleteItem2() {
-    this.items1 = [];
-    this.items2 = [];
-    this.items3 = [];
-    this.items4 = [];
-    this.items5 = [];
-    this.items6 = [];
-  }
 
   checkIfAllItemsAllocated(){
+    console.log(this.items1.length)
     if(this.items1.length == 0 || this.items2.length == 0 || this.items3.length == 0 || this.items4.length == 0 || this.items5.length == 0 || this.items6.length == 0){
-      this.allItemsAllocated = false;
-      this.checker = true;
-    }else{
       this.allItemsAllocated = true;
-      this.checker = false;
+      setTimeout(() => this.allItemsAllocated = false, 2500);
+      return false;
+    }
+    else{
+      return true;
     }
   }
 
 
   evaluateGame(){ 
-    this.checkIfAllItemsAllocated();
+    let proceedEvaluation = this.checkIfAllItemsAllocated();
 
-    if(this.allItemsAllocated == true){
-
-      var correctAnswers = [this.currentGame.ich, this.currentGame.du, this.currentGame.erSieEs, this.currentGame.wir, this.currentGame.ihr, this.currentGame.sie];
+    if(proceedEvaluation == true){
+      this.answerIsCorrect = false;
+      var correctAnswers = [this.currentGame.ich[0], this.currentGame.du[0], this.currentGame.erSieEs[0], this.currentGame.wir[0], this.currentGame.ihr[0], this.currentGame.sie[0]];
 
       var Result = []
       
@@ -270,26 +282,18 @@ export class PersonalFormsGameComponent implements OnInit {
       Result[5] = "falsch";
       sie.setAttribute("style", "background-color:#FF7171;")
       }
-
+      let tempAnswerChecker = true;
+      for( let i in Result) {
+        console.log(Result[i])
+        if(Result[i] == "falsch") tempAnswerChecker = false;
+      }
+      if(tempAnswerChecker == true) this.answerIsCorrect = true;
+      //Stimme "Du hast das Toll gemacht!" einfügen
       this.evaluated = true;
-      
-      //  for(var i = 0; i <= 5; i++){
-      //    if(correctAnswers[i] == Answers[i].toString()){
-      //      Result[i] = "richtig";
-      //    }else{
-      //      Result[i] = "falsch";
-      //    }
-      //  }
     }
   }
 
-  nextOne() {
-    this.loadNextGame();  
-    (<HTMLElement>document.getElementById('box1')).setAttribute("style", "background-color:white;");
-    (<HTMLElement>document.getElementById('box2')).setAttribute("style", "background-color:white;");
-    (<HTMLElement>document.getElementById('box3')).setAttribute("style", "background-color:white;");
-    (<HTMLElement>document.getElementById('box4')).setAttribute("style", "background-color:white;");
-    (<HTMLElement>document.getElementById('box5')).setAttribute("style", "background-color:white;");
-    (<HTMLElement>document.getElementById('box6')).setAttribute("style", "background-color:white;");
+  finishGame() {
+    console.log("fertisch")
   }
 }
