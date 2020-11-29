@@ -29,6 +29,7 @@ export class PersonalFormsGameComponent implements OnInit {
   listFiveEmpty = true;
   listSixEmpty = true;
 
+  //values of first (static) list
   Person = [
     {value:'ich', disabled: true},
     {value:'du', disabled: true},
@@ -38,6 +39,7 @@ export class PersonalFormsGameComponent implements OnInit {
     {value:'sie', disabled: true},
   ];
 
+  //empty lists to represent placeholders, i.e. one array of the length six 
   items1 = [];
   items2 = [];
   items3 = [];
@@ -52,6 +54,7 @@ export class PersonalFormsGameComponent implements OnInit {
     this.loadNextGame()
   }
 
+  //method to evaluate if something can be dropped in the list/field
   canDrop() {
     return false;
   }
@@ -61,7 +64,7 @@ export class PersonalFormsGameComponent implements OnInit {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      //list is full, don't insert
+      //if list is full and is not the list that has the initialized values, don't insert
       if(event.container.data.length > 0 && event.container.id != "selection") {}
       
       else{
@@ -241,6 +244,7 @@ export class PersonalFormsGameComponent implements OnInit {
 
     this.evaluated = true;
      
+    //previous solution
     //  for(var i = 0; i <= 5; i++){
     //    if(correctAnswers[i] == Answers[i].toString()){
     //      Result[i] = "richtig";
