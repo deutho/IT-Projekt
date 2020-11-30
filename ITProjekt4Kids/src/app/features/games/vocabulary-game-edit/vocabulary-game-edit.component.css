@@ -214,3 +214,19 @@
 .button {
     font-weight: 800;
 }
+.recordButton {
+    width: 36px;
+    height: 36px;
+    border-radius: 100px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-color: #ff7267;
+}
+
+.record-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}

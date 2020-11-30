@@ -164,7 +164,8 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   readQuestion(Text) {
-    this.playSound("./../../../../assets/Audio/"+Text.substring(0,Text.length-1)+".ogg");
+    console.log(this.currentGame.question[1])
+    this.playSound("https://firebasestorage.googleapis.com/v0/b/kids-8b916.appspot.com/o/audio%2Fgames%2Fwordquiz%2F1606749707332_753708?alt=media&token=950cb9cf-54d1-46f4-868f-c55a90192872");
   }
 
   readButtonOne(Text) {

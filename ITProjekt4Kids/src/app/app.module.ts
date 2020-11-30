@@ -14,6 +14,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {AngularFireStorageModule} from '@angular/fire/storage'
 firebase.initializeApp(environment.firebase)
 import { CommonModule } from '@angular/common';  
+import { RecordRTCService } from './services/record-rtc.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,10 @@ import { CommonModule } from '@angular/common';
     AngularFireStorageModule,
     CommonModule
   ],
-  providers: [AngularFirestore],
+  providers: [ 
+    AngularFirestore,
+    RecordRTCService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

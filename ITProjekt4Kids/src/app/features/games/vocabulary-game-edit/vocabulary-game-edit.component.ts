@@ -7,7 +7,7 @@ import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import {v4 as uuidv4} from 'uuid';
-
+import { RecordRTCService } from 'src/app/services/record-rtc.service';
 
 @Component({
   selector: 'app-vocabulary-game-edit',
@@ -35,14 +35,14 @@ export class VocabularyGameEditComponent implements OnInit {
   finalScreen = false;
   noMoreGames = false;
 
-  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService) {
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService) {
     // get folder where game created in
     this.appService.myGameData$.subscribe((data) => {
       this.folderID = data;
     });
     this.appService.myImageURL$.subscribe((data) => {
       this.imageURL = data;
-    });
+    });    
   }
 
   async ngOnInit(): Promise<void> {
@@ -60,6 +60,9 @@ export class VocabularyGameEditComponent implements OnInit {
     this.loadNextGame();
   }
 
+  startVoiceRecord(){
+    this._recordRTC.toggleRecord();
+  }
   loadNextGame() {   
     if(this.finalScreen && this.Games.length == 0) {
       this.noMoreGames = true;

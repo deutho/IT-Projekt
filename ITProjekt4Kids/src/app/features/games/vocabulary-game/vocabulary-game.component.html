@@ -84,7 +84,7 @@
 <div *ngIf = "speakerMode==true"  class=" container " id="full" >    
     <div class="item-question question" style="margin: 0 auto; cursor: pointer;" (click) = "readQuestion(currentGame.question)">
             <button role="text" class="question" id="question" value="{{currentGame.question}}" style="background:transparent; outline:0;border:transparent; margin: 0 auto; cursor: default; display: none;"></button>
-            {{currentGame.question}}
+            {{currentGame.question[0]}}
     </div>
     <div class="item-image">
         <div id="myimg" class="img-style" style="width: 50%; min-width: 340px; max-height: 350px;">
