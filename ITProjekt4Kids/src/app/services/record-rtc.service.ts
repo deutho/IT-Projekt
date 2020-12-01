@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import * as RecordRTC from 'recordrtc';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import * as firebase from 'firebase';
 
 @Injectable()
 export class RecordRTCService {
@@ -16,7 +18,8 @@ export class RecordRTCService {
   task: AngularFireUploadTask;
   snapshot: Observable<any>;
   percentage: Observable<number>;
-  downloadURL: string;
+  downloadURL$: Observable<string>;
+  private mydownloadURLSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   test: string;
   interval; recordingTimer: string; recordWebRTC: any; mediaRecordStream: any;
   options: any = {
@@ -25,10 +28,17 @@ export class RecordRTCService {
   }
   app: any;
 
+  storage = firebase.storage();
+  storageRef = this.storage.ref();
+
+
   constructor(
     private sanitizer: DomSanitizer,
-    private storage: AngularFireStorage
-  ) { }
+    // private storage: AngularFireStorage
+    
+  ) {
+    this.downloadURL$ = this.mydownloadURLSubject.asObservable();
+   }
 
   /**
    * @function toggleRecord
@@ -79,35 +89,24 @@ export class RecordRTCService {
     })
   }
 
-  async uploadToFirestore(blob) {
+  uploadToFirestore(blob) {
 
     // The storage path
     let name = Date.now() + '_' + blob.size
     const path = `/audio/games/wordquiz/${name}`;
 
     // Reference to storage bucket
-    const ref = this.storage.ref(path);
+    var audioRef = this.storageRef.child(path);
 
     // The main task
-    this.task = this.storage.upload(path, blob);
+    audioRef.put(blob).then((snapshot) => {
+      audioRef.getDownloadURL().then((data) => {
+        console.log(data)
+        this.mydownloadURLSubject.next(data);
+      })
+      
 
-    // Progress monitoring
-    this.percentage = this.task.percentageChanges();
-
-    this.snapshot   = this.task.snapshotChanges().pipe(
-      tap(console.log),
-      // The file's download URL
-      finalize( async() =>  {
-        this.downloadURL = await ref.getDownloadURL().toPromise();
-        
-
-        // this.db.collection('files').add( { downloadURL: this.downloadURL, path });
-        // console.log(this.downloadURL)
-        // this.app.myQuestionAudioURL(this.downloadURL)
-        
-      }),
-    );
-    
+    });
   }
 
   /**

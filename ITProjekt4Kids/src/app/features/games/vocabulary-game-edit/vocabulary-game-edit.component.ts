@@ -34,8 +34,9 @@ export class VocabularyGameEditComponent implements OnInit {
   isDefault = false;
   finalScreen = false;
   noMoreGames = false;
+  audioURL: string;
 
-  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService) {
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService,) {
     // get folder where game created in
     this.appService.myGameData$.subscribe((data) => {
       this.folderID = data;
@@ -43,6 +44,9 @@ export class VocabularyGameEditComponent implements OnInit {
     this.appService.myImageURL$.subscribe((data) => {
       this.imageURL = data;
     });    
+    this._recordRTC.downloadURL$.subscribe((data) => {
+      this.audioURL = data;
+    })
   }
 
   async ngOnInit(): Promise<void> {
@@ -62,6 +66,7 @@ export class VocabularyGameEditComponent implements OnInit {
 
   startVoiceRecord(){
     this._recordRTC.toggleRecord();
+    console.log(this.audioURL)
   }
   loadNextGame() {   
     if(this.finalScreen && this.Games.length == 0) {
@@ -108,7 +113,7 @@ export class VocabularyGameEditComponent implements OnInit {
     console.log(this.currentGame.photoID)
      this.loaded = true;
 
-    }
+  }
 
     // makes changes persitant in the database
   saveChanges() { 

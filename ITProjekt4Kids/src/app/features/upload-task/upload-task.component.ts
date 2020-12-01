@@ -39,7 +39,7 @@ export class UploadTaskComponent implements OnInit {
 
     // Progress monitoring
     this.percentage = this.task.percentageChanges();
-
+    console.log(ref)
     this.snapshot   = this.task.snapshotChanges().pipe(
       tap(console.log),
       // The file's download URL
@@ -48,7 +48,7 @@ export class UploadTaskComponent implements OnInit {
         
 
         // this.db.collection('files').add( { downloadURL: this.downloadURL, path });
-        // console.log(this.downloadURL)
+        console.log(this.downloadURL)
         this.app.myImageURL(this.downloadURL)
         
       }),
