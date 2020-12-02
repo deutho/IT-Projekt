@@ -35,6 +35,7 @@ export class VocabularyGameEditComponent implements OnInit {
   finalScreen = false;
   noMoreGames = false;
   audioURL: string;
+  selectedDOMElement: HTMLElement;
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService,) {
     // get folder where game created in
@@ -46,6 +47,7 @@ export class VocabularyGameEditComponent implements OnInit {
     });    
     this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
+      console.log(this.audioURL)
     })
   }
 
@@ -64,9 +66,8 @@ export class VocabularyGameEditComponent implements OnInit {
     this.loadNextGame();
   }
 
-  startVoiceRecord(){
+  startVoiceRecord(event){
     this._recordRTC.toggleRecord();
-    console.log(this.audioURL)
   }
   loadNextGame() {   
     if(this.finalScreen && this.Games.length == 0) {
