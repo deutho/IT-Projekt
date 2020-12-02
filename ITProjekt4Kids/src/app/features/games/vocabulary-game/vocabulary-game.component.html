@@ -11,19 +11,19 @@
         </div>        
     </div>
     <div class="item-ans1">
-        <button id="button1" type=button (click) = "buttonOne(answers[0])" class="btn button-style" value="{{answers[0]}}">
+        <button id="button1" type=button (click) = "buttonOne(answers[0][0])" class="btn button-style" value="{{answers[0][0]}}">
         </button>
     </div>
     <div class="item-ans2">
-        <button id="button2" type=button (click) = "buttonTwo(answers[1])" class="btn button-style" value="{{answers[1]}}">
+        <button id="button2" type=button (click) = "buttonTwo(answers[1][0])" class="btn button-style" value="{{answers[1][0]}}">
         </button>
     </div>
     <div class="item-ans3">
-        <button id="button3" type=button (click) = "buttonThree(answers[2])" class="btn button-style" value="{{answers[2]}}">         
+        <button id="button3" type=button (click) = "buttonThree(answers[2][0])" class="btn button-style" value="{{answers[2][0]}}">         
         </button>
     </div>
     <div class="item-ans4" >
-        <button id="button4" type=button class="btn button-style" (click) = "buttonFour(answers[3])" value="{{answers[3]}}">
+        <button id="button4" type=button class="btn button-style" (click) = "buttonFour(answers[3][0])" value="{{answers[3][0]}}">
         </button>
     </div>
     <!-- Derzeit mal raus, find das UX so besser
@@ -82,7 +82,7 @@
 
 
 <div *ngIf = "speakerMode==true"  class=" container " id="full" >    
-    <div class="item-question question" style="margin: 0 auto; cursor: pointer;" (click) = "readQuestion(currentGame.question)">
+    <div class="item-question question" style="margin: 0 auto; cursor: pointer;" (click) = "readQuestion()">
             <button role="text" class="question" id="question" value="{{currentGame.question}}" style="background:transparent; outline:0;border:transparent; margin: 0 auto; cursor: default; display: none;"></button>
             {{currentGame.question[0]}}
     </div>
@@ -92,19 +92,19 @@
         </div>        
     </div>
     <div class="item-ans1">
-        <button id="button1" type=button (click) = "readButtonOne(answers[0])"  class="btn button-style" value="{{answers[0]}}">
+        <button id="button1" type=button (click) = "readButtonOne()"  class="btn button-style" value="{{answers[0][0]}}">
         </button>
     </div>
     <div class="item-ans2">
-        <button id="button2" type=button (click) = "readButtonTwo(answers[1])" class="btn button-style" value="{{answers[1]}}">
+        <button id="button2" type=button (click) = "readButtonTwo()" class="btn button-style" value="{{answers[1][0]}}">
         </button>
     </div>
     <div class="item-ans3">
-        <button id="button3" type=button (click) = "readButtonThree(answers[2])" class="btn button-style" value="{{answers[2]}}">         
+        <button id="button3" type=button (click) = "readButtonThree()" class="btn button-style" value="{{answers[2][0]}}">         
         </button>
     </div>
     <div class="item-ans4" >
-        <button id="button4" type=button class="btn button-style" (click) = "readButtonFour(answers[3])" value="{{answers[3]}}">
+        <button id="button4" type=button class="btn button-style" (click) = "readButtonFour()" value="{{answers[3][0]}}">
         </button>
     </div>
     <div class="item-final" *ngIf = "this.evaluated == true && this.Games.length == 0" style="padding-top: 0;">

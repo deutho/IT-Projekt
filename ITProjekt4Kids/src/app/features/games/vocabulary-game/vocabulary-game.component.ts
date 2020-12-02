@@ -37,7 +37,7 @@ export class VocabularyGameComponent implements OnInit {
   playedGames: VocabularyGame[];
   loaded = undefined;
   selection: string;
-  answers: string[];
+  answers: string[][];
   imageURL = "";
   response;
   evaluated = false;
@@ -106,7 +106,7 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   shuffleAnswers() {
-    this.answers = [this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0], this.currentGame.rightAnswer[0]];
+    this.answers = [this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3, this.currentGame.rightAnswer];
     this.imageURL = this.currentGame.photoID; //in the meantime set the URL
     this.shuffleArray(this.answers);
   }
@@ -163,25 +163,25 @@ export class VocabularyGameComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('button4')).setAttribute("style", "background-color:white;");
   }
 
-  readQuestion(Text) {
+  readQuestion() {
     console.log(this.currentGame.question[1])
-    this.playSound("https://firebasestorage.googleapis.com/v0/b/kids-8b916.appspot.com/o/audio%2Fgames%2Fwordquiz%2F1606749707332_753708?alt=media&token=950cb9cf-54d1-46f4-868f-c55a90192872");
+    this.playSound(this.currentGame.question[1]);
   }
 
-  readButtonOne(Text) {
-    this.playSound("./../../../../assets/Audio/"+Text+".ogg");
+  readButtonOne() {
+    this.playSound(this.answers[0][1]);
   }
 
-  readButtonTwo(Text) {
-    this.playSound("./../../../../assets/Audio/"+Text+".ogg");
+  readButtonTwo() {
+    this.playSound(this.answers[1][1]);
   }
 
-  readButtonThree(Text) {
-    this.playSound("./../../../../assets/Audio/"+Text+".ogg");
+  readButtonThree() {
+    this.playSound(this.answers[2][1]);
   }
 
-  readButtonFour(Text) {
-    this.playSound("./../../../../assets/Audio/"+Text+".ogg");
+  readButtonFour() {
+    this.playSound(this.answers[3][1]);
   }
 
   buttonOne(answer:string) {
