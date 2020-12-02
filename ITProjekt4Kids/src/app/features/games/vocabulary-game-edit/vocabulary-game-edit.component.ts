@@ -43,6 +43,10 @@ export class VocabularyGameEditComponent implements OnInit {
   selectedDOMElement: HTMLElement;
   triggeredHTML: string;
   editingAudio = false;
+  valueButton1: string;
+  valueButton2: string;
+  valueButton3: string;
+  valueButton4: string;
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService,) {
     // get folder where game created in
@@ -125,8 +129,7 @@ export class VocabularyGameEditComponent implements OnInit {
         this.finalScreen = true;
         let uid = uuidv4();
         var newGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png', this.folderID);
-        this.currentGame = newGame;
-        
+        this.currentGame = newGame;        
      }
 
     //  to prevent disappearing of content - text is filled to have some clickable element
@@ -240,16 +243,18 @@ export class VocabularyGameEditComponent implements OnInit {
   // checks if the question, the image, or one of the button values has changed
   checkForChanges(): boolean{
     if(this.currentGame == undefined) return false;
-    let valueButton1 = document.getElementById('button1').innerText;
-    let valueButton2 = document.getElementById('button2').innerText;
-    let valueButton3 = document.getElementById('button3').innerText;
-    let valueButton4 = document.getElementById('button4').innerText;
-    let question = document.getElementById('question').innerText;
-    if(this.currentGame.rightAnswer[0] == valueButton1 && 
-       this.currentGame.answer1[0] == valueButton2 &&
-       this.currentGame.answer2[0] == valueButton3 &&
-       this.currentGame.answer3[0] == valueButton4 &&
-       this.currentGame.question[0] == question &&
+    if(this.editingAudio == false) {
+      this.valueButton1 = document.getElementById('button1').innerText;
+      this.valueButton2 = document.getElementById('button2').innerText;
+      this.valueButton3 = document.getElementById('button3').innerText;
+      this.valueButton4 = document.getElementById('button4').innerText;
+      this.question = document.getElementById('question').innerText;
+    }
+    if(this.currentGame.rightAnswer[0] == this.valueButton1 && 
+       this.currentGame.answer1[0] == this.valueButton2 &&
+       this.currentGame.answer2[0] == this.valueButton3 &&
+       this.currentGame.answer3[0] == this.valueButton4 &&
+       this.currentGame.question[0] == this.question &&
        this.currentGame.photoID == this.imageURL &&
        this.currentGame.rightAnswer[1] == this.audioURLAnswer1 &&
        this.currentGame.answer1[1] == this.audioURLAnswer2 &&
@@ -330,8 +335,12 @@ export class VocabularyGameEditComponent implements OnInit {
     if(this.editingAudio == false) {
       this.answers = [document.getElementById('button1').innerText, document.getElementById('button2').innerText, document.getElementById('button3').innerText, document.getElementById('button4').innerText];
       this.question = document.getElementById('question').innerText;
+      this.valueButton1 = document.getElementById('button1').innerText;
+      this.valueButton2 = document.getElementById('button2').innerText;
+      this.valueButton3 = document.getElementById('button3').innerText;
+      this.valueButton4 = document.getElementById('button4').innerText;
     }
-      this.editingAudio = !this.editingAudio    
+    this.editingAudio = !this.editingAudio    
   }
 
 }
