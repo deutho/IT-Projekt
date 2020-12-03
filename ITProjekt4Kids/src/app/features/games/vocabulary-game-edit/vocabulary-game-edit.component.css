@@ -260,7 +260,7 @@
     justify-content: flex-start;
 }
 
-audio::-webkit-media-controls-panel {
+/* audio::-webkit-media-controls-panel {
 
-    /* background-color: white; */
-}
+    background-color: white;
+} */
