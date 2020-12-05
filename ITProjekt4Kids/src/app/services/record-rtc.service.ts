@@ -133,15 +133,17 @@ export class RecordRTCService {
       let minutes = +timer[0];
       let seconds = +timer[1];
 
-      if (minutes == 10) {
+      // if (minutes == 10) {
+      //   this.recordWebRTC.stopRecording();
+      //   clearInterval(this.interval);
+      //   return
+      // }
+      ++seconds;
+      if (seconds >= 30) {
+        // ++minutes;
+        // seconds = 0;
         this.recordWebRTC.stopRecording();
         clearInterval(this.interval);
-        return
-      }
-      ++seconds;
-      if (seconds >= 59) {
-        ++minutes;
-        seconds = 0;
       }
 
       if (seconds < 10) {

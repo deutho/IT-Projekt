@@ -35,7 +35,18 @@ export class VocabularyGameEditComponent implements OnInit {
   finalScreen = false;
   noMoreGames = false;
   audioURL: string;
+  audioURLQuestion: string;
+  audioURLAnswer1: string;
+  audioURLAnswer2: string;
+  audioURLAnswer3: string;
+  audioURLAnswer4: string;
   selectedDOMElement: HTMLElement;
+  triggeredHTML: string;
+  editingAudio = false;
+  valueButton1: string;
+  valueButton2: string;
+  valueButton3: string;
+  valueButton4: string;
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService,) {
     // get folder where game created in
@@ -47,7 +58,7 @@ export class VocabularyGameEditComponent implements OnInit {
     });    
     this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
-      console.log(this.audioURL)
+      this.loadAudio();
     })
   }
 
@@ -64,11 +75,41 @@ export class VocabularyGameEditComponent implements OnInit {
 
     //load first game
     this.loadNextGame();
+    this.initSounds();
   }
 
-  startVoiceRecord(event){
+  startVoiceRecord(HTMLFinder){
+    this.triggeredHTML = HTMLFinder;
     this._recordRTC.toggleRecord();
   }
+
+  loadAudio(){
+    if(this.triggeredHTML == 'question') {
+      this.audioURLQuestion = this.audioURL;
+    }
+    else if(this.triggeredHTML == 'answer1') {
+      this.audioURLAnswer1 = this.audioURL;
+    }
+    else if(this.triggeredHTML == 'answer2') {
+      this.audioURLAnswer2 = this.audioURL;
+    }
+    else if(this.triggeredHTML == 'answer3') {
+      this.audioURLAnswer3 = this.audioURL;
+    }
+    else if(this.triggeredHTML == 'answer4') {
+      this.audioURLAnswer4 = this.audioURL;
+    }
+  }
+
+  initSounds() {
+    this.audioURLQuestion = this.currentGame.question[1]
+    this.audioURLAnswer1 = this.currentGame.rightAnswer[1]
+    this.audioURLAnswer2 = this.currentGame.answer1[1]
+    this.audioURLAnswer3 = this.currentGame.answer2[1]
+    this.audioURLAnswer4 = this.currentGame.answer3[1]
+  }
+
+
   loadNextGame() {   
     if(this.finalScreen && this.Games.length == 0) {
       this.noMoreGames = true;
@@ -87,9 +128,8 @@ export class VocabularyGameEditComponent implements OnInit {
     else {
         this.finalScreen = true;
         let uid = uuidv4();
-        var newGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405_960_720.png', this.folderID);
-        this.currentGame = newGame;
-        
+        var newGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID);
+        this.currentGame = newGame;        
      }
 
     //  to prevent disappearing of content - text is filled to have some clickable element
@@ -106,14 +146,8 @@ export class VocabularyGameEditComponent implements OnInit {
 
 
     //  lets the html know, that content can now be loaded
-    console.log(this.currentGame.question[0])
-    console.log(this.currentGame.answer1[0])
-    console.log(this.currentGame.answer2[0])
-    console.log(this.currentGame.answer3[0])
-    console.log(this.currentGame.rightAnswer[0])
-    console.log(this.currentGame.photoID)
-     this.loaded = true;
-
+    this.initSounds();
+    this.loaded = true;
   }
 
     // makes changes persitant in the database
@@ -125,6 +159,11 @@ export class VocabularyGameEditComponent implements OnInit {
       this.currentGame.answer2[0] = document.getElementById('button3').innerText;
       this.currentGame.answer3[0] = document.getElementById('button4').innerText;
       this.currentGame.question[0] = document.getElementById('question').innerText;
+      this.currentGame.rightAnswer[1] = this.audioURLAnswer1;
+      this.currentGame.answer1[1] = this.audioURLAnswer2;
+      this.currentGame.answer2[1] = this.audioURLAnswer3;
+      this.currentGame.answer3[1] = this.audioURLAnswer4;
+      this.currentGame.question[1] = this.audioURLQuestion;
       if(this.currentGame.photoID != this.imageURL) {
         if(this.currentGame.photoID.search("firebasestorage.googleapis.com") != -1) {
           this.afs.deleteFromStorageByUrl(this.currentGame.photoID).catch((err) => {
@@ -204,17 +243,24 @@ export class VocabularyGameEditComponent implements OnInit {
   // checks if the question, the image, or one of the button values has changed
   checkForChanges(): boolean{
     if(this.currentGame == undefined) return false;
-    let valueButton1 = document.getElementById('button1').innerText;
-    let valueButton2 = document.getElementById('button2').innerText;
-    let valueButton3 = document.getElementById('button3').innerText;
-    let valueButton4 = document.getElementById('button4').innerText;
-    let question = document.getElementById('question').innerText;
-    if(this.currentGame.rightAnswer[0] == valueButton1 && 
-       this.currentGame.answer1[0] == valueButton2 &&
-       this.currentGame.answer2[0] == valueButton3 &&
-       this.currentGame.answer3[0] == valueButton4 &&
-       this.currentGame.question[0] == question &&
-       this.currentGame.photoID == this.imageURL) {
+    if(this.editingAudio == false) {
+      this.valueButton1 = document.getElementById('button1').innerText;
+      this.valueButton2 = document.getElementById('button2').innerText;
+      this.valueButton3 = document.getElementById('button3').innerText;
+      this.valueButton4 = document.getElementById('button4').innerText;
+      this.question = document.getElementById('question').innerText;
+    }
+    if(this.currentGame.rightAnswer[0] == this.valueButton1 && 
+       this.currentGame.answer1[0] == this.valueButton2 &&
+       this.currentGame.answer2[0] == this.valueButton3 &&
+       this.currentGame.answer3[0] == this.valueButton4 &&
+       this.currentGame.question[0] == this.question &&
+       this.currentGame.photoID == this.imageURL &&
+       this.currentGame.rightAnswer[1] == this.audioURLAnswer1 &&
+       this.currentGame.answer1[1] == this.audioURLAnswer2 &&
+       this.currentGame.answer2[1] == this.audioURLAnswer3 &&
+       this.currentGame.answer3[1] == this.audioURLAnswer4 &&
+       this.currentGame.question[1] == this.audioURLQuestion) {
         return false;
        }
     else {
@@ -272,6 +318,7 @@ export class VocabularyGameEditComponent implements OnInit {
       }
     }
     this.loadInnerTextValues();
+    this.initSounds();
   }
 
   //As content is mutable, this is necessary to avoid bugs
@@ -282,6 +329,18 @@ export class VocabularyGameEditComponent implements OnInit {
     document.getElementById('button4').innerText = this.currentGame.answer3[0];
     document.getElementById('question').innerText = this.currentGame.question[0];
     this.imageURL = this.currentGame.photoID;
+  }
+
+  switchMode() {
+    if(this.editingAudio == false) {
+      this.answers = [document.getElementById('button1').innerText, document.getElementById('button2').innerText, document.getElementById('button3').innerText, document.getElementById('button4').innerText];
+      this.question = document.getElementById('question').innerText;
+      this.valueButton1 = document.getElementById('button1').innerText;
+      this.valueButton2 = document.getElementById('button2').innerText;
+      this.valueButton3 = document.getElementById('button3').innerText;
+      this.valueButton4 = document.getElementById('button4').innerText;
+    }
+    this.editingAudio = !this.editingAudio    
   }
 
 }
