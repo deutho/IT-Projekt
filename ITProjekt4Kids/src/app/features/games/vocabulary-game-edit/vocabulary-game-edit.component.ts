@@ -47,6 +47,15 @@ export class VocabularyGameEditComponent implements OnInit {
   valueButton2: string;
   valueButton3: string;
   valueButton4: string;
+  isRecording = false;
+  showMaxRecordingWarning = false;
+  audioQuestionPlaying = false;
+  audioAnswer1Playing = false;
+  audioAnswer2Playing = false;
+  audioAnswer3Playing = false;
+  audioAnswer4Playing = false;
+  recordingTimeout;
+  
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService,) {
     // get folder where game created in
@@ -58,7 +67,11 @@ export class VocabularyGameEditComponent implements OnInit {
     });    
     this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
+      if((<HTMLButtonElement> document.getElementById("audioButtonQuestion")) != null) {
+        this.allowRecord(true);
+      }
       this.loadAudio();
+      // console.log("hellloooo")
     })
   }
 
@@ -81,6 +94,56 @@ export class VocabularyGameEditComponent implements OnInit {
   startVoiceRecord(HTMLFinder){
     this.triggeredHTML = HTMLFinder;
     this._recordRTC.toggleRecord();
+    clearTimeout(this.recordingTimeout)
+    this.recordingTimeout = window.setTimeout(() => {
+        this.startVoiceRecord(HTMLFinder);
+        this.showMaxRecordingWarning = true;
+        setTimeout(() => this.showMaxRecordingWarning = false, 4000)
+    }, 10800);
+    this.toggleLockedHTML();
+  }
+
+  toggleLockedHTML() {
+    if(this.isRecording) {
+      this.isRecording = false;
+      //unlock all audioButtonAnswer0 audioButtonQuestion
+      (<HTMLButtonElement> document.getElementById("audioButtonQuestion")).disabled = false;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer0")).disabled = false;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer1")).disabled = false;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer2")).disabled = false;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer3")).disabled = false;
+      clearTimeout(this.recordingTimeout)
+      this.allowRecord(false);
+    }
+    else{
+      this.isRecording = true;
+      //lock all except correct one
+      if(this.triggeredHTML != 'question')(<HTMLButtonElement> document.getElementById("audioButtonQuestion")).disabled = true;
+      if(this.triggeredHTML != 'answer1')(<HTMLButtonElement> document.getElementById("audioButtonAnswer0")).disabled = true;
+      if(this.triggeredHTML != 'answer2')(<HTMLButtonElement> document.getElementById("audioButtonAnswer1")).disabled = true;
+      if(this.triggeredHTML != 'answer3')(<HTMLButtonElement> document.getElementById("audioButtonAnswer2")).disabled = true;
+      if(this.triggeredHTML != 'answer4')(<HTMLButtonElement> document.getElementById("audioButtonAnswer3")).disabled = true;
+
+    }
+  }
+
+  allowRecord (allowed) {
+    console.log("allowRecord")
+    if(allowed == true) {
+      console.log("allowRecord = true");
+      (<HTMLButtonElement> document.getElementById("audioButtonQuestion")).disabled = false;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer0")).disabled = false;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer1")).disabled = false;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer2")).disabled = false;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer3")).disabled = false;
+    }
+    else {
+      (<HTMLButtonElement> document.getElementById("audioButtonQuestion")).disabled = true;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer0")).disabled = true;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer1")).disabled = true;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer2")).disabled = true;
+      (<HTMLButtonElement> document.getElementById("audioButtonAnswer3")).disabled = true;
+    }
   }
 
   loadAudio(){
@@ -108,7 +171,50 @@ export class VocabularyGameEditComponent implements OnInit {
     this.audioURLAnswer3 = this.currentGame.answer2[1]
     this.audioURLAnswer4 = this.currentGame.answer3[1]
   }
+  playAudio(htmlSource) {
+    console.log(this.audioURLAnswer1);
+    (<HTMLAudioElement>document.getElementById('player' + htmlSource)).play();
+    setTimeout(() => {
+      this.stopAudio(htmlSource);
+    }, (<HTMLAudioElement>document.getElementById('player' + htmlSource)).duration*1000);
+    
+    if(htmlSource == 'question') {
+      this.audioQuestionPlaying = true;
+    }
+    else if(htmlSource == 'answer1') {
+      this.audioAnswer1Playing = true;
+    }
+    else if(htmlSource == 'answer2') {
+      this.audioAnswer2Playing = true;
+    }
+    else if(htmlSource == 'answer3') {
+      this.audioAnswer3Playing = true;
+    }
+    else if(htmlSource == 'answer4') {
+      this.audioAnswer4Playing = true;
+    }
 
+  }
+
+  stopAudio(htmlSource) {
+    (<HTMLAudioElement>document.getElementById('player' + htmlSource)).pause()
+    if(htmlSource == 'question') {
+      this.audioQuestionPlaying = false;
+    }
+    else if(htmlSource == 'answer1') {
+      this.audioAnswer1Playing = false;
+    }
+    else if(htmlSource == 'answer2') {
+      this.audioAnswer2Playing = false;
+    }
+    else if(htmlSource == 'answer3') {
+      this.audioAnswer3Playing = false;
+    }
+    else if(htmlSource == 'answer4') {
+      this.audioAnswer4Playing = false;
+    }
+    clearTimeout(this.recordingTimeout)
+  }
 
   loadNextGame() {   
     if(this.finalScreen && this.Games.length == 0) {
@@ -190,6 +296,10 @@ export class VocabularyGameEditComponent implements OnInit {
 
   deletePictureOnAbort() {
 
+  }
+
+  noAudioSource() {
+    //insert a warning that no audio can be found
   }
 
   uploadTextToSpeechElement(element) {

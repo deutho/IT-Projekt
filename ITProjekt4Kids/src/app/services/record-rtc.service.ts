@@ -21,7 +21,10 @@ export class RecordRTCService {
   downloadURL$: Observable<string>;
   private mydownloadURLSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   test: string;
-  interval; recordingTimer: string; recordWebRTC: any; mediaRecordStream: any;
+  interval; 
+  recordingTimer: string = ""; 
+  recordWebRTC: any; 
+  mediaRecordStream: any;
   options: any = {
     type: 'audio',
     mimeType: 'audio/webm'
@@ -77,19 +80,16 @@ export class RecordRTCService {
    * blob file making to blob url `blobUrl`
    * @name startCountdown stop counting with stream
    */
-  stopRTC() {
-    this.recordWebRTC.stop((blob) => {
+  stopRTC() : Promise<any>{
+    return this.recordWebRTC.stop((blob) => {
       //NOTE: upload on server
     //   this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
-        console.log(blob)
     this.uploadToFirestore(blob);
-
-
-        this.startCountdown(true);
+    this.startCountdown(true);
     })
   }
 
-  uploadToFirestore(blob) {
+  uploadToFirestore(blob): Promise<any>{
 
     // The storage path
     let name = Date.now() + '_' + blob.size
@@ -99,7 +99,7 @@ export class RecordRTCService {
     var audioRef = this.storageRef.child(path);
 
     // The main task
-    audioRef.put(blob).then((snapshot) => {
+    return audioRef.put(blob).then((snapshot) => {
       audioRef.getDownloadURL().then((data) => {
         console.log(data)
         this.mydownloadURLSubject.next(data);
