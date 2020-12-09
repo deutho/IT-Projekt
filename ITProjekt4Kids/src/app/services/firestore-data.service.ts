@@ -22,10 +22,6 @@ export class FirestoreDataService {
     constructor(public _afs: AngularFirestore, public _auth: AuthService) {
     }
     
-    getAllStudents(teacher_uid): AngularFirestoreCollection<User> {
-    return null        
-    }
-
     getCurrentUser(): AngularFirestoreCollectionGroup<User> {
         return this._afs.collectionGroup('users', ref => ref.where('uid', "==", this._auth.getCurrentUser().uid));
     }
@@ -45,39 +41,31 @@ export class FirestoreDataService {
         return this._afs.collection('games', ref => ref.where('folderUID', '==', id));
     }
 
-    getFolders(path: string): AngularFirestoreDocument {
-        return this._afs.doc("folders/"+path);
+    
+    async getFolderElement(uid: string): Promise<Folderelement> {
+        let ref: AngularFirestoreDocument<Folderelement> = this._afs.collection("folders").doc(uid);
+        return await ref.valueChanges().pipe(take(1)).toPromise()
     }
 
-    updateFolders(folder: Folder, currentPath: string) {
-        return this.db.doc("folders/"+currentPath).update({
+    updateFolders(folder: Folder, uid: string) {
+        return this.db.collection("folders").doc(uid).update({
             folders: firebase.firestore.FieldValue.arrayUnion(JSON.parse(JSON.stringify(folder)))
         });
     }
 
-    deleteFolder(folder: Folder, currentPath: string) {
-        return this.db.doc("folders/"+currentPath).update({
+    deleteFolder(folder: Folder, uid: string) {
+        return this.db.collection("folders").doc(uid).update({
             folders: firebase.firestore.FieldValue.arrayRemove(JSON.parse(JSON.stringify(folder)))
         });
     }
     
-    addFolderDocument(uid: string, path: string): void{
-        this.db.doc("folders/"+path).collection(uid).add({
-            parent: uid,
-            folders: []
-        });
-    }
-    getSubFolder(path: string, uid: string): AngularFirestoreCollection<Folderelement> {
-        return this._afs.collection("folders/"+path, ref => ref.where('parent', '==', uid));
-    }
-
-    initializeFolderDocument(uid: string) {
+    addFolderDocument(uid: string, parent: string): void{
         this.db.collection("folders").doc(uid).set({
-            parent: "folders",
+            parent: parent,
             folders: []
         });
     }
-
+   
     updateTask(task) {
         this.db.collection("games").doc(task.uid).set(JSON.parse(JSON.stringify(task)));
     }

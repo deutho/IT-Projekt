@@ -94,7 +94,7 @@ export class AddUserComponent implements OnInit {
       })
 
       if (this.newUser.role == 2) {
-        this.afs.initializeFolderDocument(this.newUser.uid);
+        this.afs.addFolderDocument(this.newUser.uid, 'root');
       }
 
       //Delete the second App
