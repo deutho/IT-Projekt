@@ -47,10 +47,12 @@ export class MainMenuComponent implements OnInit {
   currentFolders: Folder[] = [];
   currentPathForHTML: string = "";
   addElementForm: FormGroup;
+  editElementForm: FormGroup;
   formSubmitted = false;
   gameSelected = false;
   emptyMessage: string = "Keine Elemente in diesem Ordner";
   creating = false;
+  editing = false;
   redirectdata: string[] = [];
   redirected;
   redirectitem;
@@ -59,6 +61,7 @@ export class MainMenuComponent implements OnInit {
   directurl = "";
   linkCopied = false;
   lastpath;
+  folderToChange: Folder;
 
   async ngOnInit() {
     
@@ -66,6 +69,8 @@ export class MainMenuComponent implements OnInit {
       name:  ['', Validators.required],
       game:  []
     });
+
+
 
     this.level = 0;
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
@@ -115,6 +120,12 @@ export class MainMenuComponent implements OnInit {
         this.ownFolders = data.folders
         });
 
+      this.ownFolders.sort((a, b) => {
+        if (a.name < b.name) {return -1;}
+        if (a.name > b.name) {return 1;}
+        return 0;
+      });
+      
       if (this.level == 0) {
         this.currentFolders = this.derdiedazFolder.concat(this.ownFolders);
       } else {
@@ -138,7 +149,7 @@ export class MainMenuComponent implements OnInit {
     this.afs.updateFolders(newFolder, this.currentPath);
 
     //If it is Type Folder, generate a Collection for it
-    if (newFolder.type == "folder") this.afs.addFolderDocument(newFolder.uid, newFolder.name, this.currentPath); 
+    if (newFolder.type == "folder") this.afs.addFolderDocument(newFolder.uid, this.currentPath); 
   }
     
   navigate(header, data) {
@@ -159,7 +170,7 @@ export class MainMenuComponent implements OnInit {
       
       var folderElement: Folderelement;
       var docname: string;
-      (await this.afs.getSubFolder(this.currentPath, item.name).snapshotChanges().pipe(take(1)).toPromise()).
+      (await this.afs.getSubFolder(this.currentPath, item.uid).snapshotChanges().pipe(take(1)).toPromise()).
       map(data => {
         folderElement = data.payload.doc.data();
         docname = data.payload.doc.id;
@@ -192,6 +203,26 @@ export class MainMenuComponent implements OnInit {
 
   addElement() {
     this.creating = true;
+  }
+
+  editElement(item) {
+    this.editElementForm = this.fb.group({
+      name:  [item.name, Validators.required],
+    });
+    this.folderToChange = item;
+    this.editing = true;
+  }
+
+  edit() {
+    if (this.editElementForm.valid && this.editElementForm.get('name').value != this.folderToChange.name) {
+      
+      //change the folder value in the database and load new (in one transaction)
+      this.afs.deleteFolder(this.folderToChange, this.currentPath).then(() => {
+        this.folderToChange.name = this.editElementForm.get('name').value;
+      this.afs.updateFolders(this.folderToChange, this.currentPath);
+      }).then(() => this.getFolders()).catch(err => console.log(err))
+    }
+    this.editing = false;
   }
 
   submit() {
@@ -231,7 +262,6 @@ export class MainMenuComponent implements OnInit {
       }
       this.level--;
       this.getFolders();
-
     }
   }
 
