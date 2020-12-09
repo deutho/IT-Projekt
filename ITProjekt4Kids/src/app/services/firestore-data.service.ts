@@ -55,20 +55,20 @@ export class FirestoreDataService {
         });
     }
 
-    removeFolder(folder: Folder, currentPath: string) {
+    deleteFolder(folder: Folder, currentPath: string) {
         return this.db.doc("folders/"+currentPath).update({
             folders: firebase.firestore.FieldValue.arrayRemove(JSON.parse(JSON.stringify(folder)))
         });
     }
     
-    addFolderDocument(uid: string, name: string, path: string): void{
+    addFolderDocument(uid: string, path: string): void{
         this.db.doc("folders/"+path).collection(uid).add({
-            parent: name,
+            parent: uid,
             folders: []
         });
     }
-    getSubFolder(path: string, name: string): AngularFirestoreCollection<Folderelement> {
-        return this._afs.collection("folders/"+path, ref => ref.where('parent', '==', name));
+    getSubFolder(path: string, uid: string): AngularFirestoreCollection<Folderelement> {
+        return this._afs.collection("folders/"+path, ref => ref.where('parent', '==', uid));
     }
 
     initializeFolderDocument(uid: string) {
