@@ -52,56 +52,131 @@
             <div class="record-div" >
                 <div class="textForAudio">{{question}}</div>
                 <div class="editAudioInteraction" >
-                    <button id="testKnopf" class="recordButton" (click)="startVoiceRecord('question')" >
+                    <button id="audioButtonQuestion" class="recordButton" (click)="startVoiceRecord('question')" >
                         <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
                     </button>
+                    <div class="spacingBetweenButtonAndTimer"></div>
                     <div class="counter" *ngIf="triggeredHTML == 'question'">{{_recordRTC?.recordingTimer}}</div>
-                    <audio [src]="this.audioURLQuestion" controls></audio>
+                    <audio id = "playerquestion" [src]="this.audioURLQuestion"></audio>
+                    <div style="padding-left: 20px;">
+                        <div (click) = "noAudioSource()" *ngIf="this.audioURLQuestion == ''">
+                            <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                            </svg>
+                        </div>
+                        <div (click) = "playAudio('question')" *ngIf="this.audioURLQuestion != '' && this.audioQuestionPlaying == false">
+                            <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                        </div>
+                        <div (click) = "stopAudio('question')" *ngIf="this.audioURLQuestion != '' && this.audioQuestionPlaying == true">
+                            <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                        </div>
+                    </div>
                 </div>
             </div>
         
             <div class="record-div">
                 <div class="textForAudio">{{answers[0]}}</div>
                 <div class="editAudioInteraction">
-                    <button id="testKnopf" class="recordButton" (click)="startVoiceRecord('answer1')">
+                    <button id="audioButtonAnswer0" class="recordButton" (click)="startVoiceRecord('answer1')">
                         <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
                     </button>
+                    <div class="spacingBetweenButtonAndTimer"></div>
                     <div class="counter" *ngIf="triggeredHTML == 'answer1'">{{_recordRTC?.recordingTimer}}</div>
-                    <audio [src]="this.audioURLAnswer1" controls></audio>
+                    <audio id = "playeranswer1" [src]="this.audioURLAnswer1"></audio>
+                    <div style="padding-left: 20px;">
+                        <div (click) = "noAudioSource()" *ngIf="this.audioURLAnswer1 == ''">
+                            <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                            </svg>
+                        </div>
+                        <div (click) = "playAudio('answer1')" *ngIf="this.audioURLAnswer1 != '' && this.audioAnswer1Playing == false">
+                            <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                        </div>
+                        <div (click) = "stopAudio('answer1')" *ngIf="this.audioURLAnswer1 != '' && this.audioAnswer1Playing == true">
+                            <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                        </div>
+                    </div>
                 </div>
             </div>
         
             <div class="record-div">
                 <div class="textForAudio">{{answers[1]}}</div>
                 <div class="editAudioInteraction">
-                    <button id="testKnopf" class="recordButton" (click)="startVoiceRecord('answer2')">
+                    <button id="audioButtonAnswer1" class="recordButton" (click)="startVoiceRecord('answer2')">
                         <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
                     </button>
+                    <div class="spacingBetweenButtonAndTimer"></div>
                     <div class="counter" *ngIf="triggeredHTML == 'answer2'">{{_recordRTC?.recordingTimer}}</div>
-                    <audio [src]="this.audioURLAnswer2" controls></audio>
+                    <audio id = "playeranswer2" [src]="this.audioURLAnswer2"></audio>
+                    <div style="padding-left: 20px;">
+                        <div (click) = "noAudioSource()" *ngIf="this.audioURLAnswer2 == ''">
+                            <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                            </svg>
+                        </div>
+                        <div (click) = "playAudio('answer2')" *ngIf="this.audioURLAnswer2 != '' && this.audioAnswer2Playing == false">
+                            <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                        </div>
+                        <div (click) = "stopAudio('answer2')" *ngIf="this.audioURLAnswer2 != '' && this.audioAnswer2Playing == true">
+                            <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                        </div>
+                    </div>
                 </div>
             </div>
         
             <div class="record-div">
                     <div class="textForAudio">{{answers[2]}}</div>
                     <div class="editAudioInteraction">
-                        <button id="testKnopf" class="recordButton" (click)="startVoiceRecord('answer3')">
+                        <button id="audioButtonAnswer2" class="recordButton" (click)="startVoiceRecord('answer3')">
                             <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
                         </button>
+                        <div class="spacingBetweenButtonAndTimer"></div>
                         <div class="counter" *ngIf="triggeredHTML == 'answer3'">{{_recordRTC?.recordingTimer}}</div>
-                        <audio [src]="this.audioURLAnswer3" controls></audio>
+                        <audio id = "playeranswer3" [src]="this.audioURLAnswer3"></audio>
+                        <div style="padding-left: 20px;">
+                            <div (click) = "noAudioSource()" *ngIf="this.audioURLAnswer3 == ''">
+                                <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                                </svg>
+                            </div>
+                            <div (click) = "playAudio('answer3')" *ngIf="this.audioURLAnswer3 != '' && this.audioAnswer3Playing == false">
+                                <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                            </div>
+                            <div (click) = "stopAudio('answer3')" *ngIf="this.audioURLAnswer3 != '' && this.audioAnswer3Playing == true">
+                                <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                            </div>
+                        </div>
                     </div>
             </div>
         
             <div class="record-div">
                     <div class="textForAudio">{{answers[3]}}</div>
                     <div class="editAudioInteraction">
-                        <button id="testKnopf" class="recordButton" (click)="startVoiceRecord('answer4')">
+                        <button id="audioButtonAnswer3" class="recordButton" (click)="startVoiceRecord('answer4')">
                             <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
                         </button>
+                        <div class="spacingBetweenButtonAndTimer"></div>
                         <div class="counter" *ngIf="triggeredHTML == 'answer4'">{{_recordRTC?.recordingTimer}}</div>
-                        <audio [src]="this.audioURLAnswer4" controls></audio>
+                        <audio id = "playeranswer4" [src]="this.audioURLAnswer4"></audio>
+                        <div style="padding-left: 20px;">
+                            <div (click) = "noAudioSource()" *ngIf="this.audioURLAnswer4 == ''">
+                                <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                                </svg>
+                            </div>
+                            <div (click) = "playAudio('answer4')" *ngIf="this.audioURLAnswer4 != '' && this.audioAnswer4Playing == false">
+                                <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                            </div>
+                            <div (click) = "stopAudio('answer4')" *ngIf="this.audioURLAnswer4 != '' && this.audioAnswer4Playing == true">
+                                <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                            </div>
+                        </div>
                     </div>
+            </div>
+            
+            <div *ngIf = "showMaxRecordingWarning == true" class="item-final alert alert-warning text-center" role="alert" style="width: 80%; margin:0 auto; z-index: 5; align-self: flex-end;">
+                Aufnahme beendet!
+                Audiospuren können maximal 10 Sekunden lang sein!
             </div>
         
         </div>
@@ -150,43 +225,29 @@
 
     <!-- actionBar editing=false speichern -->
     <div *ngIf = "editingAudio == false" class="item-actionBar" style="display: flex; padding-top: 0; justify-content: center; align-items: center;">
+        <div style="min-height: 150px;"></div>
         <div type=button class="btn"  style="display:block; width: 100%; margin: 0 auto">      
-            <svg style="width: 5%; min-width: 50px; min-height: 50px; " id="Capa_1" enable-background="new 0 0 467.765 467.765"  viewBox="0 0 467.765 467.765" xmlns="http://www.w3.org/2000/svg">
-                <path fill="#0275d8" d="m58.471 0v87.706h58.471v-29.235h87.706v350.824h-58.471v58.471h175.412v-58.471h-58.471v-350.824h87.706v29.235h58.471v-87.706z"/>
-            </svg>  
+            <svg  fill="#0275d8" style="width: 5%; min-width: 50px; min-height: 50px; enable-background:new 0 0 512 512;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve"> <path d="M255,394.948H80c-44.112,0-80-35.888-80-80v-118c0-44.112,35.888-80,80-80h175c11.046,0,20,8.954,20,20s-8.954,20-20,20H80  c-22.056,0-40,17.944-40,40v118c0,22.056,17.944,40,40,40h175c11.046,0,20,8.954,20,20S266.046,394.948,255,394.948z M432,116.948  h-18c-11.046,0-20,8.954-20,20s8.954,20,20,20h18c22.056,0,40,17.944,40,40v118c0,22.056-17.944,40-40,40h-18  c-11.046,0-20,8.954-20,20s8.954,20,20,20h18c44.112,0,80-35.888,80-80v-118C512,152.835,476.112,116.948,432,116.948z M414,472  c-33.084,0-60-26.916-60-60V100c0-33.084,26.916-60,60-60c11.046,0,20-8.954,20-20s-8.954-20-20-20  c-32.676,0-61.74,15.755-80,40.066C315.74,15.755,286.676,0,254,0c-11.046,0-20,8.954-20,20s8.954,20,20,20  c33.084,0,60,26.916,60,60v312c0,33.084-26.916,60-60,60c-11.046,0-20,8.954-20,20s8.954,20,20,20c32.676,0,61.74-15.755,80-40.066  C352.26,496.245,381.324,512,414,512c11.046,0,20-8.954,20-20S425.046,472,414,472z"/> </svg>
         </div>
         <div type=button class="btn"  style="display:block; width: 100%; margin: 0 auto" (click) = "saveChanges()"> 
-            <svg style="width: 5%; min-width: 50px; min-height: 50px; " aria-hidden="true" focusable="false" data-prefix="far" data-icon="save" class="svg-inline--fa fa-save fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path fill="grey" d="M433.941 129.941l-83.882-83.882A48 48 0 0 0 316.118 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V163.882a48 48 0 0 0-14.059-33.941zM272 80v80H144V80h128zm122 352H54a6 6 0 0 1-6-6V86a6 6 0 0 1 6-6h42v104c0 13.255 10.745 24 24 24h176c13.255 0 24-10.745 24-24V83.882l78.243 78.243a6 6 0 0 1 1.757 4.243V426a6 6 0 0 1-6 6zM224 232c-48.523 0-88 39.477-88 88s39.477 88 88 88 88-39.477 88-88-39.477-88-88-88zm0 128c-22.056 0-40-17.944-40-40s17.944-40 40-40 40 17.944 40 40-17.944 40-40 40z">
-                </path>
-            </svg>            
+            <svg fill="grey" style="width: 5%; min-width: 50px; min-height: 50px; enable-background:new 0 0 512 512;"version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve"> <g> <g> <path d="M508.885,88.448L423.552,3.115C421.547,1.131,418.837,0,416,0H32C14.357,0,0,14.357,0,32v448c0,17.643,14.357,32,32,32 h448c17.643,0,32-14.357,32-32V96C512,93.163,510.869,90.453,508.885,88.448z M490.667,480c0,5.888-4.8,10.667-10.667,10.667H32 c-5.867,0-10.667-4.779-10.667-10.667V32c0-5.888,4.8-10.667,10.667-10.667h379.584l79.083,79.083V480z"/> </g> </g> <g> <g> <path d="M373.333,0H138.667C132.779,0,128,4.779,128,10.667v128c0,17.643,14.357,32,32,32h192c17.643,0,32-14.357,32-32v-128 C384,4.779,379.221,0,373.333,0z M362.667,138.667c0,5.888-4.8,10.667-10.667,10.667H160c-5.867,0-10.667-4.779-10.667-10.667 V21.333h213.333V138.667z"/> </g> </g> <g> <g> <path d="M394.667,192H117.333C87.915,192,64,215.936,64,245.333v256C64,507.221,68.779,512,74.667,512h362.667 c5.888,0,10.667-4.779,10.667-10.667v-256C448,215.936,424.085,192,394.667,192z M426.667,490.667H85.333V245.333 c0-17.643,14.357-32,32-32h277.333c17.643,0,32,14.357,32,32V490.667z"/> </g> </g> <g> <g> <path d="M330.667,42.667H288c-5.888,0-10.667,4.779-10.667,10.667v64c0,5.888,4.779,10.667,10.667,10.667h42.667 c5.888,0,10.667-4.779,10.667-10.667v-64C341.333,47.445,336.555,42.667,330.667,42.667z M320,106.667h-21.333V64H320V106.667z"/> </g> </g> <g> <g> <path d="M373.333,277.333H138.667c-5.888,0-10.667,4.779-10.667,10.667s4.779,10.667,10.667,10.667h234.667 c5.888,0,10.667-4.779,10.667-10.667S379.221,277.333,373.333,277.333z"/> </g> </g> <g> <g> <path d="M373.333,341.333H138.667c-5.888,0-10.667,4.779-10.667,10.667c0,5.888,4.779,10.667,10.667,10.667h234.667 c5.888,0,10.667-4.779,10.667-10.667C384,346.112,379.221,341.333,373.333,341.333z"/> </g> </g> <g> <g> <path d="M373.333,405.333H138.667c-5.888,0-10.667,4.779-10.667,10.667c0,5.888,4.779,10.667,10.667,10.667h234.667 c5.888,0,10.667-4.779,10.667-10.667C384,410.112,379.221,405.333,373.333,405.333z"/> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>                  
         </div>
         <div type=button class="btn"  style="display:block; width: 100%; margin: 0 auto" (click) = "switchMode()"> 
-            <svg style="width: 5%; min-width: 50px; min-height: 50px; " aria-hidden="true" focusable="false" data-prefix="fas" data-icon="volume-up" class="svg-inline--fa fa-volume-up fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                <path fill="grey" d="M215.03 71.05L126.06 160H24c-13.26 0-24 10.74-24 24v144c0 13.25 10.74 24 24 24h102.06l88.97 88.95c15.03 15.03 40.97 4.47 40.97-16.97V88.02c0-21.46-25.96-31.98-40.97-16.97zm233.32-51.08c-11.17-7.33-26.18-4.24-33.51 6.95-7.34 11.17-4.22 26.18 6.95 33.51 66.27 43.49 105.82 116.6 105.82 195.58 0 78.98-39.55 152.09-105.82 195.58-11.17 7.32-14.29 22.34-6.95 33.5 7.04 10.71 21.93 14.56 33.51 6.95C528.27 439.58 576 351.33 576 256S528.27 72.43 448.35 19.97zM480 256c0-63.53-32.06-121.94-85.77-156.24-11.19-7.14-26.03-3.82-33.12 7.46s-3.78 26.21 7.41 33.36C408.27 165.97 432 209.11 432 256s-23.73 90.03-63.48 115.42c-11.19 7.14-14.5 22.07-7.41 33.36 6.51 10.36 21.12 15.14 33.12 7.46C447.94 377.94 480 319.54 480 256zm-141.77-76.87c-11.58-6.33-26.19-2.16-32.61 9.45-6.39 11.61-2.16 26.2 9.45 32.61C327.98 228.28 336 241.63 336 256c0 14.38-8.02 27.72-20.92 34.81-11.61 6.41-15.84 21-9.45 32.61 6.43 11.66 21.05 15.8 32.61 9.45 28.23-15.55 45.77-45 45.77-76.88s-17.54-61.32-45.78-76.86z">
-                </path>
-            </svg>        
+            <svg fill="grey" style="width: 5%; min-width: 50px; min-height: 50px; " id="Capa_1" enable-background="new 0 0 512.02 512.02"  viewBox="0 0 512.02 512.02" xmlns="http://www.w3.org/2000/svg" ><g id="XMLID_773_"><g id="XMLID_1124_"><path id="XMLID_333_" d="m502.01 368.68h-34.31c-5.522 0-10-4.477-10-10s4.478-10 10-10h34.31c5.522 0 10 4.477 10 10s-4.478 10-10 10z"/></g><g id="XMLID_1123_"><path id="XMLID_332_" d="m456.323 324.545c-4.051 0-7.861-2.478-9.366-6.495-1.938-5.171.684-10.935 5.855-12.873l25.834-9.679c5.178-1.938 10.936.685 12.873 5.856 1.938 5.171-.684 10.935-5.855 12.873l-25.834 9.679c-1.156.434-2.342.639-3.507.639z"/></g><g id="XMLID_1122_"><path id="XMLID_331_" d="m482.153 422.499c-1.165 0-2.351-.206-3.507-.639l-25.834-9.679c-5.172-1.938-7.793-7.701-5.855-12.873s7.697-7.795 12.873-5.856l25.834 9.679c5.172 1.938 7.793 7.701 5.855 12.873-1.504 4.016-5.316 6.495-9.366 6.495z"/></g><path id="XMLID_334_" d="m422.7 228.848c27.828-24.89 43.621-59.987 43.621-97.673 0-72.33-58.844-131.175-131.174-131.175h-92.931c-.004.005-.006.011-.01.017-48.248.002-94.902 14.26-134.914 41.23-4.58 3.087-5.79 9.302-2.703 13.881 3.087 4.58 9.302 5.788 13.881 2.703 36.702-24.739 79.495-37.815 123.751-37.814 13.296 0 26.613 1.182 39.583 3.514 31.48 5.66 58.175 25.112 73.239 53.371 14.809 27.778 16.102 60.123 3.549 88.742-9.216 21.014-22.194 39.973-38.574 56.353-18.665 18.666-40.538 32.836-65.012 42.116-21.464 8.139-39.396 22.629-51.855 41.902-12.479 19.303-18.303 41.606-16.841 64.493v.004c.004.078.009.156.014.234 1.519 21.161-9.229 40.474-28.05 50.399-18.104 9.547-38.379 7.719-54.235-4.888-53.351-42.42-83.978-105.791-84.028-173.864-.032-44.315 13.044-87.165 37.815-123.916 3.087-4.58 1.877-10.795-2.703-13.881-4.579-3.088-10.796-1.877-13.881 2.703-27.011 40.07-41.267 86.79-41.232 135.108.055 74.2 33.436 143.271 91.581 189.503 8.137 6.469 17.266 10.892 26.803 13.238l-21.644 53.094c-2.085 5.114.37 10.95 5.484 13.035 1.236.504 2.515.742 3.771.742 3.945 0 7.683-2.349 9.264-6.228l23.98-58.825c9.638-.652 19.272-3.342 28.354-8.132 25.925-13.673 40.738-40.278 38.674-69.446-.002-.051-.005-.102-.009-.153-2.434-38.106 20.002-72.837 55.829-86.423 27.138-10.29 51.383-25.994 72.063-46.674 18.146-18.145 32.527-39.16 42.748-62.461 2.902-6.617 5.18-13.401 6.85-20.278 2.819 13.458 4.281 27.203 4.281 40.987v15.298c0 1.961.577 3.879 1.658 5.516l40.188 60.851-33.094 22.724c-2.717 1.865-4.34 4.949-4.34 8.244v29.492l-31.869 14.421c-3.683 1.666-5.999 5.384-5.873 9.424.126 4.039 2.672 7.605 6.45 9.038l31.292 11.862v21.586c0 13.379-10.885 24.264-24.264 24.264h-96.511c-5.522 0-10 4.477-10 10s4.478 10 10 10h24.997l-19.879 51.301c-1.996 5.15.562 10.942 5.711 12.938 1.188.46 2.409.679 3.611.679 4.008 0 7.791-2.428 9.326-6.39l22.679-58.527h50.065c24.407 0 44.264-19.856 44.264-44.264v-28.493c0-4.273-2.686-7.91-6.457-9.342l.001-.009-15.232-5.774 15.02-6.796c3.882-1.374 6.667-5.067 6.667-9.419v-30.729l28.754-19.744c8.952-6.146 11.362-18.517 5.374-27.576zm-11.17-16.893-3.491-5.279v-12.291c0-35.876-8.897-71.54-25.714-103.23-2.357-8.096-5.563-16.025-9.634-23.661-10.61-19.905-26.063-36.142-44.671-47.494h7.127c61.302 0 111.175 49.873 111.175 111.175-.001 30.94-12.563 59.822-34.792 80.78z"/><g id="XMLID_1319_"><g id="XMLID_1320_"><path id="XMLID_325_" d="m78.149 88.158c-2.63 0-5.2-1.06-7.07-2.93-1.859-1.86-2.93-4.43-2.93-7.07 0-2.63 1.07-5.21 2.93-7.07 1.87-1.86 4.44-2.93 7.07-2.93s5.21 1.07 7.07 2.93c1.87 1.86 2.93 4.44 2.93 7.07 0 2.64-1.06 5.21-2.93 7.07-1.86 1.87-4.44 2.93-7.07 2.93z"/></g></g></g></svg>          
         </div>
     </div>
 
     <!-- actionBar editing=true speichern -->
     <div *ngIf = "editingAudio == true" class="item-actionBar" style="display: flex; padding-top: 0; justify-content: center; align-items: center;">
+        <div style="min-height: 150px;"></div>
         <div type=button class="btn"  style="display:block; width: 100%; margin: 0 auto" (click) = "switchMode()">      
-            <svg style="width: 5%; min-width: 50px; min-height: 50px; " id="Capa_1" enable-background="new 0 0 467.765 467.765"  viewBox="0 0 467.765 467.765" xmlns="http://www.w3.org/2000/svg">
-                <path fill="grey" d="m58.471 0v87.706h58.471v-29.235h87.706v350.824h-58.471v58.471h175.412v-58.471h-58.471v-350.824h87.706v29.235h58.471v-87.706z"/>
-            </svg>  
+            <svg fill="grey" style="width: 5%; min-width: 50px; min-height: 50px; enable-background:new 0 0 512 512;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve"> <path d="M255,394.948H80c-44.112,0-80-35.888-80-80v-118c0-44.112,35.888-80,80-80h175c11.046,0,20,8.954,20,20s-8.954,20-20,20H80  c-22.056,0-40,17.944-40,40v118c0,22.056,17.944,40,40,40h175c11.046,0,20,8.954,20,20S266.046,394.948,255,394.948z M432,116.948  h-18c-11.046,0-20,8.954-20,20s8.954,20,20,20h18c22.056,0,40,17.944,40,40v118c0,22.056-17.944,40-40,40h-18  c-11.046,0-20,8.954-20,20s8.954,20,20,20h18c44.112,0,80-35.888,80-80v-118C512,152.835,476.112,116.948,432,116.948z M414,472  c-33.084,0-60-26.916-60-60V100c0-33.084,26.916-60,60-60c11.046,0,20-8.954,20-20s-8.954-20-20-20  c-32.676,0-61.74,15.755-80,40.066C315.74,15.755,286.676,0,254,0c-11.046,0-20,8.954-20,20s8.954,20,20,20  c33.084,0,60,26.916,60,60v312c0,33.084-26.916,60-60,60c-11.046,0-20,8.954-20,20s8.954,20,20,20c32.676,0,61.74-15.755,80-40.066  C352.26,496.245,381.324,512,414,512c11.046,0,20-8.954,20-20S425.046,472,414,472z"/> </svg>
         </div>
         <div type=button class="btn"  style="display:block; width: 100%; margin: 0 auto" (click) = "saveChanges()"> 
-            <svg style="width: 5%; min-width: 50px; min-height: 50px; " aria-hidden="true" focusable="false" data-prefix="far" data-icon="save" class="svg-inline--fa fa-save fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path fill="grey" d="M433.941 129.941l-83.882-83.882A48 48 0 0 0 316.118 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V163.882a48 48 0 0 0-14.059-33.941zM272 80v80H144V80h128zm122 352H54a6 6 0 0 1-6-6V86a6 6 0 0 1 6-6h42v104c0 13.255 10.745 24 24 24h176c13.255 0 24-10.745 24-24V83.882l78.243 78.243a6 6 0 0 1 1.757 4.243V426a6 6 0 0 1-6 6zM224 232c-48.523 0-88 39.477-88 88s39.477 88 88 88 88-39.477 88-88-39.477-88-88-88zm0 128c-22.056 0-40-17.944-40-40s17.944-40 40-40 40 17.944 40 40-17.944 40-40 40z">
-                </path>
-            </svg>            
+            <svg fill="grey" style="width: 5%; min-width: 50px; min-height: 50px; enable-background:new 0 0 512 512;"version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve"> <g> <g> <path d="M508.885,88.448L423.552,3.115C421.547,1.131,418.837,0,416,0H32C14.357,0,0,14.357,0,32v448c0,17.643,14.357,32,32,32 h448c17.643,0,32-14.357,32-32V96C512,93.163,510.869,90.453,508.885,88.448z M490.667,480c0,5.888-4.8,10.667-10.667,10.667H32 c-5.867,0-10.667-4.779-10.667-10.667V32c0-5.888,4.8-10.667,10.667-10.667h379.584l79.083,79.083V480z"/> </g> </g> <g> <g> <path d="M373.333,0H138.667C132.779,0,128,4.779,128,10.667v128c0,17.643,14.357,32,32,32h192c17.643,0,32-14.357,32-32v-128 C384,4.779,379.221,0,373.333,0z M362.667,138.667c0,5.888-4.8,10.667-10.667,10.667H160c-5.867,0-10.667-4.779-10.667-10.667 V21.333h213.333V138.667z"/> </g> </g> <g> <g> <path d="M394.667,192H117.333C87.915,192,64,215.936,64,245.333v256C64,507.221,68.779,512,74.667,512h362.667 c5.888,0,10.667-4.779,10.667-10.667v-256C448,215.936,424.085,192,394.667,192z M426.667,490.667H85.333V245.333 c0-17.643,14.357-32,32-32h277.333c17.643,0,32,14.357,32,32V490.667z"/> </g> </g> <g> <g> <path d="M330.667,42.667H288c-5.888,0-10.667,4.779-10.667,10.667v64c0,5.888,4.779,10.667,10.667,10.667h42.667 c5.888,0,10.667-4.779,10.667-10.667v-64C341.333,47.445,336.555,42.667,330.667,42.667z M320,106.667h-21.333V64H320V106.667z"/> </g> </g> <g> <g> <path d="M373.333,277.333H138.667c-5.888,0-10.667,4.779-10.667,10.667s4.779,10.667,10.667,10.667h234.667 c5.888,0,10.667-4.779,10.667-10.667S379.221,277.333,373.333,277.333z"/> </g> </g> <g> <g> <path d="M373.333,341.333H138.667c-5.888,0-10.667,4.779-10.667,10.667c0,5.888,4.779,10.667,10.667,10.667h234.667 c5.888,0,10.667-4.779,10.667-10.667C384,346.112,379.221,341.333,373.333,341.333z"/> </g> </g> <g> <g> <path d="M373.333,405.333H138.667c-5.888,0-10.667,4.779-10.667,10.667c0,5.888,4.779,10.667,10.667,10.667h234.667 c5.888,0,10.667-4.779,10.667-10.667C384,410.112,379.221,405.333,373.333,405.333z"/> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>          
         </div>
         <div type=button class="btn"  style="display:block; width: 100%; margin: 0 auto" > 
-            <svg style="width: 5%; min-width: 50px; min-height: 50px; " aria-hidden="true" focusable="false" data-prefix="fas" data-icon="volume-up" class="svg-inline--fa fa-volume-up fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                <path fill="#0275d8" d="M215.03 71.05L126.06 160H24c-13.26 0-24 10.74-24 24v144c0 13.25 10.74 24 24 24h102.06l88.97 88.95c15.03 15.03 40.97 4.47 40.97-16.97V88.02c0-21.46-25.96-31.98-40.97-16.97zm233.32-51.08c-11.17-7.33-26.18-4.24-33.51 6.95-7.34 11.17-4.22 26.18 6.95 33.51 66.27 43.49 105.82 116.6 105.82 195.58 0 78.98-39.55 152.09-105.82 195.58-11.17 7.32-14.29 22.34-6.95 33.5 7.04 10.71 21.93 14.56 33.51 6.95C528.27 439.58 576 351.33 576 256S528.27 72.43 448.35 19.97zM480 256c0-63.53-32.06-121.94-85.77-156.24-11.19-7.14-26.03-3.82-33.12 7.46s-3.78 26.21 7.41 33.36C408.27 165.97 432 209.11 432 256s-23.73 90.03-63.48 115.42c-11.19 7.14-14.5 22.07-7.41 33.36 6.51 10.36 21.12 15.14 33.12 7.46C447.94 377.94 480 319.54 480 256zm-141.77-76.87c-11.58-6.33-26.19-2.16-32.61 9.45-6.39 11.61-2.16 26.2 9.45 32.61C327.98 228.28 336 241.63 336 256c0 14.38-8.02 27.72-20.92 34.81-11.61 6.41-15.84 21-9.45 32.61 6.43 11.66 21.05 15.8 32.61 9.45 28.23-15.55 45.77-45 45.77-76.88s-17.54-61.32-45.78-76.86z">
-                </path>
-            </svg>        
+            <svg fill="#0275d8" style="width: 5%; min-width: 50px; min-height: 50px; " id="Capa_1" enable-background="new 0 0 512.02 512.02"  viewBox="0 0 512.02 512.02" xmlns="http://www.w3.org/2000/svg" ><g id="XMLID_773_"><g id="XMLID_1124_"><path id="XMLID_333_" d="m502.01 368.68h-34.31c-5.522 0-10-4.477-10-10s4.478-10 10-10h34.31c5.522 0 10 4.477 10 10s-4.478 10-10 10z"/></g><g id="XMLID_1123_"><path id="XMLID_332_" d="m456.323 324.545c-4.051 0-7.861-2.478-9.366-6.495-1.938-5.171.684-10.935 5.855-12.873l25.834-9.679c5.178-1.938 10.936.685 12.873 5.856 1.938 5.171-.684 10.935-5.855 12.873l-25.834 9.679c-1.156.434-2.342.639-3.507.639z"/></g><g id="XMLID_1122_"><path id="XMLID_331_" d="m482.153 422.499c-1.165 0-2.351-.206-3.507-.639l-25.834-9.679c-5.172-1.938-7.793-7.701-5.855-12.873s7.697-7.795 12.873-5.856l25.834 9.679c5.172 1.938 7.793 7.701 5.855 12.873-1.504 4.016-5.316 6.495-9.366 6.495z"/></g><path id="XMLID_334_" d="m422.7 228.848c27.828-24.89 43.621-59.987 43.621-97.673 0-72.33-58.844-131.175-131.174-131.175h-92.931c-.004.005-.006.011-.01.017-48.248.002-94.902 14.26-134.914 41.23-4.58 3.087-5.79 9.302-2.703 13.881 3.087 4.58 9.302 5.788 13.881 2.703 36.702-24.739 79.495-37.815 123.751-37.814 13.296 0 26.613 1.182 39.583 3.514 31.48 5.66 58.175 25.112 73.239 53.371 14.809 27.778 16.102 60.123 3.549 88.742-9.216 21.014-22.194 39.973-38.574 56.353-18.665 18.666-40.538 32.836-65.012 42.116-21.464 8.139-39.396 22.629-51.855 41.902-12.479 19.303-18.303 41.606-16.841 64.493v.004c.004.078.009.156.014.234 1.519 21.161-9.229 40.474-28.05 50.399-18.104 9.547-38.379 7.719-54.235-4.888-53.351-42.42-83.978-105.791-84.028-173.864-.032-44.315 13.044-87.165 37.815-123.916 3.087-4.58 1.877-10.795-2.703-13.881-4.579-3.088-10.796-1.877-13.881 2.703-27.011 40.07-41.267 86.79-41.232 135.108.055 74.2 33.436 143.271 91.581 189.503 8.137 6.469 17.266 10.892 26.803 13.238l-21.644 53.094c-2.085 5.114.37 10.95 5.484 13.035 1.236.504 2.515.742 3.771.742 3.945 0 7.683-2.349 9.264-6.228l23.98-58.825c9.638-.652 19.272-3.342 28.354-8.132 25.925-13.673 40.738-40.278 38.674-69.446-.002-.051-.005-.102-.009-.153-2.434-38.106 20.002-72.837 55.829-86.423 27.138-10.29 51.383-25.994 72.063-46.674 18.146-18.145 32.527-39.16 42.748-62.461 2.902-6.617 5.18-13.401 6.85-20.278 2.819 13.458 4.281 27.203 4.281 40.987v15.298c0 1.961.577 3.879 1.658 5.516l40.188 60.851-33.094 22.724c-2.717 1.865-4.34 4.949-4.34 8.244v29.492l-31.869 14.421c-3.683 1.666-5.999 5.384-5.873 9.424.126 4.039 2.672 7.605 6.45 9.038l31.292 11.862v21.586c0 13.379-10.885 24.264-24.264 24.264h-96.511c-5.522 0-10 4.477-10 10s4.478 10 10 10h24.997l-19.879 51.301c-1.996 5.15.562 10.942 5.711 12.938 1.188.46 2.409.679 3.611.679 4.008 0 7.791-2.428 9.326-6.39l22.679-58.527h50.065c24.407 0 44.264-19.856 44.264-44.264v-28.493c0-4.273-2.686-7.91-6.457-9.342l.001-.009-15.232-5.774 15.02-6.796c3.882-1.374 6.667-5.067 6.667-9.419v-30.729l28.754-19.744c8.952-6.146 11.362-18.517 5.374-27.576zm-11.17-16.893-3.491-5.279v-12.291c0-35.876-8.897-71.54-25.714-103.23-2.357-8.096-5.563-16.025-9.634-23.661-10.61-19.905-26.063-36.142-44.671-47.494h7.127c61.302 0 111.175 49.873 111.175 111.175-.001 30.94-12.563 59.822-34.792 80.78z"/><g id="XMLID_1319_"><g id="XMLID_1320_"><path id="XMLID_325_" d="m78.149 88.158c-2.63 0-5.2-1.06-7.07-2.93-1.859-1.86-2.93-4.43-2.93-7.07 0-2.63 1.07-5.21 2.93-7.07 1.87-1.86 4.44-2.93 7.07-2.93s5.21 1.07 7.07 2.93c1.87 1.86 2.93 4.44 2.93 7.07 0 2.64-1.06 5.21-2.93 7.07-1.86 1.87-4.44 2.93-7.07 2.93z"/></g></g></g></svg>          
         </div>
     </div>
 

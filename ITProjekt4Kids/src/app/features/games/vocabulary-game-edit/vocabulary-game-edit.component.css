@@ -220,6 +220,7 @@
     border: none;
     cursor: pointer;
     background-color: #ff7267;
+    
 }
 
 .record-div {
@@ -237,7 +238,7 @@
 
 .counter {
     /* min-width: 40px;  */
-    padding-left: 10px;
+    /* padding-left: 10px; */
 }
 
 .textForAudio {
@@ -260,7 +261,11 @@
     justify-content: flex-start;
 }
 
-audio::-webkit-media-controls-panel {
+/* audio::-webkit-media-controls-panel {
 
-    /* background-color: white; */
+    background-color: white;
+} */
+
+.spacingBetweenButtonAndTimer {
+    width: 10px
 }
