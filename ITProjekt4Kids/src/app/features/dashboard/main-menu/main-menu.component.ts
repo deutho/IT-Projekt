@@ -292,7 +292,6 @@ export class MainMenuComponent implements OnInit {
 
   }
   
-
   toggleStudentMode() {
     this.appService.myStudentMode();
   }
