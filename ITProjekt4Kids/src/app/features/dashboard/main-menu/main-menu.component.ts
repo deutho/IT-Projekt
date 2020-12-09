@@ -97,7 +97,7 @@ export class MainMenuComponent implements OnInit {
         else if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
         else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
 
-        if (this.currentPathForHTML == "") this.currentPathForHTML = "Meine Ordner";
+        
       }
     }
 
@@ -164,9 +164,10 @@ export class MainMenuComponent implements OnInit {
         this.currentPathForHTML = "derdieDAZ Standard Übungen"
       } else {
         this.currentPath = this.currentPath + "/"+item.uid;
-        this.currentPathForHTML = this.currentPathForHTML + "/" + item.name;
+        if (this.level == 0) this.currentPathForHTML = this.currentPathForHTML + item.name;
+        else this.currentPathForHTML = this.currentPathForHTML + "/" + item.name;
       }
-      this.level++
+      
       
       var folderElement: Folderelement;
       var docname: string;
@@ -177,6 +178,7 @@ export class MainMenuComponent implements OnInit {
       });
 
       this.currentPath = this.currentPath + "/" + docname;
+      this.level++
       this.getFolders();
       history.pushState(null, 'placeholder');
       
@@ -252,7 +254,7 @@ export class MainMenuComponent implements OnInit {
         if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
         else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
 
-        this.currentPathForHTML = "Meine Ordner";
+        this.currentPathForHTML = "";
       }else {
 
         for (let i = 0; i<=1; i++) {
