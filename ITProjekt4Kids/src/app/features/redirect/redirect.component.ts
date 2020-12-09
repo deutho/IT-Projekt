@@ -23,17 +23,15 @@ export class RedirectComponent implements OnInit {
   console.log(this.activatedRoute);
   this.user = this.activatedRoute.snapshot.queryParamMap.get('user');
   this.path = this.activatedRoute.snapshot.queryParamMap.get('path');
-  this.item = JSON.parse(this.activatedRoute.snapshot.queryParamMap.get('item'));
+  this.item = this.activatedRoute.snapshot.queryParamMap.get('item');
 
   }
   
 
   async ngOnInit() {
     this.data[0] = this.user.substring(0, this.user.indexOf("-"))+" "+this.user.substring(this.user.indexOf("-")+1);
-    console.log(this.data[0]);
     this.data[1] = this.path;
     this.data[2] = this.item;
-    console.log(this.data);
     this.app.myRedirectData(this.data);
     this.router.navigate(['']);
   }

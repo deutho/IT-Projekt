@@ -16,7 +16,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 export class MainComponent implements OnInit {
 
   public data: string = "mainMenu";
-  public header: string = "Hauptmenü";
+  public header: string = "Startseite";
   public currentUser: User;
   studentMode;
   changedToStudent = false;

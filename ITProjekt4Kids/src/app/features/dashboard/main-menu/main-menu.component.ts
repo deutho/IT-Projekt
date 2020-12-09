@@ -40,6 +40,7 @@ export class MainMenuComponent implements OnInit {
   loaded = false;
   level;
   error;
+  redirecterror;
   errorMessage;
   currentPath: string = "";
   ownFolders: Folder[] = [];
@@ -54,7 +55,7 @@ export class MainMenuComponent implements OnInit {
   creating = false;
   editing = false;
   redirectdata: string[] = [];
-  redirected;
+  redirected: boolean = false;
   redirectitem;
   studentMode;
   shareGameOverlay = false;
@@ -62,6 +63,7 @@ export class MainMenuComponent implements OnInit {
   linkCopied = false;
   lastpath;
   folderToChange: Folder;
+  failed: boolean = false;
 
   async ngOnInit() {
     
@@ -70,45 +72,79 @@ export class MainMenuComponent implements OnInit {
       game:  []
     });
 
-
-
-    this.level = 0;
+    this.level = 0; //set the level for the first query
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
     then(data => this.currentUser = data[0]);
     
-    
+    //If the user was redirected
     if (this.redirectdata.length != 0) {
       this.redirected = true;
+      //set the redirection path
       this.currentPath = this.redirectdata[1];
-      console.log(this.redirectdata[2]);
-      this.redirectitem = this.redirectdata[2];
-      this.currentPathForHTML = "Geteilt von "+this.redirectdata[0];
-      console.log(this.redirectdata);
+      
+      //get the folders for the path and choose the redirected one per UID 
+      let folders: Folder[];
+      await this.afs.getFolders(this.redirectdata[1]).valueChanges().pipe(take(1)).toPromise().
+      then(data => {
+        console.log(data)
+        //If there is no Item with the given id or it has been deleted
+        if (data == undefined) {
+          //TODO show error
+          this.failed = true;
+        } else {
+
+            folders = data.folders
+            folders.forEach(element => {
+            if (element.uid == this.redirectdata[2]) 
+              this.redirectitem = element;        
+            });
+            if (this.redirectitem == undefined) {
+              //TODO show error
+             this.failed = true;
+            }
+          }
+        });
+      
+      console.log(this.failed)
+      //Set the path for the User in the navbar
+      this.currentPathForHTML = "Geteilt von "+this.redirectdata[0]+"/";
+      //empty the behaviour subject after is was consumed
       this.appService.myRedirectData([])
-    } else {
-      this.redirected = false;
+    } 
+    //if the user is not redirected or the redirection failed do this
+    if (this.redirected == false || this.failed == true) {
+      //Only of the user is not and admin
       if (this.currentUser.role != 1){
+        //check if there is a lastpath (returning from a game)
+        console.log(this.lastpath);
         if (this.lastpath.length != 0){
+          
+          //set the last paths and the level
           this.currentPath = this.lastpath[0];
           this.currentPathForHTML = this.lastpath[1];
           this.level = parseInt(this.lastpath[2]);
+          //empty the behaviour subject after is was consumed
           this.appService.myLastPath([]);
         }
+        //set the path according to teacher and student if there was not lastpath
         else if (this.currentUser.role == 2) this.currentPath = this.currentUser.uid;
         else if (this.currentUser.role == 3) this.currentPath = this.currentUser.parent;
-
-        
       }
     }
 
-    if (this.redirected == true) {
+    //perform the itemclick in case of a redirection, otherways load folders on currentpath
+    
+    if (this.redirected == true && this.failed == false) {
       this.itemclick(this.redirectitem);
-    } else this.getFolders();    
-  }
+    } else this.getFolders();
+
+    
+  } 
+  
 
   async getFolders() {
     if (this.currentUser.role != 1) {
-      if (this.level == 0 && this.redirected != true){
+      if (this.level == 0 && (this.redirected != true || this.failed == true)){
       await this.afs.getFolders("derdiedaz").valueChanges().pipe(take(1)).toPromise().
       then(data => {
         this.derdiedazFolder = data.folders
@@ -134,6 +170,13 @@ export class MainMenuComponent implements OnInit {
    }
     
     this.loaded = true;
+    //if there was a redirect error - inform the user
+    if (this.failed == true) {
+      this.failed = false;
+      this.redirecterror = true;
+      this.errorMessage = "Das Element existiert nicht oder wurde gelöscht. Wir haben dich zu deinen Ordner weitergeleitet."
+      setTimeout(() => this.redirecterror = false, 5000);
+    }
   }
 
   addFolder(newUid: string, newName: string, newType: string, gameType?: string) {
@@ -285,7 +328,7 @@ export class MainMenuComponent implements OnInit {
 
   createLink(item) {
     var url = environment.shareableURL;
-    this.directurl = url+'/direct?user='+this.currentUser.firstname+"-"+this.currentUser.lastname+'&path='+this.currentPath+'&item='+JSON.stringify(item);
+    this.directurl = url+'/direct?user='+this.currentUser.firstname+"-"+this.currentUser.lastname+'&path='+this.currentPath+'&item='+item.uid;
     this.shareGameOverlay = true;
   }
 
