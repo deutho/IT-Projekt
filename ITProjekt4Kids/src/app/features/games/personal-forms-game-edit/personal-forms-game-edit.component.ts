@@ -51,13 +51,13 @@ export class PersonalFormsGameEditComponent implements OnInit {
   saveChanges() {
     let uid = uuidv4();
     this.currentGame = new PersonalFormsGame(uid, 
-      document.getElementById('question').innerText,
-      document.getElementById('valueIch').innerText,
-      document.getElementById('valueDu').innerText,
-      document.getElementById('valueErSieEs').innerText,
-      document.getElementById('valueWir').innerText,
-      document.getElementById('valueIhr').innerText,
-      document.getElementById('valueSie').innerText,
+      [document.getElementById('question').innerText, this.audioURLQuestion],
+      [document.getElementById('valueIch').innerText, this.audioURLAnswer1],
+      [document.getElementById('valueDu').innerText, this.audioURLAnswer2],
+      [document.getElementById('valueErSieEs').innerText, this.audioURLAnswer3],
+      [document.getElementById('valueWir').innerText, this.audioURLAnswer4],
+      [document.getElementById('valueIhr').innerText, this.audioURLAnswer5],
+      [document.getElementById('valueSie').innerText, this.audioURLAnswer6],
       this.folderUID)
 
       this.afs.updateTask(this.currentGame);
