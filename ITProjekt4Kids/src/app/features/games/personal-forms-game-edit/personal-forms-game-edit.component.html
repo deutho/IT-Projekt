@@ -1,1 +1,26 @@
-<p>personal-forms-game-edit works!</p>
+<div class="example-container_question">
+    <input type="text" id="question" placeholder="Hier bitte Frage eingeben">
+</div>
+
+<div class="example-container_person">
+    <div
+          cdkDropList 
+          [cdkDropListData]="Person"
+          class="example-list">
+          <div class="example-box columnOne"*ngFor="let p of Person, index as i"
+          cdkDrag
+          [cdkDragDisabled]="p.disabled">{{p.value}}
+          </div>
+    </div>
+</div>
+
+<div class="example-container_values">
+    <div style="display: flex; flex-direction: column;">
+        <input type="text" class="example-box" id ="valueIch" placeholder="z.B. gehe"> 
+        <input type="text" class="example-box" id ="valueDu" placeholder="z.B. gehst">
+        <input type="text" class="example-box" id ="valueErSieEs" placeholder="z.B. geht">
+        <input type="text" class="example-box" id ="valueWir" placeholder="z.B. gehen">
+        <input type="text" class="example-box" id ="valueIhr" placeholder="z.B. geht">
+        <input type="text" class="example-box" id ="valueSie" placeholder="z.B. gehen">
+    </div>
+</div>
