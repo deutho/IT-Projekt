@@ -1,28 +1,76 @@
-<div class="example-container_question">
-    <input type="text" id="question" placeholder="Hier bitte Frage eingeben">
-</div>
-
-<div class="example-container_person">
-    <div
-          cdkDropList 
-          [cdkDropListData]="Person"
-          class="example-list">
-          <div class="example-box columnOne"*ngFor="let p of Person, index as i"
-          cdkDrag
-          [cdkDragDisabled]="p.disabled">{{p.value}}
-          </div>
+<div class="pageContainer">
+    <!-- Question -->
+    <div class="example-container_question question">
+        <input type="text" id="question" placeholder="Hier bitte Frage eingeben">
     </div>
-</div>
 
-<div class="example-container_values">
-    <div style="display: flex; flex-direction: column;">
-        <input type="text" class="example-box" id ="valueIch" placeholder="z.B. gehe"> 
-        <input type="text" class="example-box" id ="valueDu" placeholder="z.B. gehst">
-        <input type="text" class="example-box" id ="valueErSieEs" placeholder="z.B. geht">
-        <input type="text" class="example-box" id ="valueWir" placeholder="z.B. gehen">
-        <input type="text" class="example-box" id ="valueIhr" placeholder="z.B. geht">
-        <input type="text" class="example-box" id ="valueSie" placeholder="z.B. gehen">
+    <!-- main part -->
+    <div class="gameValues">
+        <div class="example-container_person">
+            <div
+                cdkDropList 
+                [cdkDropListData]="Person"
+                class="example-list">
+                <div class="example-box columnOne"*ngFor="let p of Person, index as i"
+                cdkDrag
+                [cdkDragDisabled]="p.disabled">{{p.value}}
+                </div>
+            </div>
+        </div>
+    
+        <div class="example-container_values">
+            <div style="display: flex; flex-direction: column;">
+                <input type="text" class="example-box" id ="valueIch" placeholder="z.B. gehe"> 
+                <input type="text" class="example-box" id ="valueDu" placeholder="z.B. gehst">
+                <input type="text" class="example-box" id ="valueErSieEs" placeholder="z.B. geht">
+                <input type="text" class="example-box" id ="valueWir" placeholder="z.B. gehen">
+                <input type="text" class="example-box" id ="valueIhr" placeholder="z.B. geht">
+                <input type="text" class="example-box" id ="valueSie" placeholder="z.B. gehen">
+            </div>
+        </div>
     </div>
-</div>
+    
+    <!-- Buttons -->
+    <div class="actionBar">
+        <button (click)="this.saveChanges()">Speichern</button>
+        <button (click)="this.leftArrowClicked()">Zurück</button>
+        <button (click)="this.rightArrowClicked()">Weiter</button>
+    </div>
 
-<button (click)="this.saveChanges()">Speichern</button>
+    <!-- Feedback -->
+    <div *ngIf = "this.saved == true" class="item-final alert alert-success text-center" role="alert" style="width: 80%; margin:0 auto;">
+        Erfolgreich gespeichert!
+    </div>
+    <div *ngIf = "this.noChanges == true" class="item-final alert alert-primary text-center" role="alert" style="width: 80%; margin:0 auto;">
+        Es gibt keine zu speichernden Änderungen!
+    </div>
+    <div *ngIf = "this.noMoreGames == true" class="item-final alert alert-primary text-center" role="alert" style="width: 80%; margin:0 auto;">
+        Keine weiteren Fragen!
+    </div>
+    <div *ngIf = "this.notAllInputFieldsFilled == true" class="item-final alert alert-danger text-center" role="alert" style="width: 80%; margin:0 auto;">
+        Es wurden nicht alle Felder ausgefüllt!
+    </div>
+
+    <!-- overlay which appeares when unsaved changed would be lost -->
+    <div *ngIf="unsavedChanges == true" class="fullscreen">
+        <div *ngIf="unsavedChanges == true" class="overlay" (click)="unsavedChanges = false;"></div>
+        <div *ngIf="unsavedChanges == true" class="superOverlay" style=" min-width: 260px; ;display:block; border-radius: 15px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));">
+            <div style="display: flex; justify-content: flex-end;" (click)="unsavedChanges = false;">
+                <i class="fas fa-times" style="display: flex; opacity: 0.6; align-content: flex-end; cursor: pointer; padding: 10px 10px 0px 0px;">
+                </i>
+            </div>
+            <div style="padding: 20px 10%; width: 100%; display: flex; justify-content: space-around;">
+                <div>Es gibt ungespeicherte Änderungen!</div>
+            </div>
+            <div  style="padding: 20px 10%; width: 100%; display: flex; justify-content: space-between;">
+                <div (click)="discardChanges()" class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 25%; min-width: 100px; cursor: pointer;">
+                    Verwerfen
+                </div>
+                <div (click)="saveAndContinue()" class="btn dropshadow" style="display: inline-block; background-color: #40d04f; width: 25%; min-width: 100px; cursor: pointer;">
+                    Speichern
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
