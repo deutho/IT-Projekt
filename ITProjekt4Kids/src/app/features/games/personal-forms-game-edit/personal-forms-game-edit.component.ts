@@ -4,6 +4,8 @@ import { AppService } from 'src/app/services/app.service';
 import {v4 as uuidv4} from 'uuid';
 import { PersonalFormsGame } from 'src/app/models/PersonalFormsGame.model';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { take } from 'rxjs/operators';
+import { User } from 'src/app/models/users.model';
 
 @Component({
   selector: 'app-personal-forms-game-edit',
@@ -28,18 +30,8 @@ export class PersonalFormsGameEditComponent implements OnInit {
   audioURLAnswer3: string;
   audioURLAnswer4: string;
   audioURLAnswer5: string;
-  audioURLAnswer6: string;
-
-  constructor(private afs: FirestoreDataService, private appService: AppService) { 
-    this.appService.myGameData$.subscribe((data) => {
-      this.folderUID = data;
-    });
-  }
-
-  ngOnInit(): void {
-  }
-
-   Person = [
+  audioURLAnswer6: string;  
+  Person = [
     {value:'ich', disabled: true},
     {value:'du', disabled: true},
     {value:'er/sie/es', disabled: true},
@@ -47,20 +39,85 @@ export class PersonalFormsGameEditComponent implements OnInit {
     {value:'ihr', disabled: true},
     {value:'sie', disabled: true},
   ];
+  currentUser: User;
+  Games: PersonalFormsGame[];
+  previousGames: PersonalFormsGame[];
+  finalScreen = false;
+  noMoreGames = false;
+  loaded = false;
+  saved = false;
+  noChanges = false;
+  notAllInputFieldsFilled = false;
+
+
+
+  constructor(private afs: FirestoreDataService, private appService: AppService) { 
+    this.appService.myGameData$.subscribe((data) => {
+      this.folderUID = data;
+    });
+  }
+
+  async ngOnInit(): Promise<void> {
+    //get user
+    await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
+      .then(data => this.currentUser = data[0]);
+    // get games
+    await this.afs.getTasksPerID(this.folderUID).valueChanges().pipe(take(1)).toPromise()
+      .then(data => this.Games = data);
+    //init second stack for going back and forwards between games
+    let previousGames = [];
+    this.previousGames = previousGames;
+
+    //load first game
+    this.loadNextGame();
+    this.initSounds();
+  }
+
+
 
   saveChanges() {
-    let uid = uuidv4();
-    this.currentGame = new PersonalFormsGame(uid, 
-      document.getElementById('question').innerText,
-      document.getElementById('valueIch').innerText,
-      document.getElementById('valueDu').innerText,
-      document.getElementById('valueErSieEs').innerText,
-      document.getElementById('valueWir').innerText,
-      document.getElementById('valueIhr').innerText,
-      document.getElementById('valueSie').innerText,
-      this.folderUID)
+    if (this.checkForChanges()) {
+      if(
+        (<HTMLInputElement>document.getElementById('question')).value == '' ||
+        (<HTMLInputElement>document.getElementById('valueIch')).value == '' ||
+        (<HTMLInputElement>document.getElementById('valueDu')).value == '' ||
+        (<HTMLInputElement>document.getElementById('valueErSieEs')).value == '' ||
+        (<HTMLInputElement>document.getElementById('valueWir')).value == '' ||
+        (<HTMLInputElement>document.getElementById('valueIhr')).value == '' ||
+        (<HTMLInputElement>document.getElementById('valueSie')).value == '' 
+      ) {
+        //error
+        this.notAllInputFieldsFilled = true;
+        setTimeout(() => this.notAllInputFieldsFilled = false, 2500);
+        return
+      }
+      
+      let uid;
+      if(this.currentGame.uid == '') uid = uuidv4();
+      else uid = this.currentGame.uid;
+      this.currentGame = new PersonalFormsGame(uid, 
+        [(<HTMLInputElement>document.getElementById('question')).value, this.audioURLQuestion],
+        [(<HTMLInputElement>document.getElementById('valueIch')).value, this.audioURLAnswer1],
+        [(<HTMLInputElement>document.getElementById('valueDu')).value, this.audioURLAnswer2],
+        [(<HTMLInputElement>document.getElementById('valueErSieEs')).value, this.audioURLAnswer3],
+        [(<HTMLInputElement>document.getElementById('valueWir')).value, this.audioURLAnswer4],
+        [(<HTMLInputElement>document.getElementById('valueIhr')).value, this.audioURLAnswer5],
+        [(<HTMLInputElement>document.getElementById('valueSie')).value, this.audioURLAnswer6],
+        this.folderUID)
 
-      this.afs.updateTask(this.currentGame);
+        //check if all Fields are filled 
+        //TODO
+
+
+        this.afs.updateTask(this.currentGame);
+        this.finalScreen = false;
+        this.saved = true;
+        setTimeout(() => this.saved = false, 2500);
+      }
+      else {
+        this.noChanges = true;
+        setTimeout(() => this.noChanges = false, 2500);
+      }
   }
 
   initSounds() {
@@ -76,14 +133,13 @@ export class PersonalFormsGameEditComponent implements OnInit {
   checkForChanges(): boolean{
     if(this.currentGame == undefined) return false;
 
-    this.valueButton1 = document.getElementById('valueIch').innerText;
-    this.valueButton2 = document.getElementById('valueDu').innerText;
-    this.valueButton3 = document.getElementById('valueErSieEs').innerText;
-    this.valueButton4 = document.getElementById('valueWir').innerText;
-    this.valueButton5 = document.getElementById('valueIhr').innerText;
-    this.valueButton6 = document.getElementById('valueSie').innerText;
-    this.question = document.getElementById('question').innerText;
-
+    this.valueButton1 = (<HTMLInputElement>document.getElementById('valueIch')).value;
+    this.valueButton2 = (<HTMLInputElement>document.getElementById('valueDu')).value;
+    this.valueButton3 = (<HTMLInputElement>document.getElementById('valueErSieEs')).value;
+    this.valueButton4 = (<HTMLInputElement>document.getElementById('valueWir')).value;
+    this.valueButton5 = (<HTMLInputElement>document.getElementById('valueIhr')).value;
+    this.valueButton6 = (<HTMLInputElement>document.getElementById('valueSie')).value;
+    this.question = (<HTMLInputElement>document.getElementById('question')).value;
     if(this.currentGame.ich[0] == this.valueButton1 && 
       this.currentGame.du[0] == this.valueButton2 &&
       this.currentGame.erSieEs[0] == this.valueButton3 &&
@@ -97,7 +153,9 @@ export class PersonalFormsGameEditComponent implements OnInit {
       this.currentGame.wir[1] == this.audioURLAnswer4 &&
       this.currentGame.ihr[1] == this.audioURLAnswer5 &&
       this.currentGame.sie[1] == this.audioURLAnswer6 &&
-      this.currentGame.question[1] == this.audioURLQuestion) {
+      this.currentGame.question[1] == this.audioURLQuestion
+      ) {
+
        return false;
     }
   else {
@@ -109,6 +167,7 @@ export class PersonalFormsGameEditComponent implements OnInit {
   rightArrowClicked() {
     if(this.checkForChanges()) {
       this.unsavedChanges = true;
+      console.log("changes!!!!")
     }
     else this.loadNextGame();
   }
@@ -117,14 +176,83 @@ export class PersonalFormsGameEditComponent implements OnInit {
   leftArrowClicked() {
     if(this.checkForChanges()) {
       this.unsavedChanges = true;
+      console.log("changes!!!!")
     }
     else this.loadPreviousGame();
   }
 
   loadNextGame() {
+    if(this.finalScreen && this.Games.length == 0) {
+      this.noMoreGames = true;
+      setTimeout(() => this.noMoreGames = false, 2500);
+      return; //maybe add some feedback here
+    }
+
+    if(this.currentGame != undefined) this.previousGames.push(this.currentGame)
+
+    // if game has some pages to be played left
+    if (this.Games.length > 0) {
+        this.currentGame = this.Games.pop();            
+    }
+    // if game is empty, or you clicked past the last page in the game
+    else {
+        this.finalScreen = true;
+        let uid = uuidv4();
+        var newGame = new PersonalFormsGame(uid, ['',''], ['',''], ['',''], ['', ''], ['', ''], ['',''], ['',''], this.folderUID);
+        this.currentGame = newGame;        
+     }
+
+    //  to prevent disappearing of content - text is filled to have some clickable element
+    //  if (this.currentGame.question[0] == "") this.currentGame.question[0] = "Hier die Frage eingeben";
+    //  if (this.currentGame.rightAnswer[0] == "") this.currentGame.rightAnswer[0] = "Richtige Antwort";
+    //  if (this.currentGame.answer1[0] == "") this.currentGame.answer1[0] = "Falsche Antwort 1";
+    //  if (this.currentGame.answer2[0] == "") this.currentGame.answer2[0] = "Falsche Antwort 2";
+    //  if (this.currentGame.answer3[0] == "") this.currentGame.answer3[0] = "Falsche Antwort 3";
+
+    // set values for question, answers and photo-url
+    //  this.question = this.currentGame.question[0];
+    //  this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
+    //  this.imageURL = this.currentGame.photoID;
+    this.loadInputFieldValues();
+
+    //  lets the html know, that content can now be loaded
+    this.initSounds();
+    this.loaded = true;
+  }
+
+  loadInputFieldValues() {
+    (<HTMLInputElement>document.getElementById('question')).value = this.currentGame.question[0];
+    (<HTMLInputElement>document.getElementById('valueIch')).value = this.currentGame.ich[0];
+    (<HTMLInputElement>document.getElementById('valueDu')).value = this.currentGame.du[0];
+    (<HTMLInputElement>document.getElementById('valueErSieEs')).value = this.currentGame.erSieEs[0];
+    (<HTMLInputElement>document.getElementById('valueWir')).value = this.currentGame.wir[0];
+    (<HTMLInputElement>document.getElementById('valueIhr')).value = this.currentGame.ihr[0];
+    (<HTMLInputElement>document.getElementById('valueSie')).value = this.currentGame.sie[0];
   }
 
   loadPreviousGame() {
+    if(this.previousGames.length == 0) {
+      this.noMoreGames = true;
+      setTimeout(() => this.noMoreGames = false, 2500);
+      return; //maybe add some feedback here
+    }
+    if(this.currentGame != undefined) this.Games.push(this.currentGame)
+
+
+    this.currentGame = this.previousGames.pop();   
+    this.loadInputFieldValues();
+    this.loaded = true;  
+
   }
 
+  saveAndContinue() {
+    this.unsavedChanges=false;
+    this.saveChanges();  
+  }
+
+  discardChanges() {
+    this.unsavedChanges=false;
+    this.loadInputFieldValues();
+    this.initSounds();
+  }
 }
