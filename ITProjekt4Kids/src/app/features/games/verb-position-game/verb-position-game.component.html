@@ -1,0 +1,35 @@
+<h1>Was macht der Affe?</h1>
+
+<img
+  style="display: block; width: 40%; height: 100%; margin: 0 auto; padding: 20px 20px; min-width: 300px; max-height: 330px;"
+  src="https://cdn.pixabay.com/photo/2018/06/30/09/29/music-3507317_960_720.jpg"
+/>
+
+<div
+  cdkDropList
+  cdkDropListOrientation="horizontal"
+  class="example-list"
+  (cdkDropListDropped)="drop($event)"
+>
+  <div class="example-box" *ngFor="let word of words" cdkDrag>
+    {{word}}
+  </div>
+</div>
+
+<div *ngIf="showAnswer">
+  <div
+    cdkDropList
+    cdkDropListOrientation="horizontal"
+    class="example-list"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <div class="example-box" *ngFor="let word of correct" cdkDrag>
+      {{word}}
+    </div>
+  </div>
+</div>
+
+<button (click)="showAnswer = true">Fertig</button>
+
+<button>Klick-Modus</button>
+<button>Vorlese-Modus</button>

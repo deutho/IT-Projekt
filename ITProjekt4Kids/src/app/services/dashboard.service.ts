@@ -73,6 +73,20 @@ export class DashboardService {
     );
   }
 
+  private verbPositionGame() {
+    return () =>
+    import('../features/games/verb-position-game/verb-position-game.component').then(
+      m => m.VerbPositionGameComponent
+    );
+  }
+
+  private verbPositionGameEdit() {
+    return () =>
+    import('../features/games/verb-position-game-edit/verb-position-game-edit.component').then(
+      m => m.VerbPositionGameEditComponent
+    );
+  }
+
   private bugReport() {
     return () =>
     import('../features/dashboard/bug-report/bug-report.component').then(
@@ -122,6 +136,14 @@ export class DashboardService {
     } else if (this.data == "bug-report") {
       return this.appService.forChild(vcr, {
         loadChildren: this.bugReport()
+      });
+    } else if (this.data == "verb-position-game") {
+      return this.appService.forChild(vcr, {
+        loadChildren: this.verbPositionGame()
+      });
+    } else if (this.data == "verb-position-game-edit") {
+      return this.appService.forChild(vcr, {
+        loadChildren: this.verbPositionGameEdit()
       });
     }
   }
