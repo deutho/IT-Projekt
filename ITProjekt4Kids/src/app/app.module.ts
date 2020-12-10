@@ -15,14 +15,10 @@ import {AngularFireStorageModule} from '@angular/fire/storage'
 firebase.initializeApp(environment.firebase)
 import { CommonModule } from '@angular/common';  
 import { RecordRTCService } from './services/record-rtc.service';
-import { VerbPositionGameComponent } from './features/games/verb-position-game/verb-position-game.component';
-import { VerbPositionGameEditComponent } from './features/games/verb-position-game-edit/verb-position-game-edit.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    VerbPositionGameComponent,
-    VerbPositionGameEditComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,

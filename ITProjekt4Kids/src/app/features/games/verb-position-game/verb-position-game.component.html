@@ -11,8 +11,8 @@
   class="example-list"
   (cdkDropListDropped)="drop($event)"
 >
-  <div class="example-box" *ngFor="let word of words" cdkDrag>
-    {{word}}
+  <div class="example-box" *ngFor="let words of sentence, index as i" cdkDrag>
+    {{words}}
   </div>
 </div>
 
@@ -23,8 +23,8 @@
     class="example-list"
     (cdkDropListDropped)="drop($event)"
   >
-    <div class="example-box" *ngFor="let word of correct" cdkDrag>
-      {{word}}
+    <div class="example-box" *ngFor="let words of correct" cdkDrag>
+      {{words}}
     </div>
   </div>
 </div>

@@ -14,6 +14,8 @@ import { VocabularyGameComponent } from './games/vocabulary-game/vocabulary-game
 import { VocabularyGameEditComponent } from './games/vocabulary-game-edit/vocabulary-game-edit.component';
 import { PersonalFormsGameComponent } from './games/personal-forms-game/personal-forms-game.component';
 import { PersonalFormsGameEditComponent } from './games/personal-forms-game-edit/personal-forms-game-edit.component';
+import { VerbPositionGameComponent } from './games/verb-position-game/verb-position-game.component';
+import { VerbPositionGameEditComponent } from './games/verb-position-game-edit/verb-position-game-edit.component';
 import { BugReportComponent } from './dashboard/bug-report/bug-report.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { UploaderComponent } from './uploader/uploader.component';
@@ -40,6 +42,8 @@ declarations: [
   VocabularyGameEditComponent,
   PersonalFormsGameComponent,
   PersonalFormsGameEditComponent,
+  VerbPositionGameComponent,
+  VerbPositionGameEditComponent,
   BugReportComponent,
   UploaderComponent,
   UploadTaskComponent,

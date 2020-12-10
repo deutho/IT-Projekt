@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/users.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { VerbPositionGame } from 'src/app/models/VerbPositionGame.model';
+import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-verb-position-game',
@@ -9,26 +12,25 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 })
 export class VerbPositionGameComponent implements OnInit {
 
-  constructor() { }
+  constructor(private afs: FirestoreDataService, private appService: AppService) { }
 
   ngOnInit(): void {
   }
 
-  Games: VerbPositionGameComponent[] = []
+  Games: VerbPositionGame[] = []
   currentUser: User;
-  currentGame: VerbPositionGameComponent
+  currentGame: VerbPositionGame
   folderID;
   answers: string[]
   evaluated = false;
   finished = false;
-  allItemsAllocated = false;
   answerIsCorrect = false;
   loaded = false; 
 
-    words = [
-      'die Banane!!',
-      'der Affe',
-      'schält'
+    sentence = [
+      "die Banane",
+      "der Affe",
+      "schält"
     ];
 
     correct = ["der Affe", "schält", "die Banane"];
@@ -36,11 +38,6 @@ export class VerbPositionGameComponent implements OnInit {
     showAnswer = false;
   
     drop(event: CdkDragDrop<string[]>) {
-      moveItemInArray(this.words, event.previousIndex, event.currentIndex);
+      moveItemInArray(this.sentence, event.previousIndex, event.currentIndex);
     }
-
-
-
-
-
 }
