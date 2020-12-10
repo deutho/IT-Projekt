@@ -62,8 +62,7 @@ export class PersonalFormsGameComponent implements OnInit {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
       .then(data => this.currentUser = data[0]);
 
-    await this.afs.getTasksPerID(this.folderID).valueChanges().pipe(take(1)).toPromise()
-      .then(data => this.Games = data);
+    await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
     this.shuffleArray(this.Games)
     this.loadNextGame()
   }

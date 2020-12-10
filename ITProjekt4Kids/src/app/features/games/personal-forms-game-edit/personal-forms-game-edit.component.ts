@@ -62,8 +62,7 @@ export class PersonalFormsGameEditComponent implements OnInit {
     await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
       .then(data => this.currentUser = data[0]);
     // get games
-    await this.afs.getTasksPerID(this.folderUID).valueChanges().pipe(take(1)).toPromise()
-      .then(data => this.Games = data);
+    await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
     //init second stack for going back and forwards between games
     let previousGames = [];
     this.previousGames = previousGames;

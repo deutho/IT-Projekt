@@ -11,6 +11,7 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { environment } from 'src/environments/environment';
 import {v4 as uuidv4} from 'uuid';
+import { runInThisContext } from 'vm';
 
 
 @Component({
@@ -230,10 +231,7 @@ export class MainMenuComponent implements OnInit {
     }
   }
 
-  addElement() {
-    this.creating = true;
-  }
-
+ 
   editElement(item) {
     this.editElementForm = this.fb.group({
       name:  [item.name, Validators.required],
@@ -290,7 +288,11 @@ export class MainMenuComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  addElement() {
+    this.creating = true;
+  }
+
+  createNewElement() {
     if (this.addElementForm.valid) {
       let name :string = this.addElementForm.get('name').value;
       let game :string = this.addElementForm.get('game').value;
@@ -319,17 +321,60 @@ export class MainMenuComponent implements OnInit {
   }
 
   deleteElement(item) {
-    this.itemtodelete = item;
-    this.deleteElementOverlay = true;
+    //in case someone is dumb enough and trys to delete our derdiedaz games *hust* schiffer *hust*
+    if (this.currentPathForHTML.substring(0,9) != "derdieDAZ" && item.uid != 'derdiedaz') {
+      this.itemtodelete = item;
+      this.deleteElementOverlay = true;
+    }
   }
 
   async delete() {
-    let gamesToDelete: Folder[] = [];
-    let currentFolders: Folder[] = [];
-    
-    await this.afs.getFolderElement(this.itemtodelete.uid).then(data => currentFolders = data.folders);
+   if (this.itemtodelete.type == 'task') this.deleteGame(this.itemtodelete, false);
+   else if (this.itemtodelete.type == 'folder') {
+     let documentsToDelete: string[] = []
+     let foldersToCheck: Folder[] = []
+     let currentItem: Folder
 
+     //add the first stack of items on the first level
+     await this.afs.getFolderElement(this.itemtodelete.uid).then(data => data.folders.forEach(folder => foldersToCheck.push(folder)));
+     documentsToDelete.push(this.itemtodelete.uid);
+
+     while (foldersToCheck.length != 0) {
+        currentItem = foldersToCheck.pop();
+        if(currentItem.type == "task") this.deleteGame(currentItem, true);
+        
+        if(currentItem.type == "folder") {
+          documentsToDelete.push(currentItem.uid);
+          await this.afs.getFolderElement(currentItem.uid).then(data => data.folders.forEach(folder => foldersToCheck.push(folder)));
+        }
+     }
+
+     documentsToDelete.forEach(async element => {
+       await this.afs.deleteDocument('folders', element);
+     });
+
+     await this.afs.deleteFolder(this.itemtodelete, this.currentDocKey).then(() => this.getFolders());
+    }
     
+    this.deleteElementOverlay = false;
+  }
+
+  async deleteGame(item: Folder, cascading: boolean) {
+    //Go through the item and delete the cloud storage
+    let games
+    await this.afs.getTasksPerID(item.uid).then(data => games = data)
+    
+    console.log(games)
+
+    games.forEach(element => {
+      for (let key of Object.keys(element)) {
+        if (key == "photoID" && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") this.afs.deleteFromStorageByUrl(element[key]);
+        if (element[key].length == 2 && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") {
+          this.afs.deleteFromStorageByUrl(element[key][1])
+        }
+      }
+    });  
+    if (cascading == false) await this.afs.deleteFolder(item, this.currentDocKey).then(() => this.getFolders());
   }
   
   toggleStudentMode() {

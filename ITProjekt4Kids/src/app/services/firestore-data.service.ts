@@ -37,11 +37,11 @@ export class FirestoreDataService {
         }
     }
 
-    getTasksPerID(id): AngularFirestoreCollection<any> {
-        return this._afs.collection('games', ref => ref.where('folderUID', '==', id));
+    async getTasksPerID(id): Promise<any> {
+        let ref: AngularFirestoreCollection<any> = this._afs.collection('games', ref => ref.where('folderUID', '==', id));
+        return await ref.valueChanges().pipe(take(1)).toPromise()
     }
 
-    
     async getFolderElement(uid: string): Promise<Folderelement> {
         let ref: AngularFirestoreDocument<Folderelement> = this._afs.collection("folders").doc(uid);
         return await ref.valueChanges().pipe(take(1)).toPromise()
@@ -57,6 +57,10 @@ export class FirestoreDataService {
         return this.db.collection("folders").doc(uid).update({
             folders: firebase.firestore.FieldValue.arrayRemove(JSON.parse(JSON.stringify(folder)))
         });
+    }
+
+    deleteDocument(collection: string, uid: string) {
+        this.db.collection(collection).doc(uid).delete();
     }
     
     addFolderDocument(uid: string, parent: string): void{
