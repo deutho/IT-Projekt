@@ -11,7 +11,6 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { environment } from 'src/environments/environment';
 import {v4 as uuidv4} from 'uuid';
-import { runInThisContext } from 'vm';
 
 
 @Component({
