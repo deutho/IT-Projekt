@@ -21,14 +21,25 @@ export class FirestoreDataService {
 
     constructor(public _afs: AngularFirestore, public _auth: AuthService) {
     }
-    
+    /** gets signed in user from DB 
+     * 
+     */
     getCurrentUser(): AngularFirestoreCollectionGroup<User> {
         return this._afs.collectionGroup('users', ref => ref.where('uid', "==", this._auth.getCurrentUser().uid));
     }
+    /**gets the user by id
+     * 
+     * @param uid user id
+     */
     getUserPerID(uid: string): AngularFirestoreCollectionGroup<User> {
         return this._afs.collectionGroup('users', ref => ref.where('uid', "==", uid));
     }
 
+    /**adds a user with id and parent
+     * 
+     * @param user user id
+     * @param parent parent id (teacher or admin)
+     */
     addUser(user: User, parent: User) {
         if (user.role == 2){
             this.db.collection("users/"+user.parent+"/users").doc(user.uid).set(JSON.parse(JSON.stringify(user)));
@@ -37,32 +48,60 @@ export class FirestoreDataService {
         }
     }
 
+    /**gets the Questions for a game
+     * 
+     * @param id folder id
+     */
     async getTasksPerID(id): Promise<any> {
         let ref: AngularFirestoreCollection<any> = this._afs.collection('games', ref => ref.where('folderUID', '==', id));
         return await ref.valueChanges().pipe(take(1)).toPromise()
     }
 
+    /** returns the content of a folder !document!
+     * 
+     * @param uid uid of the Document
+     */
     async getFolderElement(uid: string): Promise<Folderelement> {
         let ref: AngularFirestoreDocument<Folderelement> = this._afs.collection("folders").doc(uid);
         return await ref.valueChanges().pipe(take(1)).toPromise()
     }
 
+    /** adds a folder within a document
+     * 
+     * @param folder the folder to be added
+     * @param uid the Document the folder is added to
+     */
     updateFolders(folder: Folder, uid: string) {
         return this.db.collection("folders").doc(uid).update({
             folders: firebase.firestore.FieldValue.arrayUnion(JSON.parse(JSON.stringify(folder)))
         });
     }
 
+    /** removes folder from a document
+     * 
+     * @param folder the folder to be removed
+     * @param uid the Document the folder is removed from
+     */
     deleteFolder(folder: Folder, uid: string) {
         return this.db.collection("folders").doc(uid).update({
             folders: firebase.firestore.FieldValue.arrayRemove(JSON.parse(JSON.stringify(folder)))
         });
     }
 
+    /** deletes the whole document (can be folder, game, user, ...)
+     * 
+     * @param collection the collection the document is in (games, users, folders)
+     * @param uid the uid of the document you want to delete
+     */
     deleteDocument(collection: string, uid: string) {
         this.db.collection(collection).doc(uid).delete();
     }
     
+    /**adds folder document after creating a new folder
+     * 
+     * @param uid the uid of the folder document
+     * @param parent the uid of the parent of the new created folder document
+     */
     addFolderDocument(uid: string, parent: string): void{
         this.db.collection("folders").doc(uid).set({
             parent: parent,
@@ -70,10 +109,22 @@ export class FirestoreDataService {
         });
     }
    
+    /** updates the given task (creates a new task if uid is not already in DB - if uid is known, values are updated)
+     * 
+     * @param task uid of task
+     */
     updateTask(task) {
         this.db.collection("games").doc(task.uid).set(JSON.parse(JSON.stringify(task)));
     }
 
+    /** temporary result of a finished game
+     * 
+     * @param uid uid of user (student)
+     * @param totalRounds rounds of the game 
+     * @param roundsWon rounds correct
+     * @param folderID uid of game
+     * @param duration time taken to play the game
+     */
     createResult(uid: string, totalRounds: number, roundsWon: number, folderID: number, duration: number) {
         this.db.collection('results/'+uid+"/results").add({
             totalRounds: totalRounds,
@@ -83,6 +134,12 @@ export class FirestoreDataService {
         });
     }
 
+    /** adds a bug report to DB (temporary)
+     * 
+     * @param description description of bug the user wants to report
+     * @param user name of user
+     * @param status 'offen' or 'geschlossen'
+     */
     addBugReport(description: string, user: string, status: string): boolean {
         let success = true;
         this.db.collection("bugreports").add({
@@ -96,10 +153,18 @@ export class FirestoreDataService {
     return success;
     }
 
+    /** shows the reported bugs of the user
+     * 
+     * @param user name of user
+     */
     getBugReportsByUser(user: string): AngularFirestoreCollection<BugReport> {
         return this._afs.collection("bugreports", ref => ref.where('user', "==", user));
     }
 
+    /**deletes the given element (e.g. image or audio)
+     * 
+     * @param url url of the element in firebase
+     */
     deleteFromStorageByUrl(url: string): Promise<any> {
         return this.storage.refFromURL(url).delete();
     }
