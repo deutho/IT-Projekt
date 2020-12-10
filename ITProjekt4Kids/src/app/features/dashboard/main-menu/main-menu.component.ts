@@ -239,14 +239,20 @@ export class MainMenuComponent implements OnInit {
     this.editing = true;
   }
 
-  edit() {
+  async edit() {
     if (this.editElementForm.valid && this.editElementForm.get('name').value != this.folderToChange.name) {
       
-      //change the folder value in the database and load new (in one transaction)
-      this.afs.deleteFolder(this.folderToChange, this.currentDocKey).then(() => {
-        this.folderToChange.name = this.editElementForm.get('name').value;
-      this.afs.updateFolders(this.folderToChange, this.currentDocKey);
-      }).then(() => this.getFolders()).catch(err => console.log(err))
+      //delte the current folder
+      await this.afs.deleteFolder(this.folderToChange, this.currentDocKey);
+      
+      //change the name
+      this.folderToChange.name = this.editElementForm.get('name').value;
+
+      //add the folder again
+      await this.afs.updateFolders(this.folderToChange, this.currentDocKey);
+
+      //get the folders again
+      this.getFolders();
     }
     this.editing = false;
   }
@@ -368,7 +374,7 @@ export class MainMenuComponent implements OnInit {
     games.forEach(element => {
       for (let key of Object.keys(element)) {
         if (key == "photoID" && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") this.afs.deleteFromStorageByUrl(element[key]);
-        if (element[key].length == 2 && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") {
+        if (element[key].length > 1 && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") {
           this.afs.deleteFromStorageByUrl(element[key][1])
         }
       }
