@@ -305,7 +305,9 @@ export class MainMenuComponent implements OnInit {
   createNewElement() {
     if (this.addElementForm.valid) {
       let name :string = this.addElementForm.get('name').value;
-      let game :string = this.addElementForm.get('game').value;
+      let game :string = (<HTMLSelectElement>document.getElementById('gameTypeSelector')).value
+      console.log(game)
+      // this.addElementForm.get('game').value;
       let createFolder = !this.gameSelected;
       console.log(createFolder);
       var uid = uuidv4();
