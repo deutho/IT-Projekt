@@ -247,15 +247,17 @@
                     </div>         
                     <!-- dropdown Menue -->
                     <div *ngIf="gameSelected"  style="padding: 20px 0px;">
-                        <select formControlName="game" class="form-control custom-select drop-shadow">                            
-                            <option value="" selected disabled hidden>Choose here</option>
-                            <option value="vocabular-game">Single Choice</option>
-                            <option value="personal-forms-game">Drag&Drop</option>
+                        <!-- formControlName="game" -->
+                        <select id="gameTypeSelector" class="form-control custom-select drop-shadow">                            
+                            <option value="" selected disabled hidden>Wähle die Art des Lernspiels</option>
+                            <option value="vocabular-game">Wort-Quiz</option>
+                            <option value="personal-forms-game">Personal-Formen-Rätsel</option>
+                            <option value="verb-position-game">Satzstellungs-Spiel</option>
                          </select>
                     </div>
                     <!-- add button -->
                     <div style="padding: 20px 0px;">
-                        <input type="submit" value="Element anlegen" style="text-align: center; "  class="btn submit-button">
+                        <div style="text-align: center; "  class="btn submit-button" (click)="createNewElement()">Element anlegen</div>
                     </div>    
                 </form>
             </div>
