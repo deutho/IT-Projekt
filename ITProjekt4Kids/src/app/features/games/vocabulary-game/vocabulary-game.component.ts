@@ -301,6 +301,7 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   checkAnswer(id: string) {
+    if(id == 'question') return;
     if(!this.evaluated) {
       let button = (<HTMLButtonElement>document.getElementById(id))
       let correctAnswer = this.evaluateGame(button.value);            
@@ -374,7 +375,6 @@ export class VocabularyGameComponent implements OnInit {
     this.speakerMode = !this.speakerMode;
     this.loaded = true;
     this.updateColorhelper();
-    
   }
 
   playSound(soundfile) {

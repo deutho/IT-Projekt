@@ -9,7 +9,7 @@
 
 
 <div *ngIf = "this.loaded == true && finished == false"  class="container" id="full" >    
-    <div class="item-question question" style="margin: 0 auto;">
+    <div class="item-question question" style="margin: 0 auto; cursor: pointer" (click) = "buttonClicked('question')" >
             <button role="text" class="question" id="question" value="{{currentGame.question[0]}}" style="background:transparent; outline:0;border:transparent; margin: 0 auto; cursor: pointer; display: none"></button>
             {{currentGame.question[0]}}
     </div>
