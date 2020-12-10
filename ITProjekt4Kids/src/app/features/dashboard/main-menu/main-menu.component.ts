@@ -325,18 +325,11 @@ export class MainMenuComponent implements OnInit {
 
   async delete() {
     let gamesToDelete: Folder[] = [];
-    let rootFolder: Folder;
-    let subFolder: Folder;
-    let foldersToCheck: string[]
-    let path = this.currentDocKey
+    let currentFolders: Folder[] = [];
+    
+    await this.afs.getFolderElement(this.itemtodelete.uid).then(data => currentFolders = data.folders);
 
-    //Get the base folder
-    this.currentFolders.forEach(element =>{
-      if (element.uid == this.itemtodelete.uid) rootFolder = element;
-    });
-
-
-    console.log("deleted");
+    
   }
   
   toggleStudentMode() {
