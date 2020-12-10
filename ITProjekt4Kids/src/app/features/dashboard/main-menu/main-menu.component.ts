@@ -53,6 +53,7 @@ export class MainMenuComponent implements OnInit {
   emptyMessage: string = "Keine Elemente in diesem Ordner";
   creating = false;
   editing = false;
+  deleting = false;
   redirectdata: string[] = [];
   redirected: boolean = false;
   redirectitem;
@@ -65,6 +66,7 @@ export class MainMenuComponent implements OnInit {
   folderToChange: Folder;
   failed: boolean = false;
   itemtodelete: Folder;
+  
   
 
   async ngOnInit() {
@@ -242,14 +244,20 @@ export class MainMenuComponent implements OnInit {
     }
   }
 
-  edit() {
+  async edit() {
     if (this.editElementForm.valid && this.editElementForm.get('name').value != this.folderToChange.name) {
       
-      //change the folder value in the database and load new (in one transaction)
-      this.afs.deleteFolder(this.folderToChange, this.currentDocKey).then(() => {
-        this.folderToChange.name = this.editElementForm.get('name').value;
-      this.afs.updateFolders(this.folderToChange, this.currentDocKey);
-      }).then(() => this.getFolders()).catch(err => console.log(err))
+      //delte the current folder
+      await this.afs.deleteFolder(this.folderToChange, this.currentDocKey);
+      
+      //change the name
+      this.folderToChange.name = this.editElementForm.get('name').value;
+
+      //add the folder again
+      await this.afs.updateFolders(this.folderToChange, this.currentDocKey);
+
+      //get the folders again
+      this.getFolders();
     }
     this.editing = false;
   }
@@ -329,19 +337,20 @@ export class MainMenuComponent implements OnInit {
       this.deleteElementOverlay = true;
     }
   }
-
+  
   async delete() {
-   if (this.itemtodelete.type == 'task') this.deleteGame(this.itemtodelete, false);
-   else if (this.itemtodelete.type == 'folder') {
-     let documentsToDelete: string[] = []
-     let foldersToCheck: Folder[] = []
-     let currentItem: Folder
+    this.deleting=true;
+    if (this.itemtodelete.type == 'task') this.deleteGame(this.itemtodelete, false);
+    else if (this.itemtodelete.type == 'folder') {
+      let documentsToDelete: string[] = []
+      let foldersToCheck: Folder[] = []
+      let currentItem: Folder
 
-     //add the first stack of items on the first level
-     await this.afs.getFolderElement(this.itemtodelete.uid).then(data => data.folders.forEach(folder => foldersToCheck.push(folder)));
-     documentsToDelete.push(this.itemtodelete.uid);
+      //add the first stack of items on the first level
+      await this.afs.getFolderElement(this.itemtodelete.uid).then(data => data.folders.forEach(folder => foldersToCheck.push(folder)));
+      documentsToDelete.push(this.itemtodelete.uid);
 
-     while (foldersToCheck.length != 0) {
+      while (foldersToCheck.length != 0) {
         currentItem = foldersToCheck.pop();
         if(currentItem.type == "task") this.deleteGame(currentItem, true);
         
@@ -349,16 +358,17 @@ export class MainMenuComponent implements OnInit {
           documentsToDelete.push(currentItem.uid);
           await this.afs.getFolderElement(currentItem.uid).then(data => data.folders.forEach(folder => foldersToCheck.push(folder)));
         }
-     }
+      }
 
-     documentsToDelete.forEach(async element => {
-       await this.afs.deleteDocument('folders', element);
-     });
+      documentsToDelete.forEach(async element => {
+        await this.afs.deleteDocument('folders', element);
+      });
 
-     await this.afs.deleteFolder(this.itemtodelete, this.currentDocKey).then(() => this.getFolders());
+      await this.afs.deleteFolder(this.itemtodelete, this.currentDocKey).then(() => this.getFolders());
     }
     
     this.deleteElementOverlay = false;
+    this.deleting=false;
   }
 
   async deleteGame(item: Folder, cascading: boolean) {
@@ -371,7 +381,7 @@ export class MainMenuComponent implements OnInit {
     games.forEach(element => {
       for (let key of Object.keys(element)) {
         if (key == "photoID" && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") this.afs.deleteFromStorageByUrl(element[key]);
-        if (element[key].length == 2 && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") {
+        if (element[key].length > 1 && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") {
           this.afs.deleteFromStorageByUrl(element[key][1])
         }
       }
