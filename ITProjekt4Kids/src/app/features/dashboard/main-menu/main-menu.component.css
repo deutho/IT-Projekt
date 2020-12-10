@@ -64,6 +64,7 @@ input {
     cursor: default; /* Add a pointer on hover */
     justify-content: center;
     align-items: center;
+    min-width: 320px;
 }
 
 .fullscreen {
@@ -88,6 +89,7 @@ input {
     display: block;
     margin: 0 auto;
     padding: 20px 0px;
+    min-width: 280px;
 }
 
 .submit-button {
