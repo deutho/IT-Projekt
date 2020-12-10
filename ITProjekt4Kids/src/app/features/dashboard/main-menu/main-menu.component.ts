@@ -231,12 +231,15 @@ export class MainMenuComponent implements OnInit {
   }
 
  
+
   editElement(item) {
-    this.editElementForm = this.fb.group({
-      name:  [item.name, Validators.required],
-    });
-    this.folderToChange = item;
-    this.editing = true;
+    if (this.currentPathForHTML.substring(0,9) != "derdieDAZ" && item.uid != 'derdiedaz') {
+      this.editElementForm = this.fb.group({
+        name:  [item.name, Validators.required],
+      });
+      this.folderToChange = item;
+      this.editing = true;
+    }
   }
 
   edit() {
