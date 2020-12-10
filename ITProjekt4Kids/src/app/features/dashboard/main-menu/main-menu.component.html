@@ -142,7 +142,7 @@
         <!-- deleting element overlay -->
         <div class="fullscreen" *ngIf="deleteElementOverlay == true">
             <div class="overlay" (click)="deleteElementOverlay = false"></div>
-            <div class="superOverlay" style="display: flex; justify-content: space-around; flex-direction: column;min-width: 250px;">
+            <div class="superOverlay" style="display: flex; justify-content: space-around; flex-direction: column;">
                 <div style="display: flex; justify-content: flex-end;" (click)="deleteElementOverlay = false">
                     <i class="fas fa-times" style="display: flex; opacity: 0.6; align-content: flex-end; cursor: pointer; padding: 10px 10px 0px 0px;">
                     </i>
@@ -150,8 +150,16 @@
                 <div class="content" style="display: flex; justify-content: space-between; flex-direction: column; ">
                     Das Element kann danach nicht mehr hergestellt werden. Es werden untergeordnete Elemente mitgelöscht.
                     <div style="height: 10px;"></div>
-                    <div (click)="delete()" class="btn dropshadow" style="display: inline-block; background-color: lightgreen; width: 80%;">
+                    <!-- <div (click)="delete()" class="btn dropshadow submit-button" style="background-color: #D04040;">
                         Löschen
+                    </div> -->
+                    <div style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
+                        <div class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 30%; min-width: 110px; ">
+                            Abbrechen
+                        </div>
+                        <div (click)="delete()" class="btn dropshadow" style="display: inline-block; background-color:#ff0f0f; width: 30%; min-width: 110px;">
+                            Löschen
+                        </div>
                     </div>
                     <div style="height: 10px;"></div>
                     <div *ngIf="deleting == true" class="loader" style="width : 40px;"></div>
@@ -163,7 +171,7 @@
         <!-- share link overlay -->
         <div class="fullscreen" *ngIf="shareGameOverlay == true">
             <div class="overlay" (click)="shareGameOverlay = false"></div>
-            <div class="superOverlay" style="display: flex; justify-content: space-around; flex-direction: column;min-width: 250px;">
+            <div class="superOverlay" style="display: flex; justify-content: space-around; flex-direction: column;">
                 <div style="display: flex; justify-content: flex-end;" (click)="shareGameOverlay = false">
                     <i class="fas fa-times" style="display: flex; opacity: 0.6; align-content: flex-end; cursor: pointer; padding: 10px 10px 0px 0px;">
                     </i>
@@ -171,7 +179,7 @@
                 <div class="content" style="display: flex; justify-content: space-between; flex-direction: column; ">
                     <input value={{directurl}} style="width: 100%;">
                     <div style="height: 10px;"></div>
-                    <div (click)="copied()" class="btn dropshadow" style="display: inline-block; background-color: lightgreen; width: 80%;">
+                    <div (click)="copied()" class="btn dropshadow submit-button">
                         Link in die Zwischenablage kopieren
                     </div>
                 </div>
@@ -214,7 +222,7 @@
         <!-- grey background -->
         <div *ngIf="creating == true" class="overlay" (click)="creating = false;"></div>
         <!-- white div, which contains all the input fields -->
-        <div *ngIf="creating == true" class="superOverlay" style="border-radius: 15px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));">
+        <div *ngIf="creating == true" class="superOverlay">
             <div class="content">               
                 <!-- formular -->
                 <form [formGroup]="addElementForm" (ngSubmit) = "createNewElement()">
