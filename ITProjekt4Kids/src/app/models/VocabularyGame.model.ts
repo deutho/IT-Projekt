@@ -7,7 +7,8 @@ export class VocabularyGame{
         public rightAnswer: string[],
         public question: string[],
         public photoID: string,
-        public folderUID: string) {
+        public folderUID: string,
+        public number: number) {
         
     }
 }
