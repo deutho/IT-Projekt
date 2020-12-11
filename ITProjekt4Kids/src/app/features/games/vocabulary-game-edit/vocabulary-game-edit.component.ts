@@ -55,6 +55,8 @@ export class VocabularyGameEditComponent implements OnInit {
   audioAnswer4Playing = false;
   recordingTimeout;
   default = false;
+  nextCountNumber: number;
+  countoffset: number;
   
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService,) {
@@ -80,10 +82,19 @@ export class VocabularyGameEditComponent implements OnInit {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
     // get games
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
+
+    //set numbers
+    let numbers: Number[];
+    this.Games.forEach(element => {
+      
+    });
     
     //load first game
     if (this.Games.length == 0) this.initializeNewQuestion();
     else this.loadNextGame(true);
+
+
+    
     
   }
 
@@ -215,7 +226,7 @@ export class VocabularyGameEditComponent implements OnInit {
   initializeNewQuestion() {
       this.finalScreen = true;
       let uid = uuidv4();
-      this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID); 
+      this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID, 1); 
       this.default = true; 
       
   }
