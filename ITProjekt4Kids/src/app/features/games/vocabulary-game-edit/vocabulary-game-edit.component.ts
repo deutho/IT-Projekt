@@ -20,12 +20,11 @@ export class VocabularyGameEditComponent implements OnInit {
   Games: VocabularyGame[];
   currentGame: VocabularyGame;
   currentUser: User;
-  playedGames: VocabularyGame[];
-  loaded = undefined;
+  loaded = false;
   answers: string[];
   imageURL = "";
   editingPicture = false;
-  previousGames: VocabularyGame[];
+  previousGames: VocabularyGame[] = [];
   folderID = "";
   question: string;
   saved;
@@ -55,6 +54,7 @@ export class VocabularyGameEditComponent implements OnInit {
   audioAnswer3Playing = false;
   audioAnswer4Playing = false;
   recordingTimeout;
+  default = false;
   
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService,) {
@@ -81,13 +81,11 @@ export class VocabularyGameEditComponent implements OnInit {
       .then(data => this.currentUser = data[0]);
     // get games
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
-    //init second stack for going back and forwards between games
-    let previousGames = [];
-    this.previousGames = previousGames;
-
+    
     //load first game
-    this.loadNextGame();
-    this.initSounds();
+    if (this.Games.length == 0) this.initializeNewQuestion();
+    else this.loadNextGame(true);
+    
   }
 
   startVoiceRecord(HTMLFinder){
@@ -215,44 +213,75 @@ export class VocabularyGameEditComponent implements OnInit {
     clearTimeout(this.recordingTimeout)
   }
 
-  loadNextGame() {   
+  initializeNewQuestion() {
+      this.finalScreen = true;
+      let uid = uuidv4();
+      this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID); 
+      this.default = true; 
+      
+  }
+
+  loadNextGame(nopush?: boolean) {   
+    this.loaded = false;
     if(this.finalScreen && this.Games.length == 0) {
       this.noMoreGames = true;
+      this.loaded = true;
       setTimeout(() => this.noMoreGames = false, 2500);
       return; //maybe add some feedback here
+    } else {
+      if (!nopush) this.previousGames.push(this.currentGame)
+
+      // if game has some pages to be played left
+      if (this.Games.length > 0) {
+      this.currentGame = this.Games.pop();  
+      this.default = false;
+      }   
+        
+      // if game is empty, or you clicked past the last page in the game
+      else this.initializeNewQuestion();
+
+      // //  to prevent disappearing of content - text is filled to have some clickable element
+      //  if (this.currentGame.question[0] == "") this.currentGame.question[0] = "Hier die Frage eingeben";
+      //  if (this.currentGame.rightAnswer[0] == "") this.currentGame.rightAnswer[0] = "Richtige Antwort";
+      //  if (this.currentGame.answer1[0] == "") this.currentGame.answer1[0] = "Falsche Antwort 1";
+      //  if (this.currentGame.answer2[0] == "") this.currentGame.answer2[0] = "Falsche Antwort 2";
+      //  if (this.currentGame.answer3[0] == "") this.currentGame.answer3[0] = "Falsche Antwort 3";
+
+      // set values for question, answers and photo-url
+      this.question = this.currentGame.question[0];
+      this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
+      this.imageURL = this.currentGame.photoID;
+
+
+      //  lets the html know, that content can now be loaded
+      this.initSounds();
+      this.loaded = true;
+      this.loadInnerTextValues();
     }
+  }
 
-    if(this.currentGame != undefined) this.previousGames.push(this.currentGame)
+  // activated on click of left arrow - loades the previous game
+  loadPreviousGame() {
+    this.loaded = false;
+    if(this.previousGames.length == 0) {
+      this.noMoreGames = true;
+      this.loaded = true;
+      setTimeout(() => this.noMoreGames = false, 2500);
+      return; //maybe add some feedback here
+    } else {
+        this.finalScreen = false;
+        if(this.currentGame != undefined && this.default == false) this.Games.push(this.currentGame)
+        else this.default = false;
 
-    // if game has some pages to be played left
-    if (this.Games.length > 0) {
-        this.currentGame = this.Games.pop();     
-       
-    }
-    // if game is empty, or you clicked past the last page in the game
-    else {
-        this.finalScreen = true;
-        let uid = uuidv4();
-        var newGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID);
-        this.currentGame = newGame;        
-     }
-
-    //  to prevent disappearing of content - text is filled to have some clickable element
-     if (this.currentGame.question[0] == "") this.currentGame.question[0] = "Hier die Frage eingeben";
-     if (this.currentGame.rightAnswer[0] == "") this.currentGame.rightAnswer[0] = "Richtige Antwort";
-     if (this.currentGame.answer1[0] == "") this.currentGame.answer1[0] = "Falsche Antwort 1";
-     if (this.currentGame.answer2[0] == "") this.currentGame.answer2[0] = "Falsche Antwort 2";
-     if (this.currentGame.answer3[0] == "") this.currentGame.answer3[0] = "Falsche Antwort 3";
-
-    // set values for question, answers and photo-url
-     this.question = this.currentGame.question[0];
-     this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
-     this.imageURL = this.currentGame.photoID;
-
-
-    //  lets the html know, that content can now be loaded
-    this.initSounds();
-    this.loaded = true;
+        
+        this.currentGame = this.previousGames.pop();
+        this.question = this.currentGame.question[0];
+        this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
+        this.imageURL = this.currentGame.photoID; 
+        this.loaded = true;  
+        this.initSounds();
+        this.loadInnerTextValues();
+      }
   }
 
     // makes changes persitant in the database
@@ -279,11 +308,10 @@ export class VocabularyGameEditComponent implements OnInit {
         this.currentGame.photoID = this.imageURL;
       }
       
-
-
       this.afs.updateTask(this.currentGame);
       this.finalScreen = false;
       this.saved = true;
+      this.default = false;
       setTimeout(() => this.saved = false, 2500);
       
     }
@@ -301,44 +329,7 @@ export class VocabularyGameEditComponent implements OnInit {
     //insert a warning that no audio can be found
   }
 
-  uploadTextToSpeechElement(element) {
-
-    //TO DO Switch Case for the specific Element
-
-    this.currentGame.answer1; //Example
-    
-    if(this.currentGame.answer1[1] == ""){
-    //Upload the Element
-    
-    //Set the Download URL
-
-    }else {
-      //Delete Current TextToSpeech Element on Firebase Storage
-
-      //upload the new Element
-
-      //Set the DownloadURL
-    }
-  }
-
-  // activated on click of left arrow - loades the previous game
-  loadPreviousGame() {
-    if(this.previousGames.length == 0) {
-      this.noMoreGames = true;
-      setTimeout(() => this.noMoreGames = false, 2500);
-      return; //maybe add some feedback here
-    }
-    if(this.currentGame != undefined) this.Games.push(this.currentGame)
-
-
-    this.currentGame = this.previousGames.pop();   
-    this.question = this.currentGame.question[0];
-    this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
-    this.imageURL = this.currentGame.photoID; 
-    this.loaded = true;  
-    
-    this.loadInnerTextValues();
-  }
+  
   
   // activates on Home-Button click, return, the user to the home menu, and saves changed if any were made
   returnToMainMenu() {
@@ -450,6 +441,20 @@ export class VocabularyGameEditComponent implements OnInit {
       this.valueButton4 = document.getElementById('button4').innerText;
     }
     this.editingAudio = !this.editingAudio    
+  }
+  /**Deletes the currentGame from the Database
+   * 
+   */
+ async deleteQuestion() {
+    if (!this.finalScreen) {
+      //get the UID from the CurrentElement if it is a valid Question
+      let questionToDelete = this.currentGame.uid;
+      //delete the question from the database
+      this.loaded = false;
+      await this.afs.deleteDocument("games", questionToDelete);
+      this.loadNextGame(true);
+    }
+
   }
 
 }

@@ -1,8 +1,13 @@
+<span id="dummy"></span>
+<div id="overlay" *ngIf="loaded == false">
+    <div class="spinner">
+        <div class="loader-big" style="width : 80px; height: 80px"></div>
+    </div>
+</div>
 
 <!-- load only if values have loaded -->
-
-
-<div *ngIf = "this.loaded == true"  class="container" id="full" >   
+<div *ngIf = "this.loaded == true"  class="container" id="full" >
+    <button *ngIf = "finalScreen == false" (click) = "deleteQuestion()">Frage Löschen</button>   
     <!-- question -->
     <div *ngIf = "editingAudio == false" id ="question" class="item-question question" style="margin: 0 auto;" contenteditable="true">
             {{question}}
@@ -288,6 +293,9 @@
         </div>
     </div>
 </div>
+
+
+
 
 <!-- <div *ngIf = "this.saved == true" class="fullscreen">
     <div *ngIf = "this.saved == true" class="overlay" (click)="unsavedChanges = false;"></div>

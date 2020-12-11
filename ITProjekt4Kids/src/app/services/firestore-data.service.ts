@@ -93,8 +93,8 @@ export class FirestoreDataService {
      * @param collection the collection the document is in (games, users, folders)
      * @param uid the uid of the document you want to delete
      */
-    deleteDocument(collection: string, uid: string) {
-        this.db.collection(collection).doc(uid).delete();
+    deleteDocument(collection: string, uid: string): Promise<any> {
+        return this.db.collection(collection).doc(uid).delete();
     }
     
     /**adds folder document after creating a new folder
