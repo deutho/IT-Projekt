@@ -66,6 +66,7 @@ export class VocabularyGameComponent implements OnInit {
   audioButton4Loaded = false;
   imageLoaded = false;
   image = new Image();  
+  noQuestionsInGame = false;
 
   
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, private nav: NavigationService) {
@@ -225,15 +226,19 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   finishGames() {
-    this.endtime = Date.now();
-    this.duration = this.endtime-this.starttime;
-    this.afs.createResult(this.currentUser.uid, this.totalrounds, this.roundsWon, this.folderID, this.duration);
-    this.finished = true;
-    this.finalScreen()
+    if(this.totalNumberOfRounds > 0) {
+      this.endtime = Date.now();
+      this.duration = this.endtime-this.starttime;
+      this.afs.createResult(this.currentUser.uid, this.totalrounds, this.roundsWon, this.folderID, this.duration);
+      this.finished = true;
+      this.finalScreen()
+    }
+    else this.noQuestionsInGame = true;
+
   }
 
   goBack() {
-    this.nav.navigate("Hauptmenü", "mainMenu");
+    this.nav.navigate("Startseite", "mainMenu");
   }
 
   evaluateGame(selection) {

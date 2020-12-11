@@ -1,11 +1,18 @@
 <span id="dummy"></span>
 <!-- <div id="overlay" *ngIf="this.evaluated  && this.finished == false" (click)="nextOne()"></div>  -->
-<div id="overlay" *ngIf="loaded == false">
+<div id="overlay" *ngIf="loaded == false && noQuestionsInGame == false">
     <div class="spinner">
         <div class="loader-big" style="width : 80px; height: 80px"></div>
     </div>
 </div>
 
+<div id="overlay" *ngIf="noQuestionsInGame == true" (click)="goBack()">
+    <div class="spinner">
+        <div class="alert alert-primary text-center" style="width: 80%; margin:0 auto; max-width: 500px;">
+            Dieses Spiel enthält keine Fragen!
+        </div>
+    </div>
+</div>
 
 
 <div *ngIf = "this.loaded == true && finished == false"  class="container" id="full" >    
