@@ -84,18 +84,11 @@ export class VocabularyGameEditComponent implements OnInit {
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
 
     //set numbers
-    let numbers: Number[];
-    this.Games.forEach(element => {
-      
-    });
+    
     
     //load first game
     if (this.Games.length == 0) this.initializeNewQuestion();
     else this.loadNextGame(true);
-
-
-    
-    
   }
 
   startVoiceRecord(HTMLFinder){
@@ -228,7 +221,11 @@ export class VocabularyGameEditComponent implements OnInit {
       let uid = uuidv4();
       this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID, 1); 
       this.default = true; 
-      
+      this.question = this.currentGame.question[0];
+      this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
+      this.imageURL = this.currentGame.photoID;
+      this.initSounds();
+      this.loaded = true;
   }
 
   loadNextGame(nopush?: boolean) {   
@@ -276,7 +273,6 @@ export class VocabularyGameEditComponent implements OnInit {
         if(this.currentGame != undefined && this.default == false) this.Games.push(this.currentGame)
         else this.default = false;
 
-        
         this.currentGame = this.previousGames.pop();
         this.question = this.currentGame.question[0];
         this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
