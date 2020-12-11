@@ -85,17 +85,13 @@ export class VocabularyGameEditComponent implements OnInit {
 
     //set numbers
     let numbers: Number[];
-    this.Games.forEach(element => {
-      
-    });
-    
+   
     //load first game
-    if (this.Games.length == 0) this.initializeNewQuestion();
-    else this.loadNextGame(true);
-
-
-    
-    
+    if (this.Games.length == 0) {
+      this.initializeNewQuestion();
+      this.loaded = true;
+    } 
+    else this.loadNextGame(true); 
   }
 
   startVoiceRecord(HTMLFinder){
