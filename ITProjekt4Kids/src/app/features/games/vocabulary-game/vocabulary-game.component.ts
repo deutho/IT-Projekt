@@ -66,6 +66,7 @@ export class VocabularyGameComponent implements OnInit {
   audioButton4Loaded = false;
   imageLoaded = false;
   image = new Image();  
+  noQuestionsInGame = false;
 
   
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, private nav: NavigationService) {
@@ -76,8 +77,7 @@ export class VocabularyGameComponent implements OnInit {
 
   async ngOnInit(){
     history.pushState(null, "");
-    await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
-      .then(data => this.currentUser = data[0]);
+    await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
 
@@ -182,6 +182,13 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   checkIfContentIsLoaded() {
+    //if no audio files exist - they are set to true here
+    if(this.currentGame.question[1] == "") this.audioQuestionLoaded = true;
+    if(this.answers[0][1] == "") this.audioButton1Loaded = true;
+    if(this.answers[1][1] == "") this.audioButton2Loaded = true;
+    if(this.answers[2][1] == "") this.audioButton3Loaded = true;
+    if(this.answers[3][1] == "") this.audioButton4Loaded = true;
+
     if( 
       this.audioQuestionLoaded == true &&
       this.audioButton1Loaded == true &&
@@ -218,15 +225,19 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   finishGames() {
-    this.endtime = Date.now();
-    this.duration = this.endtime-this.starttime;
-    this.afs.createResult(this.currentUser.uid, this.totalrounds, this.roundsWon, this.folderID, this.duration);
-    this.finished = true;
-    this.finalScreen()
+    if(this.totalNumberOfRounds > 0) {
+      this.endtime = Date.now();
+      this.duration = this.endtime-this.starttime;
+      this.afs.createResult(this.currentUser.uid, this.totalrounds, this.roundsWon, this.folderID, this.duration);
+      this.finished = true;
+      this.finalScreen()
+    }
+    else this.noQuestionsInGame = true;
+
   }
 
   goBack() {
-    this.nav.navigate("Hauptmenü", "mainMenu");
+    this.nav.navigate("Startseite", "mainMenu");
   }
 
   evaluateGame(selection) {
@@ -254,28 +265,28 @@ export class VocabularyGameComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('button4')).setAttribute("style", "background-color:white;");
   }
 
-  readQuestion() {
-    this.playSound(this.currentGame.question[1]);
-  }
+  // readQuestion() {
+  //   this.playSound(this.currentGame.question[1]);
+  // }
 
-  readButtonOne() {
-    this.playSound(this.answers[0][1]);
-  }
+  // readButtonOne() {
+  //   this.playSound(this.answers[0][1]);
+  // }
 
-  readButtonTwo() {
-    this.playSound(this.answers[1][1]);
-  }
+  // readButtonTwo() {
+  //   this.playSound(this.answers[1][1]);
+  // }
 
-  readButtonThree() {
-    this.playSound(this.answers[2][1]);
-  }
+  // readButtonThree() {
+  //   this.playSound(this.answers[2][1]);
+  // }
 
-  readButtonFour() {
-    this.playSound(this.answers[3][1]);
-  }
+  // readButtonFour() {
+  //   this.playSound(this.answers[3][1]);
+  // }
 
   buttonClicked(id : string) {
-    if (this.speakerMode == false) {
+    if (this.speakerMode == false && this.evaluated == false) {
       this.checkAnswer(id);
     }
     else this.readButtonValue(id);
@@ -343,27 +354,27 @@ export class VocabularyGameComponent implements OnInit {
     var colors = color.split("|");
 
     if (colors.indexOf("red") > -1) {
-        str = str.replace(/die/g, '<span style="color:red;">die</span>');
+        str = str.replace(/die/, '<span style="color:red;">die</span>');
     }
 
     if (colors.indexOf("blue") > -1) {
-        str = str.replace(/der/g, '<span style="color:blue;">der</span>');
+        str = str.replace(/der/, '<span style="color:blue;">der</span>');
     }
 
     if (colors.indexOf("green") > -1) {
-        str = str.replace(/das/g, '<span style="color:green;">das</span>');
+        str = str.replace(/das/, '<span style="color:green;">das</span>');
     }
 
     if (colors.indexOf("red") > -1) {
-      str = str.replace(/Die/g, '<span style="color:red;">Die</span>');
+      str = str.replace(/Die/, '<span style="color:red;">Die</span>');
     }
 
     if (colors.indexOf("blue") > -1) {
-        str = str.replace(/Der/g, '<span style="color:blue;">Der</span>');
+        str = str.replace(/Der/, '<span style="color:blue;">Der</span>');
     }
 
     if (colors.indexOf("green") > -1) {
-        str = str.replace(/Das/g, '<span style="color:green;">Das</span>');
+        str = str.replace(/Das/, '<span style="color:green;">Das</span>');
     }
 
 

@@ -24,8 +24,9 @@ export class FirestoreDataService {
     /** gets signed in user from DB 
      * 
      */
-    getCurrentUser(): AngularFirestoreCollectionGroup<User> {
-        return this._afs.collectionGroup('users', ref => ref.where('uid', "==", this._auth.getCurrentUser().uid));
+    async getCurrentUser(): Promise<any> {
+        let ref: AngularFirestoreCollectionGroup<any> = this._afs.collectionGroup('users', ref => ref.where('uid', "==", this._auth.getCurrentUser().uid));
+        return await ref.valueChanges().pipe(take(1)).toPromise()
     }
     /**gets the user by id
      * 
@@ -93,8 +94,8 @@ export class FirestoreDataService {
      * @param collection the collection the document is in (games, users, folders)
      * @param uid the uid of the document you want to delete
      */
-    deleteDocument(collection: string, uid: string) {
-        this.db.collection(collection).doc(uid).delete();
+    deleteDocument(collection: string, uid: string): Promise<any> {
+        return this.db.collection(collection).doc(uid).delete();
     }
     
     /**adds folder document after creating a new folder
