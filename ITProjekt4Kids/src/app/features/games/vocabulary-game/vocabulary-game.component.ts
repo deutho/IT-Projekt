@@ -77,8 +77,7 @@ export class VocabularyGameComponent implements OnInit {
 
   async ngOnInit(){
     history.pushState(null, "");
-    await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
-      .then(data => this.currentUser = data[0]);
+    await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
 
