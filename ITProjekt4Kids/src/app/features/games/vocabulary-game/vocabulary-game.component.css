@@ -369,3 +369,9 @@
 	justify-content: center;
 	align-items: center;
 }
+
+.arrowToNextQuestion {
+	width: 30vw;
+	max-height: 12vw;
+	max-width: 250px;
+}
