@@ -182,6 +182,13 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   checkIfContentIsLoaded() {
+    //if no audio files exist - they are set to true here
+    if(this.currentGame.question[1] == "") this.audioQuestionLoaded = true;
+    if(this.answers[0][1] == "") this.audioButton1Loaded = true;
+    if(this.answers[1][1] == "") this.audioButton2Loaded = true;
+    if(this.answers[2][1] == "") this.audioButton3Loaded = true;
+    if(this.answers[3][1] == "") this.audioButton4Loaded = true;
+
     if( 
       this.audioQuestionLoaded == true &&
       this.audioButton1Loaded == true &&
@@ -254,25 +261,25 @@ export class VocabularyGameComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('button4')).setAttribute("style", "background-color:white;");
   }
 
-  readQuestion() {
-    this.playSound(this.currentGame.question[1]);
-  }
+  // readQuestion() {
+  //   this.playSound(this.currentGame.question[1]);
+  // }
 
-  readButtonOne() {
-    this.playSound(this.answers[0][1]);
-  }
+  // readButtonOne() {
+  //   this.playSound(this.answers[0][1]);
+  // }
 
-  readButtonTwo() {
-    this.playSound(this.answers[1][1]);
-  }
+  // readButtonTwo() {
+  //   this.playSound(this.answers[1][1]);
+  // }
 
-  readButtonThree() {
-    this.playSound(this.answers[2][1]);
-  }
+  // readButtonThree() {
+  //   this.playSound(this.answers[2][1]);
+  // }
 
-  readButtonFour() {
-    this.playSound(this.answers[3][1]);
-  }
+  // readButtonFour() {
+  //   this.playSound(this.answers[3][1]);
+  // }
 
   buttonClicked(id : string) {
     if (this.speakerMode == false && this.evaluated == false) {
