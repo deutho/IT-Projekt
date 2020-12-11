@@ -275,7 +275,7 @@ export class VocabularyGameComponent implements OnInit {
   }
 
   buttonClicked(id : string) {
-    if (this.speakerMode == false) {
+    if (this.speakerMode == false && this.evaluated == false) {
       this.checkAnswer(id);
     }
     else this.readButtonValue(id);
