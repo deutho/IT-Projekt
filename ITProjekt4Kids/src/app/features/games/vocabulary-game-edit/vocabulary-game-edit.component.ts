@@ -240,13 +240,6 @@ export class VocabularyGameEditComponent implements OnInit {
       // if game is empty, or you clicked past the last page in the game
       else this.initializeNewQuestion();
 
-      // //  to prevent disappearing of content - text is filled to have some clickable element
-      //  if (this.currentGame.question[0] == "") this.currentGame.question[0] = "Hier die Frage eingeben";
-      //  if (this.currentGame.rightAnswer[0] == "") this.currentGame.rightAnswer[0] = "Richtige Antwort";
-      //  if (this.currentGame.answer1[0] == "") this.currentGame.answer1[0] = "Falsche Antwort 1";
-      //  if (this.currentGame.answer2[0] == "") this.currentGame.answer2[0] = "Falsche Antwort 2";
-      //  if (this.currentGame.answer3[0] == "") this.currentGame.answer3[0] = "Falsche Antwort 3";
-
       // set values for question, answers and photo-url
       this.question = this.currentGame.question[0];
       this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
