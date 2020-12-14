@@ -66,6 +66,7 @@ export class MainMenuComponent implements OnInit {
   folderToChange: Folder;
   failed: boolean = false;
   itemtodelete: Folder;
+  creatingElementError = false;
   
   
 
@@ -302,21 +303,37 @@ export class MainMenuComponent implements OnInit {
   }
 
   createNewElement() {
-    if (this.addElementForm.valid) {
-      let name :string = this.addElementForm.get('name').value;
-      let game :string = (<HTMLSelectElement>document.getElementById('gameTypeSelector')).value
-      console.log(game)
-      // this.addElementForm.get('game').value;
+    let successfulCreated = false;    
+      let name :string = this.addElementForm.get('name').value;      
       let createFolder = !this.gameSelected;
-      console.log(createFolder);
       var uid = uuidv4();
-      if (createFolder) this.addFolder(uid, name, 'folder');
-      else {
-        this.addFolder(uid, name, 'task', game)
+      console.log(name)
+      if (createFolder) {
+        
+        if(name == '') {
+          //error response
+          console.log("error")
+          this.creatingElementError = true;
+          setTimeout(() => this.creatingElementError = false, 2500);
+        }
+        else {
+          this.addFolder(uid, name, 'folder');
+          successfulCreated = true;
+        }
       }
-
-    }
-    this.creating = false;
+      else {
+        let game :string = (<HTMLSelectElement>document.getElementById('gameTypeSelector')).value
+        if(name == '' || game == '') {
+          //error response
+          this.creatingElementError = true;
+          setTimeout(() => this.creatingElementError = false, 2500);
+        }
+        else {
+          this.addFolder(uid, name, 'task', game)
+          successfulCreated = true;
+        }
+      }    
+    if(successfulCreated == true) this.creating = false;
   }
 
   createLink(item) {
