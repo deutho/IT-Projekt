@@ -8,7 +8,8 @@ export class VocabularyGame{
         public question: string[],
         public photoID: string,
         public folderUID: string,
-        public number: number) {
+        public number: number,
+        public coloring: boolean) {
         
     }
 }

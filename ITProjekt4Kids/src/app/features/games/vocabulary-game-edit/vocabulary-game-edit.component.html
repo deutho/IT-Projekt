@@ -7,7 +7,11 @@
 
 <!-- load only if values have loaded -->
 <div *ngIf = "this.loaded == true"  class="container" id="full" >
-    <button *ngIf = "finalScreen == false" (click) = "deleteQuestion()">Frage Löschen</button>   
+    <button *ngIf = "finalScreen == false" (click) = "deleteQuestion()">Frage Löschen</button>
+    <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" (change)="handleSelected($event)" id = "articlecoloring" >
+        <label class="custom-control-label" for="articlecoloring">Artikel einfärben</label>
+    </div>
     <!-- question -->
     <div *ngIf = "editingAudio == false" (focus)="clearInnerText('question')" (blur)="leftEditingMode('question')" id ="question" class="item-question question" style="margin: 0 auto;" contenteditable="true">
             {{question}}
