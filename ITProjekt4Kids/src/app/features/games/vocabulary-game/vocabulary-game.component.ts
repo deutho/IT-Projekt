@@ -190,11 +190,12 @@ export class VocabularyGameComponent implements OnInit {
     if(this.answers[3][1] == "") this.audioButton4Loaded = true;
 
     if( 
-      this.audioQuestionLoaded == true &&
-      this.audioButton1Loaded == true &&
-      this.audioButton2Loaded == true &&
-      this.audioButton3Loaded == true &&
-      this.audioButton4Loaded == true &&
+      // taken out atm to avoid long waiting between questions - has to be implementet better - will take alot of time
+      // this.audioQuestionLoaded == true &&
+      // this.audioButton1Loaded == true &&
+      // this.audioButton2Loaded == true &&
+      // this.audioButton3Loaded == true &&
+      // this.audioButton4Loaded == true &&
       this.imageLoaded == true
       ) {
         this.loaded = true
@@ -354,27 +355,33 @@ export class VocabularyGameComponent implements OnInit {
     var colors = color.split("|");
 
     if (colors.indexOf("red") > -1) {
-        str = str.replace(/die/, '<span style="color:red;">die</span>');
+      // style="color:red;"
+        str = str.replace(/die/, '<span >die</span>');
     }
 
     if (colors.indexOf("blue") > -1) {
-        str = str.replace(/der/, '<span style="color:blue;">der</span>');
+      // '<span style="color:blue;">der</span>'
+        str = str.replace(/der/, '<span >der</span>');
     }
 
     if (colors.indexOf("green") > -1) {
-        str = str.replace(/das/, '<span style="color:green;">das</span>');
+      // style="color:green;"
+        str = str.replace(/das/, '<span >das</span>');
     }
 
     if (colors.indexOf("red") > -1) {
-      str = str.replace(/Die/, '<span style="color:red;">Die</span>');
+      // style="color:red;"
+      str = str.replace(/Die/, '<span >Die</span>');
     }
 
     if (colors.indexOf("blue") > -1) {
-        str = str.replace(/Der/, '<span style="color:blue;">Der</span>');
+      // style="color:blue;"
+        str = str.replace(/Der/, '<span >Der</span>');
     }
 
     if (colors.indexOf("green") > -1) {
-        str = str.replace(/Das/, '<span style="color:green;">Das</span>');
+      // style="color:green;"
+        str = str.replace(/Das/, '<span >Das</span>');
     }
 
 

@@ -9,7 +9,7 @@
 <div *ngIf = "this.loaded == true"  class="container" id="full" >
     <button *ngIf = "finalScreen == false" (click) = "deleteQuestion()">Frage Löschen</button>   
     <!-- question -->
-    <div *ngIf = "editingAudio == false" id ="question" class="item-question question" style="margin: 0 auto;" contenteditable="true">
+    <div *ngIf = "editingAudio == false" (focus)="clearInnerText('question')" (blur)="leftEditingMode('question')" id ="question" class="item-question question" style="margin: 0 auto;" contenteditable="true">
             {{question}}
     </div>
 
@@ -198,22 +198,22 @@
 
     <!-- buttons 1 to 4 -->
     <div class="item-ans1" *ngIf = "editingAudio == false">
-        <div id="button1" type=button class="btn button-style" contenteditable="true" style=" border-color: green;">
+        <div id="button1" type=button class="btn button-style" (focus)="clearInnerText('button1')" (blur)="leftEditingMode('button1')" contenteditable="true" style=" border-color: green;">
             {{answers[0]}}
         </div>
     </div>
     <div class="item-ans2" *ngIf = "editingAudio == false">
-        <div id="button2" type=button class="btn button-style" contenteditable="true" style=" border-color: red;" >
+        <div id="button2" type=button class="btn button-style" (focus)="clearInnerText('button2')" (blur)="leftEditingMode('button2')" contenteditable="true" style=" border-color: red;" >
             {{answers[1]}}
         </div>
     </div>
     <div class="item-ans3" *ngIf = "editingAudio == false">
-        <div id="button3" type=button class="btn button-style" contenteditable="true" style=" border-color: red;">    
+        <div id="button3" type=button class="btn button-style" (focus)="clearInnerText('button3')" (blur)="leftEditingMode('button3')" contenteditable="true" style=" border-color: red;">    
             {{answers[2]}}     
         </div>
     </div>
     <div class="item-ans4" *ngIf = "editingAudio == false">
-        <div id="button4" type=button class="btn button-style" contenteditable="true" style=" border-color: red;">
+        <div id="button4" type=button class="btn button-style" (focus)="clearInnerText('button4')" (blur)="leftEditingMode('button4')" contenteditable="true" style=" border-color: red;">
             {{answers[3]}}
         </div>
     </div>
