@@ -190,11 +190,12 @@ export class VocabularyGameComponent implements OnInit {
     if(this.answers[3][1] == "") this.audioButton4Loaded = true;
 
     if( 
-      this.audioQuestionLoaded == true &&
-      this.audioButton1Loaded == true &&
-      this.audioButton2Loaded == true &&
-      this.audioButton3Loaded == true &&
-      this.audioButton4Loaded == true &&
+      // taken out atm to avoid long waiting between questions - has to be implementet better - will take alot of time
+      // this.audioQuestionLoaded == true &&
+      // this.audioButton1Loaded == true &&
+      // this.audioButton2Loaded == true &&
+      // this.audioButton3Loaded == true &&
+      // this.audioButton4Loaded == true &&
       this.imageLoaded == true
       ) {
         this.loaded = true
