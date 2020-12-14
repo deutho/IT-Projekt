@@ -1,35 +1,40 @@
-<h1>Was macht der Affe?</h1>
+<div id="overlay" *ngIf="this.evaluated == true && this.answerIsCorrect == true" (click)="loadNextGame()"></div>
+<div class="content">
+    <h1>Was macht der Affe?</h1>
 
-<img
-  style="display: block; width: 40%; height: 100%; margin: 0 auto; padding: 20px 20px; min-width: 300px; max-height: 330px;"
-  src="https://cdn.pixabay.com/photo/2018/06/30/09/29/music-3507317_960_720.jpg"
-/>
+    <img
+    style="display: block; width: 40%; height: 100%; margin: 0 auto; padding: 20px 20px; min-width: 300px; max-height: 330px;"
+    src="https://cdn.pixabay.com/photo/2018/06/30/09/29/music-3507317_960_720.jpg"
+    />
 
-<div
-  cdkDropList
-  cdkDropListOrientation="horizontal"
-  class="example-list"
-  (cdkDropListDropped)="drop($event)"
->
-  <div class="example-box" *ngFor="let words of sentence, index as i" cdkDrag>
-    {{words}}
-  </div>
-</div>
+    <div
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)"
+        cdkDropListEnterPredicate="canDrop">
 
-<div *ngIf="showAnswer">
-  <div
-    cdkDropList
-    cdkDropListOrientation="horizontal"
-    class="example-list"
-    (cdkDropListDropped)="drop($event)"
-  >
-    <div class="example-box" *ngFor="let words of correct" cdkDrag>
-      {{words}}
+        <div id="word1" class="example-box" *ngFor="let words of word1" cdkDrag>{{words}}</div>
+        <div id="word2" class="example-box" *ngFor="let words of word2" cdkDrag>{{words}}</div>
+        <div id="word3" class="example-box" *ngFor="let words of word3" cdkDrag>{{words}}</div>
     </div>
-  </div>
+
+    <!-- <div *ngIf="showAnswer">
+        <div 
+            cdkDropList
+            cdkDropListOrientation="horizontal"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)"
+            cdkDropListSortingDisabled>
+
+            <div class="example-box" *ngFor="let words of correct" cdkDrag>
+            {{words}}
+            </div>
+        </div>
+    </div> -->
+
+    <button (click)="this.evaluateGame()">Fertig</button>
+
+    <button>Klick-Modus</button>
+    <button>Vorlese-Modus</button>
 </div>
-
-<button (click)="showAnswer = true">Fertig</button>
-
-<button>Klick-Modus</button>
-<button>Vorlese-Modus</button>

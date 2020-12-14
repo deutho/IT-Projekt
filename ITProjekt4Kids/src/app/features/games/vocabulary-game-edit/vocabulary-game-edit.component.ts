@@ -55,6 +55,8 @@ export class VocabularyGameEditComponent implements OnInit {
   audioAnswer4Playing = false;
   recordingTimeout;
   default = false;
+  nextCountNumber: number;
+  
   
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService,) {
@@ -77,15 +79,24 @@ export class VocabularyGameEditComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     //get user
-    await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise()
-      .then(data => this.currentUser = data[0]);
+    await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
     // get games
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
+
+    //set numbers
+    let numbers: number[] = [];
+    this.Games.forEach(element => {
+      numbers.push(element.number);
+    });
+    //calculate the next number
+    this.nextCountNumber = Math.max(...numbers)+1;
+
+    //sort array by number
+    this.Games.sort((a, b) => {return a.number - b.number});
     
     //load first game
     if (this.Games.length == 0) this.initializeNewQuestion();
     else this.loadNextGame(true);
-    
   }
 
   startVoiceRecord(HTMLFinder){
@@ -216,9 +227,14 @@ export class VocabularyGameEditComponent implements OnInit {
   initializeNewQuestion() {
       this.finalScreen = true;
       let uid = uuidv4();
-      this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID); 
+      this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID, this.nextCountNumber); 
+      this.nextCountNumber++;
       this.default = true; 
-      
+      this.question = this.currentGame.question[0];
+      this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
+      this.imageURL = this.currentGame.photoID;
+      this.initSounds();
+      this.loaded = true;
   }
 
   loadNextGame(nopush?: boolean) {   
@@ -239,13 +255,6 @@ export class VocabularyGameEditComponent implements OnInit {
         
       // if game is empty, or you clicked past the last page in the game
       else this.initializeNewQuestion();
-
-      // //  to prevent disappearing of content - text is filled to have some clickable element
-      //  if (this.currentGame.question[0] == "") this.currentGame.question[0] = "Hier die Frage eingeben";
-      //  if (this.currentGame.rightAnswer[0] == "") this.currentGame.rightAnswer[0] = "Richtige Antwort";
-      //  if (this.currentGame.answer1[0] == "") this.currentGame.answer1[0] = "Falsche Antwort 1";
-      //  if (this.currentGame.answer2[0] == "") this.currentGame.answer2[0] = "Falsche Antwort 2";
-      //  if (this.currentGame.answer3[0] == "") this.currentGame.answer3[0] = "Falsche Antwort 3";
 
       // set values for question, answers and photo-url
       this.question = this.currentGame.question[0];
@@ -273,7 +282,6 @@ export class VocabularyGameEditComponent implements OnInit {
         if(this.currentGame != undefined && this.default == false) this.Games.push(this.currentGame)
         else this.default = false;
 
-        
         this.currentGame = this.previousGames.pop();
         this.question = this.currentGame.question[0];
         this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];

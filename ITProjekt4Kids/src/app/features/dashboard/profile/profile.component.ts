@@ -26,8 +26,7 @@ export class ProfileComponent implements OnInit {
   
   async ngOnInit() {
     history.pushState(null, "");
-    await this.afs.getCurrentUser().valueChanges().pipe(take(1)).toPromise().
-    then(data => this.currentUser = data[0]);
+    await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
     this.currentUser.username = this.currentUser.username.substring(0, this.currentUser.username.lastIndexOf('@'));
 
     if(this.currentUser.role == 1) this.accountTyp = "Adminaccount";
