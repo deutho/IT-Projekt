@@ -267,7 +267,12 @@
                     <div style="padding: 20px 0px;">
                         <div style="text-align: center; "  class="btn submit-button" (click)="createNewElement()">Element anlegen</div>
                     </div>    
+                    <!-- error message -->
+
                 </form>
+                <div *ngIf = "creatingElementError == true" class="item-final alert alert-danger text-center" role="alert" style="width: 80%; margin:0 auto; z-index: 5; align-self: flex-end;">
+                    Etwas wurde nicht richtig ausgefüllt!
+                </div>
             </div>
         </div>
     </div>
