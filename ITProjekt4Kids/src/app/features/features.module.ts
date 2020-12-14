@@ -55,7 +55,7 @@ imports: [
   ReactiveFormsModule,
   FormsModule,
   DragDropModule,
-  ClipboardModule
+  ClipboardModule,
 ],
 exports: [MainComponent],
 providers: [AngularFirestore],

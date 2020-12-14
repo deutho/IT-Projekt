@@ -56,6 +56,7 @@ export class VocabularyGameEditComponent implements OnInit {
   recordingTimeout;
   default = false;
   nextCountNumber: number;
+  checkstate: boolean;
   
   
 
@@ -231,7 +232,7 @@ export class VocabularyGameEditComponent implements OnInit {
   initializeNewQuestion() {
       this.finalScreen = true;
       let uid = uuidv4();
-      this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID, this.nextCountNumber); 
+      this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID, this.nextCountNumber, true); 
       this.nextCountNumber++;
       this.default = true; 
       this.question = this.currentGame.question[0];
@@ -264,7 +265,7 @@ export class VocabularyGameEditComponent implements OnInit {
       this.question = this.currentGame.question[0];
       this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
       this.imageURL = this.currentGame.photoID;
-
+      
 
       //  lets the html know, that content can now be loaded
       this.initSounds();
@@ -511,6 +512,15 @@ export class VocabularyGameEditComponent implements OnInit {
       this.loadNextGame(true);
     }
 
+  }
+
+  handleSelected($event) {
+    if ($event.target.checked === true) {
+      this.currentGame.coloring = true;
+    }
+    if ($event.target.checked === false) {
+      this.currentGame.coloring = false;
+    }
   }
 
 }
