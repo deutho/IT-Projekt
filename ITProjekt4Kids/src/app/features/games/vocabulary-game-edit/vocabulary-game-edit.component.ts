@@ -404,7 +404,17 @@ export class VocabularyGameEditComponent implements OnInit {
     if(this.checkForChanges()) {
       this.unsavedChanges = true;
     }
-    else this.loadNextGame();
+    else {
+      this.loadNextGame();
+      if(this.editingAudio == true) {
+        this.valueButton1 = this.currentGame.rightAnswer[0];
+        this.valueButton2 = this.currentGame.answer1[0];
+        this.valueButton3 = this.currentGame.answer2[0];
+        this.valueButton4 = this.currentGame.answer3[0];
+        this.question = this.currentGame.question[0];
+      }
+    }
+
   }
 
   //navigating to previous question
@@ -412,7 +422,16 @@ export class VocabularyGameEditComponent implements OnInit {
     if(this.checkForChanges()) {
       this.unsavedChanges = true;
     }
-    else this.loadPreviousGame();
+    else {
+      this.loadPreviousGame();
+      if(this.editingAudio == true) {
+        this.valueButton1 = this.currentGame.rightAnswer[0];
+        this.valueButton2 = this.currentGame.answer1[0];
+        this.valueButton3 = this.currentGame.answer2[0];
+        this.valueButton4 = this.currentGame.answer3[0];
+        this.question = this.currentGame.question[0];
+      }
+    }
   }
 
   //save button from warning of unsaved changes
@@ -435,14 +454,14 @@ export class VocabularyGameEditComponent implements OnInit {
 
   //As content is mutable, this is necessary to avoid bugs
   loadInnerTextValues() {
-    // console.log("hallo")
-    // document.getElementById('button1').innerText = this.currentGame.rightAnswer[0];
-    // console.log("hallo2")
-    // document.getElementById('button2').innerText = this.currentGame.answer1[0];
-    // document.getElementById('button3').innerText = this.currentGame.answer2[0];
-    // document.getElementById('button4').innerText = this.currentGame.answer3[0];
-    // document.getElementById('question').innerText = this.currentGame.question[0];
-    // this.imageURL = this.currentGame.photoID;
+    if(document.getElementById('button1') != null) {
+      document.getElementById('button1').innerText = this.currentGame.rightAnswer[0];
+      document.getElementById('button2').innerText = this.currentGame.answer1[0];
+      document.getElementById('button3').innerText = this.currentGame.answer2[0];
+      document.getElementById('button4').innerText = this.currentGame.answer3[0];
+      document.getElementById('question').innerText = this.currentGame.question[0];
+      this.imageURL = this.currentGame.photoID;
+    }
   }
 
   switchMode() {
