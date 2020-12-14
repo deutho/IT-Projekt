@@ -430,12 +430,14 @@ export class VocabularyGameEditComponent implements OnInit {
 
   //As content is mutable, this is necessary to avoid bugs
   loadInnerTextValues() {
-    document.getElementById('button1').innerText = this.currentGame.rightAnswer[0];
-    document.getElementById('button2').innerText = this.currentGame.answer1[0];
-    document.getElementById('button3').innerText = this.currentGame.answer2[0];
-    document.getElementById('button4').innerText = this.currentGame.answer3[0];
-    document.getElementById('question').innerText = this.currentGame.question[0];
-    this.imageURL = this.currentGame.photoID;
+    // console.log("hallo")
+    // document.getElementById('button1').innerText = this.currentGame.rightAnswer[0];
+    // console.log("hallo2")
+    // document.getElementById('button2').innerText = this.currentGame.answer1[0];
+    // document.getElementById('button3').innerText = this.currentGame.answer2[0];
+    // document.getElementById('button4').innerText = this.currentGame.answer3[0];
+    // document.getElementById('question').innerText = this.currentGame.question[0];
+    // this.imageURL = this.currentGame.photoID;
   }
 
   switchMode() {
@@ -449,6 +451,29 @@ export class VocabularyGameEditComponent implements OnInit {
     }
     this.editingAudio = !this.editingAudio    
   }
+
+  clearInnerText(idOfHTMLElement: string) {
+    let elem = document.getElementById(idOfHTMLElement)
+    if(
+      elem.innerText == 'Falsche Antwort 1' ||
+      elem.innerText == 'Falsche Antwort 2' ||
+      elem.innerText == 'Falsche Antwort 3' ||
+      elem.innerText == 'Richtige Antwort' ||
+      elem.innerText == 'Hier die Frage eingeben'
+    ) elem.innerText = ""
+  }
+
+  leftEditingMode(idOfHTMLElement: string) {
+    let elem = document.getElementById(idOfHTMLElement)
+    if(elem.innerText == ''){
+      if(idOfHTMLElement == "question") elem.innerText = 'Hier die Frage eingeben';
+      else if(idOfHTMLElement == "button1") elem.innerText = 'Richtige Antwort';
+      else if(idOfHTMLElement == "button2") elem.innerText = 'Falsche Antwort 1';
+      else if(idOfHTMLElement == "button3") elem.innerText = 'Falsche Antwort 2';
+      else if(idOfHTMLElement == "button4") elem.innerText = 'Falsche Antwort 3';
+    }
+  }
+
   /**Deletes the currentGame from the Database
    * 
    */
