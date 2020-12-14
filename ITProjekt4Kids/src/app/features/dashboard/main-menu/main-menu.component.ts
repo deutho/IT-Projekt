@@ -381,9 +381,11 @@ export class MainMenuComponent implements OnInit {
 
     games.forEach(element => {
       for (let key of Object.keys(element)) {
-        if (key == "photoID" && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") this.afs.deleteFromStorageByUrl(element[key]);
-        if (element[key].length > 1 && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") {
-          this.afs.deleteFromStorageByUrl(element[key][1])
+        if (key != null) {
+          if (key == "photoID" && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") this.afs.deleteFromStorageByUrl(element[key]);
+          if (element[key].length > 1 && element[key][1].substring(0,37) == "https://firebasestorage.googleapis.com") {
+            this.afs.deleteFromStorageByUrl(element[key][1])
+          }
         }
       }
     });  

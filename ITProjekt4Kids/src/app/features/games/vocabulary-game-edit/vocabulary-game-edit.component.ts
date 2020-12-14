@@ -84,15 +84,20 @@ export class VocabularyGameEditComponent implements OnInit {
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
 
     //set numbers
-    let numbers: number[] = [];
-    this.Games.forEach(element => {
-      numbers.push(element.number);
-    });
-    //calculate the next number
-    this.nextCountNumber = Math.max(...numbers)+1;
+    this.nextCountNumber = 0;
+    //if already questions in the game
+    if (this.Games.length != 0) {
+      let numbers: number[] = [];
+      this.Games.forEach(element => {
+        numbers.push(element.number);
+      });
 
+      //calculate the next number
+      this.nextCountNumber = Math.max(...numbers)+1;
+    }
+    
     //sort array by number
-    this.Games.sort((a, b) => {return a.number - b.number});
+    this.Games.sort((a, b) => {return b.number - a.number});
     
     //load first game
     if (this.Games.length == 0) this.initializeNewQuestion();
