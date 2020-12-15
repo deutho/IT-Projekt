@@ -58,7 +58,8 @@ export class VocabularyGameEditComponent implements OnInit {
   nextCountNumber: number;
   checkstate: boolean;
   coloring = true;
-  
+  deleteElementOverlay = false;
+ 
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService,) {
     // get folder where game created in
@@ -410,6 +411,7 @@ export class VocabularyGameEditComponent implements OnInit {
       this.unsavedChanges = true;
     }
     else {
+      this.loaded=false;
       this.loadNextGame();
       if(this.editingAudio == true) {
         this.valueButton1 = this.currentGame.rightAnswer[0];
@@ -428,6 +430,7 @@ export class VocabularyGameEditComponent implements OnInit {
       this.unsavedChanges = true;
     }
     else {
+      this.loaded=false;
       this.loadPreviousGame();
       if(this.editingAudio == true) {
         this.valueButton1 = this.currentGame.rightAnswer[0];
@@ -507,11 +510,13 @@ export class VocabularyGameEditComponent implements OnInit {
    * 
    */
  async deleteQuestion() {
+  
     if (!this.finalScreen) {
       //get the UID from the CurrentElement if it is a valid Question
       let questionToDelete = this.currentGame.uid;
       //delete the question from the database
       this.loaded = false;
+      this.deleteElementOverlay = false;
       await this.afs.deleteDocument("games", questionToDelete);
       this.loadNextGame(true);
     }

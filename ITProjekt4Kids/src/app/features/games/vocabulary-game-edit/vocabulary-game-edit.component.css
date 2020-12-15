@@ -177,7 +177,9 @@
     cursor: default; /* Add a pointer on hover */
   }
 
-
+  .dropshadow {
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));
+}
   .superOverlay {
     position: fixed; /* Sit on top of the page content */
     display: flex; /* Hidden by default */
@@ -185,7 +187,16 @@
     background-color: white; /* Black background with opacity */
     z-index: 4; /* Specify a stack order in case you're using a different order for other elements */
     cursor: default; /* Add a pointer on hover */
+    border-radius: 15px; 
   }
+
+  .content {
+    width: 80%;
+    display: block;
+    margin: 0 auto;
+    padding: 20px 0px;
+    min-width: 280px;
+}
 
 .fullscreen {
     position: fixed; /* Sit on top of the page content */
