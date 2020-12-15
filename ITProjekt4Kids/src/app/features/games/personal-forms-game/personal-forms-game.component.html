@@ -1,7 +1,7 @@
 <div id="overlay" *ngIf="this.evaluated == true && this.answerIsCorrect == true" (click)="loadNextGame()"></div>
   <div class="content" *ngIf="loaded == true">
     <div class="row">
-      <h4>{{currentGame.question}}</h4>
+      <h4>{{currentGame.question[0]}}</h4>
       <!-- first column -->
       <div cdkDropListGroup class ="wrapper">
         <div class="example-container">

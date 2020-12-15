@@ -9,17 +9,18 @@
 }
 
 .example-list {
-  border-bottom: solid 1px #ccc;
+  border: dashed 1px #ccc;
   min-height: 63px;
   background: white;
   /* border-radius: 4px; */
   overflow: hidden;
   display: block;
+  background: transparent;
 }
 
 .example-box {
   padding: 20px 10px;
-  border-bottom: solid 1px #ccc;
+  border: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
   flex-direction: row;
@@ -28,6 +29,7 @@
   box-sizing: border-box;
   cursor: move;
   background: white;
+  /* background: transparent; */
   font-size: 14px;
   min-height: 63px;
 }

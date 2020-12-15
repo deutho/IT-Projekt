@@ -345,7 +345,7 @@ export class VocabularyGameComponent implements OnInit {
   updateColor(id) {
     var text = document.getElementById(id);
     var str = (<HTMLInputElement>text).value,
-        reg = /red|blue|green/ig; //g is to replace all occurances
+        reg = /red|blue|green/g; //g is to replace all occurances
 
     //fixing a bit
     var toStr = String(reg);
@@ -353,37 +353,38 @@ export class VocabularyGameComponent implements OnInit {
 
     //split it baby
     var colors = color.split("|");
+    if(this.currentGame.coloring == undefined) this.currentGame.coloring = true;
+    if(this.currentGame.coloring) {
+      if (colors.indexOf("red") > -1) {
+        // 
+          str = str.replace(/\bdie\b/g, '<span style="color:red;" >die</span>');
+      }
 
-    if (colors.indexOf("red") > -1) {
-      // style="color:red;"
-        str = str.replace(/die/, '<span >die</span>');
+      if (colors.indexOf("blue") > -1) {
+        // '<span style="color:blue;">der</span>'
+          str = str.replace(/\bder\b/g, '<span style="color:blue;">der</span>');
+      }
+
+      if (colors.indexOf("green") > -1) {
+        // style="color:green;"
+          str = str.replace(/\bdas\b/g, '<span style="color:green;">das</span>');
+      }
+
+      if (colors.indexOf("red") > -1) {
+        // style="color:red;"
+        str = str.replace(/\bDie\b/g, '<span  style="color:red;">Die</span>');
+      }
+
+      if (colors.indexOf("blue") > -1) {
+        // style="color:blue;"
+          str = str.replace(/\bDer\b/g, '<span style="color:blue;">Der</span>');
+      }
+
+      if (colors.indexOf("green") > -1) {
+        // style="color:green;"
+          str = str.replace(/\bDas\b/g, '<span style="color:green;">Das</span>');
+      }
     }
-
-    if (colors.indexOf("blue") > -1) {
-      // '<span style="color:blue;">der</span>'
-        str = str.replace(/der/, '<span >der</span>');
-    }
-
-    if (colors.indexOf("green") > -1) {
-      // style="color:green;"
-        str = str.replace(/das/, '<span >das</span>');
-    }
-
-    if (colors.indexOf("red") > -1) {
-      // style="color:red;"
-      str = str.replace(/Die/, '<span >Die</span>');
-    }
-
-    if (colors.indexOf("blue") > -1) {
-      // style="color:blue;"
-        str = str.replace(/Der/, '<span >Der</span>');
-    }
-
-    if (colors.indexOf("green") > -1) {
-      // style="color:green;"
-        str = str.replace(/Das/, '<span >Das</span>');
-    }
-
 
     document.getElementById(id).innerHTML = str;
   }  

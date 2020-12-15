@@ -12,4 +12,5 @@ export const environment = {
   },
 
   shareableURL: 'www.derdiedaz.at',
+  isDeployment: true
 };

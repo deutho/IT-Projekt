@@ -25,6 +25,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AppComponent } from '../app.component';
 import { RedirectComponent } from './redirect/redirect.component';
 import { ClipboardModule } from 'ngx-clipboard';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -56,6 +57,7 @@ imports: [
   FormsModule,
   DragDropModule,
   ClipboardModule,
+  NgbModule
 ],
 exports: [MainComponent],
 providers: [AngularFirestore],

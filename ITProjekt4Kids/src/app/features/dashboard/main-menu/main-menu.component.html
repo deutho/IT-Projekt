@@ -259,8 +259,9 @@
                         <select id="gameTypeSelector" class="form-control custom-select drop-shadow">                            
                             <option value="" selected disabled hidden>Wähle die Art des Lernspiels</option>
                             <option value="vocabular-game">Wort-Quiz</option>
-                            <option value="personal-forms-game">Personal-Formen-Rätsel</option>
-                            <option value="verb-position-game">Satzstellungs-Spiel</option>
+                            <!-- comment for deploy -->
+                            <option *ngIf="!isDeployment" value="personal-forms-game">Personal-Formen-Rätsel</option>
+                            <option *ngIf="!isDeployment" value="verb-position-game">Satzstellungs-Spiel</option>
                          </select>
                     </div>
                     <!-- add button -->

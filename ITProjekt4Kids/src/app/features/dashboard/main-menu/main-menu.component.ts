@@ -67,11 +67,12 @@ export class MainMenuComponent implements OnInit {
   failed: boolean = false;
   itemtodelete: Folder;
   creatingElementError = false;
+  isDeployment = false;
   
   
 
   async ngOnInit() {
-    
+    this.isDeployment = environment.isDeployment; // delete when project is done
     this.addElementForm = this.fb.group({
       name:  ['', Validators.required],
       game:  []

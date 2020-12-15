@@ -15,6 +15,8 @@ import {AngularFireStorageModule} from '@angular/fire/storage'
 firebase.initializeApp(environment.firebase)
 import { CommonModule } from '@angular/common';  
 import { RecordRTCService } from './services/record-rtc.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {NgbPaginationModule, NgbAlertModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,10 @@ import { RecordRTCService } from './services/record-rtc.service';
     BrowserAnimationsModule,
     HttpClientModule,
     AngularFireStorageModule,
-    CommonModule
+    CommonModule,
+    NgbModule,
+    NgbPaginationModule, 
+    NgbAlertModule
   ],
   providers: [ 
     AngularFirestore,

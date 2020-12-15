@@ -16,6 +16,7 @@ export const environment = {
   },
 
   shareableURL: 'localhost:4200',
+  isDeployment: false
 };
 
 /*

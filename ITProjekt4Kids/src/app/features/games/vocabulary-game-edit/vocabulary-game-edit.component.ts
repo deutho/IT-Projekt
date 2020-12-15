@@ -57,7 +57,7 @@ export class VocabularyGameEditComponent implements OnInit {
   default = false;
   nextCountNumber: number;
   checkstate: boolean;
-  
+  coloring = true;
   
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService,) {
@@ -79,6 +79,7 @@ export class VocabularyGameEditComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    
     //get user
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
     // get games
@@ -232,7 +233,7 @@ export class VocabularyGameEditComponent implements OnInit {
   initializeNewQuestion() {
       this.finalScreen = true;
       let uid = uuidv4();
-      this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID, this.nextCountNumber, true); 
+      this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID, this.nextCountNumber, this.coloring); 
       this.nextCountNumber++;
       this.default = true; 
       this.question = this.currentGame.question[0];
@@ -265,7 +266,7 @@ export class VocabularyGameEditComponent implements OnInit {
       this.question = this.currentGame.question[0];
       this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
       this.imageURL = this.currentGame.photoID;
-      
+      this.coloring = this.currentGame.coloring;
 
       //  lets the html know, that content can now be loaded
       this.initSounds();
@@ -291,6 +292,7 @@ export class VocabularyGameEditComponent implements OnInit {
         this.question = this.currentGame.question[0];
         this.answers = [this.currentGame.rightAnswer[0], this.currentGame.answer1[0], this.currentGame.answer2[0], this.currentGame.answer3[0]];
         this.imageURL = this.currentGame.photoID; 
+        this.coloring = this.currentGame.coloring;
         this.loaded = true;  
         this.initSounds();
         this.loadInnerTextValues();
@@ -311,6 +313,7 @@ export class VocabularyGameEditComponent implements OnInit {
       this.currentGame.answer2[1] = this.audioURLAnswer3;
       this.currentGame.answer3[1] = this.audioURLAnswer4;
       this.currentGame.question[1] = this.audioURLQuestion;
+      this.currentGame.coloring = this.coloring;
       if(this.currentGame.photoID != this.imageURL) {
         if(this.currentGame.photoID.search("firebasestorage.googleapis.com") != -1) {
           this.afs.deleteFromStorageByUrl(this.currentGame.photoID).catch((err) => {
@@ -373,7 +376,8 @@ export class VocabularyGameEditComponent implements OnInit {
        this.currentGame.answer1[1] == this.audioURLAnswer2 &&
        this.currentGame.answer2[1] == this.audioURLAnswer3 &&
        this.currentGame.answer3[1] == this.audioURLAnswer4 &&
-       this.currentGame.question[1] == this.audioURLQuestion) {
+       this.currentGame.question[1] == this.audioURLQuestion &&
+       this.currentGame.coloring == this.coloring) {
         return false;
        }
     else {
