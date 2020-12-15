@@ -66,7 +66,7 @@ export class BugReportComponent implements OnInit {
         this.bugreports =  data;
       });
 
-    this.bugreports = this.bugreports.sort((n1, n2) => {return n1.time.seconds - n2.time.seconds });
+    this.bugreports = this.bugreports.sort((n1, n2) => {return n2.time.seconds - n1.time.seconds });
     let i = 0;
     this.bugreports.forEach((m) => {
       var date = new Date(m.time.seconds*1000).toLocaleDateString("de-DE")

@@ -1,7 +1,7 @@
 <div *ngIf ="write === true" class="content">
     
     <div style = "margin: auto; ">
-        <label for="textarea">Beschreiben Sie bitte den Bug. Erwähnen Sie dabei auch, für welche Nutzer der Bug auftritt (Lehrer, Schüler, beide):</label>  
+        <label for="textarea">Beschreiben Sie bitte Ihr Feedback. Erwähnen Sie dabei auch, für welche Nutzer das Feedback relevant ist (Lehrer, Schüler, beide):</label>  
        <div class="col-75">
         <textarea id="textarea" name="subject" placeholder="Hier den Text zur Fehlerbeschreibung eingeben..." style="height:200px"></textarea>
       </div>
@@ -26,7 +26,7 @@
 </div>
 
 <div *ngIf = "write === false">
-    Bug Reports von {{currentUser.firstname}} {{currentUser.lastname}}
+    Feedback Reports von {{currentUser.firstname}} {{currentUser.lastname}}
     <ul *ngFor="let bugreport of bugreports;  index as i" style="padding-top: -50px;">
         <li style="margin-top: 30px;">
              {{i+1}} Status: {{bugreport.status}} vom {{dates[i]}}: {{bugreport.description}}

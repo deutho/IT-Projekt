@@ -30,6 +30,7 @@ export class RecordRTCService {
     mimeType: 'audio/webm'
   }
   app: any;
+  currentGameUID: string;
 
   storage = firebase.storage();
   storageRef = this.storage.ref();
@@ -48,7 +49,8 @@ export class RecordRTCService {
    * check recording base on `recordingTimer`
    * getting permission on `mediaDevices` audio
    */
-  toggleRecord() {
+  toggleRecord(currentGameUID : string) {
+    this.currentGameUID = currentGameUID;
     if (this.recordingTimer) {
       this.stopRTC();
     } else {
@@ -93,7 +95,7 @@ export class RecordRTCService {
 
     // The storage path
     let name = Date.now() + '_' + blob.size
-    const path = `/audio/games/wordquiz/${name}`;
+    const path = `/audio/${this.currentGameUID}_${name}`;
 
     // Reference to storage bucket
     var audioRef = this.storageRef.child(path);

@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'uploader',
   templateUrl: './uploader.component.html',
   styleUrls: ['./uploader.component.css']
 })
+
+
 export class UploaderComponent {
+  @Input() public currentGameUID: string;
 
   isHovering: boolean;
   tooManyFiles: boolean = false;

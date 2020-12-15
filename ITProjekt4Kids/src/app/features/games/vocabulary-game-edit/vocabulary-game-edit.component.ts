@@ -109,7 +109,7 @@ export class VocabularyGameEditComponent implements OnInit {
 
   startVoiceRecord(HTMLFinder){
     this.triggeredHTML = HTMLFinder;
-    this._recordRTC.toggleRecord();
+    this._recordRTC.toggleRecord(this.currentGame.uid);
     clearTimeout(this.recordingTimeout)
     this.recordingTimeout = window.setTimeout(() => {
         this.startVoiceRecord(HTMLFinder);

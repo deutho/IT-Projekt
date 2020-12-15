@@ -12,7 +12,8 @@ import { AppService } from 'src/app/services/app.service';
 })
 export class UploadTaskComponent implements OnInit {
 
-  @Input() file: File;
+  @Input() public file: File;
+  @Input() public currentGameUID: string;
 
   task: AngularFireUploadTask;
 
@@ -29,7 +30,7 @@ export class UploadTaskComponent implements OnInit {
 
   startUpload() {
     // The storage path
-    const path = `/pictures/games/wordquiz/${Date.now()}_${this.file.name}`;
+    const path = `/pictures/games/${this.currentGameUID}_${Date.now()}_${this.file.name}`;
 
     // Reference to storage bucket
     const ref = this.storage.ref(path);

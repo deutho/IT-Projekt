@@ -7,6 +7,7 @@ import { AppService } from 'src/app/services/app.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { NavigationService } from 'src/app/services/navigation.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,7 @@ export class MainComponent implements OnInit {
   studentMode;
   changedToStudent = false;
   changedToTeacher = false;
+  isDeployment;
   constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private afs: FirestoreDataService, private nav: NavigationService) {
     this.appService.myComponent(this.data);
     this.appService.myheader$.subscribe((header) => {
@@ -32,6 +34,8 @@ export class MainComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.isDeployment = environment.isDeployment;
+
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
     this.currentUser.username = this.currentUser.username.substring(0, this.currentUser.username.lastIndexOf('@'));
     
