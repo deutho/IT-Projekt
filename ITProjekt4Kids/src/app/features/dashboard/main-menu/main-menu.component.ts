@@ -21,17 +21,7 @@ import {v4 as uuidv4} from 'uuid';
 export class MainMenuComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService, private nav: NavigationService) {
-      this.appService.myRedirect$.subscribe((redirect) => {
-        this.redirectdata = redirect;
-      });
-
-    this.appService.myStudentMode$.subscribe((studentMode) => {
-      this.studentMode = studentMode;
-    });
-
-    this.appService.myLastPath$.subscribe((lastpath) => {
-      this.lastpath = lastpath;
-    });
+      
    }
 
   data;
@@ -72,6 +62,19 @@ export class MainMenuComponent implements OnInit {
   
 
   async ngOnInit() {
+    this.appService.myRedirect$.subscribe((redirect) => {
+      this.redirectdata = redirect;
+    });
+
+    this.appService.myStudentMode$.subscribe((studentMode) => {
+      this.studentMode = studentMode;
+    });
+
+    this.appService.myLastPath$.subscribe((lastpath) => {
+      this.lastpath = lastpath;
+    });
+
+
     this.isDeployment = environment.isDeployment; // delete when project is done
     this.addElementForm = this.fb.group({
       name:  ['', Validators.required],
