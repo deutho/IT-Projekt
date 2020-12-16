@@ -44,6 +44,7 @@ export class MainMenuComponent implements OnInit {
   creating = false;
   editing = false;
   deleting = false;
+  standard = false;
   redirectdata: string[] = [];
   redirected: boolean = false;
   redirectitem;
@@ -207,10 +208,13 @@ export class MainMenuComponent implements OnInit {
       if (item.name == "derdiedaz") {
         this.currentDocKey = "derdiedaz";
         this.currentPathForHTML = "derdieDAZ Standard Übungen"
+        console.log(this.currentPathForHTML)
       } else {
         this.currentDocKey = item.uid;
         if (this.level == 0) this.currentPathForHTML = this.currentPathForHTML + item.name;
         else this.currentPathForHTML = this.currentPathForHTML + "/" + item.name;
+        console.log(this.currentPathForHTML)
+        console.log(this.currentPathForHTML.substring(0,26))
       }
       this.level++
       this.getFolders();
