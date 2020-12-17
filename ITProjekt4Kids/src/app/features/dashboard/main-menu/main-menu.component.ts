@@ -21,17 +21,7 @@ import {v4 as uuidv4} from 'uuid';
 export class MainMenuComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService, private nav: NavigationService) {
-      this.appService.myRedirect$.subscribe((redirect) => {
-        this.redirectdata = redirect;
-      });
-
-    this.appService.myStudentMode$.subscribe((studentMode) => {
-      this.studentMode = studentMode;
-    });
-
-    this.appService.myLastPath$.subscribe((lastpath) => {
-      this.lastpath = lastpath;
-    });
+      
    }
 
   data;
@@ -54,6 +44,7 @@ export class MainMenuComponent implements OnInit {
   creating = false;
   editing = false;
   deleting = false;
+  standard = false;
   redirectdata: string[] = [];
   redirected: boolean = false;
   redirectitem;
@@ -72,6 +63,19 @@ export class MainMenuComponent implements OnInit {
   
 
   async ngOnInit() {
+    this.appService.myRedirect$.subscribe((redirect) => {
+      this.redirectdata = redirect;
+    });
+
+    this.appService.myStudentMode$.subscribe((studentMode) => {
+      this.studentMode = studentMode;
+    });
+
+    this.appService.myLastPath$.subscribe((lastpath) => {
+      this.lastpath = lastpath;
+    });
+
+
     this.isDeployment = environment.isDeployment; // delete when project is done
     this.addElementForm = this.fb.group({
       name:  ['', Validators.required],
@@ -204,10 +208,13 @@ export class MainMenuComponent implements OnInit {
       if (item.name == "derdiedaz") {
         this.currentDocKey = "derdiedaz";
         this.currentPathForHTML = "derdieDAZ Standard Übungen"
+        console.log(this.currentPathForHTML)
       } else {
         this.currentDocKey = item.uid;
         if (this.level == 0) this.currentPathForHTML = this.currentPathForHTML + item.name;
         else this.currentPathForHTML = this.currentPathForHTML + "/" + item.name;
+        console.log(this.currentPathForHTML)
+        console.log(this.currentPathForHTML.substring(0,26))
       }
       this.level++
       this.getFolders();
