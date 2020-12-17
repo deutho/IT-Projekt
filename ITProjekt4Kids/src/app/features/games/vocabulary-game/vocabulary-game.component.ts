@@ -357,32 +357,32 @@ export class VocabularyGameComponent implements OnInit {
     if(this.currentGame.coloring) {
       if (colors.indexOf("red") > -1) {
         // 
-          str = str.replace(/\bdie\b/g, '<span style="color:red;" >die</span>');
+          str = str.replace(/\bdie(?=^|\s)/g, '<span style="color:red;" >die</span>');
       }
 
       if (colors.indexOf("blue") > -1) {
         // '<span style="color:blue;">der</span>'
-          str = str.replace(/\bder\b/g, '<span style="color:blue;">der</span>');
+          str = str.replace(/\der(?=^|\s)/g, '<span style="color:blue;">der</span>');
       }
 
       if (colors.indexOf("green") > -1) {
         // style="color:green;"
-          str = str.replace(/\bdas\b/g, '<span style="color:green;">das</span>');
+          str = str.replace(/\das(?=^|\s)/g, '<span style="color:green;">das</span>');
       }
 
       if (colors.indexOf("red") > -1) {
         // style="color:red;"
-        str = str.replace(/\bDie\b/g, '<span  style="color:red;">Die</span>');
+        str = str.replace(/\bDie(?=^|\s)/g, '<span  style="color:red;">Die</span>');
       }
 
       if (colors.indexOf("blue") > -1) {
         // style="color:blue;"
-          str = str.replace(/\bDer\b/g, '<span style="color:blue;">Der</span>');
+          str = str.replace(/\bDer(?=^|\s)/g, '<span style="color:blue;">Der</span>');
       }
 
       if (colors.indexOf("green") > -1) {
         // style="color:green;"
-          str = str.replace(/\bDas\b/g, '<span style="color:green;">Das</span>');
+          str = str.replace(/\bDas(?=^|\s)/g, '<span style="color:green;">Das</span>');
       }
     }
 
