@@ -13,25 +13,10 @@
         class="example-list"
         (cdkDropListDropped)="drop($event)"
         cdkDropListEnterPredicate="canDrop">
-
-        <div id="word1" class="example-box" *ngFor="let words of word1" cdkDrag>{{words}}</div>
-        <div id="word2" class="example-box" *ngFor="let words of word2" cdkDrag>{{words}}</div>
-        <div id="word3" class="example-box" *ngFor="let words of word3" cdkDrag>{{words}}</div>
+        
+        <div class="example-box" *ngFor="let words of sentence, index as i" cdkDrag="this.ucFirst()" id="{{ 'word' + i }}">{{words}}</div>
     </div>
 
-    <!-- <div *ngIf="showAnswer">
-        <div 
-            cdkDropList
-            cdkDropListOrientation="horizontal"
-            class="example-list"
-            (cdkDropListDropped)="drop($event)"
-            cdkDropListSortingDisabled>
-
-            <div class="example-box" *ngFor="let words of correct" cdkDrag>
-            {{words}}
-            </div>
-        </div>
-    </div> -->
 
     <button (click)="this.evaluateGame()">Fertig</button>
 
