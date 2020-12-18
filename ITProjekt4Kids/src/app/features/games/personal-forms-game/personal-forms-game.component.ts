@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import {CdkDragDrop, CdkDropList, CDK_DROP_LIST, copyArrayItem, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { PersonalFormsGame } from 'src/app/models/PersonalFormsGame.model';
 import { supportsPassiveEventListeners } from '@angular/cdk/platform';
@@ -6,6 +6,7 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { take } from 'rxjs/internal/operators/take';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-personal-forms-game',
@@ -14,7 +15,7 @@ import { AppService } from 'src/app/services/app.service';
 })
 export class PersonalFormsGameComponent implements OnInit {
 
-  constructor(private afs: FirestoreDataService, private appService: AppService) {
+  constructor(private afs: FirestoreDataService, private appService: AppService, private nav: NavigationService) {
     this.appService.myGameData$.subscribe((data) => {
       this.folderID = data;
     });
@@ -31,6 +32,14 @@ export class PersonalFormsGameComponent implements OnInit {
   allItemsAllocated = false;
   answerIsCorrect = false;
   loaded = false;
+  totalNumberOfRounds = 0;
+  noQuestionsInGame = false;
+  roundsWon = 0;
+  roundsLost = 0;
+  roundsWonAnimation = [];
+  roundsLostAnimation = [];
+  speakerMode = false;
+
 
   // boolean to detect if list already contains a string
   listOneEmpty = true;
@@ -60,10 +69,10 @@ export class PersonalFormsGameComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
-
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
     this.shuffleArray(this.Games)
     this.loadNextGame()
+    this.totalNumberOfRounds = this.Games.length+1; 
   }
 
   //method to evaluate if something can be dropped in the list/field
@@ -287,13 +296,60 @@ export class PersonalFormsGameComponent implements OnInit {
       for( let i in Result) {
         if(Result[i] == "falsch") tempAnswerChecker = false;
       }
-      if(tempAnswerChecker == true) this.answerIsCorrect = true;
-      //Stimme "Du hast das Toll gemacht!" einfügen
+
+      //there is only one evaluation, but infinte trys to pass the game
+        if(tempAnswerChecker == true){
+          this.answerIsCorrect = true;
+          if(!this.evaluated) this.roundsWon++;
+          //Stimme "Du hast das toll gemacht!" 
+        }else{
+          if(!this.evaluated) this.roundsLost++;
+          //Stimme "Oje, probier es noch einmal, du schaffst das!"
+        }   
       this.evaluated = true;
     }
   }
 
   finishGame() {
     console.log("fertisch")
+    if(this.totalNumberOfRounds > 0) {
+      // this.endtime = Date.now();
+      // this.duration = this.endtime-this.starttime;
+      // this.afs.createResult(this.currentUser.uid, this.totalrounds, this.roundsWon, this.folderID, this.duration);
+      this.finished = true;
+      this.finalScreen()
+    }
+    else this.noQuestionsInGame = true;
   }
+
+  finalScreen(){
+    this.roundsWonAnimation = [].constructor(this.roundsWon);
+    this.roundsLostAnimation = [].constructor(this.roundsLost);
+  }
+
+  happyFace() {
+    if((this.totalNumberOfRounds - this.roundsWon + this.roundsLost) < (this.totalNumberOfRounds / 2) ) {
+      return true; //more than 50% correct
+    }
+    else return false;
+  }
+
+  goBack() {
+    this.nav.navigate("Startseite", "mainMenu");
+  }
+
+  @HostListener('window:popstate', ['$event'])
+  onBrowserBackBtnClose(event: Event) {
+    event.preventDefault();
+    this.nav.navigate('Hauptmenü', 'mainMenu');
+  }
+
+  switchMode() {
+    this.loaded = false;
+    this.speakerMode = !this.speakerMode;
+    this.loaded = true;
+    // this.updateColorhelper();
+  }
+  
+
 }
