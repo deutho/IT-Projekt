@@ -1,5 +1,8 @@
-* {
+#h1{
   font-size: 25px;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  color: black;
 }
 
 .example-list {
@@ -53,14 +56,12 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.example-container {
-  width: 20%;
-  max-width: 100%;
-  margin: 0 25px 25px 0;
-  display: inline-block;
-  vertical-align: top;
-  min-width: 100px;
-  
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .content {
@@ -69,6 +70,13 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.row {
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 #overlay {
@@ -84,3 +92,383 @@
   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */ 
 }
+
+@keyframes cssAnimation {    
+  to {        
+      width:0;
+      height:0;
+      padding: 0 0 0 0;
+      overflow:hidden;
+  }
+}
+@-webkit-keyframes cssAnimation {
+  to {        
+      width:0;
+      height:0;
+      padding: 0 0 0 0;
+      visibility:hidden;
+  }
+}
+
+.response {
+  margin: 0 auto;
+  padding: 10px 20px 10px 20px; 
+  border-radius: 100px;
+}
+
+.columnOne {
+  justify-content: flex-end;
+}
+
+.item-backToHome {
+  grid-area: home;
+}
+
+.item-nextQuestion {
+  grid-area: next;
+}
+
+.item-final {
+  grid-area: final;
+}
+
+.container {
+  display: grid;
+  width: 100%;
+  margin: 2% auto;
+  grid-template-columns: 10% 40% 40% 10%;
+  grid-template-rows: auto;
+  grid-template-areas:  
+      ". question question . "
+      "image image image image"
+      ". ans1 ans2 ."
+      ". ans3 ans4 ."
+      ". . . ."
+      ". final final ."
+      ". home next ."
+      
+      ". . . ."
+  }
+
+.button-style {
+  display: block;
+  background-color: #ffffff;
+  border-radius: 10px;
+  width: 90%;
+  height: 75%;
+  margin: 10px auto;
+  min-height: 50px;
+  padding: 10px 0px 10px 0px;
+text-align: center;
+font-size:calc(15px + 1vw);
+  filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.img-style {
+  max-width: 50%;
+  max-height: 50%;
+margin: 60px auto;
+  text-align: center;
+min-width: 340px
+}
+
+.image {
+width: 80%; 
+height: 80%;
+border-radius: 15px;
+border: 20px solid white;
+filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.question {
+  overflow-wrap: break-word;
+  font-size: 200%;
+  text-align: center;  
+  width: 100%
+}
+
+.input{
+  width: 97.5%;
+  padding: 0 0 0 2.5%;
+}
+
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: block; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 35px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color:transparent; /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+.speakerMode {
+  position: fixed; /* Sit on top of the page content */
+  display: block; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 66px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color:transparent; /* Black background with opacity */
+  z-index: 3; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: default; /* Add a pointer on hover */
+}
+
+.transparent {
+  color: black;
+  opacity: 0.4;
+  background-color: transparent;    
+  
+}
+
+
+.star {
+  width: 30px;
+  height: 30px;
+}
+
+.containerFinal {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.flex-center-leftAlign {
+display: flex;
+justify-content: flex-start;
+align-content: flex-start;
+align-items: flex-start;
+flex-direction: column;
+}
+
+/* Code frome Codepen */
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+
+#container {
+ position: relative;
+ overflow: hidden;
+ width: 250px;
+ height: 250px;
+}
+h1 {
+ font-size: 0.9em;
+ font-weight: 100;
+ letter-spacing: 3px;
+ padding-top: 8px;
+ color: #fcfcfc;
+ padding-bottom: 5px;
+   text-transform: uppercase;
+   display: inline-block;
+   vertical-align: bottom;
+   line-height: normal;
+}
+.green {
+ color: #4ec07d;
+}
+.red {
+ color: #e96075;
+}
+.alert {
+ font-weight: 700;
+ letter-spacing: 5px;
+}
+
+button, .dot {
+ cursor: pointer;
+}
+#success-box {
+ position: absolute;
+ width: 100%;
+ height: 100%;
+ background: linear-gradient(to bottom right, #b0db7d 40%, #99dbb4 100%);
+ border-radius: 20px;
+}
+#error-box {
+ position: absolute;
+ width: 100%;
+ height: 100%;
+ background: linear-gradient(to bottom left, #ef8d9c 40%, #ffc39e 100%);
+ border-radius: 20px;
+}
+.dot {
+ width: 8px;
+ height: 8px;
+ background: #fcfcfc;
+ border-radius: 50%;
+ position: absolute;
+ top: 4%;
+ right: 6%;
+}
+.dot:hover {
+ background: #c9c9c9;
+}
+.two {
+ right: 12%;
+ opacity: 0.5;
+}
+.face {
+ position: absolute;
+ width: 22%;
+ height: 22%;
+ background: #fcfcfc;
+ border-radius: 50%;
+ border: 1px solid #777;
+ top: 21%;
+ left: 37.5%;
+ z-index: 2;
+ animation: bounce 1s ease-in infinite;
+}
+.face2 {
+ position: absolute;
+ width: 22%;
+ height: 22%;
+ background: #fcfcfc;
+ border-radius: 50%;
+ border: 1px solid #777;
+ top: 21%;
+ left: 37.5%;
+ z-index: 2;
+ animation: roll 3s ease-in-out infinite;
+}
+.eye {
+ position: absolute;
+ width: 5px;
+ height: 5px;
+ background: #777;
+ border-radius: 50%;
+ top: 40%;
+ left: 20%;
+}
+.right {
+ left: 68%;
+}
+.mouth {
+ position: absolute;
+ top: 43%;
+ left: 41%;
+ width: 7px;
+ height: 7px;
+ border-radius: 50%;
+}
+.happy {
+ border: 2px solid;
+ border-color: transparent #777 #777 transparent;
+ transform: rotate(45deg);
+}
+.sad {
+ top: 49%;
+ border: 2px solid;
+ border-color: #777 transparent transparent #777;
+ transform: rotate(45deg);
+}
+.shadow {
+ position: absolute;
+ width: 21%;
+ height: 3%;
+ opacity: 0.5;
+ background: #777;
+ left: 40%;
+ top: 43%;
+ border-radius: 50%;
+ z-index: 1;
+}
+.scale {
+ animation: scale 1s ease-in infinite;
+}
+.move {
+ animation: move 3s ease-in-out infinite;
+}
+.message {
+ position: absolute;
+ width: 100%;
+ text-align: center;
+ height: 40%;
+ top: 47%;
+}
+.button-box {
+ position: absolute;
+ background: #fcfcfc;
+ width: 50%;
+ height: 15%;
+ border-radius: 20px;
+ top: 73%;
+ left: 25%;
+ outline: 0;
+ border: none;
+ box-shadow: 2px 2px 10px rgba(119, 119, 119, .5);
+   transition: all 0.5s ease-in-out;
+}
+.button-box:hover {
+ background: #efefef;
+ transform: scale(1.05);
+ transition: all 0.3s ease-in-out;
+}
+@keyframes bounce {
+ 50% {
+   transform: translateY(-10px);
+}
+}
+@keyframes scale {
+ 50% {
+   transform: scale(0.9);
+}
+}
+@keyframes roll {
+ 0% {
+   transform: rotate(0deg);
+   left: 25%;
+}
+ 50% {
+   left: 60%;
+   transform: rotate(168deg);
+}
+ 100% {
+   transform: rotate(0deg);
+   left: 25%;
+}
+}
+@keyframes move {
+ 0% {
+   left: 25%;
+}
+ 50% {
+   left: 60%;
+}
+ 100% {
+   left: 25%;
+}
+}
+
+.endScreenContainer {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;    
+}
+.space{
+  min-height: 50px;
+}
+
+.spinner {
+height: 100%;
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.arrowToNextQuestion {
+width: 30vw;
+max-height: 12vw;
+max-width: 250px;
+}
+
+
