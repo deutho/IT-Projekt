@@ -5,7 +5,7 @@
         <input type="text" id="question" placeholder="Hier bitte Frage eingeben">
     </div>
 
-    <!-- image -->
+    <!-- Image -->
     <div *ngIf = "editingAudio == false" class="item-image" >          
         <div id="myimg" class="img-style">              
             <img id="image" class="image" *ngIf = "this.editingPicture == false" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';"  (click)="this.editingPicture = true" src = "{{imageURL}}">
@@ -39,17 +39,40 @@
                 <input type="text" class="example-box" id ="valueWord1" placeholder="1. Wort"> 
                 <input type="text" class="example-box" id ="valueWord2" placeholder="2. Wort">
                 <input type="text" class="example-box" id ="valueWord3" placeholder="3. Wort">
+                <input type="text" class="example-box" id ="audioURLWord1" placeholder="1. Audio"> 
+                <input type="text" class="example-box" id ="audioURLWord2" placeholder="2. Audio">
+                <input type="text" class="example-box" id ="audioURLWord3" placeholder="3. Audio">
             </div>
         </div>
+    </div>
+
+
+    <!-- Audio -->
+    <div>
+
+        
     </div>
 
     <!-- Buttons -->
     <div class="actionBar">
         <button (click)="this.saveChanges()">Speichern</button>
-        <!-- <button (click)="this.leftArrowClicked()">Zurück</button>
-        <button (click)="this.rightArrowClicked()">Weiter</button> -->
+        <button (click)="this.leftArrowClicked()">Zurück</button>
+        <button (click)="this.rightArrowClicked()">Weiter</button>
     </div>
 
+    <!-- Feedback -->
+    <div *ngIf = "this.saved == true" class="item-final alert alert-success text-center" role="alert" style="width: 80%; margin:0 auto;">
+        Erfolgreich gespeichert!
+    </div>
+    <div *ngIf = "this.noChanges == true" class="item-final alert alert-primary text-center" role="alert" style="width: 80%; margin:0 auto;">
+        Es gibt keine zu speichernden Änderungen!
+    </div>
+    <div *ngIf = "this.noMoreGames == true" class="item-final alert alert-primary text-center" role="alert" style="width: 80%; margin:0 auto;">
+        Keine weiteren Fragen!
+    </div>
+    <div *ngIf = "this.notAllInputFieldsFilled == true" class="item-final alert alert-danger text-center" role="alert" style="width: 80%; margin:0 auto;">
+        Es wurden nicht alle Felder ausgefüllt!
+    </div>
 
 
 
