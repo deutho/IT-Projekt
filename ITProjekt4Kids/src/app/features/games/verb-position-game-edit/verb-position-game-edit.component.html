@@ -1,1 +1,56 @@
-<p>verb-position-game-edit works!</p>
+<div class="pageContainer">
+
+    <!-- Question -->
+    <div class="example-container_question question">
+        <input type="text" id="question" placeholder="Hier bitte Frage eingeben">
+    </div>
+
+    <!-- image -->
+    <div *ngIf = "editingAudio == false" class="item-image" >          
+        <div id="myimg" class="img-style">              
+            <img id="image" class="image" *ngIf = "this.editingPicture == false" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';"  (click)="this.editingPicture = true" src = "{{imageURL}}">
+            
+            <!-- <img *ngIf = "this.editingPicture == true" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';" id="image" class="image"  (click)="this.editingPicture = true" src = "{{imageURL}}"> -->
+            <div class="imageEditing-container"  *ngIf = "this.editingPicture == true">
+                <uploader currentGameUID="{{currentGame.uid}}" style="padding: 10px; cursor: pointer;"></uploader>
+                <div class="centerImageEditing" >
+                    
+                    <input id="URL" class="imageEditingItem2" value="{{imageURL}}">
+                    <!-- <div style="display: inline-block; cursor:pointer" (click)="pictureEdited()">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-square" class="svg-inline--fa fa-check-square fa-w-14 imageEditingItem3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path style="color: green;  "  fill="currentColor" d="M400 480H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48v352c0 26.51-21.49 48-48 48zm-204.686-98.059l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.248-16.379-6.249-22.628 0L184 302.745l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.25 16.379 6.25 22.628.001z">
+                            </path>
+                        </svg>
+                    </div> -->
+                    <div class="buttonsEditImage">
+                        <div class="btn button" style="background-color: red;" (click)="abortPictureEdit();">Abbrechen</div>
+                        <div class="btn button" style="background-color: green;" (click)="pictureEdited()">Bestätigen</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>                 
+    </div>
+
+    <!-- Words -->
+    <div class="gameValues">
+        <div class="example-container_values">
+            <div style="display: flex; flex-direction: line">
+                <input type="text" class="example-box" id ="valueWord1" placeholder="1. Wort"> 
+                <input type="text" class="example-box" id ="valueWord2" placeholder="2. Wort">
+                <input type="text" class="example-box" id ="valueWord3" placeholder="3. Wort">
+            </div>
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="actionBar">
+        <button (click)="this.saveChanges()">Speichern</button>
+        <!-- <button (click)="this.leftArrowClicked()">Zurück</button>
+        <button (click)="this.rightArrowClicked()">Weiter</button> -->
+    </div>
+
+
+
+
+</div>

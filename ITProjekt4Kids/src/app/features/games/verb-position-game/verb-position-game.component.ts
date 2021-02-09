@@ -67,6 +67,7 @@ export class VerbPositionGameComponent implements OnInit {
     evaluateGame(){
       var Result = []
       var wordId = []
+      
       //return all ponints of words, which where added before
       for(var i = 0; i < this.correct.length; i++){
         var word = this.correct[i]
