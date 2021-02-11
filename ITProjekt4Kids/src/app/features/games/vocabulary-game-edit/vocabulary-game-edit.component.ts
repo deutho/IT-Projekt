@@ -234,7 +234,8 @@ export class VocabularyGameEditComponent implements OnInit {
   initializeNewQuestion() {
       this.finalScreen = true;
       let uid = uuidv4();
-      this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderID, this.nextCountNumber, this.coloring); 
+      // https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67
+      this.currentGame = new VocabularyGame(uid, ['Falsche Antwort 1',''], ['Falsche Antwort 2',''], ['Falsche Antwort 3',''], ['Richtige Antwort', ''], ["Hier die Frage eingeben", ''], './../../../../assets/Images/Placeholder-Image/north_blur_Text.png', this.folderID, this.nextCountNumber, this.coloring); 
       this.nextCountNumber++;
       this.default = true; 
       this.question = this.currentGame.question[0];

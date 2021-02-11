@@ -3,7 +3,7 @@
     }
 .item-image {
     display: block; 
-    width: 80%;
+    width: 100%;
     }
 .item-ans1 {
     grid-area: ans1;
