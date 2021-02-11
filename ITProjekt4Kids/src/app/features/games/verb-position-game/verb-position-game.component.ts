@@ -127,6 +127,8 @@ export class VerbPositionGameComponent implements OnInit {
           arr[currentIndex] = arr[randomIndex];
           arr[randomIndex] = temporaryValue;
       }
+      this.capitalizeFirst();
+      this.point();
     }
 
     //uppercase first letter of the first box
