@@ -4,10 +4,8 @@ import { take } from 'rxjs/internal/operators/take';
 import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
-import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
-import { NavigationService } from 'src/app/services/navigation.service';
 const starAnimation = trigger('starAnimation', [
   transition('* <=> *', [
     query(':enter',
@@ -69,7 +67,7 @@ export class VocabularyGameComponent implements OnInit {
   noQuestionsInGame = false;
 
   
-  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, private nav: NavigationService) {
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService) {
     this.appService.myGameData$.subscribe((data) => {
       this.folderID = data;
     });
@@ -237,9 +235,7 @@ export class VocabularyGameComponent implements OnInit {
 
   }
 
-  goBack() {
-    this.nav.navigate("Startseite", "mainMenu");
-  }
+  
 
   evaluateGame(selection) {
     let correctAnswer;
@@ -414,11 +410,7 @@ export class VocabularyGameComponent implements OnInit {
     else return false;
   }
 
-  @HostListener('window:popstate', ['$event'])
-  onBrowserBackBtnClose(event: Event) {
-    event.preventDefault();
-    this.nav.navigate('Hauptmenü', 'mainMenu');
-  }
+
 }
 
 

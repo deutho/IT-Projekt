@@ -4,8 +4,6 @@ import {
     ViewContainerRef
   } from '@angular/core';
   import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
-  import { map } from 'rxjs/operators';
-import { DashboardService } from './dashboard.service';
   
   export interface ComponentLoader {
     loadChildren: () => Promise<any>;
@@ -16,8 +14,6 @@ import { DashboardService } from './dashboard.service';
   })
   export class AppService {
 
-    myComponent$: Observable<any>;
-    private myMethodSubject = new Subject<any>();
     myheader$: Observable<any>;
     private myHeaderSubject = new Subject<any>();
     myGameData$: Observable<any>;
@@ -33,7 +29,6 @@ import { DashboardService } from './dashboard.service';
 
 
     constructor(private cfr: ComponentFactoryResolver) {
-        this.myComponent$ = this.myMethodSubject.asObservable();
         this.myheader$ = this.myHeaderSubject.asObservable();
         this.myGameData$ = this.myGameDataSubject.asObservable();
         this.myRedirect$ = this.myRedirectSubject.asObservable();
@@ -42,17 +37,6 @@ import { DashboardService } from './dashboard.service';
         this.myLastPath$ = this.myLastPathSubject.asObservable();
     }
   
-    forChild(vcr: ViewContainerRef, cl: ComponentLoader) {
-      return from(cl.loadChildren()).pipe(
-        map((component: any) => this.cfr.resolveComponentFactory(component)),
-        map(componentFactory => vcr.createComponent(componentFactory))
-      );
-    }
-
-    myComponent(data) {
-        this.myMethodSubject.next(data);
-    }
-
     myHeader(data) {
       this.myHeaderSubject.next(data);
     }

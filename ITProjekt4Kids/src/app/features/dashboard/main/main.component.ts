@@ -4,9 +4,7 @@ import { Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
-import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
-import { NavigationService } from 'src/app/services/navigation.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -23,8 +21,7 @@ export class MainComponent implements OnInit {
   changedToStudent = false;
   changedToTeacher = false;
   isDeployment;
-  constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private afs: FirestoreDataService, private nav: NavigationService) {
-    this.appService.myComponent(this.data);
+  constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private afs: FirestoreDataService) {
     this.appService.myheader$.subscribe((header) => {
       this.header = header;
    });
@@ -43,10 +40,6 @@ export class MainComponent implements OnInit {
   
   logout() {
     this.auth.signOut().then(() => this.router.navigate(['login']))
-  }
-
-  navigate(header, data) {
-    this.nav.navigate(header, data);
   }
 
   toggleStudentMode() {

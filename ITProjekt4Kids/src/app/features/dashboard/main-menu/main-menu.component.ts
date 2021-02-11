@@ -6,11 +6,10 @@ import { take } from 'rxjs/internal/operators/take';
 import { Folder } from 'src/app/models/folder.model';
 import { Folderelement } from 'src/app/models/folderelement.model';
 import { AppService } from 'src/app/services/app.service';
-import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
-import { NavigationService } from 'src/app/services/navigation.service';
 import { environment } from 'src/environments/environment';
 import {v4 as uuidv4} from 'uuid';
+import { MainComponent } from '../main/main.component';
 
 
 @Component({
@@ -20,7 +19,7 @@ import {v4 as uuidv4} from 'uuid';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService, private nav: NavigationService) {
+  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService) {
       
    }
 
@@ -231,7 +230,7 @@ export class MainMenuComponent implements OnInit {
         type = type+"-edit";
         if (this.currentPathForHTML.substring(0,9) == "derdieDAZ") standard = true;
       }
-      if (standard == false) this.navigate(item.name, type);
+      if (standard == false) this.router.navigate[""]; //navigate to the game
       else {
         this.errorMessage = "Diese Übung ist standardmäßig inkludiert und kann daher nicht verändert oder gelöscht werden."
         this.error = true
@@ -429,10 +428,4 @@ export class MainMenuComponent implements OnInit {
       this.goUpOneLevel();
     } 
   }
-
-  navigate(header, data) {
-    this.nav.navigate(header, data);
-    }
-
-
 }

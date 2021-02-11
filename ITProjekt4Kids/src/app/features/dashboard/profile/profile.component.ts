@@ -4,7 +4,6 @@ import { take, tap } from 'rxjs/operators';
 import { User } from 'src/app/models/users.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
-import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +21,7 @@ export class ProfileComponent implements OnInit {
   passwordChange = undefined;
   
   
-  constructor(public afs: FirestoreDataService, public auth: AuthService, private fb: FormBuilder, private nav: NavigationService) {}
+  constructor(public afs: FirestoreDataService, public auth: AuthService, private fb: FormBuilder) {}
   
   async ngOnInit() {
     history.pushState(null, "");
@@ -72,10 +71,5 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  @HostListener('window:popstate', ['$event'])
-  onBrowserBackBtnClose(event: Event) {
-    event.preventDefault();
-    this.nav.navigate('Hauptmenü', 'mainMenu');
-  }
 
 }

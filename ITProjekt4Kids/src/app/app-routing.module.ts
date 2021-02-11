@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MainComponent } from './features/dashboard/main/main.component';
+import { MainMenuComponent } from './features/dashboard/main-menu/main-menu.component';
 import { LoginPageComponent } from './features/login/login-page.component';
 import {AngularFireAuthGuard, AngularFireAuthGuardModule, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
 import { RedirectComponent } from './features/redirect/redirect.component';
@@ -15,8 +15,8 @@ const routes: Routes = [
 { path: 'direct',
   component: RedirectComponent
 },
-  { path: '',
-  component: MainComponent,
+  { path: 'app',
+  component: MainMenuComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },

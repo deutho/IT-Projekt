@@ -42,7 +42,7 @@ loginform: FormGroup;
     let username :string = this.loginform.get('username').value
     let password :string = this.loginform.get('password').value
     username = username+'@derdiedaz.at'
-    this.auth.signIn(username, password).then(() => this.router.navigate([''])).catch((error) => {
+    this.auth.signIn(username, password).then(() => this.router.navigate(['app'])).catch((error) => {
       this.error = true;
       this.loginform.get("username").setValue('');
       this.loginform.get("password").setValue('');
