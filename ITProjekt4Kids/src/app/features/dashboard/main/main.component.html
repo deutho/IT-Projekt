@@ -10,7 +10,7 @@
         
             <h4 class = "align-center text-white"> {{header}}</h4>
     
-    <div *ngIf = "currentUser" class="flex-center-row" >
+    <div *ngIf = currentUser class="flex-center-row" >
 
         <!-- teacher/student vision change -->
         <div *ngIf = "(currentUser.role == 2 || studentMode == true) && header == 'Startseite'" class="flex-center-row" >

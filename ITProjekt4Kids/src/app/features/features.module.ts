@@ -30,7 +30,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
 declarations: [
-  MainComponent,
   ProfileComponent,
   StatisticsComponent,
   AddUserComponent,
@@ -56,7 +55,7 @@ imports: [
   ClipboardModule,
   NgbModule
 ],
-exports: [MainComponent],
+
 providers: [AngularFirestore],
 bootstrap: [AppComponent]
 })
