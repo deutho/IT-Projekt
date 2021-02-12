@@ -6,6 +6,7 @@ import { take } from 'rxjs/internal/operators/take';
 import { Folder } from 'src/app/models/folder.model';
 import { Folderelement } from 'src/app/models/folderelement.model';
 import { AppService } from 'src/app/services/app.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { environment } from 'src/environments/environment';
 import {v4 as uuidv4} from 'uuid';
@@ -19,7 +20,8 @@ import { MainComponent } from '../main/main.component';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService) {
+  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService, private auth: AuthService) {
+
       
    }
 
@@ -62,6 +64,12 @@ export class MainMenuComponent implements OnInit {
   
 
   async ngOnInit() {
+
+    console.log(this.auth.getCurrentUser())
+    if(this.auth.isAuthenticated()) {
+      this.appService.myUser(this.auth.getCurrentUser());
+    }
+
     this.appService.myRedirect$.subscribe((redirect) => {
       this.redirectdata = redirect;
     });

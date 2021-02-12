@@ -26,6 +26,8 @@ import {
     private myStudentModeSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     myLastPath$: Observable<string[]>;
     private myLastPathSubject: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+    myUser$: Observable<any>;
+    private myUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
 
     constructor() {
@@ -35,6 +37,14 @@ import {
         this.myImageURL$ = this.myImageURLSubject.asObservable();
         this.myStudentMode$ = this.myStudentModeSubject.asObservable();
         this.myLastPath$ = this.myLastPathSubject.asObservable();
+    }
+
+    myUser(data) {
+      this.myUserSubject.next(data);
+    }
+
+    getMyUser(): Observable<any> {
+      return this.myUserSubject.asObservable();
     }
   
     myHeader(data) {
