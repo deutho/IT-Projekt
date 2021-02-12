@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
@@ -20,14 +20,17 @@ export class MainComponent implements OnInit {
   changedToStudent = false;
   changedToTeacher = false;
   isDeployment;
+  private headersubscription;
+  private modesubscription;
   constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private afs: FirestoreDataService) {
-    this.appService.getMyHeader().subscribe((header) => {
+    this.headersubscription = this.appService.getMyHeader().subscribe((header) => {
       this.header = header;
    });
-   this.appService.myStudentMode$.subscribe((studentMode) => {
+   this.modesubscription = this.appService.myStudentMode$.subscribe((studentMode) => {
     this.studentMode = studentMode;
   });
   }
+  
 
   async ngOnInit() {
     this.isDeployment = environment.isDeployment;
@@ -59,6 +62,7 @@ export class MainComponent implements OnInit {
     this.router.navigate([route]);
     this.appService.myHeader(header);
   }
+
 
 } 
 
