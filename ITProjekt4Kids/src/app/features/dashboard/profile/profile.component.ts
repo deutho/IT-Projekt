@@ -4,6 +4,7 @@ import { take, tap } from 'rxjs/operators';
 import { User } from 'src/app/models/users.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import {MainComponent} from '../main/main.component';
 
 @Component({
   selector: 'app-profile',
@@ -21,10 +22,12 @@ export class ProfileComponent implements OnInit {
   passwordChange = undefined;
   
   
-  constructor(public afs: FirestoreDataService, public auth: AuthService, private fb: FormBuilder) {}
+  constructor(public afs: FirestoreDataService, public auth: AuthService, private fb: FormBuilder) {
+    
+  }
   
   async ngOnInit() {
-    history.pushState(null, "");
+  
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
     this.currentUser.username = this.currentUser.username.substring(0, this.currentUser.username.lastIndexOf('@'));
 

@@ -14,15 +14,14 @@ import { environment } from 'src/environments/environment';
 })
 export class MainComponent implements OnInit {
 
-  public data: string = "mainMenu";
-  public header: string = "Startseite";
+  public header: string;
   public currentUser: User;
   studentMode;
   changedToStudent = false;
   changedToTeacher = false;
   isDeployment;
   constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private afs: FirestoreDataService) {
-    this.appService.myheader$.subscribe((header) => {
+    this.appService.getMyHeader().subscribe((header) => {
       this.header = header;
    });
    this.appService.myStudentMode$.subscribe((studentMode) => {
@@ -54,6 +53,11 @@ export class MainComponent implements OnInit {
       this.changedToTeacher = true;
       setTimeout(() => this.changedToTeacher = false, 4000);
     }
+  }
+
+  navigate(route: string, header: string) {
+    this.router.navigate([route]);
+    this.appService.myHeader(header);
   }
 
 } 

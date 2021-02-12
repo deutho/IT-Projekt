@@ -15,9 +15,9 @@ import {
   export class AppService {
 
     myheader$: Observable<any>;
-    private myHeaderSubject = new Subject<any>();
+    private myHeaderSubject = new BehaviorSubject<String>("Startseite")
     myGameData$: Observable<any>;
-    private myGameDataSubject: BehaviorSubject<any> = new BehaviorSubject<any>([])
+    private myGameDataSubject = new BehaviorSubject<any>([])
     myRedirect$: Observable<any>;
     private myRedirectSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
     myImageURL$: Observable<any>;
@@ -28,7 +28,7 @@ import {
     private myLastPathSubject: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
 
-    constructor(private cfr: ComponentFactoryResolver) {
+    constructor() {
         this.myheader$ = this.myHeaderSubject.asObservable();
         this.myGameData$ = this.myGameDataSubject.asObservable();
         this.myRedirect$ = this.myRedirectSubject.asObservable();
@@ -39,6 +39,10 @@ import {
   
     myHeader(data) {
       this.myHeaderSubject.next(data);
+    }
+
+    getMyHeader(): Observable<any> {
+      return this.myHeaderSubject.asObservable();
     }
 
     myGameData(data) {

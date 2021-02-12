@@ -4,6 +4,7 @@ import { MainMenuComponent } from './features/dashboard/main-menu/main-menu.comp
 import { LoginPageComponent } from './features/login/login-page.component';
 import {AngularFireAuthGuard, AngularFireAuthGuardModule, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
 import { RedirectComponent } from './features/redirect/redirect.component';
+import { ProfileComponent } from './features/dashboard/profile/profile.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
@@ -20,6 +21,10 @@ const routes: Routes = [
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
+  { path: "app/profile",
+  component: ProfileComponent
+},
+
 ];
 
 @NgModule({
