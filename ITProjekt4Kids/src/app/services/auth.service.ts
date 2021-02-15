@@ -20,8 +20,6 @@ export class AuthService {
         this.authStatusListener();
     }
 
-
-  
     private authStatusSub = new BehaviorSubject(this.getCurrentUser());
     currentAuthStatus = this.authStatusSub.asObservable();
 
