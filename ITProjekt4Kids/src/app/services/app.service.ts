@@ -3,7 +3,8 @@ import {
     ComponentFactoryResolver,
     ViewContainerRef
   } from '@angular/core';
-  import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
+  import { BehaviorSubject, from, Observable, ObservedValueOf, Subject } from 'rxjs';
+import { User } from '../models/users.model';
   
   export interface ComponentLoader {
     loadChildren: () => Promise<any>;
@@ -26,8 +27,8 @@ import {
     private myStudentModeSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     myLastPath$: Observable<string[]>;
     private myLastPathSubject: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
-    myUser$: Observable<any>;
-    private myUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+    
+    
 
 
     constructor() {
@@ -39,14 +40,8 @@ import {
         this.myLastPath$ = this.myLastPathSubject.asObservable();
     }
 
-    myUser(data) {
-      this.myUserSubject.next(data);
-    }
+    
 
-    getMyUser(): Observable<any> {
-      return this.myUserSubject.asObservable();
-    }
-  
     myHeader(data) {
       this.myHeaderSubject.next(data);
     }

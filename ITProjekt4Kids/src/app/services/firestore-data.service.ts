@@ -8,6 +8,7 @@ import { Folder } from '../models/folder.model';
 import { Folderelement } from '../models/folderelement.model';
 import { take } from 'rxjs/operators';
 import { BugReport } from '../models/bugreport.model';
+import { BehaviorSubject } from 'rxjs';
 
 
 
@@ -17,10 +18,26 @@ export class FirestoreDataService {
     db = firebase.firestore();
     storage = firebase.storage();
     storageRef = this.storage.ref();
-    
+
+    private currentUser: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+    currentUserStatus = this.currentUser.asObservable();
 
     constructor(public _afs: AngularFirestore, public _auth: AuthService) {
+        this.authStatusListener();
     }
+
+    
+    //Auth Change Listener for the user observable
+    authStatusListener() {
+        firebase.auth().onAuthStateChanged(async (credential) => {
+            if (credential) {
+                await this.getCurrentUser().then(data => this.currentUser.next(data[0]));
+            } else {
+                this.currentUser.next(null);
+            }
+        })
+    }
+   
     /** gets signed in user from DB 
      * 
      */

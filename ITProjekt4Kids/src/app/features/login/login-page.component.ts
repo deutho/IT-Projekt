@@ -18,8 +18,6 @@ export class LoginPageComponent implements OnInit {
 loginform: FormGroup;
 
   constructor(private fb: FormBuilder, private router: Router, private auth: AuthService, private app: AppService, private afs: FirestoreDataService) { }
-  
-
 
   errorMessage = '';
   error;
@@ -43,7 +41,7 @@ loginform: FormGroup;
     let username :string = this.loginform.get('username').value
     let password :string = this.loginform.get('password').value
     username = username+'@derdiedaz.at'
-    this.auth.signIn(username, password).then(() => this.app.myUser(this.afs.getCurrentUser())).then(() => this.router.navigate(['app'])).catch((error) => {
+    this.auth.signIn(username, password).catch((error) => {
       this.error = true;
       this.loginform.get("username").setValue('');
       this.loginform.get("password").setValue('');

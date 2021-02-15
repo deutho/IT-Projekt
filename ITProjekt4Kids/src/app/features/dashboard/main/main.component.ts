@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, SystemJsNgModuleLoader } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { take } from 'rxjs/internal/operators/take';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
@@ -16,31 +17,32 @@ import { environment } from 'src/environments/environment';
 export class MainComponent implements OnInit {
 
   public header: string;
-  public currentUser: User;
-
   studentMode;
+  currentUser: User;
+  isAuthenticated: firebase.User;
   changedToStudent = false;
   changedToTeacher = false;
   isDeployment;
   private headersubscription;
   private modesubscription;
-  private usersubscription;
+  private userSubscriptpion;
   constructor(private auth: AuthService, private router: Router, private appService: AppService, private afs: FirestoreDataService) {
+
     this.headersubscription = this.appService.getMyHeader().subscribe((header) => {
-      this.header = header;
-   });
-   this.modesubscription = this.appService.myStudentMode$.subscribe((studentMode) => {
-    this.studentMode = studentMode;
-  });
-    this.usersubscription = this.appService.getMyUser().subscribe((user) => {
-      this.currentUser = user;
-    })
+        this.header = header;
+    });
+
+    this.modesubscription = this.appService.myStudentMode$.subscribe((studentMode) => {
+      this.studentMode = studentMode;
+    });
 
   }
   
 
   async ngOnInit() {
     this.isDeployment = environment.isDeployment;
+    this.auth.currentAuthStatus.subscribe(authstatus => this.isAuthenticated = authstatus)
+    this.afs.currentUserStatus.subscribe(user => this.currentUser = user)
   }
   
   logout() {
@@ -65,7 +67,6 @@ export class MainComponent implements OnInit {
     this.router.navigate([route]);
     this.appService.myHeader(header);
   }
-
 
 } 
 

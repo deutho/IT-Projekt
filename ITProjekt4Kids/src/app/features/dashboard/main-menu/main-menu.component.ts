@@ -63,12 +63,7 @@ export class MainMenuComponent implements OnInit {
   
   
 
-  async ngOnInit() {
-
-    console.log(this.auth.getCurrentUser())
-    if(this.auth.isAuthenticated()) {
-      this.appService.myUser(this.auth.getCurrentUser());
-    }
+  async ngOnInit() {    
 
     this.appService.myRedirect$.subscribe((redirect) => {
       this.redirectdata = redirect;
@@ -159,6 +154,10 @@ export class MainMenuComponent implements OnInit {
 
   } 
   
+  signOut():void  {
+    this.auth.signOut();
+  }
+
 
   async getFolders() {
     if (this.currentUser.role != 1) {
