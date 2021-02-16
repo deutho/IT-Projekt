@@ -38,6 +38,7 @@ export class PersonalFormsGameComponent implements OnInit {
   roundsWonAnimation = [];
   roundsLostAnimation = [];
   speakerMode = false;
+  checked : boolean = false
 
 
   // boolean to detect if list already contains a string
@@ -172,6 +173,7 @@ export class PersonalFormsGameComponent implements OnInit {
 
   loadNextGame() {
     this.evaluated = false;
+    this.checked = false;
     
     if (this.Games.length > 0) {
         this.currentGame = this.Games.pop();      
@@ -223,6 +225,7 @@ export class PersonalFormsGameComponent implements OnInit {
 
 
   evaluateGame(){ 
+    
     let proceedEvaluation = this.checkIfAllItemsAllocated();
 
     if(proceedEvaluation == true){
@@ -299,13 +302,17 @@ export class PersonalFormsGameComponent implements OnInit {
       //there is only one evaluation, but infinte trys to pass the game
         if(tempAnswerChecker == true){
           this.answerIsCorrect = true;
-          if(!this.evaluated) this.roundsWon++;
+          if(!this.evaluated && this.checked == false) this.roundsWon++;
+          this.evaluated = true;
+          this.checked = true
           //Stimme "Du hast das toll gemacht!" 
         }else{
-          if(!this.evaluated) this.roundsLost++;
+          if(!this.evaluated && this.checked == false) this.roundsLost++;
+          this.checked = true
+          this.evaluated == false
           //Stimme "Oje, probier es noch einmal, du schaffst das!"
         }   
-      this.evaluated = true;
+      
     }
   }
 
