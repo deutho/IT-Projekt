@@ -362,12 +362,12 @@ export class VocabularyGameComponent implements OnInit {
 
       if (colors.indexOf("blue") > -1) {
         // '<span style="color:blue;">der</span>'
-          str = str.replace(/\der(?=^|\s)/g, '<span style="color:blue;">der</span>');
+          str = str.replace(/\bder(?=^|\s)/g, '<span style="color:blue;">der</span>');
       }
 
       if (colors.indexOf("green") > -1) {
         // style="color:green;"
-          str = str.replace(/\das(?=^|\s)/g, '<span style="color:green;">das</span>');
+          str = str.replace(/\bdas(?=^|\s)/g, '<span style="color:green;">das</span>');
       }
 
       if (colors.indexOf("red") > -1) {

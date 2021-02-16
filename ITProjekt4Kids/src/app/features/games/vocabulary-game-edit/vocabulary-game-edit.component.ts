@@ -505,6 +505,7 @@ export class VocabularyGameEditComponent implements OnInit {
       else if(idOfHTMLElement == "button3") elem.innerText = 'Falsche Antwort 2';
       else if(idOfHTMLElement == "button4") elem.innerText = 'Falsche Antwort 3';
     }
+
   }
 
   /**Deletes the currentGame from the Database
