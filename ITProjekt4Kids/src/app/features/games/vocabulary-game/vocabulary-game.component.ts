@@ -206,6 +206,9 @@ export class VocabularyGameComponent implements OnInit {
 
   shuffleAnswers() {
     this.answers = [this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3, this.currentGame.rightAnswer];
+    if(this.currentGame.photoID == null){
+      this.currentGame.photoID = "https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg"
+    }
     this.imageURL = this.currentGame.photoID; //in the meantime set the URL
     this.shuffleArray(this.answers);
   }
@@ -243,7 +246,8 @@ export class VocabularyGameComponent implements OnInit {
 
   evaluateGame(selection) {
     let correctAnswer;
-    if (selection == this.currentGame.rightAnswer[0]) {
+    // let s : String = (selection.toString() + ' ')
+    if (selection == this.currentGame.rightAnswer[0] + ' ') {
       this.response = "Richtig!!";
       this.roundsWon++
       this.totalrounds++;
@@ -316,7 +320,7 @@ export class VocabularyGameComponent implements OnInit {
     if(id == 'question') return;
     if(!this.evaluated) {
       let button = (<HTMLButtonElement>document.getElementById(id))
-      let correctAnswer = this.evaluateGame(button.value);            
+      let correctAnswer = this.evaluateGame(button.value);          
       if (correctAnswer) {
         button.setAttribute("style", "background-color:#52FF82;");
       }
