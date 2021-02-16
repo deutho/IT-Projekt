@@ -33,6 +33,6 @@ export class RedirectComponent implements OnInit {
     this.data[1] = this.item;
     this.data[2] = this.path;
     this.app.myRedirectData(this.data);
-    this.router.navigate(['']);
+    this.router.navigate(['app']);
   }
 }

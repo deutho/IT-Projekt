@@ -237,7 +237,9 @@ export class MainMenuComponent implements OnInit {
         type = type+"-edit";
         if (this.currentPathForHTML.substring(0,9) == "derdieDAZ") standard = true;
       }
-      if (standard == false) this.router.navigate[""]; //navigate to the game
+      if (standard == false) {
+        this.router.navigate[""]; //navigate to the game
+      } 
       else {
         this.errorMessage = "Diese Übung ist standardmäßig inkludiert und kann daher nicht verändert oder gelöscht werden."
         this.error = true

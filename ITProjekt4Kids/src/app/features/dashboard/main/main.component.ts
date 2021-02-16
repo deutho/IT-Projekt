@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
 
   public header: string;
   studentMode;
@@ -26,6 +26,7 @@ export class MainComponent implements OnInit {
   private headersubscription;
   private modesubscription;
   private userSubscriptpion;
+  private authstatusSubscription;
   constructor(private auth: AuthService, private router: Router, private appService: AppService, private afs: FirestoreDataService) {
 
     this.headersubscription = this.appService.getMyHeader().subscribe((header) => {
@@ -38,11 +39,10 @@ export class MainComponent implements OnInit {
 
   }
   
-
   async ngOnInit() {
     this.isDeployment = environment.isDeployment;
-    this.auth.currentAuthStatus.subscribe(authstatus => this.isAuthenticated = authstatus)
-    this.afs.currentUserStatus.subscribe(user => this.currentUser = user)
+    this.authstatusSubscription = this.auth.currentAuthStatus.subscribe(authstatus => this.isAuthenticated = authstatus)
+    this.userSubscriptpion = this.afs.currentUserStatus.subscribe(user => this.currentUser = user)
   }
   
   logout() {
@@ -66,6 +66,15 @@ export class MainComponent implements OnInit {
   navigate(route: string, header: string) {
     this.router.navigate([route]);
     this.appService.myHeader(header);
+  }
+
+
+  //Unsubscribe at the life cycle hook
+  ngOnDestroy() {
+    this.headersubscription.unsubscribe();
+    this.modesubscription.unsubscribe();
+    this.userSubscriptpion.unsubscribe();
+    this.authstatusSubscription.unsubscribe();
   }
 
 } 
