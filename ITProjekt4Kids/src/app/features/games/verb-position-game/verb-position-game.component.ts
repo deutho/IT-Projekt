@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/users.model';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { VerbPositionGame } from 'src/app/models/VerbPositionGame.model';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { AppService } from 'src/app/services/app.service';
@@ -12,7 +12,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
   styleUrls: ['./verb-position-game.component.css']
 })
 export class VerbPositionGameComponent implements OnInit {
-
+  
   constructor(private afs: FirestoreDataService, private appService: AppService, private nav: NavigationService) {
     this.appService.myGameData$.subscribe((data) => {
       this.folderID = data;
@@ -37,13 +37,14 @@ export class VerbPositionGameComponent implements OnInit {
    correct: string[] = []
    roundsWonAnimation = [];
    roundsLostAnimation = [];
+   noQuestionsInGame = false;
 
   async ngOnInit(): Promise<void> {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
     this.sentence = [];
     this.loadNextGame();
-    this.totalNumberOfRounds = this.Games.length+1; 
+    this.totalNumberOfRounds = this.Games.length+1;
   }
     
   drop(event: CdkDragDrop<string[]>) {
@@ -59,12 +60,14 @@ export class VerbPositionGameComponent implements OnInit {
         // console.log(this.currentGame)         
         this.sentence = [];
         for(let i = 0; i < this.currentGame.words.length; i++){
-          this.sentence.push(this.currentGame.words[i])
-          console.log('sentence: ' + this.sentence[i])
+          if(this.currentGame.words[i] != "undefined") this.sentence.push(this.currentGame.words[i])   
         }
 
+        console.log('sentence: ' + this.sentence)
         this.correct = this.sentence.slice();
         this.shuffleArray(this.sentence); 
+        this.capitalizeFirst();
+        this.point();
         this.loaded = true;
         this.answerIsCorrect = false;
         this.imageURL = this.currentGame.photoID;
@@ -164,26 +167,27 @@ export class VerbPositionGameComponent implements OnInit {
         this.sentence[i] = word
       }
     var wordPluspoint = this.sentence[this.sentence.length-1]
-    console.log(wordPluspoint)
     wordPluspoint = wordPluspoint + "."
     this.sentence[this.sentence.length-1] = wordPluspoint   
   }
 
   finishGame() {
-    console.log("fertig");
-    // this.finished = true;
-    this.finito = true;
+    if(this.totalNumberOfRounds > 0){
+      this.finished = true;
+      this.finalScreen()
+    }else{
+      this.noQuestionsInGame = true;
+      console.log("no questions included")
+    }
   }
 
   switchMode() {
     this.loaded = false;
     this.speakerMode = !this.speakerMode;
     this.loaded = true;
-    // this.updateColorhelper();
   }
 
   happyFace() {
-    
     if((this.totalNumberOfRounds - this.roundsWon) < (this.totalNumberOfRounds / 2) ) {
       return true; //more than 50% correct
     }
@@ -192,6 +196,11 @@ export class VerbPositionGameComponent implements OnInit {
 
   goBack() {
     this.nav.navigate("Startseite", "mainMenu");
+  }
+
+  finalScreen() {
+    this.roundsWonAnimation = [].constructor(this.roundsWon);
+    this.roundsLostAnimation = [].constructor(this.totalNumberOfRounds - this.roundsWon);
   }
 
 }

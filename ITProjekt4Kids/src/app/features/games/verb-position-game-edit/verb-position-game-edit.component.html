@@ -13,20 +13,12 @@
             <!-- <img *ngIf = "this.editingPicture == true" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';" id="image" class="image"  (click)="this.editingPicture = true" src = "{{imageURL}}"> -->
             <div class="imageEditing-container"  *ngIf = "this.editingPicture == true">
                 <uploader currentGameUID="{{currentGame.uid}}" style="padding: 10px; cursor: pointer;"></uploader>
-                <div class="centerImageEditing" >
-                    
+                <div class="centerImageEditing">            
                     <input id="URL" class="imageEditingItem2" value="{{imageURL}}">
-                    <!-- <div style="display: inline-block; cursor:pointer" (click)="pictureEdited()">
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check-square" class="svg-inline--fa fa-check-square fa-w-14 imageEditingItem3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path style="color: green;  "  fill="currentColor" d="M400 480H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48v352c0 26.51-21.49 48-48 48zm-204.686-98.059l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.248-16.379-6.249-22.628 0L184 302.745l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.25 16.379 6.25 22.628.001z">
-                            </path>
-                        </svg>
-                    </div> -->
                     <div class="buttonsEditImage">
                         <div class="btn button" style="background-color: red;" (click)="abortPictureEdit();">Abbrechen</div>
                         <div class="btn button" style="background-color: green;" (click)="pictureEdited()">Bestätigen</div>
                     </div>
-
                 </div>
             </div>
         </div>                 
@@ -36,9 +28,13 @@
     <div class="gameValues">
         <div class="example-container_values">
             <div style="display: flex; flex-direction: line">
-                <input type="text" class="example-box" id ="valueWord1" placeholder="1. Wort"> 
-                <input type="text" class="example-box" id ="valueWord2" placeholder="2. Wort">
-                <input type="text" class="example-box" id ="valueWord3" placeholder="3. Wort">
+                <input type="text" class="example-box" id ="valueWord1" placeholder="1. Satzteil"> 
+                <input type="text" class="example-box" id ="valueWord2" placeholder="2. Satzteil">
+                <input type="text" class="example-box" id ="valueWord3" placeholder="3. Satzteil">
+                <input type="text" class="example-box" id ="valueWord4" placeholder="4. Satzteil">
+                <input type="text" class="example-box" id ="valueWord5" placeholder="5. Satzteil">
+                <input type="text" class="example-box" id ="valueWord6" placeholder="6. Satzteil">
+
                 <input type="text" class="example-box" id ="audioURLWord1" placeholder="1. Audio"> 
                 <input type="text" class="example-box" id ="audioURLWord2" placeholder="2. Audio">
                 <input type="text" class="example-box" id ="audioURLWord3" placeholder="3. Audio">
@@ -46,16 +42,11 @@
         </div>
     </div>
 
-
-    <!-- Audio -->
-    <div>
-
-        
-    </div>
-
     <!-- Buttons -->
     <div class="actionBar">
         <button (click)="this.saveChanges()">Speichern</button>
+        <button (click) = "deleteElementOverlay = true">Löschen</button>
+        <button (click)="switchMode()">Text/Audio-Switch</button>
         <button (click)="this.leftArrowClicked()">Zurück</button>
         <button (click)="this.rightArrowClicked()">Weiter</button>
     </div>
@@ -71,9 +62,240 @@
         Keine weiteren Fragen!
     </div>
     <div *ngIf = "this.notAllInputFieldsFilled == true" class="item-final alert alert-danger text-center" role="alert" style="width: 80%; margin:0 auto;">
-        Es wurden nicht alle Felder ausgefüllt!
+        Die ersten drei Felder müssen Inhalte aufweisen!
+    </div>
+    <div *ngIf = "this.noQuestionFilled == true" class="item-final alert alert-danger text-center" role="alert" style="width: 80%; margin:0 auto;">
+        Die Fragestellung muss formuliert werden!
+    </div>    
+
+    <!-- deleting element overlay -->
+    <div class="fullscreen" *ngIf="deleteElementOverlay == true">
+        <div class="overlay" (click)="deleteElementOverlay = false"></div>
+        <div class="superOverlay" style="display: flex; justify-content: space-around; flex-direction: column;">
+            <div style="display: flex; justify-content: flex-end;" (click)="deleteElementOverlay = false">
+                <i class="fas fa-times" style="display: flex; opacity: 0.6; align-content: flex-end; cursor: pointer; padding: 10px 10px 0px 0px;">
+                </i>
+            </div>
+            <div class="content" style="display: flex; justify-content: space-between; flex-direction: column; ">
+                Das Element kann danach nicht mehr hergestellt werden. Es werden untergeordnete Elemente mitgelöscht.
+                <div style="height: 10px;"></div>
+                <div style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
+                    <div class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 30%; min-width: 110px; ">
+                        Abbrechen
+                    </div>
+                    <div (click) = "deleteQuestion()" class="btn dropshadow" style="display: inline-block; background-color:#ff0f0f; width: 30%; min-width: 110px;">
+                        Löschen
+                    </div>
+                </div>
+                <div style="height: 10px;"></div>
+            </div>
+        </div>
     </div>
 
+    <!-- overlay, which appeares when unsaved changed would be lost -->
+    <div *ngIf="unsavedChanges == true" class="fullscreen">
+        <div *ngIf="unsavedChanges == true" class="overlay" (click)="unsavedChanges = false;"></div>
+        <div *ngIf="unsavedChanges == true" class="superOverlay" style=" min-width: 260px; ;display:block; border-radius: 15px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.25));">
+            <div style="display: flex; justify-content: flex-end;" (click)="unsavedChanges = false;">
+                <i class="fas fa-times" style="display: flex; opacity: 0.6; align-content: flex-end; cursor: pointer; padding: 10px 10px 0px 0px;">
+                </i>
+            </div>
+            <div style="padding: 20px 10%; width: 100%; display: flex; justify-content: space-around;">
+                <div>Es gibt ungespeicherte Änderungen!</div>
+            </div>
+            <div  style="padding: 20px 10%; width: 100%; display: flex; justify-content: space-between;">
+                <div (click)="discardChanges()" class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 25%; min-width: 100px; cursor: pointer;">
+                    Verwerfen
+                </div>
+                <div (click)="saveAndContinue()" class="btn dropshadow" style="display: inline-block; background-color: #40d04f; width: 25%; min-width: 100px; cursor: pointer;">
+                    Speichern
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+
+<!-- Audio -->
+<div *ngIf = "editingAudio == true" class="audioEditingContainer">
+    <div class="record-div" >
+        <div class="textForAudio">{{question}}</div>
+        <div class="editAudioInteraction" >
+            <button id="audioButtonQuestion" class="recordButton" (click)="startVoiceRecord('question')" >
+                <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
+            </button>
+            <div class="spacingBetweenButtonAndTimer"></div>
+            <div class="counter" *ngIf="triggeredHTML == 'question'">{{_recordRTC?.recordingTimer}}</div>
+            <audio id = "playerquestion" [src]="this.audioURLQuestion"></audio>
+            <div style="padding-left: 20px;">
+                <div (click) = "noAudioSource()" *ngIf="this.audioURLQuestion == ''">
+                    <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                    </svg>
+                </div>
+                <div (click) = "playAudio('question')" *ngIf="this.audioURLQuestion != '' && this.audioQuestionPlaying == false">
+                    <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                </div>
+                <div (click) = "stopAudio('question')" *ngIf="this.audioURLQuestion != '' && this.audioQuestionPlaying == true">
+                    <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="record-div">
+        <div class="textForAudio">{{words[0]}}</div>
+        <div class="editAudioInteraction">
+            <button id="audioButtonWord1" class="recordButton" (click)="startVoiceRecord('word1')">
+                <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
+            </button>
+            <div class="spacingBetweenButtonAndTimer"></div>
+            <div class="counter" *ngIf="triggeredHTML == 'word1'">{{_recordRTC?.recordingTimer}}</div>
+            <audio id = "playerword1" [src]="this.audioURLWord1"></audio>
+            <div style="padding-left: 20px;">
+                <div (click) = "noAudioSource()" *ngIf="this.audioURLWord1 == ''">
+                    <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                    </svg>
+                </div>
+                <div (click) = "playAudio('word1')" *ngIf="this.audioURLWord1 != '' && this.audioWord1Playing == false">
+                    <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                </div>
+                <div (click) = "stopAudio('word1')" *ngIf="this.audioURLWord1 != '' && this.audioWord1Playing == true">
+                    <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="record-div">
+        <div class="textForAudio">{{words[1]}}</div>
+        <div class="editAudioInteraction">
+            <button id="audioButtonWord2" class="recordButton" (click)="startVoiceRecord('word2')">
+                <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
+            </button>
+            <div class="spacingBetweenButtonAndTimer"></div>
+            <div class="counter" *ngIf="triggeredHTML == 'word2'">{{_recordRTC?.recordingTimer}}</div>
+            <audio id = "playerword2" [src]="this.audioURLWord2"></audio>
+            <div style="padding-left: 20px;">
+                <div (click) = "noAudioSource()" *ngIf="this.audioURLWord2 == ''">
+                    <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                    </svg>
+                </div>
+                <div (click) = "playAudio('word2')" *ngIf="this.audioURLWord2 != '' && this.audioWord2Playing == false">
+                    <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                </div>
+                <div (click) = "stopAudio('word2')" *ngIf="this.audioURLWord2 != '' && this.audioWord2Playing == true">
+                    <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="record-div">
+            <div class="textForAudio">{{words[2]}}</div>
+            <div class="editAudioInteraction">
+                <button id="audioButtonWord2" class="recordButton" (click)="startVoiceRecord('word3')">
+                    <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
+                </button>
+                <div class="spacingBetweenButtonAndTimer"></div>
+                <div class="counter" *ngIf="triggeredHTML == 'word3'">{{_recordRTC?.recordingTimer}}</div>
+                <audio id = "playerword3" [src]="this.audioURLWord3"></audio>
+                <div style="padding-left: 20px;">
+                    <div (click) = "noAudioSource()" *ngIf="this.audioURLWord3 == ''">
+                        <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                        </svg>
+                    </div>
+                    <div (click) = "playAudio('word3')" *ngIf="this.audioURLWord3 != '' && this.audioWord3Playing == false">
+                        <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                    </div>
+                    <div (click) = "stopAudio('word3')" *ngIf="this.audioURLWord3 != '' && this.audioWord3Playing == true">
+                        <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <div class="record-div">
+            <div class="textForAudio">{{words[3]}}</div>
+            <div class="editAudioInteraction">
+                <button id="audioButtonWord3" class="recordButton" (click)="startVoiceRecord('word4')">
+                    <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
+                </button>
+                <div class="spacingBetweenButtonAndTimer"></div>
+                <div class="counter" *ngIf="triggeredHTML == 'word4'">{{_recordRTC?.recordingTimer}}</div>
+                <audio id = "playerword4" [src]="this.audioURLWord4"></audio>
+                <div style="padding-left: 20px;">
+                    <div (click) = "noAudioSource()" *ngIf="this.audioURLWord4 == ''">
+                        <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                        </svg>
+                    </div>
+                    <div (click) = "playAudio('word4')" *ngIf="this.audioURLWord4 != '' && this.audioWord4Playing == false">
+                        <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                    </div>
+                    <div (click) = "stopAudio('word4')" *ngIf="this.audioURLWord4 != '' && this.audioWord4Playing == true">
+                        <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <div class="record-div">
+        <div class="textForAudio">{{words[4]}}</div>
+        <div class="editAudioInteraction">
+            <button id="audioButtonWord5" class="recordButton" (click)="startVoiceRecord('word5')">
+                <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
+            </button>
+            <div class="spacingBetweenButtonAndTimer"></div>
+            <div class="counter" *ngIf="triggeredHTML == 'word5'">{{_recordRTC?.recordingTimer}}</div>
+            <audio id = "playerword5" [src]="this.audioURLWord5"></audio>
+            <div style="padding-left: 20px;">
+                <div (click) = "noAudioSource()" *ngIf="this.audioURLWord5 == ''">
+                    <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                    </svg>
+                </div>
+                <div (click) = "playAudio('word5')" *ngIf="this.audioURLWord5 != '' && this.audioWord5Playing == false">
+                    <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                </div>
+                <div (click) = "stopAudio('word5')" *ngIf="this.audioURLWord5 != '' && this.audioWord5Playing == true">
+                    <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="record-div">
+        <div class="textForAudio">{{words[5]}}</div>
+        <div class="editAudioInteraction">
+            <button id="audioButtonWord6" class="recordButton" (click)="startVoiceRecord('word6')">
+                <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
+            </button>
+            <div class="spacingBetweenButtonAndTimer"></div>
+            <div class="counter" *ngIf="triggeredHTML == 'word6'">{{_recordRTC?.recordingTimer}}</div>
+            <audio id = "playerword6" [src]="this.audioURLWord6"></audio>
+            <div style="padding-left: 20px;">
+                <div (click) = "noAudioSource()" *ngIf="this.audioURLWord6 == ''">
+                    <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                    </svg>
+                </div>
+                <div (click) = "playAudio('word6')" *ngIf="this.audioURLWord6 != '' && this.audioWord6Playing == false">
+                    <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                </div>
+                <div (click) = "stopAudio('word6')" *ngIf="this.audioURLWord6 != '' && this.audioWord6Playing == true">
+                    <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div *ngIf = "showMaxRecordingWarning == true" class="item-final alert alert-warning text-center" role="alert" style="width: 80%; margin:0 auto; z-index: 5; align-self: flex-end;">
+        Aufnahme beendet!
+        Audiospuren können maximal 10 Sekunden lang sein!
+    </div>
 
 </div>
