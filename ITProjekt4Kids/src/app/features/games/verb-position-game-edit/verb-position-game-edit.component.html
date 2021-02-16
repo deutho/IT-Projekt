@@ -26,18 +26,18 @@
 
     <!-- Words -->
     <div class="gameValues">
-        <div class="example-container_values">
-            <div style="display: flex; flex-direction: line">
-                <input type="text" class="example-box" id ="valueWord1" placeholder="1. Satzteil"> 
-                <input type="text" class="example-box" id ="valueWord2" placeholder="2. Satzteil">
-                <input type="text" class="example-box" id ="valueWord3" placeholder="3. Satzteil">
-                <input type="text" class="example-box" id ="valueWord4" placeholder="4. Satzteil">
-                <input type="text" class="example-box" id ="valueWord5" placeholder="5. Satzteil">
-                <input type="text" class="example-box" id ="valueWord6" placeholder="6. Satzteil">
-
-                <input type="text" class="example-box" id ="audioURLWord1" placeholder="1. Audio"> 
-                <input type="text" class="example-box" id ="audioURLWord2" placeholder="2. Audio">
-                <input type="text" class="example-box" id ="audioURLWord3" placeholder="3. Audio">
+        <div class="example-container_values"  style="display: flex; flex-direction: row; ">
+            <!-- <div>Icons erstellt von <a href="https://www.flaticon.com/de/autoren/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div> -->
+            <div style="display: flex; vertical-align: middle; padding-right: 15px;" (click)="removeInputField()">
+                <svg fill="LightCoral" style=" width: 40px"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" > <g transform="translate(1 1)"> <g> <g> <path d="M255-1C113.618-1-1,113.618-1,255s114.618,256,256,256s256-114.618,256-256S396.382-1,255-1z M255,468.333 c-117.818,0-213.333-95.515-213.333-213.333S137.182,41.667,255,41.667S468.333,137.182,468.333,255S372.818,468.333,255,468.333 z"/> <path d="M382.996,233.667H127.038c-11.782,0-21.333,9.551-21.333,21.333s9.551,21.333,21.333,21.333h255.957 c11.782,0,21.333-9.551,21.333-21.333S394.778,233.667,382.996,233.667z"/> </g> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>
+            </div>
+            <!-- Input Fields -->
+            <div  *ngFor="let item of valuesOfInput;  index as i">
+                <input (blur)="updateValuesOfInputVariable()" type="text" class="example-box" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}"> 
+            </div>      
+            <!-- <div>Icons erstellt von <a href="https://icon54.com/" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div> -->
+            <div style="display: flex; vertical-align: middle; padding-left: 15px;" (click)="addInputField()">
+                <svg fill="LimeGreen" style=" width: 40px" viewBox="0 0 512 512"  xmlns="http://www.w3.org/2000/svg"><path d="m256 512c-141.164062 0-256-114.835938-256-256s114.835938-256 256-256 256 114.835938 256 256-114.835938 256-256 256zm0-480c-123.519531 0-224 100.480469-224 224s100.480469 224 224 224 224-100.480469 224-224-100.480469-224-224-224zm0 0"/><path d="m368 272h-224c-8.832031 0-16-7.167969-16-16s7.167969-16 16-16h224c8.832031 0 16 7.167969 16 16s-7.167969 16-16 16zm0 0"/><path d="m256 384c-8.832031 0-16-7.167969-16-16v-224c0-8.832031 7.167969-16 16-16s16 7.167969 16 16v224c0 8.832031-7.167969 16-16 16zm0 0"/></svg>
             </div>
         </div>
     </div>

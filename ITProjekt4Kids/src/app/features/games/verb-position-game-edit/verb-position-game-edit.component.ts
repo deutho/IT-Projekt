@@ -58,8 +58,8 @@ export class VerbPositionGameEditComponent implements OnInit {
   audioWord5Playing = false;
   audioWord6Playing = false;
   words: string[]
-
-
+  valuesOfInput = [];
+  audioData = [];
   constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService) { 
     this.appService.myGameData$.subscribe((data) => {
       this.folderUID = data;
@@ -84,11 +84,12 @@ export class VerbPositionGameEditComponent implements OnInit {
     //init second stack for going back and forwards between games
     let previousGames = [];
     this.previousGames = previousGames;
-
     //load first game
     this.loadNextGame();
     // this.initSounds();
   }
+
+
 
   loadNextGame(nopush?: boolean){
     if(this.finalScreen && this.Games.length == 0) {
@@ -108,7 +109,9 @@ export class VerbPositionGameEditComponent implements OnInit {
     else {
         this.finalScreen = true;
         let uid = uuidv4();  
-        var newGame = new VerbPositionGame(uid, ['', '', ''], ['', '', ''], ['',''], 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67', this.folderUID);
+        this.valuesOfInput = ['', '', ''];
+      	this.audioData = ['', '', ''];
+        var newGame = new VerbPositionGame(uid, this.valuesOfInput, this.audioData, ['',''], './../../../../assets/Images/Placeholder-Image/north_blur_Text.png', this.folderUID);
         this.currentGame = newGame;        
      }
      
@@ -122,28 +125,30 @@ export class VerbPositionGameEditComponent implements OnInit {
   loadInputFieldValues() {
     (<HTMLInputElement>document.getElementById('question')).value = this.currentGame.question[0];
 
-    for(let i = 0; i < 6; i++){
-      (<HTMLInputElement>document.getElementById('valueWord' + (i+1))).value= this.currentGame.words[i];
-    }
+    // for(let i = 0; i < this.valuesOfInput.length; i++){
+    //   (<HTMLInputElement>document.getElementById('valueWord' + (i+1))).value= this.currentGame.words[i];
+    // }
 
-    this.words = [this.currentGame.words[0], this.currentGame.words[1], this.currentGame.words[2], this.currentGame.words[3], this.currentGame.words[4], this.currentGame.words[5]]
+    // this.words = [this.currentGame.words[0], this.currentGame.words[1], this.currentGame.words[2], this.currentGame.words[3], this.currentGame.words[4], this.currentGame.words[5]]
+
     this.imageURL = this.currentGame.photoID;
+    this.valuesOfInput = this.currentGame.words;
+    this.audioData = this.currentGame.audio;
+    // this.updateValuesOfInputVariable();
   }
 
   saveChanges() {
     if (this.checkForChanges()) {
       //check if image has changed
-      if(this.currentGame.photoID != this.imageURL) {
-        if(this.currentGame.photoID.search("firebasestorage.googleapis.com") != -1) {
-          this.afs.deleteFromStorageByUrl(this.currentGame.photoID).catch((err) => {
-            console.log(err.errorMessage);
-            //Give Warning that Delete Operation was not successful
-          });
-        }
+      // if(this.currentGame.photoID != this.imageURL) {
+        // if(this.currentGame.photoID.search("firebasestorage.googleapis.com") != -1) {
+        //   this.afs.deleteFromStorageByUrl(this.currentGame.photoID).catch((err) => {
+        //     console.log(err.errorMessage);
+        //     //Give Warning that Delete Operation was not successful
+        //   });
+        // }
         this.currentGame.photoID = this.imageURL;
-      }
-
-      this.deleteEmptyFields();
+      // }
 
       //Vergame must have a question
       if((<HTMLInputElement>document.getElementById('question')).value == ''){
@@ -151,133 +156,34 @@ export class VerbPositionGameEditComponent implements OnInit {
         setTimeout(() => this.noQuestionFilled = false, 2500);
         return
       }
-
-      //Verbgame must have 3 filled fields at least
-      if(
-        (<HTMLInputElement>document.getElementById('valueWord1')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueWord2')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueWord3')).value == ''
-      ) {
-        //error
-        this.notAllInputFieldsFilled = true;
-        setTimeout(() => this.notAllInputFieldsFilled = false, 2500);
-        return
-      }
+      
       
       let uid;
       if(this.currentGame.uid == '') uid = uuidv4();
       else uid = this.currentGame.uid;
 
-      
-      //Verbgame with 3 fields
-      if((<HTMLInputElement>document.getElementById('valueWord4')).value == undefined && 
-         (<HTMLInputElement>document.getElementById('valueWord5')).value == undefined && 
-         (<HTMLInputElement>document.getElementById('valueWord6')).value == undefined){
 
-        this.currentGame = new VerbPositionGame(
-          uid, 
-          [(<HTMLInputElement>document.getElementById('valueWord1')).value,
-          (<HTMLInputElement>document.getElementById('valueWord2')).value,
-          (<HTMLInputElement>document.getElementById('valueWord3')).value],
-        
-          [(<HTMLInputElement>document.getElementById('audioURLWord1')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord2')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord3')).value],
-  
-          [(<HTMLInputElement>document.getElementById('question')).value],
-          this.imageURL,
-          this.folderUID)
+      //Create Game
 
-          console.log('field 4, 5 und 6 empty')
-      }
+      console.log(this.valuesOfInput)
 
-      //Verbgame with 4 fields
-      if((<HTMLInputElement>document.getElementById('valueWord4')).value != undefined && 
-         (<HTMLInputElement>document.getElementById('valueWord5')).value == undefined && 
-         (<HTMLInputElement>document.getElementById('valueWord6')).value == undefined){
 
-        this.currentGame = new VerbPositionGame(
-          uid, 
-          [(<HTMLInputElement>document.getElementById('valueWord1')).value,
-          (<HTMLInputElement>document.getElementById('valueWord2')).value,
-          (<HTMLInputElement>document.getElementById('valueWord3')).value,
-          (<HTMLInputElement>document.getElementById('valueWord4')).value],
+      this.currentGame = new VerbPositionGame(
+        uid, 
+        this.valuesOfInput,
+        this.audioData,
+        [(<HTMLInputElement>document.getElementById('question')).value],
+        this.imageURL,
+        this.folderUID)    
 
-          [(<HTMLInputElement>document.getElementById('audioURLWord1')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord2')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord3')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord4')).value],
-  
-          [(<HTMLInputElement>document.getElementById('question')).value],
-          this.imageURL,
-          this.folderUID)
-
-          console.log('field 5 und 6 empty')
-      }
-
-      //Verbgame with 5 fields
-      if((<HTMLInputElement>document.getElementById('valueWord4')).value != undefined && 
-         (<HTMLInputElement>document.getElementById('valueWord5')).value != undefined && 
-         (<HTMLInputElement>document.getElementById('valueWord6')).value == undefined){
-
-        this.currentGame = new VerbPositionGame(
-          uid, 
-          [(<HTMLInputElement>document.getElementById('valueWord1')).value,
-          (<HTMLInputElement>document.getElementById('valueWord2')).value,
-          (<HTMLInputElement>document.getElementById('valueWord3')).value,
-          (<HTMLInputElement>document.getElementById('valueWord4')).value,
-          (<HTMLInputElement>document.getElementById('valueWord5')).value],
-
-          [(<HTMLInputElement>document.getElementById('audioURLWord1')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord2')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord3')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord4')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord5')).value],
-  
-          [(<HTMLInputElement>document.getElementById('question')).value],
-          this.imageURL,
-          this.folderUID)
-
-          console.log('field 6 empty')
-      }
-
-      //Verbgame with 6 fields
-      if((<HTMLInputElement>document.getElementById('valueWord4')).value != undefined && 
-         (<HTMLInputElement>document.getElementById('valueWord5')).value != undefined && 
-         (<HTMLInputElement>document.getElementById('valueWord6')).value != undefined){
-
-        this.currentGame = new VerbPositionGame(
-          uid, 
-          [(<HTMLInputElement>document.getElementById('valueWord1')).value,
-          (<HTMLInputElement>document.getElementById('valueWord2')).value,
-          (<HTMLInputElement>document.getElementById('valueWord3')).value,
-          (<HTMLInputElement>document.getElementById('valueWord4')).value,
-          (<HTMLInputElement>document.getElementById('valueWord5')).value,
-          (<HTMLInputElement>document.getElementById('valueWord6')).value],
-
-          [(<HTMLInputElement>document.getElementById('audioURLWord1')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord2')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord3')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord4')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord5')).value,
-          (<HTMLInputElement>document.getElementById('audioURLWord6')).value],
-  
-          [(<HTMLInputElement>document.getElementById('question')).value],
-          this.imageURL,
-          this.folderUID)
-
-          console.log('no field empty')
-      }
-
-        
         console.log('saved')
+        console.log(uid)
         this.afs.updateTask(this.currentGame);       
         this.finalScreen = false;
         this.saved = true;
         setTimeout(() => this.saved = false, 2500);
       }
       else {
-        this.deleteEmptyFields();
         this.noChanges = true;
         setTimeout(() => this.noChanges = false, 2500);
       }
@@ -287,32 +193,24 @@ export class VerbPositionGameEditComponent implements OnInit {
     if(this.currentGame == undefined) return false;
 
     this.question = (<HTMLInputElement>document.getElementById('question')).value;
-    this.valueWord1 = (<HTMLInputElement>document.getElementById('valueWord1')).value;
-    this.valueWord2 = (<HTMLInputElement>document.getElementById('valueWord2')).value;
-    this.valueWord3 = (<HTMLInputElement>document.getElementById('valueWord3')).value;
-    this.valueWord4 = (<HTMLInputElement>document.getElementById('valueWord4')).value;
-    this.valueWord5 = (<HTMLInputElement>document.getElementById('valueWord5')).value;
-    this.valueWord6 = (<HTMLInputElement>document.getElementById('valueWord6')).value;
+    this.updateValuesOfInputVariable();
+    // this.audioURLWord1 = (<HTMLInputElement>document.getElementById('audioURLWord1')).value;
+    // this.audioURLWord2 = (<HTMLInputElement>document.getElementById('audioURLWord2')).value;
+    // this.audioURLWord3 = (<HTMLInputElement>document.getElementById('audioURLWord3')).value;
 
-    if(this.valueWord1 == '' && this.question == '' && this.valueWord2 == '' && this.valueWord3 == '' && this.imageURL == 'https://ipsumimage.appspot.com/900x600,F5F4F4?l=|Klicke+hier,|um+ein+Bild+einzuf%C3%BCgen!||&s=67'){ 
-    return false;
+    var wordsDidChange = false
+    for(var i = 0; i < this.valuesOfInput.length; i++){
+      if(this.currentGame.words[i] != this.valuesOfInput[i]) {
+        wordsDidChange = true;
+        
+      }
+      console.log(this.currentGame.words[i] +" == "+ this.valuesOfInput[i])
     }
 
-    this.deleteEmptyFields()
-
-    this.audioURLWord1 = (<HTMLInputElement>document.getElementById('audioURLWord1')).value;
-    this.audioURLWord2 = (<HTMLInputElement>document.getElementById('audioURLWord2')).value;
-    this.audioURLWord3 = (<HTMLInputElement>document.getElementById('audioURLWord3')).value;
-
+    console.log("Words changed? : " + wordsDidChange)
     if(this.currentGame.question[0] == this.question &&
-      this.currentGame.words[0] == this.valueWord1 &&
-      this.currentGame.words[1] == this.valueWord2 && 
-      this.currentGame.words[2] == this.valueWord3 &&
-      this.currentGame.words[3] == this.valueWord4 &&
-      this.currentGame.words[4] == this.valueWord5 &&
-      this.currentGame.words[5] == this.valueWord6 &&
-
-      this.currentGame.audio[0] == this.audioURLWord1 &&
+      wordsDidChange == false &&
+      // this.currentGame.audio[0] == this.audioURLWord1 &&
       // this.currentGame.audio[1] == this.audioURLWord2 &&
       // this.currentGame.audio[2] == this.audioURLWord3 &&
       // this.currentGame.audio[3] == this.audioURLWord4 &&
@@ -322,17 +220,22 @@ export class VerbPositionGameEditComponent implements OnInit {
       this.currentGame.photoID == this.imageURL){
         return false;
     }else {
-      
-      console.log(this.currentGame.words[0] + "/ " + this.valueWord1)
-      console.log(this.currentGame.words[1] + "/ " + this.valueWord2)
-      console.log(this.currentGame.words[2] + "/ " + this.valueWord3)
-      console.log(this.currentGame.words[3] + "/ " + this.valueWord4)
-      console.log(this.currentGame.words[4] + "/ " + this.valueWord5)
-      console.log(this.currentGame.words[5] + "/ " + this.valueWord6)
-
       //true - es gibt changes, weil inhalte nicht übereinstimmen -> diese speichern
       return true;
     }
+  }
+
+  updateValuesOfInputVariable(){
+
+    var temp = []
+    for(var i = 0; i<this.valuesOfInput.length; i++) {
+        temp.push((<HTMLInputElement>document.getElementById("valueWord" + i)).value)
+    }
+    if(temp.length<3) temp.push("")
+    if(temp.length<3) temp.push("")
+    if(temp.length<3) temp.push("")
+    this.valuesOfInput = temp;
+    console.log(this.valuesOfInput)
   }
 
   pictureEdited() {  
@@ -386,21 +289,6 @@ export class VerbPositionGameEditComponent implements OnInit {
       this.loadInputFieldValues();
       this.loaded = true;  
     } 
-  }
-
-  deleteEmptyFields(){
-   if((<HTMLInputElement>document.getElementById('valueWord6')).value == ''){
-          this.valueWord6 = undefined
-          this.currentGame.words.splice(5,1)
-    }  
-    if((<HTMLInputElement>document.getElementById('valueWord5')).value == ''){
-          this.valueWord5 = undefined
-          this.currentGame.words.splice(4,1)
-    }
-    if((<HTMLInputElement>document.getElementById('valueWord4')).value == ''){
-      this.valueWord4 = undefined
-      this.currentGame.words.splice(3,1)
-    }
   }
 
   /**
@@ -604,6 +492,14 @@ export class VerbPositionGameEditComponent implements OnInit {
 
   noAudioSource() {
     //insert a warning that no audio can be found
+  }
+
+  addInputField(){
+    this.valuesOfInput.push("")
+  }
+
+  removeInputField() {
+    this.valuesOfInput.pop()
   }
 
 }
