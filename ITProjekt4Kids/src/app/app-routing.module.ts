@@ -27,7 +27,7 @@ const routes: Routes = [
   { path: 'direct',
   component: RedirectComponent
 },
-  { path: 'app',
+  { path: 'app/:id',
   component: MainMenuComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
@@ -92,7 +92,7 @@ const routes: Routes = [
 },
 
   { path: "**",
-  redirectTo: "app",
+  redirectTo: 'app/ ', //Hier vielleicht noch 404 Page not Found?
 },
 
 

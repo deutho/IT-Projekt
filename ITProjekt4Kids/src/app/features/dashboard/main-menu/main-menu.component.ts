@@ -1,10 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
 import { take } from 'rxjs/internal/operators/take';
 import { Folder } from 'src/app/models/folder.model';
 import { Folderelement } from 'src/app/models/folderelement.model';
+import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
@@ -20,23 +21,24 @@ import { MainComponent } from '../main/main.component';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService, private auth: AuthService) {
+  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService, private auth: AuthService, private route: ActivatedRoute) {
 
       
    }
 
   data;
-  currentUser;
+  currentUser: User;
   loaded = false;
   level;
   error;
   redirecterror;
   errorMessage;
+  currentPathForHTML;
   currentDocKey: string = "";
+  parentDocKey: string = "";
   ownFolders: Folder[] = [];
   derdiedazFolder: Folder[] = [];
   currentFolders: Folder[] = [];
-  currentPathForHTML: string = "";
   addElementForm: FormGroup;
   editElementForm: FormGroup;
   formSubmitted = false;
@@ -64,128 +66,98 @@ export class MainMenuComponent implements OnInit {
   
   
 
-  async ngOnInit() {    
+  async ngOnInit() {
+    //get the currentuser
+    await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
+
     this.appService.myStudentMode$.subscribe((studentMode) => {
       this.studentMode = studentMode;
     });
-
-    this.isDeployment = environment.isDeployment; // delete when project is done
-    this.addElementForm = this.fb.group({
-      name:  ['', Validators.required],
-      game:  []
+    //subscription to the active route
+    this.route.params.subscribe(params => {
+      let id: string = params['id'];
+      this.initialize(id);
     });
+  }
 
-    this.level = 0; //set the level for the first query
-
-    //get the current User
-    await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
-    
-    //If the user was redirected
-    if (sessionStorage.getItem("redirect-user")) {
-      this.redirected = true;
-      //set the redirection path
-      this.currentDocKey = sessionStorage.getItem("redirect-item");
-      
-      //get the folders for the path and choose the redirected one per UID 
-      let folders: Folder[];
-      await this.afs.getFolderElement(sessionStorage.getItem("redirect-path")).
-      then(data => {
-        console.log(data)
-        //If there is no Item with the given id or it has been deleted
-        if (data == undefined) {
-          //TODO show error
-          this.failed = true;
-        } else {
-            folders = data.folders
-            folders.forEach(element => {
-            if (element.uid == sessionStorage.getItem("redirect-item")) 
-              this.redirectitem = element;        
-            });
-            if (this.redirectitem == undefined) {
-              //TODO show error
-             this.failed = true;
-            }
-          }
-        });
-      
-      console.log(this.failed)
-      //Set the path for the User in the navbar
-      this.currentPathForHTML = "Geteilt von "+sessionStorage.getItem("redirect-user")+"/";
-      //empty the session storage
-      sessionStorage.removeItem("redirect-user");
-      sessionStorage.removeItem("redirect-path");
-      sessionStorage.removeItem("redirect-item");
-
-    } 
-    //if the user is not redirected or the redirection failed do this
-    if (this.redirected == false || this.failed == true) {
-      //Only of the user is not and admin
-      if (this.currentUser.role != 1){
-        //check if there is a lastpath (returning from a game)
-        
-        if (sessionStorage.getItem("last-path-DocKey") != null){
-          
-          //set the last paths and the level
-          this.currentDocKey = sessionStorage.getItem("last-path-DocKey");
-          this.currentPathForHTML = sessionStorage.getItem("last-path-HTML");
-          this.level = parseInt(sessionStorage.getItem("last-path-level"));
-          //empty the storage
-          sessionStorage.removeItem("last-path-DocKey");
-          sessionStorage.removeItem("last-path-HTML");
-          sessionStorage.removeItem("last-path-level");
-        }
-        //set the path according to teacher and student if there was not lastpath
-        else if (this.currentUser.role == 2) this.currentDocKey = this.currentUser.uid;
-        else if (this.currentUser.role == 3) this.currentDocKey = this.currentUser.parent;
-        console.log(this.currentDocKey);
-        console.log(this.currentUser.role)
-      }
+  //initialize the component after a path change
+  initialize(id) {
+    console.log(id);
+    if (id === " ") {
+      console.log(this.currentUser.role);
+      if (this.currentUser.role == 3) this.router.navigate(['app/'+this.currentUser.parent])
+      if (this.currentUser.role == 2) this.router.navigate(['app/'+this.currentUser.uid])
+    } else {
+      this.currentDocKey = id;
+      console.log(this.currentDocKey);
+      console.log(id);
+      this.getFolders(id)
     }
+  }
 
-    //perform the itemclick in case of a redirection, otherways load folders on currentpath
-    if (this.redirected == true && this.failed == false) {
-      this.itemclick(this.redirectitem);
-    } else this.getFolders();
-
-  } 
-  
-  async getFolders() {
+    
+  async getFolders(id: string) {
     if (this.currentUser.role != 1) {
 
       //get derdiedaz folders
-      if (this.level == 0 && (this.redirected != true || this.failed == true)) await this.afs.getFolderElement("Standardübungen").then(data => this.derdiedazFolder = data.folders);
+      let level0: boolean = false;
+      if (this.currentUser.uid === id) {
+        await this.afs.getFolderElement("Standardübungen").then(data => this.derdiedazFolder = data.folders);
+        level0 = true;
+      }
       console.log(this.derdiedazFolder);
-      await this.afs.getFolderElement(this.currentDocKey).then(data => this.ownFolders = data.folders);
+
+      let parent: string = "";
+
+      await this.afs.getFolderElement(id).then(data => {
+        this.ownFolders = data.folders;
+        this.parentDocKey = data.parent;
+      }); 
+
+
       console.log(this.ownFolders);
       this.ownFolders.sort((a, b) => {
         if (a.name < b.name) {return -1;}
         if (a.name > b.name) {return 1;}
         return 0;
       });
-      if (this.level == 0) {
+      if (level0) {
         this.currentFolders = this.derdiedazFolder.concat(this.ownFolders);
       } else {
         this.currentFolders = this.ownFolders;
       }
       console.log(this.currentFolders);
    }
-    console.log(this.failed)
     this.loaded = true;
-    console.log(this.loaded);
-    //if there was a redirect error - inform the user
-    if (this.failed == true) {
-      this.failed = false;
-      this.redirecterror = true;
-      this.errorMessage = "Das Element existiert nicht oder wurde gelöscht. Wir haben dich zu deinen Ordner weitergeleitet."
-      setTimeout(() => this.redirecterror = false, 5000);
+  } 
+
+  itemclick(item: Folder) {
+    if (item.type == "folder") {
+        this.router.navigate(['app/'+item.uid]);
     }
+    else if (item.type == "task") {
+      let data = item.uid;
+      let type = item.gameType;
+      if (this.currentUser.role == 2 && item.editors.includes(this.currentUser.uid) && this.studentMode == false) { 
+        type = type+"-edit";
+      }
+      if (item.mutable == true) {
+        this.router.navigate(['app/'+type]); //navigate to the game
+      } 
+      else {
+        this.errorMessage = "Diese Übung ist standardmäßig inkludiert und kann daher nicht verändert oder gelöscht werden."
+        this.error = true
+        setTimeout(() => this.error = false, 4000);
+      }
+    }
+
   }
 
   addFolder(newUid: string, newName: string, newType: string, gameType?: string) {
     
     //create Folder
     if (gameType != null && gameType != undefined)
-    var newFolder = new Folder(newUid, newName, newType, gameType);
+    var newFolder = new Folder(newUid, newName, newType, [this.currentUser.uid], gameType, true);
     else newFolder = new Folder(newUid, newName, newType);
 
     //Add the Folder
@@ -197,53 +169,6 @@ export class MainMenuComponent implements OnInit {
     if (newFolder.type == "folder") this.afs.addFolderDocument(newFolder.uid, this.currentDocKey); 
   }
     
-  
-
-  async itemclick(item) {
-    if (item.type == "folder") {
-      if (item.name == "derdiedaz") {
-        this.currentDocKey = "derdiedaz";
-        this.currentPathForHTML = "derdieDAZ Standard Übungen"
-        console.log(this.currentPathForHTML)
-      } else {
-        this.currentDocKey = item.uid;
-        if (this.level == 0) this.currentPathForHTML = this.currentPathForHTML + item.name;
-        else this.currentPathForHTML = this.currentPathForHTML + "/" + item.name;
-        console.log(this.currentPathForHTML)
-        console.log(this.currentPathForHTML.substring(0,26))
-      }
-      this.level++
-      this.getFolders();
-      history.pushState(null, 'placeholder');
-      
-    }
-    else if (item.type == "task") {
-      var standard = false;
-      var data = item.uid;
-      sessionStorage.setItem("game-uid", data);
-      //this.appService.myLastPath([this.currentDocKey, this.currentPathForHTML, this.level]);
-      
-      sessionStorage.setItem("last-path-DocKey", this.currentDocKey);
-      sessionStorage.setItem("last-path-HTML", this.currentPathForHTML);
-      sessionStorage.setItem("last-path-level", this.level);
-      var type = item.gameType;
-      if (this.currentUser.role == 2 && this.redirected == false && this.studentMode == false) { 
-        type = type+"-edit";
-        if (this.currentPathForHTML.substring(0,9) == "derdieDAZ") standard = true;
-      }
-      if (standard == false) {
-        this.router.navigate(['app/'+type]); //navigate to the game
-      } 
-      else {
-        this.errorMessage = "Diese Übung ist standardmäßig inkludiert und kann daher nicht verändert oder gelöscht werden."
-        this.error = true
-        setTimeout(() => this.error = false, 4000);
-      }
-    }
-  }
-
- 
-
   editElement(item) {
     if (this.currentPathForHTML.substring(0,9) != "derdieDAZ" && item.uid != 'derdiedaz') {
       this.editElementForm = this.fb.group({
@@ -267,7 +192,7 @@ export class MainMenuComponent implements OnInit {
       await this.afs.updateFolders(this.folderToChange, this.currentDocKey);
 
       //get the folders again
-      this.getFolders();
+      this.getFolders(this.currentDocKey);
     }
     this.editing = false;
   }
@@ -289,22 +214,14 @@ export class MainMenuComponent implements OnInit {
     this.creating = false;
   }
 
-  backButtonClicked() {
-    history.back();
-  }
-
  async goUpOneLevel() {
-    if (this.level != 0) {
-      if (this.level == 1) {
-        if (this.currentUser.role == 2) this.currentDocKey = this.currentUser.uid;
-        else if (this.currentUser.role == 3) this.currentDocKey = this.currentUser.parent;
-        this.currentPathForHTML = "";
-      }else {
-        await this.afs.getFolderElement(this.currentDocKey).then(data => this.currentDocKey = data.parent);
-        this.currentPathForHTML = this.currentPathForHTML.substring(0, this.currentPathForHTML.lastIndexOf('/'))
+    if (this.currentDocKey == "derdiedaz") {
+      if (this.currentUser.role == 2) this.router.navigate(['app/'+this.currentUser.uid]);
+      if (this.currentUser.role == 3) this.router.navigate(['app/'+this.currentUser.parent]);
+    } else {
+      if (this.parentDocKey != "root") {
+        this.router.navigate(['app/'+this.parentDocKey]);
       }
-      this.level--;
-      this.getFolders();
     }
   }
 
@@ -348,7 +265,6 @@ export class MainMenuComponent implements OnInit {
 
   createLink(item) {
     var url = environment.shareableURL;
-    this.directurl = url+'/direct?user='+this.currentUser.firstname+"-"+this.currentUser.lastname+'&doc='+this.currentDocKey+'&item='+item.uid;
     this.shareGameOverlay = true;
   }
 
@@ -392,7 +308,7 @@ export class MainMenuComponent implements OnInit {
         await this.afs.deleteDocument('folders', element);
       });
 
-      await this.afs.deleteFolder(this.itemtodelete, this.currentDocKey).then(() => this.getFolders());
+      await this.afs.deleteFolder(this.itemtodelete, this.currentDocKey).then(() => this.getFolders(this.currentDocKey));
     }
     
     this.deleteElementOverlay = false;
@@ -416,7 +332,7 @@ export class MainMenuComponent implements OnInit {
         }
       }
     });  
-    if (cascading == false) await this.afs.deleteFolder(item, this.currentDocKey).then(() => this.getFolders());
+    if (cascading == false) await this.afs.deleteFolder(item, this.currentDocKey).then(() => this.getFolders(this.currentDocKey));
   }
   
   toggleStudentMode() {

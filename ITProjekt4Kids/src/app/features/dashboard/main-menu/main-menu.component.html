@@ -6,16 +6,16 @@
             Pfad des Ordners 
 
         ------------------------->
-        <ul *ngIf = "level != 0" style="display: flex; justify-content: center;">
+        <ul *ngIf = "parentDocKey !== 'root'" style="display: flex; justify-content: center;">
             <li class="navigationBar">
-                <div class ="btn" (click)= backButtonClicked() style="display: flex;  width: 68px; cursor: pointer">
+                <div class ="btn" (click)= goUpOneLevel() style="display: flex;  width: 68px; cursor: pointer">
                     <svg width="20" height="20" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="reply" class="svg-inline--fa fa-reply fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <path fill="currentColor" d="M8.309 189.836L184.313 37.851C199.719 24.546 224 35.347 224 56.015v80.053c160.629 1.839 288 34.032 288 186.258 0 61.441-39.581 122.309-83.333 154.132-13.653 9.931-33.111-2.533-28.077-18.631 45.344-145.012-21.507-183.51-176.59-185.742V360c0 20.7-24.3 31.453-39.687 18.164l-176.004-152c-11.071-9.562-11.086-26.753 0-36.328z">
                         </path>
                     </svg>                     
                 </div>
                 <div style="display: inline-block; overflow-wrap: break-word; max-width: calc(100% - 68px);">
-                    {{currentPathForHTML}}
+                    
                 </div>
             </li>
         </ul>
@@ -112,7 +112,7 @@
                 </ul>
             </div>
             <!-- teacher can also add Elements -->
-            <div type="button" (click)="addElement()" *ngIf="currentPathForHTML.substring(0,26) !== 'derdieDAZ Standard Übungen' && creating == false" class="container dropshadow" style="padding-bottom: 100px;">
+            <div type="button" (click)="addElement()" *ngIf="creating == false" class="container dropshadow" style="padding-bottom: 100px;">
                 <div class="item-left" style="background-color: #85898C">
                     <svg  width="34px" height="34px" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.5375 14C0.5375 6.56304 6.56304 0.5375 14 0.5375C21.437 0.5375 27.4625 6.56304 27.4625 14C27.4625 21.437 21.437 27.4625 14 27.4625C6.56304 27.4625 0.5375 21.437 0.5375 14ZM21.2188 16.2875C21.6349 16.2875 21.975 15.9474 21.975 15.5312V12.4688C21.975 12.0526 21.6349 11.7125 21.2188 11.7125H16.2875V6.78125C16.2875 6.36508 15.9474 6.025 15.5312 6.025H12.4688C12.0526 6.025 11.7125 6.36508 11.7125 6.78125V11.7125H6.78125C6.36508 11.7125 6.025 12.0526 6.025 12.4688V15.5312C6.025 15.9474 6.36508 16.2875 6.78125 16.2875H11.7125V21.2188C11.7125 21.6349 12.0526 21.975 12.4688 21.975H15.5312C15.9474 21.975 16.2875 21.6349 16.2875 21.2188V16.2875H21.2188Z" fill="white" stroke="black" stroke-width="0.2"/>
