@@ -103,7 +103,7 @@ export class RecordRTCService {
     // The main task
     return audioRef.put(blob).then((snapshot) => {
       audioRef.getDownloadURL().then((data) => {
-        console.log(data)
+        // console.log(data)
         this.mydownloadURLSubject.next(data);
       })
       

@@ -59,6 +59,31 @@
             </div>
         </div>
     </div>
+
+    <!-- deleting element overlay -->
+    <div class="fullscreen" *ngIf="deleteElementOverlay == true">
+        <div class="overlay" (click)="deleteElementOverlay = false"></div>
+        <div class="superOverlay" style="display: flex; justify-content: space-around; flex-direction: column;">
+            <div style="display: flex; justify-content: flex-end;" (click)="deleteElementOverlay = false">
+                <i class="fas fa-times" style="display: flex; opacity: 0.6; align-content: flex-end; cursor: pointer; padding: 10px 10px 0px 0px;">
+                </i>
+            </div>
+            <div class="content" style="display: flex; justify-content: space-between; flex-direction: column; ">
+                Sind Sie sicher, dass Sie diese Frage löschen möchten? Dieser Schritt kann nicht rückgängig gemacht werden.
+                <div style="height: 10px;"></div>
+                <div style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
+                    <div class="btn dropshadow" style="display: inline-block; background-color: lightgray; width: 30%; min-width: 110px; ">
+                        Abbrechen
+                    </div>
+                    <div (click) = "deleteQuestion()" class="btn dropshadow" style="display: inline-block; background-color:#ff0f0f; width: 30%; min-width: 110px;">
+                        Löschen
+                    </div>
+                </div>
+                <div style="height: 10px;"></div>
+            </div>
+    </div>
+    </div>
+
     <!-- Buttons -->
     <!-- <div class="actionBar">
         <button (click)="this.saveChanges()">Speichern</button> -->

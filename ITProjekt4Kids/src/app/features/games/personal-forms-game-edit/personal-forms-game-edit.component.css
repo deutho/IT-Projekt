@@ -70,6 +70,7 @@
   background-color: white; /* Black background with opacity */
   z-index: 4; /* Specify a stack order in case you're using a different order for other elements */
   cursor: default; /* Add a pointer on hover */
+  border-radius: 15px; 
 }
 
 .fullscreen {
@@ -87,6 +88,14 @@
     align-items: center;
     justify-content: center;
     justify-items: center;
+}
+
+.content {
+  width: 80%;
+  display: block;
+  margin: 0 auto;
+  padding: 20px 0px;
+  min-width: 280px;
 }
 
 .pageContainer {
