@@ -6,6 +6,7 @@ import { PersonalFormsGame } from 'src/app/models/PersonalFormsGame.model';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { take } from 'rxjs/operators';
 import { User } from 'src/app/models/users.model';
+import { RecordRTCService } from 'src/app/services/record-rtc.service';
 
 @Component({
   selector: 'app-personal-forms-game-edit',
@@ -48,10 +49,14 @@ export class PersonalFormsGameEditComponent implements OnInit {
   saved = false;
   noChanges = false;
   notAllInputFieldsFilled = false;
+  editingAudio: boolean = false;
+  answers: string[];
+  deleteElementOverlay=false;
+  dreckigeURL = "https://firebasestorage.googleapis.com/v0/b/kids-8b916.appspot.com/o/audio%2F112a3678-056e-480c-b877-6f7d2c5899e1_1610311152374_753708?alt=media&token=c847474e-d4cf-4ea2-8fd0-c583a029b7fe"
+  recordingTimeout: number;
+  showMaxRecordingWarning: boolean;
 
-
-
-  constructor(private afs: FirestoreDataService, private appService: AppService) { 
+  constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService) { 
     this.appService.myGameData$.subscribe((data) => {
       this.folderUID = data;
     });
@@ -126,6 +131,18 @@ export class PersonalFormsGameEditComponent implements OnInit {
     this.audioURLAnswer4 = this.currentGame.wir[1]
     this.audioURLAnswer5 = this.currentGame.ihr[1]
     this.audioURLAnswer6 = this.currentGame.sie[1]
+  }
+
+  startVoiceRecord(HTMLFinder){
+    // this.triggeredHTML = HTMLFinder;
+    this._recordRTC.toggleRecord(this.currentGame.uid);
+    clearTimeout(this.recordingTimeout)
+    this.recordingTimeout = window.setTimeout(() => {
+        this.startVoiceRecord(HTMLFinder);
+        this.showMaxRecordingWarning = true;
+        setTimeout(() => this.showMaxRecordingWarning = false, 4000)
+    }, 10800);
+    // this.toggleLockedHTML();
   }
 
   checkForChanges(): boolean{
@@ -252,5 +269,62 @@ export class PersonalFormsGameEditComponent implements OnInit {
     this.unsavedChanges=false;
     this.loadInputFieldValues();
     this.initSounds();
+  }
+
+  switchMode() {
+    if(this.editingAudio == false) {
+      this.answers = [document.getElementById('valueIch').innerText, document.getElementById('valueDu').innerText, document.getElementById('valueErSieEs').innerText, document.getElementById('valueWir').innerText, document.getElementById('valueIhr').innerText, document.getElementById('valueSie').innerText];
+      this.question = document.getElementById('question').innerText;
+      // this.valueButton1 = document.getElementById('button1').innerText;
+      // this.valueButton2 = document.getElementById('button2').innerText;
+      // this.valueButton3 = document.getElementById('button3').innerText;
+      // this.valueButton4 = document.getElementById('button4').innerText;
+    }
+    this.editingAudio = !this.editingAudio    
+  }
+  // rework TODO
+  stopAudio(htmlSource) {
+    (<HTMLAudioElement>document.getElementById('player' + htmlSource)).pause()
+    // if(htmlSource == 'question') {
+    //   this.audioQuestionPlaying = false;
+    // }
+    // else if(htmlSource == 'answer1') {
+    //   this.audioAnswer1Playing = false;
+    // }
+    // else if(htmlSource == 'answer2') {
+    //   this.audioAnswer2Playing = false;
+    // }
+    // else if(htmlSource == 'answer3') {
+    //   this.audioAnswer3Playing = false;
+    // }
+    // else if(htmlSource == 'answer4') {
+    //   this.audioAnswer4Playing = false;
+    // }
+    // clearTimeout(this.recordingTimeout)
+  }
+
+  // rework TODO
+  playAudio(htmlSource) {
+    (<HTMLAudioElement>document.getElementById('player')).play();
+    setTimeout(() => {
+      this.stopAudio(htmlSource);
+    }, (<HTMLAudioElement>document.getElementById('player')).duration*1000);
+    
+    // if(htmlSource == 'question') {
+    //   this.audioQuestionPlaying = true;
+    // }
+    // else if(htmlSource == 'answer1') {
+    //   this.audioAnswer1Playing = true;
+    // }
+    // else if(htmlSource == 'answer2') {
+    //   this.audioAnswer2Playing = true;
+    // }
+    // else if(htmlSource == 'answer3') {
+    //   this.audioAnswer3Playing = true;
+    // }
+    // else if(htmlSource == 'answer4') {
+    //   this.audioAnswer4Playing = true;
+    // }
+
   }
 }
