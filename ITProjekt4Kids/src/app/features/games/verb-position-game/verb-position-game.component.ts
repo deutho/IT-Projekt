@@ -4,6 +4,7 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { VerbPositionGame } from 'src/app/models/VerbPositionGame.model';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { AppService } from 'src/app/services/app.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-verb-position-game',
@@ -12,10 +13,7 @@ import { AppService } from 'src/app/services/app.service';
 })
 export class VerbPositionGameComponent implements OnInit {
   
-  constructor(private afs: FirestoreDataService, private appService: AppService) {
-    this.folderID = sessionStorage.getItem("game-uid");
-    sessionStorage.removeItem("game-uid");
-    
+  constructor(private afs: FirestoreDataService, private appService: AppService, private route: ActivatedRoute) {
    }
 
    finito: boolean = false
@@ -40,6 +38,9 @@ export class VerbPositionGameComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
+
+    this.folderID = this.route.snapshot.paramMap.get('id');
+
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
     this.sentence = [];
     this.loadNextGame();

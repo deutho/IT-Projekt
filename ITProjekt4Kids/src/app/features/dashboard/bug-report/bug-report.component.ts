@@ -30,10 +30,7 @@ export class BugReportComponent implements OnInit {
   async ngOnInit() {
     this.write = true;
     this.posted = false;
-    await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
-
-    history.pushState(null, "");
-    
+    await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);    
   } 
 
   public async onSubmit() {

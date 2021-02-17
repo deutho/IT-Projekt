@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { take } from 'rxjs/internal/operators/take';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
@@ -60,11 +60,7 @@ export class VocabularyGameEditComponent implements OnInit {
   deleteElementOverlay = false;
  
 
-  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, public _recordRTC:RecordRTCService,) {
-    // get folder where game created in
-    this.folderID = sessionStorage.getItem("game-uid");
-    sessionStorage.removeItem("game-uid");
-
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) {
     
     this.appService.myImageURL$.subscribe((data) => {
       this.imageURL = data;
@@ -83,6 +79,9 @@ export class VocabularyGameEditComponent implements OnInit {
     
     //get user
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
+
+    this.folderID = this.route.snapshot.paramMap.get('id');
+
     // get games
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
 

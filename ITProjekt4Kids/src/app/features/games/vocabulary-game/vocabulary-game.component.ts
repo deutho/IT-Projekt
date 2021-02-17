@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
 import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
 import { User } from 'src/app/models/users.model';
@@ -67,16 +67,17 @@ export class VocabularyGameComponent implements OnInit {
   noQuestionsInGame = false;
 
   
-  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService) {
-    this.folderID = sessionStorage.getItem("game-uid");
-    sessionStorage.removeItem("game-uid");
-   }
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private route: ActivatedRoute) {}
 
   async ngOnInit(){
 
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
+    this.folderID = this.route.snapshot.paramMap.get('id');
+
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
+
+    
 
     this.shuffleArray(this.Games);
 

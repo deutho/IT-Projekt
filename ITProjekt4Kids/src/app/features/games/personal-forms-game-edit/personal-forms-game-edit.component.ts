@@ -7,6 +7,7 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { take } from 'rxjs/operators';
 import { User } from 'src/app/models/users.model';
 import { RecordRTCService } from 'src/app/services/record-rtc.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-personal-forms-game-edit',
@@ -63,9 +64,7 @@ export class PersonalFormsGameEditComponent implements OnInit {
   audioPlaying = -1;
 
 
-  constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService) { 
-    this.folderUID = sessionStorage.getItem("game-uid");
-    sessionStorage.removeItem("game-uid");
+  constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
 
     this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
@@ -80,6 +79,9 @@ export class PersonalFormsGameEditComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     //get user
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
+
+    this.folderUID = this.route.snapshot.paramMap.get('id');
+
     // get games
     await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
     //init second stack for going back and forwards between games

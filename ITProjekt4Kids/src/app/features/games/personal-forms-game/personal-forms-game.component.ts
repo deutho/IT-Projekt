@@ -6,6 +6,7 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { take } from 'rxjs/internal/operators/take';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-personal-forms-game',
@@ -14,10 +15,7 @@ import { AppService } from 'src/app/services/app.service';
 })
 export class PersonalFormsGameComponent implements OnInit {
 
-  constructor(private afs: FirestoreDataService, private appService: AppService) {
-    this.folderID = sessionStorage.getItem("game-uid");
-    sessionStorage.removeItem("game-uid");
-   }
+  constructor(private afs: FirestoreDataService, private appService: AppService, private route: ActivatedRoute) {}
 
   test = "Hallo Welt!"
   Games: PersonalFormsGame[] = []
@@ -68,6 +66,9 @@ export class PersonalFormsGameComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
+
+    this.folderID = this.route.snapshot.paramMap.get('id');
+
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
     this.shuffleArray(this.Games)
     this.loadNextGame()

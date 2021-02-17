@@ -2,7 +2,6 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
-import { take } from 'rxjs/internal/operators/take';
 import { Folder } from 'src/app/models/folder.model';
 import { Folderelement } from 'src/app/models/folderelement.model';
 import { User } from 'src/app/models/users.model';
@@ -10,8 +9,8 @@ import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { environment } from 'src/environments/environment';
+import { HighlightSpanKind } from 'typescript';
 import {v4 as uuidv4} from 'uuid';
-import { MainComponent } from '../main/main.component';
 
 
 @Component({
@@ -152,7 +151,7 @@ export class MainMenuComponent implements OnInit {
       }
       else if (this.currentUser.role == 2 && !item.editors.includes(this.currentUser.uid)) {
           if (this.studentMode == false) {
-            this.errorMessage = "Diese Übung ist standardmäßig inkludiert und kann daher nicht verändert oder gelöscht werden."
+            this.errorMessage = "Sie sind nicht berechtigt, diese Übung zu bearbeiten"
             this.error = true
             setTimeout(() => this.error = false, 4000);
           } else {
@@ -286,12 +285,17 @@ export class MainMenuComponent implements OnInit {
     setTimeout(() => this.linkCopied = false, 2500);
   }
 
-  deleteElement(item) {
+  deleteElement(item: Folder) {
     //in case someone is dumb enough and trys to delete our derdiedaz games *hust* schiffer *hust*
-    if (this.currentPathForHTML.substring(0,9) != "derdieDAZ" && item.uid != 'derdiedaz') {
+    if (item.editors.includes(this.currentUser.uid)) {
       this.itemtodelete = item;
       this.deleteElementOverlay = true;
-    }
+    } 
+    // else {
+    //     this.errorMessage = "Sie sind nicht berechtigt, diese Übung zu löschen."
+    //     this.error = true
+    //     setTimeout(() => this.error = false, 4000);
+    // }
   }
   
   async delete() {

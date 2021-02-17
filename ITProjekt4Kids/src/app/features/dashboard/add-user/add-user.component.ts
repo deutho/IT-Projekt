@@ -30,7 +30,6 @@ export class AddUserComponent implements OnInit {
   constructor(private fb: FormBuilder, private afs: FirestoreDataService, private auth_service: AuthService) { }
 
   ngOnInit(): void {
-    history.pushState(null, '');
     this.adduserform = this.fb.group({
       firstname:  ['', Validators.required],
       lastname:  ['', Validators.required],

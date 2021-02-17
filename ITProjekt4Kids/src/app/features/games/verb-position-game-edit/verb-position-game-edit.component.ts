@@ -5,6 +5,7 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { User } from 'src/app/models/users.model';
 import {v4 as uuidv4} from 'uuid';
 import { RecordRTCService } from 'src/app/services/record-rtc.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-verb-position-game-edit',
@@ -60,11 +61,7 @@ export class VerbPositionGameEditComponent implements OnInit {
   words: string[]
   valuesOfInput = [];
   audioData = [];
-  constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService) { 
-    this.folderUID = sessionStorage.getItem("game-uid");
-    sessionStorage.removeItem("game-uid");
-
-    
+  constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
     this.appService.myImageURL$.subscribe((data) => {
       this.imageURL = data;
     });
@@ -80,6 +77,9 @@ export class VerbPositionGameEditComponent implements OnInit {
     async ngOnInit(): Promise<void> {
     //get user
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
+
+    this.folderUID = this.route.snapshot.paramMap.get('id');
+
     // get games
     await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
     //init second stack for going back and forwards between games
