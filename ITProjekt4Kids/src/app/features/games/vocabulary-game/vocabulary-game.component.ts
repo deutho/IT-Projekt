@@ -68,13 +68,13 @@ export class VocabularyGameComponent implements OnInit {
 
   
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService) {
-    this.appService.myGameData$.subscribe((data) => {
-      this.folderID = data;
-    });
+    this.folderID = sessionStorage.getItem("game-uid");
+    sessionStorage.removeItem("game-uid");
    }
 
   async ngOnInit(){
     history.pushState(null, "");
+
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);

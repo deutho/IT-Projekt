@@ -15,9 +15,8 @@ import { AppService } from 'src/app/services/app.service';
 export class PersonalFormsGameComponent implements OnInit {
 
   constructor(private afs: FirestoreDataService, private appService: AppService) {
-    this.appService.myGameData$.subscribe((data) => {
-      this.folderID = data;
-    });
+    this.folderID = sessionStorage.getItem("game-uid");
+    sessionStorage.removeItem("game-uid");
    }
 
   test = "Hallo Welt!"

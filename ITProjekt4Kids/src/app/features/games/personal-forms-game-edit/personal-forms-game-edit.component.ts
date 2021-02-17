@@ -52,9 +52,8 @@ export class PersonalFormsGameEditComponent implements OnInit {
 
 
   constructor(private afs: FirestoreDataService, private appService: AppService) { 
-    this.appService.myGameData$.subscribe((data) => {
-      this.folderUID = data;
-    });
+    this.folderUID = sessionStorage.getItem("game-uid");
+    sessionStorage.removeItem("game-uid");
   }
 
   async ngOnInit(): Promise<void> {

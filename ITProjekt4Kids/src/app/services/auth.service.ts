@@ -39,7 +39,7 @@ export class AuthService {
     }
 
     signIn(email, password): Promise<any> {
-        return firebase.auth().signInWithEmailAndPassword(email, password).then(() => this.router.navigate(['app'], {queryParams: {id: this.getCurrentUser().uid, r: 'f'}}));
+        return firebase.auth().signInWithEmailAndPassword(email, password).then(() => this.router.navigate(['app']));
     }
 
     getCurrentUser(): firebase.User {

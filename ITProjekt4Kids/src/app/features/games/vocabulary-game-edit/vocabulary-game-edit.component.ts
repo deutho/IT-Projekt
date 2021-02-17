@@ -62,9 +62,10 @@ export class VocabularyGameEditComponent implements OnInit {
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, public _recordRTC:RecordRTCService,) {
     // get folder where game created in
-    this.appService.myGameData$.subscribe((data) => {
-      this.folderID = data;
-    });
+    this.folderID = sessionStorage.getItem("game-uid");
+    sessionStorage.removeItem("game-uid");
+
+    
     this.appService.myImageURL$.subscribe((data) => {
       this.imageURL = data;
     });    
