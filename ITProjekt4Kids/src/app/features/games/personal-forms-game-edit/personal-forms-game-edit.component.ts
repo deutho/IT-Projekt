@@ -52,7 +52,6 @@ export class PersonalFormsGameEditComponent implements OnInit {
   editingAudio: boolean = false;
   answers: string[];
   deleteElementOverlay=false;
-  dreckigeURL = "https://firebasestorage.googleapis.com/v0/b/kids-8b916.appspot.com/o/audio%2F112a3678-056e-480c-b877-6f7d2c5899e1_1610311152374_753708?alt=media&token=c847474e-d4cf-4ea2-8fd0-c583a029b7fe"
   recordingTimeout: number;
   showMaxRecordingWarning: boolean;
   audioStrings: string[] = [];
@@ -125,7 +124,6 @@ export class PersonalFormsGameEditComponent implements OnInit {
 
         //check if all Fields are filled 
         //TODO
-
 
         this.afs.updateTask(this.currentGame);
         this.finalScreen = false;
@@ -200,19 +198,12 @@ export class PersonalFormsGameEditComponent implements OnInit {
 
   loadAudio(){
     this.audioURLS[this.triggeredHTML] = this.audioURL
-    console.log(this.audioURLS)
   }
 
   checkForChanges(): boolean{
     if(this.currentGame == undefined) return false;
-
-    // this.valueButton1 = (<HTMLInputElement>document.getElementById('valueIch')).value;
-    // this.valueButton2 = (<HTMLInputElement>document.getElementById('valueDu')).value;
-    // this.valueButton3 = (<HTMLInputElement>document.getElementById('valueErSieEs')).value;
-    // this.valueButton4 = (<HTMLInputElement>document.getElementById('valueWir')).value;
-    // this.valueButton5 = (<HTMLInputElement>document.getElementById('valueIhr')).value;
-    // this.valueButton6 = (<HTMLInputElement>document.getElementById('valueSie')).value;
-    // this.question = (<HTMLInputElement>document.getElementById('question')).value;
+    this.switchMode()
+    this.switchMode()
     if(
       this.currentGame.question[0] == this.audioStrings[0] &&
       this.currentGame.ich[0] == this.audioStrings[1] && 
@@ -222,17 +213,14 @@ export class PersonalFormsGameEditComponent implements OnInit {
       this.currentGame.ihr[0] == this.audioStrings[5] &&
       this.currentGame.sie[0] == this.audioStrings[6] &&
       
-
       this.currentGame.question[1] == this.audioURLS[0] &&
       this.currentGame.ich[1] == this.audioURLS[1] && 
       this.currentGame.du[1] == this.audioURLS[2] &&
       this.currentGame.erSieEs[1] == this.audioURLS[3] &&
       this.currentGame.wir[1] == this.audioURLS[4] &&
       this.currentGame.ihr[1] == this.audioURLS[5] &&
-      this.currentGame.sie[1] == this.audioURLS[6] 
-      
+      this.currentGame.sie[1] == this.audioURLS[6]       
       ) {
-
        return false;
     }
   else {
@@ -314,8 +302,8 @@ export class PersonalFormsGameEditComponent implements OnInit {
                         this.currentGame.wir[1],
                         this.currentGame.ihr[1],
                         this.currentGame.sie[1]];
-    console.log("URLS: " + this.audioURLS)
-    console.log(this.audioURLS[0])
+    console.log("loaded data from currentgame URLS: " + this.audioURLS)
+    // console.log(this.audioURLS[0])
     // (<HTMLInputElement>document.getElementById('question')).value = this.currentGame.question[0];
     // (<HTMLInputElement>document.getElementById('valueIch')).value = this.currentGame.ich[0];
     // (<HTMLInputElement>document.getElementById('valueDu')).value = this.currentGame.du[0];
@@ -355,9 +343,6 @@ export class PersonalFormsGameEditComponent implements OnInit {
   switchMode() {    
     if(this.editingAudio == false) {
       this.audioStrings = [];
-      this.audioURLS = [];
-      console.log("vorher" + this.audioStrings);
-      console.log((<HTMLInputElement>document.getElementById('valueIch')).value);
       this.answers = [(<HTMLInputElement>document.getElementById('valueIch')).value, (<HTMLInputElement>document.getElementById('valueDu')).value, (<HTMLInputElement>document.getElementById('valueErSieEs')).value, (<HTMLInputElement>document.getElementById('valueWir')).value, (<HTMLInputElement>document.getElementById('valueIhr')).value, (<HTMLInputElement>document.getElementById('valueSie')).value];
       this.question = (<HTMLInputElement>document.getElementById('question')).value;
       
@@ -367,6 +352,7 @@ export class PersonalFormsGameEditComponent implements OnInit {
     }
     //Audio View - load list with strings and URLS to dynamicly create the audio controls
     this.editingAudio = !this.editingAudio  
+    console.log(this.audioURLS)
 
   }
   // rework TODO
@@ -419,5 +405,19 @@ export class PersonalFormsGameEditComponent implements OnInit {
 
   noAudioSource() {
     //insert a warning that no audio can be found
+  }
+
+  async deleteQuestion() {
+  
+    if (!this.finalScreen) {
+      //get the UID from the CurrentElement if it is a valid Question
+      let questionToDelete = this.currentGame.uid;
+      //delete the question from the database
+      this.loaded = false;
+      this.deleteElementOverlay = false;
+      await this.afs.deleteDocument("games", questionToDelete);
+      this.loadNextGame();
+    }
+
   }
 }
