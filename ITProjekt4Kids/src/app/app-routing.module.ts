@@ -27,31 +27,30 @@ const routes: Routes = [
   { path: 'direct',
   component: RedirectComponent
 },
-  { path: 'app/:id',
-  component: MainMenuComponent,
-  canActivate: [AngularFireAuthGuard], 
-  data: {authGuardPipe: redirectUnauthorizedToLogin}
-},
-  { path: "app/profile",
+  { path: "profile",
   component: ProfileComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
-
-  { path: "app/add-user", 
+  { path: "add-user", 
   component: AddUserComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
 
-  { path: "app/statistics",
+  { path: "statistics",
   component: StatisticsComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
 
-  { path: "app/bug-report",
+  { path: "bug-report",
   component: BugReportComponent,
+  canActivate: [AngularFireAuthGuard], 
+  data: {authGuardPipe: redirectUnauthorizedToLogin}
+},
+{ path: 'app/:id',
+  component: MainMenuComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
