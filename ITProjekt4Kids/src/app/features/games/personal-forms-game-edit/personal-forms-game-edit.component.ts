@@ -96,13 +96,13 @@ export class PersonalFormsGameEditComponent implements OnInit {
   saveChanges() {
     if (this.checkForChanges()) {
       if(
-        (<HTMLInputElement>document.getElementById('question')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueIch')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueDu')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueErSieEs')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueWir')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueIhr')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueSie')).value == '' 
+        this.audioStrings[0] == '' ||
+        this.audioStrings[1] == '' ||
+        this.audioStrings[2] == '' ||
+        this.audioStrings[3] == '' ||
+        this.audioStrings[4] == '' ||
+        this.audioStrings[5] == '' ||
+        this.audioStrings[6] == '' 
       ) {
         //error
         this.notAllInputFieldsFilled = true;
@@ -114,13 +114,13 @@ export class PersonalFormsGameEditComponent implements OnInit {
       if(this.currentGame.uid == '') uid = uuidv4();
       else uid = this.currentGame.uid;
       this.currentGame = new PersonalFormsGame(uid, 
-        [(<HTMLInputElement>document.getElementById('question')).value, this.audioURLQuestion],
-        [(<HTMLInputElement>document.getElementById('valueIch')).value, this.audioURLAnswer1],
-        [(<HTMLInputElement>document.getElementById('valueDu')).value, this.audioURLAnswer2],
-        [(<HTMLInputElement>document.getElementById('valueErSieEs')).value, this.audioURLAnswer3],
-        [(<HTMLInputElement>document.getElementById('valueWir')).value, this.audioURLAnswer4],
-        [(<HTMLInputElement>document.getElementById('valueIhr')).value, this.audioURLAnswer5],
-        [(<HTMLInputElement>document.getElementById('valueSie')).value, this.audioURLAnswer6],
+        [this.audioStrings[0], this.audioURLS[0]],
+        [this.audioStrings[1], this.audioURLS[1]],
+        [this.audioStrings[2], this.audioURLS[2]],
+        [this.audioStrings[3], this.audioURLS[3]],
+        [this.audioStrings[4], this.audioURLS[4]],
+        [this.audioStrings[5], this.audioURLS[5]],
+        [this.audioStrings[6], this.audioURLS[6]],
         this.folderUID)
 
         //check if all Fields are filled 
@@ -206,27 +206,31 @@ export class PersonalFormsGameEditComponent implements OnInit {
   checkForChanges(): boolean{
     if(this.currentGame == undefined) return false;
 
-    this.valueButton1 = (<HTMLInputElement>document.getElementById('valueIch')).value;
-    this.valueButton2 = (<HTMLInputElement>document.getElementById('valueDu')).value;
-    this.valueButton3 = (<HTMLInputElement>document.getElementById('valueErSieEs')).value;
-    this.valueButton4 = (<HTMLInputElement>document.getElementById('valueWir')).value;
-    this.valueButton5 = (<HTMLInputElement>document.getElementById('valueIhr')).value;
-    this.valueButton6 = (<HTMLInputElement>document.getElementById('valueSie')).value;
-    this.question = (<HTMLInputElement>document.getElementById('question')).value;
-    if(this.currentGame.ich[0] == this.valueButton1 && 
-      this.currentGame.du[0] == this.valueButton2 &&
-      this.currentGame.erSieEs[0] == this.valueButton3 &&
-      this.currentGame.wir[0] == this.valueButton4 &&
-      this.currentGame.ihr[0] == this.valueButton5 &&
-      this.currentGame.sie[0] == this.valueButton6 &&
-      this.currentGame.question[0] == this.question &&
-      this.currentGame.ich[1] == this.audioURLAnswer1 && 
-      this.currentGame.du[1] == this.audioURLAnswer2 &&
-      this.currentGame.erSieEs[1] == this.audioURLAnswer3 &&
-      this.currentGame.wir[1] == this.audioURLAnswer4 &&
-      this.currentGame.ihr[1] == this.audioURLAnswer5 &&
-      this.currentGame.sie[1] == this.audioURLAnswer6 &&
-      this.currentGame.question[1] == this.audioURLQuestion
+    // this.valueButton1 = (<HTMLInputElement>document.getElementById('valueIch')).value;
+    // this.valueButton2 = (<HTMLInputElement>document.getElementById('valueDu')).value;
+    // this.valueButton3 = (<HTMLInputElement>document.getElementById('valueErSieEs')).value;
+    // this.valueButton4 = (<HTMLInputElement>document.getElementById('valueWir')).value;
+    // this.valueButton5 = (<HTMLInputElement>document.getElementById('valueIhr')).value;
+    // this.valueButton6 = (<HTMLInputElement>document.getElementById('valueSie')).value;
+    // this.question = (<HTMLInputElement>document.getElementById('question')).value;
+    if(
+      this.currentGame.question[0] == this.audioStrings[0] &&
+      this.currentGame.ich[0] == this.audioStrings[1] && 
+      this.currentGame.du[0] == this.audioStrings[2] &&
+      this.currentGame.erSieEs[0] == this.audioStrings[3] &&
+      this.currentGame.wir[0] == this.audioStrings[4] &&
+      this.currentGame.ihr[0] == this.audioStrings[5] &&
+      this.currentGame.sie[0] == this.audioStrings[6] &&
+      
+
+      this.currentGame.question[1] == this.audioURLS[0] &&
+      this.currentGame.ich[1] == this.audioURLS[1] && 
+      this.currentGame.du[1] == this.audioURLS[2] &&
+      this.currentGame.erSieEs[1] == this.audioURLS[3] &&
+      this.currentGame.wir[1] == this.audioURLS[4] &&
+      this.currentGame.ihr[1] == this.audioURLS[5] &&
+      this.currentGame.sie[1] == this.audioURLS[6] 
+      
       ) {
 
        return false;
@@ -294,14 +298,33 @@ export class PersonalFormsGameEditComponent implements OnInit {
   }
 
   loadInputFieldValues() {
-    (<HTMLInputElement>document.getElementById('question')).value = this.currentGame.question[0];
-    (<HTMLInputElement>document.getElementById('valueIch')).value = this.currentGame.ich[0];
-    (<HTMLInputElement>document.getElementById('valueDu')).value = this.currentGame.du[0];
-    (<HTMLInputElement>document.getElementById('valueErSieEs')).value = this.currentGame.erSieEs[0];
-    (<HTMLInputElement>document.getElementById('valueWir')).value = this.currentGame.wir[0];
-    (<HTMLInputElement>document.getElementById('valueIhr')).value = this.currentGame.ihr[0];
-    (<HTMLInputElement>document.getElementById('valueSie')).value = this.currentGame.sie[0];
+
+    this.audioStrings = [ this.currentGame.question[0],
+                          this.currentGame.ich[0],
+                          this.currentGame.du[0],
+                          this.currentGame.erSieEs[0],
+                          this.currentGame.wir[0],
+                          this.currentGame.ihr[0],
+                          this.currentGame.sie[0]];
+
+  this.audioURLS = [ this.currentGame.question[1],
+                        this.currentGame.ich[1],
+                        this.currentGame.du[1],
+                        this.currentGame.erSieEs[1],
+                        this.currentGame.wir[1],
+                        this.currentGame.ihr[1],
+                        this.currentGame.sie[1]];
+    console.log("URLS: " + this.audioURLS)
+    console.log(this.audioURLS[0])
+    // (<HTMLInputElement>document.getElementById('question')).value = this.currentGame.question[0];
+    // (<HTMLInputElement>document.getElementById('valueIch')).value = this.currentGame.ich[0];
+    // (<HTMLInputElement>document.getElementById('valueDu')).value = this.currentGame.du[0];
+    // (<HTMLInputElement>document.getElementById('valueErSieEs')).value = this.currentGame.erSieEs[0];
+    // (<HTMLInputElement>document.getElementById('valueWir')).value = this.currentGame.wir[0];
+    // (<HTMLInputElement>document.getElementById('valueIhr')).value = this.currentGame.ihr[0];
+    // (<HTMLInputElement>document.getElementById('valueSie')).value = this.currentGame.sie[0];
   }
+
 
   loadPreviousGame() {
     if(this.previousGames.length == 0) {
@@ -331,27 +354,16 @@ export class PersonalFormsGameEditComponent implements OnInit {
 
   switchMode() {    
     if(this.editingAudio == false) {
-      console.log("vorher" + this.audioStrings)
-      console.log((<HTMLInputElement>document.getElementById('valueIch')).value)
+      this.audioStrings = [];
+      this.audioURLS = [];
+      console.log("vorher" + this.audioStrings);
+      console.log((<HTMLInputElement>document.getElementById('valueIch')).value);
       this.answers = [(<HTMLInputElement>document.getElementById('valueIch')).value, (<HTMLInputElement>document.getElementById('valueDu')).value, (<HTMLInputElement>document.getElementById('valueErSieEs')).value, (<HTMLInputElement>document.getElementById('valueWir')).value, (<HTMLInputElement>document.getElementById('valueIhr')).value, (<HTMLInputElement>document.getElementById('valueSie')).value];
-      console.log(this.answers)
       this.question = (<HTMLInputElement>document.getElementById('question')).value;
       
       // Strings e.g. Ordne zu!, gehe, gehst, geht, ...
       this.audioStrings.push(this.question);
       this.audioStrings = this.audioStrings.concat(this.answers);
-
-      // URLS
-      this.audioURLS.push(this.currentGame.question[1])
-      this.audioURLS.push(this.currentGame.ich[1])
-      this.audioURLS.push(this.currentGame.du[1])
-      this.audioURLS.push(this.currentGame.erSieEs[1])
-      this.audioURLS.push(this.currentGame.wir[1])
-      this.audioURLS.push(this.currentGame.ich[1])
-      this.audioURLS.push(this.currentGame.sie[1])
-
-      console.log("nachher" + this.audioStrings)
-
     }
     //Audio View - load list with strings and URLS to dynamicly create the audio controls
     this.editingAudio = !this.editingAudio  
