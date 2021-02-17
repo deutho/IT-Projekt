@@ -45,9 +45,7 @@ export class AddUserComponent implements OnInit {
       'auth/weak-password': 'Das Passwort muss mindestens 6 Zeichen lang sein.'
     }; // list of firebase error codes to alternate error messages
   }
-
-
-
+  
   public async onSubmit() {   
     this.success = undefined; 
     this.formSubmitted = true;
