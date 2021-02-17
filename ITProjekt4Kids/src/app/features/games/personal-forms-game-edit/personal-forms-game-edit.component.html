@@ -33,29 +33,28 @@
     </div>
 
     <div *ngIf = "editingAudio == true" class="audioEditingContainer">
-        <div class="record-div" >
-            <div class="textForAudio">Frage:</div>
+        <div class="record-div" *ngFor="let audio of audioStrings, index as i">
+            <div class="textForAudio">{{audioStrings[i]}}</div>
             <div class="editAudioInteraction" >
-                <button id="audioButtonQuestion" class="recordButton" (click)="startVoiceRecord('question')" >
+                <button id="audioButton{{i}}" class="recordButton" (click)="startVoiceRecord(i)" >
                     <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
                 </button>
                 <div class="spacingBetweenButtonAndTimer"></div>
-                <!-- *ngIf="triggeredHTML == 'question'" -->
-                <div class="counter" >{{_recordRTC?.recordingTimer}}</div>
-                <audio id = "player" [src]="this.dreckigeURL"></audio>
+                <div class="counter" *ngIf="triggeredHTML == i">{{_recordRTC?.recordingTimer}}</div>
+                <audio id = "player{{i}}" [src]="audioURLS[i]"></audio>
                 <div style="padding-left: 20px;">
-                    <!-- <div (click) = "noAudioSource()" *ngIf="this.audioURLQuestion == ''">
+                    <div (click) = "noAudioSource()" *ngIf="this.audioURLS[i] == ''">
                         <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                             <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
                         </svg>
-                    </div> -->
+                    </div>
                     <!-- *ngIf="this.audioURLQuestion != ''" -->
-                    <div (click) = "playAudio('question')" >
+                    <div (click) = "playAudio(i)" *ngIf="this.audioURLS[i] != '' && this.audioPlaying != i" >
                         <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
                     </div>
-                    <!-- <div (click) = "stopAudio('question')" *ngIf="this.audioURLQuestion != '' && this.audioQuestionPlaying == true">
+                    <div (click) = "stopAudio('question')" *ngIf="this.audioURLS[i] != '' && this.audioPlaying == i">
                         <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>
