@@ -73,6 +73,16 @@ export class MainMenuComponent implements OnInit {
     this.appService.myStudentMode$.subscribe((studentMode) => {
       this.studentMode = studentMode;
     });
+
+    this.isDeployment = environment.isDeployment; // delete when project is done
+
+    //add Element Form
+    this.addElementForm = this.fb.group({
+      name:  ['', Validators.required],
+      game:  []
+    });
+
+
     //subscription to the active route
     this.route.params.subscribe(params => {
       let id: string = params['id'];
@@ -136,21 +146,23 @@ export class MainMenuComponent implements OnInit {
         this.router.navigate(['app/'+item.uid]);
     }
     else if (item.type == "task") {
-      let data = item.uid;
       let type = item.gameType;
       if (this.currentUser.role == 2 && item.editors.includes(this.currentUser.uid) && this.studentMode == false) { 
-        type = type+"-edit";
+        this.router.navigate(['game/'+type+'-edit/'+item.uid]);
       }
-      if (item.mutable == true) {
-        this.router.navigate(['app/'+type]); //navigate to the game
-      } 
+      else if (this.currentUser.role == 2 && !item.editors.includes(this.currentUser.uid)) {
+          if (this.studentMode == false) {
+            this.errorMessage = "Diese Übung ist standardmäßig inkludiert und kann daher nicht verändert oder gelöscht werden."
+            this.error = true
+            setTimeout(() => this.error = false, 4000);
+          } else {
+            this.router.navigate(['game/'+type+'/'+item.uid]);
+          }
+      }
       else {
-        this.errorMessage = "Diese Übung ist standardmäßig inkludiert und kann daher nicht verändert oder gelöscht werden."
-        this.error = true
-        setTimeout(() => this.error = false, 4000);
+        this.router.navigate(['game/'+type+'/'+item.uid]);
       }
     }
-
   }
 
   addFolder(newUid: string, newName: string, newType: string, gameType?: string) {
@@ -337,14 +349,5 @@ export class MainMenuComponent implements OnInit {
   
   toggleStudentMode() {
     this.appService.myStudentMode();
-  }
-  
-
-  @HostListener('window:popstate', ['$event'])
-  onBrowserBackBtnClose(event: Event) {
-    event.preventDefault();
-    if (this.level > 0) {
-      this.goUpOneLevel();
-    } 
   }
 }

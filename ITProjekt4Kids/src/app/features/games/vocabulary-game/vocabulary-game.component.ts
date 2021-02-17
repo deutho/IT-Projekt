@@ -73,7 +73,6 @@ export class VocabularyGameComponent implements OnInit {
    }
 
   async ngOnInit(){
-    history.pushState(null, "");
 
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 

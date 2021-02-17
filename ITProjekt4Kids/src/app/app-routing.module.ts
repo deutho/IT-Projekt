@@ -54,37 +54,37 @@ const routes: Routes = [
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
-  { path: "app/vocabular-game",
+  { path: "game/vocabular-game/:id",
   component: VocabularyGameComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 
 },
-  { path: "app/vocabular-game-edit",
+  { path: "game/vocabular-game-edit/:id",
   component: VocabularyGameEditComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
 
-  { path: "app/personal-forms-game",
+  { path: "game/personal-forms-game/:id",
   component: PersonalFormsGameComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 
 },
-  { path: "app/personal-forms-game-edit",
+  { path: "game/personal-forms-game-edit/:id",
   component: PersonalFormsGameEditComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
 
-  { path: "app/verb-position-game",
+  { path: "game/verb-position-game/:id",
   component: VerbPositionGameComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 
 },
-  { path: "app/verb-position-game-edit",
+  { path: "game/verb-position-game-edit/:id",
   component: VerbPositionGameEditComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
