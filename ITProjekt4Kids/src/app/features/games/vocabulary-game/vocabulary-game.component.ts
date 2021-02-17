@@ -4,10 +4,8 @@ import { take } from 'rxjs/internal/operators/take';
 import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
-import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
-import { NavigationService } from 'src/app/services/navigation.service';
 const starAnimation = trigger('starAnimation', [
   transition('* <=> *', [
     query(':enter',
@@ -69,14 +67,14 @@ export class VocabularyGameComponent implements OnInit {
   noQuestionsInGame = false;
 
   
-  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, private nav: NavigationService) {
-    this.appService.myGameData$.subscribe((data) => {
-      this.folderID = data;
-    });
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService) {
+    this.folderID = sessionStorage.getItem("game-uid");
+    sessionStorage.removeItem("game-uid");
    }
 
   async ngOnInit(){
     history.pushState(null, "");
+
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
@@ -206,6 +204,9 @@ export class VocabularyGameComponent implements OnInit {
 
   shuffleAnswers() {
     this.answers = [this.currentGame.answer1, this.currentGame.answer2, this.currentGame.answer3, this.currentGame.rightAnswer];
+    if(this.currentGame.photoID == null){
+      this.currentGame.photoID = "https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg"
+    }
     this.imageURL = this.currentGame.photoID; //in the meantime set the URL
     this.shuffleArray(this.answers);
   }
@@ -237,13 +238,12 @@ export class VocabularyGameComponent implements OnInit {
 
   }
 
-  goBack() {
-    this.nav.navigate("Startseite", "mainMenu");
-  }
+  
 
   evaluateGame(selection) {
     let correctAnswer;
-    if (selection == this.currentGame.rightAnswer[0]) {
+    // let s : String = (selection.toString() + ' ')
+    if (selection == this.currentGame.rightAnswer[0] + ' ') {
       this.response = "Richtig!!";
       this.roundsWon++
       this.totalrounds++;
@@ -316,7 +316,7 @@ export class VocabularyGameComponent implements OnInit {
     if(id == 'question') return;
     if(!this.evaluated) {
       let button = (<HTMLButtonElement>document.getElementById(id))
-      let correctAnswer = this.evaluateGame(button.value);            
+      let correctAnswer = this.evaluateGame(button.value);          
       if (correctAnswer) {
         button.setAttribute("style", "background-color:#52FF82;");
       }
@@ -414,11 +414,7 @@ export class VocabularyGameComponent implements OnInit {
     else return false;
   }
 
-  @HostListener('window:popstate', ['$event'])
-  onBrowserBackBtnClose(event: Event) {
-    event.preventDefault();
-    this.nav.navigate('Hauptmenü', 'mainMenu');
-  }
+
 }
 
 

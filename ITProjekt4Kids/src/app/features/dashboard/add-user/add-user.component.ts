@@ -9,7 +9,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { take } from 'rxjs/operators';
 import { HostListener } from '@angular/core';
-import { NavigationService } from 'src/app/services/navigation.service';
 
 
 @Component({
@@ -28,7 +27,7 @@ export class AddUserComponent implements OnInit {
   newUser: User;
   currentUser: User;
   roleAddingUser: Number;
-  constructor(private fb: FormBuilder, private afs: FirestoreDataService, private auth_service: AuthService, private nav: NavigationService) { }
+  constructor(private fb: FormBuilder, private afs: FirestoreDataService, private auth_service: AuthService) { }
 
   ngOnInit(): void {
     history.pushState(null, '');
@@ -122,14 +121,6 @@ export class AddUserComponent implements OnInit {
         password: this.password
       })
     }
-  }
-
-
-
-  @HostListener('window:popstate', ['$event'])
-  onBrowserBackBtnClose(event: Event) {
-    event.preventDefault();
-    this.nav.navigate('Hauptmenü', 'mainMenu');
   }
 
 }

@@ -6,7 +6,6 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { take } from 'rxjs/internal/operators/take';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
-import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-personal-forms-game',
@@ -15,10 +14,9 @@ import { NavigationService } from 'src/app/services/navigation.service';
 })
 export class PersonalFormsGameComponent implements OnInit {
 
-  constructor(private afs: FirestoreDataService, private appService: AppService, private nav: NavigationService) {
-    this.appService.myGameData$.subscribe((data) => {
-      this.folderID = data;
-    });
+  constructor(private afs: FirestoreDataService, private appService: AppService) {
+    this.folderID = sessionStorage.getItem("game-uid");
+    sessionStorage.removeItem("game-uid");
    }
 
   test = "Hallo Welt!"
@@ -39,6 +37,7 @@ export class PersonalFormsGameComponent implements OnInit {
   roundsWonAnimation = [];
   roundsLostAnimation = [];
   speakerMode = false;
+  checked : boolean = false
 
 
   // boolean to detect if list already contains a string
@@ -173,6 +172,7 @@ export class PersonalFormsGameComponent implements OnInit {
 
   loadNextGame() {
     this.evaluated = false;
+    this.checked = false;
     
     if (this.Games.length > 0) {
         this.currentGame = this.Games.pop();      
@@ -224,6 +224,7 @@ export class PersonalFormsGameComponent implements OnInit {
 
 
   evaluateGame(){ 
+    
     let proceedEvaluation = this.checkIfAllItemsAllocated();
 
     if(proceedEvaluation == true){
@@ -300,13 +301,17 @@ export class PersonalFormsGameComponent implements OnInit {
       //there is only one evaluation, but infinte trys to pass the game
         if(tempAnswerChecker == true){
           this.answerIsCorrect = true;
-          if(!this.evaluated) this.roundsWon++;
+          if(!this.evaluated && this.checked == false) this.roundsWon++;
+          this.evaluated = true;
+          this.checked = true
           //Stimme "Du hast das toll gemacht!" 
         }else{
-          if(!this.evaluated) this.roundsLost++;
+          if(!this.evaluated && this.checked == false) this.roundsLost++;
+          this.checked = true
+          this.evaluated == false
           //Stimme "Oje, probier es noch einmal, du schaffst das!"
         }   
-      this.evaluated = true;
+      
     }
   }
 
@@ -332,16 +337,6 @@ export class PersonalFormsGameComponent implements OnInit {
       return true; //more than 50% correct
     }
     else return false;
-  }
-
-  goBack() {
-    this.nav.navigate("Startseite", "mainMenu");
-  }
-
-  @HostListener('window:popstate', ['$event'])
-  onBrowserBackBtnClose(event: Event) {
-    event.preventDefault();
-    this.nav.navigate('Hauptmenü', 'mainMenu');
   }
 
   switchMode() {

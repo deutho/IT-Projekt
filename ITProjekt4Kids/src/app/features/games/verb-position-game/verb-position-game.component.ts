@@ -4,7 +4,6 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { VerbPositionGame } from 'src/app/models/VerbPositionGame.model';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { AppService } from 'src/app/services/app.service';
-import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-verb-position-game',
@@ -13,10 +12,10 @@ import { NavigationService } from 'src/app/services/navigation.service';
 })
 export class VerbPositionGameComponent implements OnInit {
   
-  constructor(private afs: FirestoreDataService, private appService: AppService, private nav: NavigationService) {
-    this.appService.myGameData$.subscribe((data) => {
-      this.folderID = data;
-    });
+  constructor(private afs: FirestoreDataService, private appService: AppService) {
+    this.folderID = sessionStorage.getItem("game-uid");
+    sessionStorage.removeItem("game-uid");
+    
    }
 
    finito: boolean = false
@@ -198,13 +197,13 @@ export class VerbPositionGameComponent implements OnInit {
     else return false;
   }
 
-  goBack() {
-    this.nav.navigate("Startseite", "mainMenu");
-  }
-
   finalScreen() {
     this.roundsWonAnimation = [].constructor(this.roundsWon);
     this.roundsLostAnimation = [].constructor(this.totalNumberOfRounds - this.roundsWon);
+  }
+
+  goBack() {
+
   }
 
 }

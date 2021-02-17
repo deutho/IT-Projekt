@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, SystemJsNgModuleLoader } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { take } from 'rxjs/internal/operators/take';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
-import { DashboardService } from 'src/app/services/dashboard.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
-import { NavigationService } from 'src/app/services/navigation.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -14,39 +14,39 @@ import { environment } from 'src/environments/environment';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
 
-  public data: string = "mainMenu";
-  public header: string = "Startseite";
-  public currentUser: User;
+  public header: string;
   studentMode;
+  currentUser: User;
+  isAuthenticated: firebase.User;
   changedToStudent = false;
   changedToTeacher = false;
   isDeployment;
-  constructor(private auth: AngularFireAuth, private router: Router, private appService: AppService, private afs: FirestoreDataService, private nav: NavigationService) {
-    this.appService.myComponent(this.data);
-    this.appService.myheader$.subscribe((header) => {
-      this.header = header;
-   });
-   this.appService.myStudentMode$.subscribe((studentMode) => {
-    this.studentMode = studentMode;
-  });
-  }
+  private headersubscription;
+  private modesubscription;
+  private userSubscriptpion;
+  private authstatusSubscription;
+  constructor(private auth: AuthService, private router: Router, private appService: AppService, private afs: FirestoreDataService) {
 
+    this.headersubscription = this.appService.getMyHeader().subscribe((header) => {
+        this.header = header;
+    });
+
+    this.modesubscription = this.appService.myStudentMode$.subscribe((studentMode) => {
+      this.studentMode = studentMode;
+    });
+
+  }
+  
   async ngOnInit() {
     this.isDeployment = environment.isDeployment;
-
-    await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
-    this.currentUser.username = this.currentUser.username.substring(0, this.currentUser.username.lastIndexOf('@'));
-    
+    this.authstatusSubscription = this.auth.currentAuthStatus.subscribe(authstatus => this.isAuthenticated = authstatus)
+    this.userSubscriptpion = this.afs.currentUserStatus.subscribe(user => this.currentUser = user)
   }
   
   logout() {
-    this.auth.signOut().then(() => this.router.navigate(['login']))
-  }
-
-  navigate(header, data) {
-    this.nav.navigate(header, data);
+    this.auth.signOut();
   }
 
   toggleStudentMode() {
@@ -61,6 +61,20 @@ export class MainComponent implements OnInit {
       this.changedToTeacher = true;
       setTimeout(() => this.changedToTeacher = false, 4000);
     }
+  }
+
+  navigate(route: string, header: string) {
+    this.router.navigate([route]);
+    this.appService.myHeader(header);
+  }
+
+
+  //Unsubscribe at the life cycle hook
+  ngOnDestroy() {
+    this.headersubscription.unsubscribe();
+    this.modesubscription.unsubscribe();
+    this.userSubscriptpion.unsubscribe();
+    this.authstatusSubscription.unsubscribe();
   }
 
 } 

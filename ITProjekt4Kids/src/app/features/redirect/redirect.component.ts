@@ -32,7 +32,10 @@ export class RedirectComponent implements OnInit {
     this.data[0] = this.user.substring(0, this.user.indexOf("-"))+" "+this.user.substring(this.user.indexOf("-")+1);
     this.data[1] = this.item;
     this.data[2] = this.path;
-    this.app.myRedirectData(this.data);
-    this.router.navigate(['']);
+    
+    sessionStorage.setItem("redirect-user", this.data[0]);
+    sessionStorage.setItem("redirect-item", this.data[1]);
+    sessionStorage.setItem("redirect-path", this.data[2]);
+    this.router.navigate(['app']);
   }
 }

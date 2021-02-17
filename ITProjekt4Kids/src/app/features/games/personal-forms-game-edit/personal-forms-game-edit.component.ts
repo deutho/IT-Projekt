@@ -56,10 +56,11 @@ export class PersonalFormsGameEditComponent implements OnInit {
   recordingTimeout: number;
   showMaxRecordingWarning: boolean;
 
+
+
   constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService) { 
-    this.appService.myGameData$.subscribe((data) => {
-      this.folderUID = data;
-    });
+    this.folderUID = sessionStorage.getItem("game-uid");
+    sessionStorage.removeItem("game-uid");
   }
 
   async ngOnInit(): Promise<void> {

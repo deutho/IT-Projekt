@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
-import { DashboardService } from 'src/app/services/dashboard.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import {v4 as uuidv4} from 'uuid';
 import { RecordRTCService } from 'src/app/services/record-rtc.service';
@@ -61,11 +60,12 @@ export class VocabularyGameEditComponent implements OnInit {
   deleteElementOverlay = false;
  
 
-  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private dashboardService: DashboardService, public _recordRTC:RecordRTCService,) {
+  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, public _recordRTC:RecordRTCService,) {
     // get folder where game created in
-    this.appService.myGameData$.subscribe((data) => {
-      this.folderID = data;
-    });
+    this.folderID = sessionStorage.getItem("game-uid");
+    sessionStorage.removeItem("game-uid");
+
+    
     this.appService.myImageURL$.subscribe((data) => {
       this.imageURL = data;
     });    
@@ -349,14 +349,6 @@ export class VocabularyGameEditComponent implements OnInit {
 
   
   
-  // activates on Home-Button click, return, the user to the home menu, and saves changed if any were made
-  returnToMainMenu() {
-    var data = "mainMenu";
-    this.appService.myComponent(data);
-    this.dashboardService.changes();
-    var header = "Hauptmenü"
-    this.appService.myHeader(header);
-  }
 
   // checks if the question, the image, or one of the button values has changed
   checkForChanges(): boolean{

@@ -3,22 +3,43 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import { environment } from 'src/environments/environment';
+import { AppService } from './app.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { FirestoreDataService } from './firestore-data.service';
 
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-    constructor(
-        private auth: AngularFireAuth,
-        private router: Router,
-    ) {}
+    
 
+    constructor(
+        private router: Router,
+    ) {
+        this.authStatusListener();
+    }
+
+    private authStatusSub = new BehaviorSubject(this.getCurrentUser());
+    currentAuthStatus = this.authStatusSub.asObservable();
+
+
+    //auth change listener for the observable
+    authStatusListener() {
+        firebase.auth().onAuthStateChanged((credential) => {
+            if (credential) {
+                this.authStatusSub.next(credential);
+            } else {
+                this.authStatusSub.next(null);
+            }
+        })
+    }
     signOut() {
         firebase.auth().signOut().then(() => this.router.navigate(['login']));   
     }
 
-    signIn(email, password): Promise<firebase.auth.UserCredential> {
-        return firebase.auth().signInWithEmailAndPassword(email, password);
+    signIn(email, password): Promise<any> {
+        return firebase.auth().signInWithEmailAndPassword(email, password).then(() => this.router.navigate(['app']));
     }
 
     getCurrentUser(): firebase.User {

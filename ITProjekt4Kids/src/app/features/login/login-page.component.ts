@@ -4,6 +4,7 @@ import * as firebase from 'firebase';
 import { Router } from '@angular/router';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { AppService } from 'src/app/services/app.service';
 
 
 
@@ -16,9 +17,7 @@ export class LoginPageComponent implements OnInit {
 
 loginform: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) { }
-  
-
+  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService, private app: AppService, private afs: FirestoreDataService) { }
 
   errorMessage = '';
   error;
@@ -42,7 +41,7 @@ loginform: FormGroup;
     let username :string = this.loginform.get('username').value
     let password :string = this.loginform.get('password').value
     username = username+'@derdiedaz.at'
-    this.auth.signIn(username, password).then(() => this.router.navigate([''])).catch((error) => {
+    this.auth.signIn(username, password).catch((error) => {
       this.error = true;
       this.loginform.get("username").setValue('');
       this.loginform.get("password").setValue('');

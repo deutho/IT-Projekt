@@ -6,11 +6,11 @@ import { take } from 'rxjs/internal/operators/take';
 import { Folder } from 'src/app/models/folder.model';
 import { Folderelement } from 'src/app/models/folderelement.model';
 import { AppService } from 'src/app/services/app.service';
-import { DashboardService } from 'src/app/services/dashboard.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
-import { NavigationService } from 'src/app/services/navigation.service';
 import { environment } from 'src/environments/environment';
 import {v4 as uuidv4} from 'uuid';
+import { MainComponent } from '../main/main.component';
 
 
 @Component({
@@ -20,7 +20,8 @@ import {v4 as uuidv4} from 'uuid';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService, private nav: NavigationService) {
+  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService, private auth: AuthService) {
+
       
    }
 
@@ -59,22 +60,14 @@ export class MainMenuComponent implements OnInit {
   itemtodelete: Folder;
   creatingElementError = false;
   isDeployment = false;
+  userSubscriptpion
   
   
 
-  async ngOnInit() {
-    this.appService.myRedirect$.subscribe((redirect) => {
-      this.redirectdata = redirect;
-    });
-
+  async ngOnInit() {    
     this.appService.myStudentMode$.subscribe((studentMode) => {
       this.studentMode = studentMode;
     });
-
-    this.appService.myLastPath$.subscribe((lastpath) => {
-      this.lastpath = lastpath;
-    });
-
 
     this.isDeployment = environment.isDeployment; // delete when project is done
     this.addElementForm = this.fb.group({
@@ -88,14 +81,14 @@ export class MainMenuComponent implements OnInit {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
     
     //If the user was redirected
-    if (this.redirectdata.length != 0) {
+    if (sessionStorage.getItem("redirect-user")) {
       this.redirected = true;
       //set the redirection path
-      this.currentDocKey = this.redirectdata[1];
+      this.currentDocKey = sessionStorage.getItem("redirect-item");
       
       //get the folders for the path and choose the redirected one per UID 
       let folders: Folder[];
-      await this.afs.getFolderElement(this.redirectdata[2]).
+      await this.afs.getFolderElement(sessionStorage.getItem("redirect-path")).
       then(data => {
         console.log(data)
         //If there is no Item with the given id or it has been deleted
@@ -105,7 +98,7 @@ export class MainMenuComponent implements OnInit {
         } else {
             folders = data.folders
             folders.forEach(element => {
-            if (element.uid == this.redirectdata[1]) 
+            if (element.uid == sessionStorage.getItem("redirect-item")) 
               this.redirectitem = element;        
             });
             if (this.redirectitem == undefined) {
@@ -117,9 +110,12 @@ export class MainMenuComponent implements OnInit {
       
       console.log(this.failed)
       //Set the path for the User in the navbar
-      this.currentPathForHTML = "Geteilt von "+this.redirectdata[0]+"/";
-      //empty the behaviour subject after is was consumed
-      this.appService.myRedirectData([])
+      this.currentPathForHTML = "Geteilt von "+sessionStorage.getItem("redirect-user")+"/";
+      //empty the session storage
+      sessionStorage.removeItem("redirect-user");
+      sessionStorage.removeItem("redirect-path");
+      sessionStorage.removeItem("redirect-item");
+
     } 
     //if the user is not redirected or the redirection failed do this
     if (this.redirected == false || this.failed == true) {
@@ -127,17 +123,18 @@ export class MainMenuComponent implements OnInit {
       if (this.currentUser.role != 1){
         //check if there is a lastpath (returning from a game)
         
-        if (this.lastpath.length != 0){
+        if (sessionStorage.getItem("last-path-DocKey") != null){
           
           //set the last paths and the level
-          this.currentDocKey = this.lastpath[0];
-          this.currentPathForHTML = this.lastpath[1];
-          this.level = parseInt(this.lastpath[2]);
-          //empty the behaviour subject after is was consumed
-          this.appService.myLastPath([]);
+          this.currentDocKey = sessionStorage.getItem("last-path-DocKey");
+          this.currentPathForHTML = sessionStorage.getItem("last-path-HTML");
+          this.level = parseInt(sessionStorage.getItem("last-path-level"));
+          //empty the storage
+          sessionStorage.removeItem("last-path-DocKey");
+          sessionStorage.removeItem("last-path-HTML");
+          sessionStorage.removeItem("last-path-level");
         }
         //set the path according to teacher and student if there was not lastpath
-        
         else if (this.currentUser.role == 2) this.currentDocKey = this.currentUser.uid;
         else if (this.currentUser.role == 3) this.currentDocKey = this.currentUser.parent;
         console.log(this.currentDocKey);
@@ -152,7 +149,6 @@ export class MainMenuComponent implements OnInit {
 
   } 
   
-
   async getFolders() {
     if (this.currentUser.role != 1) {
 
@@ -224,14 +220,20 @@ export class MainMenuComponent implements OnInit {
     else if (item.type == "task") {
       var standard = false;
       var data = item.uid;
-      this.appService.myGameData(data);
-      this.appService.myLastPath([this.currentDocKey, this.currentPathForHTML, this.level]);
+      sessionStorage.setItem("game-uid", data);
+      //this.appService.myLastPath([this.currentDocKey, this.currentPathForHTML, this.level]);
+      
+      sessionStorage.setItem("last-path-DocKey", this.currentDocKey);
+      sessionStorage.setItem("last-path-HTML", this.currentPathForHTML);
+      sessionStorage.setItem("last-path-level", this.level);
       var type = item.gameType;
       if (this.currentUser.role == 2 && this.redirected == false && this.studentMode == false) { 
         type = type+"-edit";
         if (this.currentPathForHTML.substring(0,9) == "derdieDAZ") standard = true;
       }
-      if (standard == false) this.navigate(item.name, type);
+      if (standard == false) {
+        this.router.navigate(['app/'+type]); //navigate to the game
+      } 
       else {
         this.errorMessage = "Diese Übung ist standardmäßig inkludiert und kann daher nicht verändert oder gelöscht werden."
         this.error = true
@@ -429,10 +431,4 @@ export class MainMenuComponent implements OnInit {
       this.goUpOneLevel();
     } 
   }
-
-  navigate(header, data) {
-    this.nav.navigate(header, data);
-    }
-
-
 }

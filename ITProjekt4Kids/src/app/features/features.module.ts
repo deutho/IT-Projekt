@@ -6,10 +6,8 @@ import { MainComponent } from './dashboard/main/main.component';
 import { ProfileComponent } from './dashboard/profile/profile.component';
 import { StatisticsComponent } from './dashboard/statistics/statistics.component';
 import { AddUserComponent } from './dashboard/add-user/add-user.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardHostDirective } from 'src/app/directives/dashboard-host.directive';
 import { MainMenuComponent } from './dashboard/main-menu/main-menu.component';
-
 import { VocabularyGameComponent } from './games/vocabulary-game/vocabulary-game.component';
 import { VocabularyGameEditComponent } from './games/vocabulary-game-edit/vocabulary-game-edit.component';
 import { PersonalFormsGameComponent } from './games/personal-forms-game/personal-forms-game.component';
@@ -32,11 +30,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
 declarations: [
-  MainComponent,
   ProfileComponent,
   StatisticsComponent,
   AddUserComponent,
-  DashboardComponent,
   DashboardHostDirective,
   MainMenuComponent,
   VocabularyGameComponent,
@@ -59,7 +55,7 @@ imports: [
   ClipboardModule,
   NgbModule
 ],
-exports: [MainComponent],
+
 providers: [AngularFirestore],
 bootstrap: [AppComponent]
 })
