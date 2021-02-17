@@ -55,12 +55,26 @@ export class PersonalFormsGameEditComponent implements OnInit {
   dreckigeURL = "https://firebasestorage.googleapis.com/v0/b/kids-8b916.appspot.com/o/audio%2F112a3678-056e-480c-b877-6f7d2c5899e1_1610311152374_753708?alt=media&token=c847474e-d4cf-4ea2-8fd0-c583a029b7fe"
   recordingTimeout: number;
   showMaxRecordingWarning: boolean;
-
+  audioStrings: string[] = [];
+  audioURLS: string[] = [];
+  triggeredHTML: any;
+  isRecording: any = false;
+  audioURL: string;
+  audioPlaying = -1;
 
 
   constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService) { 
     this.folderUID = sessionStorage.getItem("game-uid");
     sessionStorage.removeItem("game-uid");
+
+    this._recordRTC.downloadURL$.subscribe((data) => {
+      this.audioURL = data;
+      if((<HTMLButtonElement> document.getElementById("audioButton0")) != null) {
+        this.allowRecord(true);
+      }
+      this.loadAudio();
+      // console.log("hellloooo")
+    })
   }
 
   async ngOnInit(): Promise<void> {
@@ -82,13 +96,13 @@ export class PersonalFormsGameEditComponent implements OnInit {
   saveChanges() {
     if (this.checkForChanges()) {
       if(
-        (<HTMLInputElement>document.getElementById('question')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueIch')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueDu')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueErSieEs')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueWir')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueIhr')).value == '' ||
-        (<HTMLInputElement>document.getElementById('valueSie')).value == '' 
+        this.audioStrings[0] == '' ||
+        this.audioStrings[1] == '' ||
+        this.audioStrings[2] == '' ||
+        this.audioStrings[3] == '' ||
+        this.audioStrings[4] == '' ||
+        this.audioStrings[5] == '' ||
+        this.audioStrings[6] == '' 
       ) {
         //error
         this.notAllInputFieldsFilled = true;
@@ -100,13 +114,13 @@ export class PersonalFormsGameEditComponent implements OnInit {
       if(this.currentGame.uid == '') uid = uuidv4();
       else uid = this.currentGame.uid;
       this.currentGame = new PersonalFormsGame(uid, 
-        [(<HTMLInputElement>document.getElementById('question')).value, this.audioURLQuestion],
-        [(<HTMLInputElement>document.getElementById('valueIch')).value, this.audioURLAnswer1],
-        [(<HTMLInputElement>document.getElementById('valueDu')).value, this.audioURLAnswer2],
-        [(<HTMLInputElement>document.getElementById('valueErSieEs')).value, this.audioURLAnswer3],
-        [(<HTMLInputElement>document.getElementById('valueWir')).value, this.audioURLAnswer4],
-        [(<HTMLInputElement>document.getElementById('valueIhr')).value, this.audioURLAnswer5],
-        [(<HTMLInputElement>document.getElementById('valueSie')).value, this.audioURLAnswer6],
+        [this.audioStrings[0], this.audioURLS[0]],
+        [this.audioStrings[1], this.audioURLS[1]],
+        [this.audioStrings[2], this.audioURLS[2]],
+        [this.audioStrings[3], this.audioURLS[3]],
+        [this.audioStrings[4], this.audioURLS[4]],
+        [this.audioStrings[5], this.audioURLS[5]],
+        [this.audioStrings[6], this.audioURLS[6]],
         this.folderUID)
 
         //check if all Fields are filled 
@@ -135,7 +149,8 @@ export class PersonalFormsGameEditComponent implements OnInit {
   }
 
   startVoiceRecord(HTMLFinder){
-    // this.triggeredHTML = HTMLFinder;
+    console.log(HTMLFinder)
+    this.triggeredHTML = HTMLFinder;
     this._recordRTC.toggleRecord(this.currentGame.uid);
     clearTimeout(this.recordingTimeout)
     this.recordingTimeout = window.setTimeout(() => {
@@ -143,33 +158,79 @@ export class PersonalFormsGameEditComponent implements OnInit {
         this.showMaxRecordingWarning = true;
         setTimeout(() => this.showMaxRecordingWarning = false, 4000)
     }, 10800);
-    // this.toggleLockedHTML();
+    this.toggleLockedHTML();
+  }
+
+  toggleLockedHTML() {
+    if(this.isRecording) {
+      this.isRecording = false;
+      //unlock all record buttons
+      for(var i = 0; i<this.audioStrings.length ; i++){
+        (<HTMLButtonElement> document.getElementById("audioButton" + i)).disabled = false;
+      }
+      clearTimeout(this.recordingTimeout)
+      this.allowRecord(false);
+    }
+    else{      
+      this.isRecording = true;
+      //lock all except correct one
+      for(var i = 0; i<this.audioStrings.length ; i++){
+        (<HTMLButtonElement> document.getElementById("audioButton" + i)).disabled = true;
+      }
+      (<HTMLButtonElement> document.getElementById("audioButton" + this.triggeredHTML)).disabled = false;
+      
+    }
+  }
+
+  allowRecord (allowed) {
+    // TODO
+    // console.log("allowRecord")
+    if(allowed == true) {
+      // console.log("allowRecord = true");
+      for(var i = 0; i<this.audioStrings.length ; i++){
+        (<HTMLButtonElement> document.getElementById("audioButton" + i)).disabled = false;
+      }
+    }
+    else {
+      for(var i = 0; i<this.audioStrings.length ; i++){
+        (<HTMLButtonElement> document.getElementById("audioButton" + i)).disabled = true;
+      }
+    }
+  }
+
+  loadAudio(){
+    this.audioURLS[this.triggeredHTML] = this.audioURL
+    console.log(this.audioURLS)
   }
 
   checkForChanges(): boolean{
     if(this.currentGame == undefined) return false;
 
-    this.valueButton1 = (<HTMLInputElement>document.getElementById('valueIch')).value;
-    this.valueButton2 = (<HTMLInputElement>document.getElementById('valueDu')).value;
-    this.valueButton3 = (<HTMLInputElement>document.getElementById('valueErSieEs')).value;
-    this.valueButton4 = (<HTMLInputElement>document.getElementById('valueWir')).value;
-    this.valueButton5 = (<HTMLInputElement>document.getElementById('valueIhr')).value;
-    this.valueButton6 = (<HTMLInputElement>document.getElementById('valueSie')).value;
-    this.question = (<HTMLInputElement>document.getElementById('question')).value;
-    if(this.currentGame.ich[0] == this.valueButton1 && 
-      this.currentGame.du[0] == this.valueButton2 &&
-      this.currentGame.erSieEs[0] == this.valueButton3 &&
-      this.currentGame.wir[0] == this.valueButton4 &&
-      this.currentGame.ihr[0] == this.valueButton5 &&
-      this.currentGame.sie[0] == this.valueButton6 &&
-      this.currentGame.question[0] == this.question &&
-      this.currentGame.ich[1] == this.audioURLAnswer1 && 
-      this.currentGame.du[1] == this.audioURLAnswer2 &&
-      this.currentGame.erSieEs[1] == this.audioURLAnswer3 &&
-      this.currentGame.wir[1] == this.audioURLAnswer4 &&
-      this.currentGame.ihr[1] == this.audioURLAnswer5 &&
-      this.currentGame.sie[1] == this.audioURLAnswer6 &&
-      this.currentGame.question[1] == this.audioURLQuestion
+    // this.valueButton1 = (<HTMLInputElement>document.getElementById('valueIch')).value;
+    // this.valueButton2 = (<HTMLInputElement>document.getElementById('valueDu')).value;
+    // this.valueButton3 = (<HTMLInputElement>document.getElementById('valueErSieEs')).value;
+    // this.valueButton4 = (<HTMLInputElement>document.getElementById('valueWir')).value;
+    // this.valueButton5 = (<HTMLInputElement>document.getElementById('valueIhr')).value;
+    // this.valueButton6 = (<HTMLInputElement>document.getElementById('valueSie')).value;
+    // this.question = (<HTMLInputElement>document.getElementById('question')).value;
+    if(
+      this.currentGame.question[0] == this.audioStrings[0] &&
+      this.currentGame.ich[0] == this.audioStrings[1] && 
+      this.currentGame.du[0] == this.audioStrings[2] &&
+      this.currentGame.erSieEs[0] == this.audioStrings[3] &&
+      this.currentGame.wir[0] == this.audioStrings[4] &&
+      this.currentGame.ihr[0] == this.audioStrings[5] &&
+      this.currentGame.sie[0] == this.audioStrings[6] &&
+      
+
+      this.currentGame.question[1] == this.audioURLS[0] &&
+      this.currentGame.ich[1] == this.audioURLS[1] && 
+      this.currentGame.du[1] == this.audioURLS[2] &&
+      this.currentGame.erSieEs[1] == this.audioURLS[3] &&
+      this.currentGame.wir[1] == this.audioURLS[4] &&
+      this.currentGame.ihr[1] == this.audioURLS[5] &&
+      this.currentGame.sie[1] == this.audioURLS[6] 
+      
       ) {
 
        return false;
@@ -237,14 +298,33 @@ export class PersonalFormsGameEditComponent implements OnInit {
   }
 
   loadInputFieldValues() {
-    (<HTMLInputElement>document.getElementById('question')).value = this.currentGame.question[0];
-    (<HTMLInputElement>document.getElementById('valueIch')).value = this.currentGame.ich[0];
-    (<HTMLInputElement>document.getElementById('valueDu')).value = this.currentGame.du[0];
-    (<HTMLInputElement>document.getElementById('valueErSieEs')).value = this.currentGame.erSieEs[0];
-    (<HTMLInputElement>document.getElementById('valueWir')).value = this.currentGame.wir[0];
-    (<HTMLInputElement>document.getElementById('valueIhr')).value = this.currentGame.ihr[0];
-    (<HTMLInputElement>document.getElementById('valueSie')).value = this.currentGame.sie[0];
+
+    this.audioStrings = [ this.currentGame.question[0],
+                          this.currentGame.ich[0],
+                          this.currentGame.du[0],
+                          this.currentGame.erSieEs[0],
+                          this.currentGame.wir[0],
+                          this.currentGame.ihr[0],
+                          this.currentGame.sie[0]];
+
+  this.audioURLS = [ this.currentGame.question[1],
+                        this.currentGame.ich[1],
+                        this.currentGame.du[1],
+                        this.currentGame.erSieEs[1],
+                        this.currentGame.wir[1],
+                        this.currentGame.ihr[1],
+                        this.currentGame.sie[1]];
+    console.log("URLS: " + this.audioURLS)
+    console.log(this.audioURLS[0])
+    // (<HTMLInputElement>document.getElementById('question')).value = this.currentGame.question[0];
+    // (<HTMLInputElement>document.getElementById('valueIch')).value = this.currentGame.ich[0];
+    // (<HTMLInputElement>document.getElementById('valueDu')).value = this.currentGame.du[0];
+    // (<HTMLInputElement>document.getElementById('valueErSieEs')).value = this.currentGame.erSieEs[0];
+    // (<HTMLInputElement>document.getElementById('valueWir')).value = this.currentGame.wir[0];
+    // (<HTMLInputElement>document.getElementById('valueIhr')).value = this.currentGame.ihr[0];
+    // (<HTMLInputElement>document.getElementById('valueSie')).value = this.currentGame.sie[0];
   }
+
 
   loadPreviousGame() {
     if(this.previousGames.length == 0) {
@@ -272,20 +352,27 @@ export class PersonalFormsGameEditComponent implements OnInit {
     this.initSounds();
   }
 
-  switchMode() {
+  switchMode() {    
     if(this.editingAudio == false) {
-      this.answers = [document.getElementById('valueIch').innerText, document.getElementById('valueDu').innerText, document.getElementById('valueErSieEs').innerText, document.getElementById('valueWir').innerText, document.getElementById('valueIhr').innerText, document.getElementById('valueSie').innerText];
-      this.question = document.getElementById('question').innerText;
-      // this.valueButton1 = document.getElementById('button1').innerText;
-      // this.valueButton2 = document.getElementById('button2').innerText;
-      // this.valueButton3 = document.getElementById('button3').innerText;
-      // this.valueButton4 = document.getElementById('button4').innerText;
+      this.audioStrings = [];
+      this.audioURLS = [];
+      console.log("vorher" + this.audioStrings);
+      console.log((<HTMLInputElement>document.getElementById('valueIch')).value);
+      this.answers = [(<HTMLInputElement>document.getElementById('valueIch')).value, (<HTMLInputElement>document.getElementById('valueDu')).value, (<HTMLInputElement>document.getElementById('valueErSieEs')).value, (<HTMLInputElement>document.getElementById('valueWir')).value, (<HTMLInputElement>document.getElementById('valueIhr')).value, (<HTMLInputElement>document.getElementById('valueSie')).value];
+      this.question = (<HTMLInputElement>document.getElementById('question')).value;
+      
+      // Strings e.g. Ordne zu!, gehe, gehst, geht, ...
+      this.audioStrings.push(this.question);
+      this.audioStrings = this.audioStrings.concat(this.answers);
     }
-    this.editingAudio = !this.editingAudio    
+    //Audio View - load list with strings and URLS to dynamicly create the audio controls
+    this.editingAudio = !this.editingAudio  
+
   }
   // rework TODO
   stopAudio(htmlSource) {
     (<HTMLAudioElement>document.getElementById('player' + htmlSource)).pause()
+    this.audioPlaying = -1;
     // if(htmlSource == 'question') {
     //   this.audioQuestionPlaying = false;
     // }
@@ -306,11 +393,12 @@ export class PersonalFormsGameEditComponent implements OnInit {
 
   // rework TODO
   playAudio(htmlSource) {
-    (<HTMLAudioElement>document.getElementById('player')).play();
+    if(this.audioPlaying != -1) this.stopAudio(this.audioPlaying);
+    (<HTMLAudioElement>document.getElementById('player' + htmlSource)).play();
     setTimeout(() => {
       this.stopAudio(htmlSource);
-    }, (<HTMLAudioElement>document.getElementById('player')).duration*1000);
-    
+    }, (<HTMLAudioElement>document.getElementById('player' + htmlSource)).duration*1000);
+    this.audioPlaying = htmlSource;
     // if(htmlSource == 'question') {
     //   this.audioQuestionPlaying = true;
     // }
@@ -327,5 +415,9 @@ export class PersonalFormsGameEditComponent implements OnInit {
     //   this.audioAnswer4Playing = true;
     // }
 
+  }
+
+  noAudioSource() {
+    //insert a warning that no audio can be found
   }
 }
