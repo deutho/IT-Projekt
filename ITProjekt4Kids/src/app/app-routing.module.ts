@@ -7,7 +7,6 @@ import { RedirectComponent } from './features/redirect/redirect.component';
 import { ProfileComponent } from './features/dashboard/profile/profile.component';
 import { AddUserComponent } from './features/dashboard/add-user/add-user.component';
 import { StatisticsComponent } from './features/dashboard/statistics/statistics.component';
-import { combineAll } from 'rxjs/operators';
 import { BugReportComponent } from './features/dashboard/bug-report/bug-report.component';
 import { VocabularyGameComponent } from './features/games/vocabulary-game/vocabulary-game.component';
 import { VocabularyGameEditComponent } from './features/games/vocabulary-game-edit/vocabulary-game-edit.component';
@@ -16,6 +15,7 @@ import { PersonalFormsGameEditComponent } from './features/games/personal-forms-
 import { VerbPositionGame } from './models/VerbPositionGame.model';
 import { VerbPositionGameComponent } from './features/games/verb-position-game/verb-position-game.component';
 import { VerbPositionGameEditComponent } from './features/games/verb-position-game-edit/verb-position-game-edit.component';
+import { NotFoundComponent } from './features/not-found/not-found.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
@@ -49,7 +49,8 @@ const routes: Routes = [
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
-{ path: 'app/:id',
+
+{ path: ':id',
   component: MainMenuComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
@@ -91,7 +92,9 @@ const routes: Routes = [
 },
 
   { path: "**",
-  redirectTo: 'app/ ', //Hier vielleicht noch 404 Page not Found?
+  component: NotFoundComponent,
+  canActivate: [AngularFireAuthGuard], 
+  data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
 
 
