@@ -16,6 +16,7 @@ import { VerbPositionGame } from './models/VerbPositionGame.model';
 import { VerbPositionGameComponent } from './features/games/verb-position-game/verb-position-game.component';
 import { VerbPositionGameEditComponent } from './features/games/verb-position-game-edit/verb-position-game-edit.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
+import { AccessDeniedComponent } from './features/access-denied/access-denied.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
@@ -46,6 +47,18 @@ const routes: Routes = [
 
   { path: "bug-report",
   component: BugReportComponent,
+  canActivate: [AngularFireAuthGuard], 
+  data: {authGuardPipe: redirectUnauthorizedToLogin}
+},
+
+{ path: "error",
+  component: NotFoundComponent,
+  canActivate: [AngularFireAuthGuard], 
+  data: {authGuardPipe: redirectUnauthorizedToLogin}
+},
+
+{ path: "access-denied",
+  component: AccessDeniedComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },

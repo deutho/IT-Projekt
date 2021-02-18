@@ -62,6 +62,7 @@ export class MainMenuComponent implements OnInit {
   isDeployment = false;
   userSubscriptpion;
   unauthorized: boolean = false;
+  currentFolderElement: Folderelement;
   
   
 
@@ -99,6 +100,21 @@ export class MainMenuComponent implements OnInit {
     } else {
       this.currentDocKey = id;
 
+
+      await this.afs.getFolderElement(id).then(data => {
+        this.currentFolderElement = data;
+      }).catch(()=>{
+        this.router.navigate(['error']);
+      });
+
+      //Auth Check
+      if (this.currentFolderElement.parent == "root") 
+      
+
+
+
+
+
       if (id == this.currentUser.uid) this.appService.myHeader("Startseite");
       console.log(this.currentDocKey);
       console.log(id);
@@ -116,17 +132,14 @@ export class MainMenuComponent implements OnInit {
         await this.afs.getFolderElement("Standardübungen").then(data => this.derdiedazFolder = data.folders);
         level0 = true;
       }
+
+      this.ownFolders = this.currentFolderElement.folders;
       console.log(this.derdiedazFolder);
 
       let parent: string = "";
 
       //get the Items, navigate to not found - when the page does not exist
-      await this.afs.getFolderElement(id).then(data => {
-        this.ownFolders = data.folders;
-        this.parentDocKey = data.parent;
-      }).catch(()=>{
-        this.router.navigate(['error']);
-      });
+     
 
       console.log(this.ownFolders);
       this.ownFolders.sort((a, b) => {
