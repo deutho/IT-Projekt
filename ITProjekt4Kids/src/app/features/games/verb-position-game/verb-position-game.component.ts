@@ -165,6 +165,7 @@ export class VerbPositionGameComponent implements OnInit {
   //uppercase first letter of the first box
   capitalizeFirst() {
     var capitalizeFirstLetter = this.sentence[0]
+
     capitalizeFirstLetter =  capitalizeFirstLetter.charAt(0).toUpperCase() + capitalizeFirstLetter.slice(1)
     this.sentence[0] = capitalizeFirstLetter
 
