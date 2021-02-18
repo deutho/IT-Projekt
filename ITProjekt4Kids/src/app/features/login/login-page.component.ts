@@ -24,6 +24,7 @@ loginform: FormGroup;
   firebaseErrors;
 
   ngOnInit(): void {
+    firebase.auth().signOut(); //use the firebase auth here and not the service, so there is not redirect
     this.loginform = this.fb.group({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required)

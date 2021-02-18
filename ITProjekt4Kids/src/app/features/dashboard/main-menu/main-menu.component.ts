@@ -60,7 +60,8 @@ export class MainMenuComponent implements OnInit {
   itemtodelete: Folder;
   creatingElementError = false;
   isDeployment = false;
-  userSubscriptpion
+  userSubscriptpion;
+  unauthorized: boolean = false;
   
   
 
@@ -93,8 +94,8 @@ export class MainMenuComponent implements OnInit {
     console.log(id);
     if (id === " ") {
       console.log(this.currentUser.role);
-      if (this.currentUser.role == 3) this.router.navigate(['app/'+this.currentUser.parent])
-      if (this.currentUser.role == 2) this.router.navigate(['app/'+this.currentUser.uid])
+      if (this.currentUser.role == 3) this.router.navigate([this.currentUser.parent])
+      if (this.currentUser.role == 2) this.router.navigate([this.currentUser.uid])
     } else {
       this.currentDocKey = id;
 
@@ -119,11 +120,13 @@ export class MainMenuComponent implements OnInit {
 
       let parent: string = "";
 
+      //get the Items, navigate to not found - when the page does not exist
       await this.afs.getFolderElement(id).then(data => {
         this.ownFolders = data.folders;
         this.parentDocKey = data.parent;
-      }); 
-
+      }).catch(()=>{
+        this.router.navigate(['error']);
+      });
 
       console.log(this.ownFolders);
       this.ownFolders.sort((a, b) => {
@@ -143,13 +146,19 @@ export class MainMenuComponent implements OnInit {
 
   itemclick(item: Folder) {
     if (item.type == "folder") {
-        this.router.navigate(['app/'+item.uid]);
+        this.router.navigate([item.uid]);
         this.appService.myHeader(item.name);
     }
     else if (item.type == "task") {
       let type = item.gameType;
       if (this.currentUser.role == 3 || (this.currentUser.role == 2 && this.studentMode == true)) this.router.navigate(['game/'+type+'/'+item.uid], {queryParams:{k: this.currentDocKey}});
-      else if (this.currentUser.role == 2 && this.studentMode == false) this.router.navigate(['game/'+type+'-edit/'+item.uid], {queryParams:{k: this.currentDocKey}});
+      else if (this.currentUser.role == 2 && this.studentMode == false) 
+      if (item.editors.includes(this.currentUser.uid)) this.router.navigate(['game/'+type+'-edit/'+item.uid], {queryParams:{k: this.currentDocKey}});
+      else {
+        this.errorMessage = "Sie sind nicht berechtigt, diese Aufgabe zu bearbeiten."
+        this.error = true;
+        setTimeout(() => this.error = false, 4000);
+      }
     }
   }
 

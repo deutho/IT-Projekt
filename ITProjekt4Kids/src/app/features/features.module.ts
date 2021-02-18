@@ -24,6 +24,8 @@ import { AppComponent } from '../app.component';
 import { RedirectComponent } from './redirect/redirect.component';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { AccessDeniedComponent } from './access-denied/access-denied.component';
 
 
 
@@ -45,7 +47,9 @@ declarations: [
   UploaderComponent,
   UploadTaskComponent,
   DropzoneDirective,
-  RedirectComponent],
+  RedirectComponent,
+  NotFoundComponent,
+  AccessDeniedComponent],
 imports: [
   CommonModule,
   RouterModule,
