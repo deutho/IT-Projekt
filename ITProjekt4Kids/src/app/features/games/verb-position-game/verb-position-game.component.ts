@@ -5,6 +5,7 @@ import { VerbPositionGame } from 'src/app/models/VerbPositionGame.model';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { AppService } from 'src/app/services/app.service';
 import { ActivatedRoute } from '@angular/router';
+import { Folder } from 'src/app/models/folder.model';
 
 @Component({
   selector: 'app-verb-position-game',
@@ -19,6 +20,7 @@ export class VerbPositionGameComponent implements OnInit {
    finito: boolean = false
    Games: VerbPositionGame[] = []
    currentUser: User;
+   folder: Folder;
    currentGame: VerbPositionGame
    folderID;
    sentence: string[] = []
@@ -40,6 +42,19 @@ export class VerbPositionGameComponent implements OnInit {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
     this.folderID = this.route.snapshot.paramMap.get('id');
+
+    let dockey: string = this.route.snapshot.queryParamMap.get('k');
+
+    //get the data of the game
+    await this.afs.getFolderElement(dockey).then(data => {
+      let f: Folder[]  = data.folders;
+      f.forEach(folder => {
+        if (folder.uid == this.folderID) this.folder = folder
+      });
+    });
+
+    //set the header
+    this.appService.myHeader(this.folder.name);
 
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
     this.sentence = [];

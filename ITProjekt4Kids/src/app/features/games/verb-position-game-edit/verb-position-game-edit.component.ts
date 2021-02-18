@@ -6,6 +6,7 @@ import { User } from 'src/app/models/users.model';
 import {v4 as uuidv4} from 'uuid';
 import { RecordRTCService } from 'src/app/services/record-rtc.service';
 import { ActivatedRoute } from '@angular/router';
+import { Folder } from 'src/app/models/folder.model';
 
 @Component({
   selector: 'app-verb-position-game-edit',
@@ -15,6 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 export class VerbPositionGameEditComponent implements OnInit {
 
   folderUID;
+  folder: Folder;
   currentGame: VerbPositionGame;
   currentUser: User;
   Games: VerbPositionGame[];
@@ -47,6 +49,7 @@ export class VerbPositionGameEditComponent implements OnInit {
   unsavedChanges = false;
   deleteElementOverlay = false;
   capitalizeFirstLetter = false;
+  unauthorized: boolean = false;
   triggeredHTML: string;
   recordingTimeout;
   showMaxRecordingWarning = false;
@@ -80,14 +83,33 @@ export class VerbPositionGameEditComponent implements OnInit {
 
     this.folderUID = this.route.snapshot.paramMap.get('id');
 
-    // get games
-    await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
-    //init second stack for going back and forwards between games
-    let previousGames = [];
-    this.previousGames = previousGames;
-    //load first game
-    this.loadNextGame();
-    // this.initSounds();
+    let dockey: string = this.route.snapshot.queryParamMap.get('k');
+
+
+    //get the data of the game
+    await this.afs.getFolderElement(dockey).then(data => {
+      let f: Folder[]  = data.folders;
+      f.forEach(folder => {
+        if (folder.uid == this.folderUID) this.folder = folder
+      });
+    });
+
+    //set the header
+    this.appService.myHeader(this.folder.name);
+
+    if (!this.folder.editors.includes(this.currentUser.uid)) {
+        this.unauthorized = true;
+    } else {
+
+      // get games
+      await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
+      //init second stack for going back and forwards between games
+      let previousGames = [];
+      this.previousGames = previousGames;
+      //load first game
+      this.loadNextGame();
+      // this.initSounds();
+    }
   }
 
 

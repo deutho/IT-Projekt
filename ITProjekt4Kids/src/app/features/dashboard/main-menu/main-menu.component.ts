@@ -21,8 +21,7 @@ import {v4 as uuidv4} from 'uuid';
 export class MainMenuComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private afs: FirestoreDataService, private cboardService: ClipboardService, private auth: AuthService, private route: ActivatedRoute) {
-
-      
+ 
    }
 
   data;
@@ -90,7 +89,7 @@ export class MainMenuComponent implements OnInit {
   }
 
   //initialize the component after a path change
-  initialize(id) {
+  async initialize(id) {
     console.log(id);
     if (id === " ") {
       console.log(this.currentUser.role);
@@ -98,6 +97,8 @@ export class MainMenuComponent implements OnInit {
       if (this.currentUser.role == 2) this.router.navigate(['app/'+this.currentUser.uid])
     } else {
       this.currentDocKey = id;
+
+      if (id == this.currentUser.uid) this.appService.myHeader("Startseite");
       console.log(this.currentDocKey);
       console.log(id);
       this.getFolders(id)
@@ -110,7 +111,7 @@ export class MainMenuComponent implements OnInit {
 
       //get derdiedaz folders
       let level0: boolean = false;
-      if (this.currentUser.uid === id) {
+      if ((this.currentUser.role == 2 && this.currentUser.uid === id) || (this.currentUser.role == 3 && this.currentUser.parent === id)) {
         await this.afs.getFolderElement("Standardübungen").then(data => this.derdiedazFolder = data.folders);
         level0 = true;
       }
@@ -143,24 +144,12 @@ export class MainMenuComponent implements OnInit {
   itemclick(item: Folder) {
     if (item.type == "folder") {
         this.router.navigate(['app/'+item.uid]);
+        this.appService.myHeader(item.name);
     }
     else if (item.type == "task") {
       let type = item.gameType;
-      if (this.currentUser.role == 2 && item.editors.includes(this.currentUser.uid) && this.studentMode == false) { 
-        this.router.navigate(['game/'+type+'-edit/'+item.uid]);
-      }
-      else if (this.currentUser.role == 2 && !item.editors.includes(this.currentUser.uid)) {
-          if (this.studentMode == false) {
-            this.errorMessage = "Sie sind nicht berechtigt, diese Übung zu bearbeiten"
-            this.error = true
-            setTimeout(() => this.error = false, 4000);
-          } else {
-            this.router.navigate(['game/'+type+'/'+item.uid]);
-          }
-      }
-      else {
-        this.router.navigate(['game/'+type+'/'+item.uid]);
-      }
+      if (this.currentUser.role == 3 || (this.currentUser.role == 2 && this.studentMode == true)) this.router.navigate(['game/'+type+'/'+item.uid], {queryParams:{k: this.currentDocKey}});
+      else if (this.currentUser.role == 2 && this.studentMode == false) this.router.navigate(['game/'+type+'-edit/'+item.uid], {queryParams:{k: this.currentDocKey}});
     }
   }
 
@@ -218,7 +207,6 @@ export class MainMenuComponent implements OnInit {
         var gameType = 'vocabular-game';
         this.addFolder(uid, name, "Task", gameType)
       }
-      
     }
     
     (<HTMLInputElement>document.getElementById('newElement')).value = '';

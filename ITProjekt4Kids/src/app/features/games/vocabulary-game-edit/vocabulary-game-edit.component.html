@@ -1,10 +1,14 @@
 <span id="dummy"></span>
-<div class="fullscreen"  *ngIf="loaded == false">
+<div class="fullscreen"  *ngIf="loaded == false && this.unauthorized === false">
     <div id="overlay">
         <div class="spinner">
             <div class="loader-big" style="width : 80px; height: 80px"></div>
         </div>
     </div>
+</div>
+
+<div *ngIf = "this.unauthorized === true">
+    Sie sind nicht berechtigt, dieses Spiel zu bearbeiten (Styling bitte Thooomas)
 </div>
 
 <!-- load only if values have loaded -->

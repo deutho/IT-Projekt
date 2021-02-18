@@ -6,6 +6,8 @@ import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+import { textChangeRangeIsUnchanged } from 'typescript';
+import { Folder } from 'src/app/models/folder.model';
 const starAnimation = trigger('starAnimation', [
   transition('* <=> *', [
     query(':enter',
@@ -43,6 +45,7 @@ export class VocabularyGameComponent implements OnInit {
   roundsWon = 0;
   totalrounds = 0;
   folderID;
+  folder: Folder;
   starttime: number;
   endtime: number;
   duration: number;
@@ -51,7 +54,6 @@ export class VocabularyGameComponent implements OnInit {
   audio = new Audio("");
   roundsWonAnimation = [];
   roundsLostAnimation = [];
-// [].constructor(totalrounds - roundsWon);
   audioQuestion = new Audio();
   audioButton1 = new Audio();
   audioButton2 = new Audio();
@@ -75,9 +77,20 @@ export class VocabularyGameComponent implements OnInit {
 
     this.folderID = this.route.snapshot.paramMap.get('id');
 
-    await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
+    let dockey: string = this.route.snapshot.queryParamMap.get('k');
 
-    
+    //get the data of the game
+    await this.afs.getFolderElement(dockey).then(data => {
+      let f: Folder[]  = data.folders;
+      f.forEach(folder => {
+        if (folder.uid == this.folderID) this.folder = folder
+      });
+    });
+
+    //set the header
+    this.appService.myHeader(this.folder.name);
+
+    await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
 
     this.shuffleArray(this.Games);
 
@@ -93,7 +106,7 @@ export class VocabularyGameComponent implements OnInit {
 
     this.starttime = Date.now();
     this.loadNextGame();
-    this.totalNumberOfRounds = this.Games.length+1;  
+    this.totalNumberOfRounds = this.Games.length+1; 
   }
 
 

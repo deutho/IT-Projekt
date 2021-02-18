@@ -8,6 +8,7 @@ import { take } from 'rxjs/operators';
 import { User } from 'src/app/models/users.model';
 import { RecordRTCService } from 'src/app/services/record-rtc.service';
 import { ActivatedRoute } from '@angular/router';
+import { Folder } from 'src/app/models/folder.model';
 
 @Component({
   selector: 'app-personal-forms-game-edit',
@@ -17,8 +18,10 @@ import { ActivatedRoute } from '@angular/router';
 export class PersonalFormsGameEditComponent implements OnInit {
   
   folderUID;
+  folder: Folder;
   currentGame: PersonalFormsGame
   unsavedChanges = false;
+  unauthorized: boolean = false;
   valueButton1: string;
   valueButton2: string;
   valueButton3: string;
@@ -82,15 +85,33 @@ export class PersonalFormsGameEditComponent implements OnInit {
 
     this.folderUID = this.route.snapshot.paramMap.get('id');
 
-    // get games
-    await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
-    //init second stack for going back and forwards between games
-    let previousGames = [];
-    this.previousGames = previousGames;
+    let dockey: string = this.route.snapshot.queryParamMap.get('k');
 
-    //load first game
-    this.loadNextGame();
-    this.initSounds();
+    //get the data of the game
+    await this.afs.getFolderElement(dockey).then(data => {
+      let f: Folder[]  = data.folders;
+      f.forEach(folder => {
+        if (folder.uid == this.folderUID) this.folder = folder
+      });
+    });
+
+    //set the header
+    this.appService.myHeader(this.folder.name);
+
+    if (!this.folder.editors.includes(this.currentUser.uid)) {
+        this.unauthorized = true;
+    } else {
+
+      // get games
+      await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
+      //init second stack for going back and forwards between games
+      let previousGames = [];
+      this.previousGames = previousGames;
+
+      //load first game
+      this.loadNextGame();
+      this.initSounds();
+    }
   }
 
 

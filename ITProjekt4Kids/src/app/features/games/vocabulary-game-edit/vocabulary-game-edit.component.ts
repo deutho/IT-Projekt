@@ -7,6 +7,7 @@ import { AppService } from 'src/app/services/app.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import {v4 as uuidv4} from 'uuid';
 import { RecordRTCService } from 'src/app/services/record-rtc.service';
+import { Folder } from 'src/app/models/folder.model';
 
 @Component({
   selector: 'app-vocabulary-game-edit',
@@ -21,6 +22,7 @@ export class VocabularyGameEditComponent implements OnInit {
   currentUser: User;
   loaded = false;
   answers: string[];
+  folder: Folder;
   imageURL = "";
   editingPicture = false;
   previousGames: VocabularyGame[] = [];
@@ -58,6 +60,8 @@ export class VocabularyGameEditComponent implements OnInit {
   checkstate: boolean;
   coloring = true;
   deleteElementOverlay = false;
+  unauthorized: boolean = false;
+  
  
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) {
@@ -82,29 +86,49 @@ export class VocabularyGameEditComponent implements OnInit {
 
     this.folderID = this.route.snapshot.paramMap.get('id');
 
-    // get games
-    await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
+    let dockey: string = this.route.snapshot.queryParamMap.get('k');
 
-    //set numbers
-    this.nextCountNumber = 0;
-    //if already questions in the game
-    if (this.Games.length != 0) {
-      let numbers: number[] = [];
-      this.Games.forEach(element => {
-        numbers.push(element.number);
+    //get the data of the game
+    await this.afs.getFolderElement(dockey).then(data => {
+      let f: Folder[]  = data.folders;
+      f.forEach(folder => {
+        if (folder.uid == this.folderID) this.folder = folder
       });
+    });
 
-      //calculate the next number
-      this.nextCountNumber = Math.max(...numbers)+1;
+    //set the header
+    this.appService.myHeader(this.folder.name);
+
+    if (!this.folder.editors.includes(this.currentUser.uid)) {
+        this.unauthorized = true;
+    } else {
+      // get games
+      await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
+
+      //set numbers
+      this.nextCountNumber = 0;
+      //if already questions in the game
+      if (this.Games.length != 0) {
+        let numbers: number[] = [];
+        this.Games.forEach(element => {
+          numbers.push(element.number);
+        });
+
+        //calculate the next number
+        this.nextCountNumber = Math.max(...numbers)+1;
+      }
+      
+      //sort array by number
+      this.Games.sort((a, b) => {return b.number - a.number});
+      
+      //load first game
+      if (this.Games.length == 0) this.initializeNewQuestion();
+      else this.loadNextGame(true);
     }
-    
-    //sort array by number
-    this.Games.sort((a, b) => {return b.number - a.number});
-    
-    //load first game
-    if (this.Games.length == 0) this.initializeNewQuestion();
-    else this.loadNextGame(true);
   }
+
+
+  
 
   startVoiceRecord(HTMLFinder){
     this.triggeredHTML = HTMLFinder;

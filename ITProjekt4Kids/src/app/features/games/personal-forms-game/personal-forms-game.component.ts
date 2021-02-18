@@ -7,6 +7,7 @@ import { take } from 'rxjs/internal/operators/take';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
 import { ActivatedRoute } from '@angular/router';
+import { Folder } from 'src/app/models/folder.model';
 
 @Component({
   selector: 'app-personal-forms-game',
@@ -20,6 +21,7 @@ export class PersonalFormsGameComponent implements OnInit {
   test = "Hallo Welt!"
   Games: PersonalFormsGame[] = []
   currentUser: User;
+  folder: Folder;
   currentGame: PersonalFormsGame
   folderID;
   answers: string[]
@@ -68,6 +70,19 @@ export class PersonalFormsGameComponent implements OnInit {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
     this.folderID = this.route.snapshot.paramMap.get('id');
+
+    let dockey: string = this.route.snapshot.queryParamMap.get('k');
+
+    //get the data of the game
+    await this.afs.getFolderElement(dockey).then(data => {
+      let f: Folder[]  = data.folders;
+      f.forEach(folder => {
+        if (folder.uid == this.folderID) this.folder = folder
+      });
+    });
+
+    //set the header
+    this.appService.myHeader(this.folder.name);
 
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
     this.shuffleArray(this.Games)

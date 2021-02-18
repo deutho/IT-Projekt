@@ -1,4 +1,9 @@
 <div class="pageContainer">
+
+    <div *ngIf = "this.unauthorized === true">
+        Sie sind nicht berechtigt, dieses Spiel zu bearbeiten (Styling bitte Thooomas)
+    </div>
+
     <div *ngIf="editingAudio == false" class="example-container_question question" style="display: flex; width: 100%; flex-direction: column;">
         <!-- Question -->
         <div class="example-container_question question">

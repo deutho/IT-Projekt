@@ -1,5 +1,9 @@
 <div class="pageContainer">
 
+    <div *ngIf = "this.unauthorized === true">
+        Sie sind nicht berechtigt, dieses Spiel zu bearbeiten (Styling bitte Thooomas)
+    </div>
+
     <!-- Question -->
     <div class="example-container_question question">
         <input type="text" id="question" placeholder="Hier bitte Frage eingeben">

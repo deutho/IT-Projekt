@@ -6,6 +6,8 @@
             Pfad des Ordners 
 
         ------------------------->
+
+         <!-------------------------
         <ul *ngIf = "parentDocKey !== 'root'" style="display: flex; justify-content: center;">
             <li class="navigationBar">
                 <div class ="btn" (click)= goUpOneLevel() style="display: flex;  width: 68px; cursor: pointer">
@@ -24,7 +26,7 @@
             <li style = "height: 34px" class="navigationBar">
             </li>
         </ul>
-        
+        ------------------------->
 
         <!-- Ansicht Schüler -->
         <div *ngIf="currentUser.role == 3">
