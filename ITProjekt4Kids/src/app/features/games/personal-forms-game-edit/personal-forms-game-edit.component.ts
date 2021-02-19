@@ -116,7 +116,9 @@ export class PersonalFormsGameEditComponent implements OnInit {
 
 
   saveChanges() {
+    console.log("checking for changes")
     if (this.checkForChanges()) {
+      console.log("changes found")
       if(
         this.audioStrings[0] == '' ||
         this.audioStrings[1] == '' ||
@@ -225,8 +227,7 @@ export class PersonalFormsGameEditComponent implements OnInit {
 
   checkForChanges(): boolean{
     if(this.currentGame == undefined) return false;
-    this.switchMode()
-    this.switchMode()
+    this.loadCurrentValues()
     if(
       this.currentGame.question[0] == this.audioStrings[0] &&
       this.currentGame.ich[0] == this.audioStrings[1] && 
@@ -246,8 +247,21 @@ export class PersonalFormsGameEditComponent implements OnInit {
       ) {
        return false;
     }
+    
   else {
     return true;
+  }
+}
+
+loadCurrentValues(){
+  if(this.editingAudio == false) {
+    this.audioStrings = [];
+    this.answers = [(<HTMLInputElement>document.getElementById('valueIch')).value, (<HTMLInputElement>document.getElementById('valueDu')).value, (<HTMLInputElement>document.getElementById('valueErSieEs')).value, (<HTMLInputElement>document.getElementById('valueWir')).value, (<HTMLInputElement>document.getElementById('valueIhr')).value, (<HTMLInputElement>document.getElementById('valueSie')).value];
+    this.question = (<HTMLInputElement>document.getElementById('question')).value;
+    
+    // Strings e.g. Ordne zu!, gehe, gehst, geht, ...
+    this.audioStrings.push(this.question);
+    this.audioStrings = this.audioStrings.concat(this.answers);
   }
 }
 

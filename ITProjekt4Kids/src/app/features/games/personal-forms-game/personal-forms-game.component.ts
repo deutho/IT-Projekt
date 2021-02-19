@@ -37,7 +37,8 @@ export class PersonalFormsGameComponent implements OnInit {
   roundsWonAnimation = [];
   roundsLostAnimation = [];
   speakerMode = false;
-  checked : boolean = false
+  checked : boolean = false;
+  audio = new Audio("");
 
 
   // boolean to detect if list already contains a string
@@ -362,5 +363,9 @@ export class PersonalFormsGameComponent implements OnInit {
     // this.updateColorhelper();
   }
   
-
+  playSound(soundfile) {
+    console.log(soundfile)
+    this.audio = new Audio(soundfile);
+    this.audio.play();
+  }
 }
