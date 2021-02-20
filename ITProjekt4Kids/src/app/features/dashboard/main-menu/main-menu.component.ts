@@ -34,6 +34,7 @@ export class MainMenuComponent implements OnInit {
   currentPathForHTML;
   currentDocKey: string = "";
   parentDocKey: string = "";
+  currentFolder: Folder;
   ownFolders: Folder[] = [];
   derdiedazFolder: Folder[] = [];
   currentFolders: Folder[] = [];
@@ -63,6 +64,11 @@ export class MainMenuComponent implements OnInit {
   userSubscriptpion;
   unauthorized: boolean = false;
   currentFolderElement: Folderelement;
+
+  //Rights bools
+  isOwner: boolean;
+  isEditor: boolean;
+  isViewer: boolean;
   
   
 
@@ -82,7 +88,6 @@ export class MainMenuComponent implements OnInit {
       game:  []
     });
 
-
     //subscription to the active route
     this.route.params.subscribe(params => {
       let id: string = params['id'];
@@ -92,6 +97,13 @@ export class MainMenuComponent implements OnInit {
 
   //initialize the component after a path change
   async initialize(id) {
+
+
+     //reset the right bools:
+     this.isOwner = false;
+     this.isEditor = false;
+     this.isViewer = true;
+
     console.log(id);
     if (id === " ") {
       console.log(this.currentUser.role);
@@ -104,43 +116,59 @@ export class MainMenuComponent implements OnInit {
       await this.afs.getFolderElement(id).then(data => {
         this.currentFolderElement = data;
       }).catch(()=>{
-        this.router.navigate(['error']);
+        this.router.navigate(['notfound']);
       });
-
-      //Auth Check
-      if (this.currentFolderElement.parent == "root") 
       
+      //set the parent dockey
+      this.parentDocKey = this.currentFolderElement.parent;
 
 
+      if (this.parentDocKey != "root") {
+        //get the current folder only if it is not a topfolder
+        await this.afs.getFolderElement(this.parentDocKey).then(data => {
+          let f: Folder[]  = data.folders;
+          f.forEach(folder => {
+            if (folder.uid == id) this.currentFolder = folder
+          });
+        });
+        this.appService.myHeader(this.currentFolder.name);
 
+        //evaluate rights
+        if (this.currentFolder.owner == this.currentUser.uid) {
+          this.isOwner = true;
+        }
 
+        if (this.currentFolder.editors.includes(this.currentUser.uid)) {
+          this.isEditor = true;
+        }
+      }
+      else {
+        if (this.currentDocKey == this.currentUser.uid) {
+          this.isOwner = true;
+          this.appService.myHeader("Startseite");
+        }
+        
+      }
 
-      if (id == this.currentUser.uid) this.appService.myHeader("Startseite");
-      console.log(this.currentDocKey);
-      console.log(id);
+      console.log(this.isOwner);
       this.getFolders(id)
     }
   }
 
-    
   async getFolders(id: string) {
     if (this.currentUser.role != 1) {
 
-      //get derdiedaz folders
+      //get derdiedaz folders only on the startpage of the respective user
       let level0: boolean = false;
       if ((this.currentUser.role == 2 && this.currentUser.uid === id) || (this.currentUser.role == 3 && this.currentUser.parent === id)) {
         await this.afs.getFolderElement("Standardübungen").then(data => this.derdiedazFolder = data.folders);
         level0 = true;
       }
 
+
       this.ownFolders = this.currentFolderElement.folders;
       console.log(this.derdiedazFolder);
-
-      let parent: string = "";
-
-      //get the Items, navigate to not found - when the page does not exist
-     
-
+      
       console.log(this.ownFolders);
       this.ownFolders.sort((a, b) => {
         if (a.name < b.name) {return -1;}
@@ -160,7 +188,6 @@ export class MainMenuComponent implements OnInit {
   itemclick(item: Folder) {
     if (item.type == "folder") {
         this.router.navigate([item.uid]);
-        this.appService.myHeader(item.name);
     }
     else if (item.type == "task") {
       let type = item.gameType;
@@ -179,8 +206,8 @@ export class MainMenuComponent implements OnInit {
     
     //create Folder
     if (gameType != null && gameType != undefined)
-    var newFolder = new Folder(newUid, newName, newType, [this.currentUser.uid], gameType, true);
-    else newFolder = new Folder(newUid, newName, newType);
+    var newFolder = new Folder(newUid, newName, newType, this.currentUser.uid, [], gameType);
+    else newFolder = new Folder(newUid, newName, newType, this.currentUser.uid);
 
     //Add the Folder
     console.log(this.currentFolders); //Just Output Check

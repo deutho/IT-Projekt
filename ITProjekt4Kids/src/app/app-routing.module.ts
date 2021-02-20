@@ -51,7 +51,7 @@ const routes: Routes = [
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
 
-{ path: "error",
+{ path: "notfound",
   component: NotFoundComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
