@@ -241,7 +241,7 @@
                     <div>
                         <!-- Name of element -->
                         <h6>Name des neuen Elements:</h6>
-                        <input placeholder="Tiere im Winter" type="text" name = "name" formControlName ="name" style="width: 100%;">
+                        <input placeholder="z.B. Tiere im Winter" type="text" name = "name" formControlName ="name" style="width: 100%;">
                     </div>
                     <!-- Choice to create Folder or Task -->
                     <div *ngIf="gameSelected == false"  style="padding: 20px 0px; width: 100%; display: flex; justify-content: space-between;">
@@ -266,10 +266,10 @@
                         <!-- formControlName="game" -->
                         <select id="gameTypeSelector" class="form-control custom-select drop-shadow">                            
                             <option value="" selected disabled hidden>Wähle die Art des Lernspiels</option>
-                            <option value="vocabular-game">Wort Quiz</option>
+                            <option value="vocabular-game">Quiz</option>
                             <!-- comment for deploy -->
-                            <option *ngIf="!isDeployment" value="personal-forms-game">Personal-Formen-Rätsel</option>
-                            <option *ngIf="!isDeployment" value="verb-position-game">Satzstellungs-Spiel</option>
+                            <option *ngIf="!isDeployment" value="personal-forms-game">Personalformen</option>
+                            <option *ngIf="!isDeployment" value="verb-position-game">Satzstellung</option>
                          </select>
                     </div>
                     <!-- add button -->

@@ -353,7 +353,7 @@ export class PersonalFormsGameComponent implements OnInit {
   }
 
   happyFace() {
-    if((this.totalNumberOfRounds - this.roundsWon + this.roundsLost) < (this.totalNumberOfRounds / 2) ) {
+    if((this.totalNumberOfRounds - this.roundsLost)/this.totalNumberOfRounds >= 0.5 ) {
       return true; //more than 50% correct
     }
     else return false;
