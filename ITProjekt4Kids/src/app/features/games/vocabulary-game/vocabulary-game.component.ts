@@ -67,6 +67,7 @@ export class VocabularyGameComponent implements OnInit {
   imageLoaded = false;
   image = new Image();  
   noQuestionsInGame = false;
+  teacherPlaying: boolean;
 
   
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private route: ActivatedRoute) {}
@@ -86,6 +87,9 @@ export class VocabularyGameComponent implements OnInit {
         if (folder.uid == this.folderID) this.folder = folder
       });
     });
+
+    //evaluate if teacher is playing
+    if (this.currentUser.role == 2) this.teacherPlaying == true;
 
     //set the header
     this.appService.myHeader(this.folder.name);
@@ -243,7 +247,7 @@ export class VocabularyGameComponent implements OnInit {
     if(this.totalNumberOfRounds > 0) {
       this.endtime = Date.now();
       this.duration = this.endtime-this.starttime;
-      this.afs.createResult(this.currentUser.uid, this.totalrounds, this.roundsWon, this.folderID, this.duration);
+      if(this.teacherPlaying == false) this.afs.createResult(this.currentUser.uid, this.totalrounds, this.roundsWon, this.folderID, this.duration);
       this.finished = true;
       this.finalScreen()
     }

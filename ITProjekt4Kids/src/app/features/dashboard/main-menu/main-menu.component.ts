@@ -50,7 +50,6 @@ export class MainMenuComponent implements OnInit {
   redirectdata: string[] = [];
   redirected: boolean = false;
   redirectitem;
-  studentMode;
   shareGameOverlay = false;
   deleteElementOverlay = false;
   directurl = "";
@@ -64,21 +63,13 @@ export class MainMenuComponent implements OnInit {
   userSubscriptpion;
   unauthorized: boolean = false;
   currentFolderElement: Folderelement;
+  isOwnerOfCurrentFolder: boolean;
 
-  //Rights bools
-  isOwner: boolean;
-  isEditor: boolean;
-  isViewer: boolean;
-  
   
 
   async ngOnInit() {
     //get the currentuser
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
-
-    this.appService.myStudentMode$.subscribe((studentMode) => {
-      this.studentMode = studentMode;
-    });
 
     this.isDeployment = environment.isDeployment; // delete when project is done
 
@@ -97,12 +88,7 @@ export class MainMenuComponent implements OnInit {
 
   //initialize the component after a path change
   async initialize(id) {
-
-
-     //reset the right bools:
-     this.isOwner = false;
-     this.isEditor = false;
-     this.isViewer = true;
+    this.isOwnerOfCurrentFolder = false;
 
     console.log(id);
     if (id === " ") {
@@ -132,25 +118,18 @@ export class MainMenuComponent implements OnInit {
           });
         });
         this.appService.myHeader(this.currentFolder.name);
+        if (this.currentFolder.owner == this.currentUser.uid) this.isOwnerOfCurrentFolder = true;
 
-        //evaluate rights
-        if (this.currentFolder.owner == this.currentUser.uid) {
-          this.isOwner = true;
-        }
-
-        if (this.currentFolder.editors.includes(this.currentUser.uid)) {
-          this.isEditor = true;
-        }
       }
       else {
         if (this.currentDocKey == this.currentUser.uid) {
-          this.isOwner = true;
-          this.appService.myHeader("Startseite");
+          this.isOwnerOfCurrentFolder = true;
         }
-        
+        this.appService.myHeader("Startseite");
       }
+      
+      
 
-      console.log(this.isOwner);
       this.getFolders(id)
     }
   }
@@ -190,15 +169,7 @@ export class MainMenuComponent implements OnInit {
         this.router.navigate([item.uid]);
     }
     else if (item.type == "task") {
-      let type = item.gameType;
-      if (this.currentUser.role == 3 || (this.currentUser.role == 2 && this.studentMode == true)) this.router.navigate(['game/'+type+'/'+item.uid], {queryParams:{k: this.currentDocKey}});
-      else if (this.currentUser.role == 2 && this.studentMode == false) 
-      if (item.editors.includes(this.currentUser.uid)) this.router.navigate(['game/'+type+'-edit/'+item.uid], {queryParams:{k: this.currentDocKey}});
-      else {
-        this.errorMessage = "Sie sind nicht berechtigt, diese Aufgabe zu bearbeiten."
-        this.error = true;
-        setTimeout(() => this.error = false, 4000);
-      }
+      this.router.navigate(['game/'+item.uid], {queryParams:{k: this.currentDocKey, t: item.gameType}});
     }
   }
 
@@ -207,7 +178,7 @@ export class MainMenuComponent implements OnInit {
     //create Folder
     if (gameType != null && gameType != undefined)
     var newFolder = new Folder(newUid, newName, newType, this.currentUser.uid, [], gameType);
-    else newFolder = new Folder(newUid, newName, newType, this.currentUser.uid);
+    else newFolder = new Folder(newUid, newName, newType, this.currentUser.uid, []);
 
     //Add the Folder
     console.log(this.currentFolders); //Just Output Check
@@ -388,7 +359,4 @@ export class MainMenuComponent implements OnInit {
     if (cascading == false) await this.afs.deleteFolder(item, this.currentDocKey).then(() => this.getFolders(this.currentDocKey));
   }
   
-  toggleStudentMode() {
-    this.appService.myStudentMode();
-  }
 }

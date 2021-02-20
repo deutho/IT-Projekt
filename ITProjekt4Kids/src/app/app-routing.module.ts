@@ -17,6 +17,7 @@ import { VerbPositionGameComponent } from './features/games/verb-position-game/v
 import { VerbPositionGameEditComponent } from './features/games/verb-position-game-edit/verb-position-game-edit.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
 import { AccessDeniedComponent } from './features/access-denied/access-denied.component';
+import { GameRedirectComponent } from './features/games/game-redirect/game-redirect.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
@@ -68,43 +69,50 @@ const routes: Routes = [
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
-  { path: "game/vocabular-game/:id",
+
+{ path: 'game/:id',
+  component: GameRedirectComponent,
+  canActivate: [AngularFireAuthGuard], 
+  data: {authGuardPipe: redirectUnauthorizedToLogin}
+},
+
+{ path: "game/vocabular-game/:id",
   component: VocabularyGameComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 
 },
-  { path: "game/vocabular-game-edit/:id",
+{ path: "game/vocabular-game-edit/:id",
   component: VocabularyGameEditComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
 
-  { path: "game/personal-forms-game/:id",
+{ path: "game/personal-forms-game/:id",
   component: PersonalFormsGameComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 
 },
-  { path: "game/personal-forms-game-edit/:id",
+{ path: "game/personal-forms-game-edit/:id",
   component: PersonalFormsGameEditComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
 
-  { path: "game/verb-position-game/:id",
+{ path: "game/verb-position-game/:id",
   component: VerbPositionGameComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 
 },
-  { path: "game/verb-position-game-edit/:id",
+{ path: "game/verb-position-game-edit/:id",
   component: VerbPositionGameEditComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}
 },
 
-  { path: "**",
+{ path: "**",
   component: NotFoundComponent,
   canActivate: [AngularFireAuthGuard], 
   data: {authGuardPipe: redirectUnauthorizedToLogin}

@@ -64,6 +64,11 @@ export class VerbPositionGameEditComponent implements OnInit {
   words: string[]
   valuesOfInput = [];
   audioData = [];
+  isOwner: boolean;
+  isEditor: boolean;
+  isViewer: boolean = true;
+
+
   constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
     this.appService.myImageURL$.subscribe((data) => {
       this.imageURL = data;
@@ -81,34 +86,40 @@ export class VerbPositionGameEditComponent implements OnInit {
     //get user
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
-    this.folderUID = this.route.snapshot.paramMap.get('id');
-
-    let dockey: string = this.route.snapshot.queryParamMap.get('k');
-
-
-    //get the data of the game
-    await this.afs.getFolderElement(dockey).then(data => {
-      let f: Folder[]  = data.folders;
-      f.forEach(folder => {
-        if (folder.uid == this.folderUID) this.folder = folder
-      });
-    });
-
-    //set the header
-    this.appService.myHeader(this.folder.name);
-
-    if (!this.folder.editors.includes(this.currentUser.uid)) {
-        this.unauthorized = true;
+    if(this.currentUser.role == 3) {
+      this.unauthorized = true;
     } else {
 
-      // get games
-      await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
-      //init second stack for going back and forwards between games
-      let previousGames = [];
-      this.previousGames = previousGames;
-      //load first game
-      this.loadNextGame();
-      // this.initSounds();
+        this.folderUID = this.route.snapshot.paramMap.get('id');
+
+        let dockey: string = this.route.snapshot.queryParamMap.get('k');
+
+
+        //get the data of the game
+        await this.afs.getFolderElement(dockey).then(data => {
+          let f: Folder[]  = data.folders;
+          f.forEach(folder => {
+            if (folder.uid == this.folderUID) this.folder = folder
+          });
+        });
+
+        //set the header
+        this.appService.myHeader(this.folder.name);
+
+        //get the rights (Thomas, mit de 2 bools kannst arbeiten - isViewer is eh imma true - jeder kann viewen)
+        if (this.folder.owner == this.currentUser.uid) this.isOwner = true;
+        if (this.folder.editors.includes(this.currentUser.uid)) this.isEditor = true;
+
+        
+
+          // get games
+          await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
+          //init second stack for going back and forwards between games
+          let previousGames = [];
+          this.previousGames = previousGames;
+          //load first game
+          this.loadNextGame();
+          // this.initSounds();
     }
   }
 

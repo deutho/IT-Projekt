@@ -26,6 +26,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
+import { GameRedirectComponent } from './games/game-redirect/game-redirect.component';
 
 
 
@@ -49,7 +50,8 @@ declarations: [
   DropzoneDirective,
   RedirectComponent,
   NotFoundComponent,
-  AccessDeniedComponent],
+  AccessDeniedComponent,
+  GameRedirectComponent],
 imports: [
   CommonModule,
   RouterModule,

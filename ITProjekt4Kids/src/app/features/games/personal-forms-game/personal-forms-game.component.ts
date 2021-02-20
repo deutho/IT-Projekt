@@ -38,6 +38,7 @@ export class PersonalFormsGameComponent implements OnInit {
   roundsLostAnimation = [];
   speakerMode = false;
   checked : boolean = false
+  teacherPlaying: boolean = false;
 
 
   // boolean to detect if list already contains a string
@@ -80,6 +81,9 @@ export class PersonalFormsGameComponent implements OnInit {
         if (folder.uid == this.folderID) this.folder = folder
       });
     });
+
+    //evaluate if teacher is playing
+    if (this.currentUser.role == 2) this.teacherPlaying == true;
 
     //set the header
     this.appService.myHeader(this.folder.name);

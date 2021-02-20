@@ -8,6 +8,7 @@
         ------------------------->
 
          <!-------------------------
+        Aufwertspfeil auskommentiert
         <ul *ngIf = "parentDocKey !== 'root'" style="display: flex; justify-content: center;">
             <li class="navigationBar">
                 <div class ="btn" (click)= goUpOneLevel() style="display: flex;  width: 68px; cursor: pointer">
@@ -69,7 +70,11 @@
             alle Ordern/Items anzeigen 
         
         ------------------------->
-        <!-- Ansicht Lehrer -->
+        <!-- Ansicht Lehrer
+        
+        plssss thomaasss fix
+        
+        -->
         <div *ngIf="currentUser.role == 2">
             <div class="container" *ngFor="let item of currentFolders;  index as i">
                 <div class="item-left colouring-{{i%4}} dropshadow" (click)=itemclick(item)>
@@ -82,6 +87,7 @@
                     </svg>   
                 </div>
                 <div class="item-center dropshadow" (click)=itemclick(item)> <h4>{{item.name}}</h4></div>
+
                 <div class="item-right dropshadow" data-toggle="dropdown">
                     <svg width="27" height="27" style="opacity: 0.6;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ellipsis-h" class="svg-inline--fa fa-ellipsis-h fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <path fill="currentColor" d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z">
@@ -97,14 +103,14 @@
                         </div>
                         <div class="dropdown-divider"></div>
                     </li>
-                    <li class="selectionOfDropdown" type="button" (click)="editElement(item)">                    
+                    <li *ngIf = "item.owner == currentUser.uid || item.editors.includes(currentUser.uid)" class="selectionOfDropdown" type="button" (click)="editElement(item)">                    
                         <div style="display: flex; flex-direction: row; align-items: flex-end;">
                             <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18 icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path></svg>
                             <a class="textOfDropdown" > Umbenennen</a>
                         </div>
                         <div class="dropdown-divider"></div>
                     </li>
-                    <li class="selectionOfDropdown" type="button" (click)="deleteElement(item)">                    
+                    <li *ngIf = "item.owner == currentUser.uid" class="selectionOfDropdown" type="button" (click)="deleteElement(item)">                    
                         <div style="display: flex; flex-direction: row; align-items: flex-end;">
                             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14 icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"></path></svg>
                             <a class="textOfDropdown" > Löschen</a>
@@ -114,7 +120,7 @@
                 </ul>
             </div>
             <!-- teacher can also add Elements -->
-            <div type="button" (click)="addElement()" *ngIf="creating == false && isOwner == true" class="container dropshadow" style="padding-bottom: 100px;">
+            <div type="button" (click)="addElement()" *ngIf="creating == false && isOwnerOfCurrentFolder == true" class="container dropshadow" style="padding-bottom: 100px;">
                 <div class="item-left" style="background-color: #85898C">
                     <svg  width="34px" height="34px" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.5375 14C0.5375 6.56304 6.56304 0.5375 14 0.5375C21.437 0.5375 27.4625 6.56304 27.4625 14C27.4625 21.437 21.437 27.4625 14 27.4625C6.56304 27.4625 0.5375 21.437 0.5375 14ZM21.2188 16.2875C21.6349 16.2875 21.975 15.9474 21.975 15.5312V12.4688C21.975 12.0526 21.6349 11.7125 21.2188 11.7125H16.2875V6.78125C16.2875 6.36508 15.9474 6.025 15.5312 6.025H12.4688C12.0526 6.025 11.7125 6.36508 11.7125 6.78125V11.7125H6.78125C6.36508 11.7125 6.025 12.0526 6.025 12.4688V15.5312C6.025 15.9474 6.36508 16.2875 6.78125 16.2875H11.7125V21.2188C11.7125 21.6349 12.0526 21.975 12.4688 21.975H15.5312C15.9474 21.975 16.2875 21.6349 16.2875 21.2188V16.2875H21.2188Z" fill="white" stroke="black" stroke-width="0.2"/>

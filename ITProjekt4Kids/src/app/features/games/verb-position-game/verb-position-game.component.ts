@@ -37,6 +37,7 @@ export class VerbPositionGameComponent implements OnInit {
    roundsWonAnimation = [];
    roundsLostAnimation = [];
    noQuestionsInGame = false;
+   teacherPlaying: boolean;
 
   async ngOnInit(): Promise<void> {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
@@ -55,6 +56,9 @@ export class VerbPositionGameComponent implements OnInit {
 
     //set the header
     this.appService.myHeader(this.folder.name);
+
+    //evaluate if teacher is playing
+    if (this.currentUser.role == 2) this.teacherPlaying == true;
 
     await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
     this.sentence = [];
