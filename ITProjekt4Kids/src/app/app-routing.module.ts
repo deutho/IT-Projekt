@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainMenuComponent } from './features/dashboard/main-menu/main-menu.component';
 import { LoginPageComponent } from './features/login/login-page.component';
-import {AngularFireAuthGuard, AngularFireAuthGuardModule, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
 import { ProfileComponent } from './features/dashboard/profile/profile.component';
 import { AddUserComponent } from './features/dashboard/add-user/add-user.component';
 import { StatisticsComponent } from './features/dashboard/statistics/statistics.component';
@@ -45,57 +44,57 @@ const routes: Routes = [
   canActivate: [AuthGuard]
 },
 
-{ path: "notfound",
+  { path: "notfound",
   component: NotFoundComponent,
   canActivate: [AuthGuard]
 },
 
-{ path: "access-denied",
+  { path: "access-denied",
   component: AccessDeniedComponent,
   canActivate: [AuthGuard]
 },
 
-{ path: ':id',
+  { path: ':id',
   component: MainMenuComponent,
   canActivate: [AuthGuard]
 },
 
-{ path: 'game/:id',
+  { path: 'game/:id',
   component: GameRedirectComponent,
   canActivate: [AuthGuard]
 },
 
-{ path: "game/vocabular-game/:id",
+  { path: "game/vocabular-game/:id",
   component: VocabularyGameComponent,
   canActivate: [AuthGuard]
 
 },
-{ path: "game/vocabular-game-edit/:id",
+  { path: "game/vocabular-game-edit/:id",
   component: VocabularyGameEditComponent,
   canActivate: [AuthGuard]
 },
 
-{ path: "game/personal-forms-game/:id",
+  { path: "game/personal-forms-game/:id",
   component: PersonalFormsGameComponent,
   canActivate: [AuthGuard]
 
 },
-{ path: "game/personal-forms-game-edit/:id",
+  { path: "game/personal-forms-game-edit/:id",
   component: PersonalFormsGameEditComponent,
   canActivate: [AuthGuard]
 },
 
-{ path: "game/verb-position-game/:id",
+  { path: "game/verb-position-game/:id",
   component: VerbPositionGameComponent,
   canActivate: [AuthGuard]
 
 },
-{ path: "game/verb-position-game-edit/:id",
+  { path: "game/verb-position-game-edit/:id",
   component: VerbPositionGameEditComponent,
   canActivate: [AuthGuard]
 },
 
-{ path: "**",
+  { path: "**",
   component: NotFoundComponent,
   canActivate: [AuthGuard]
 },
