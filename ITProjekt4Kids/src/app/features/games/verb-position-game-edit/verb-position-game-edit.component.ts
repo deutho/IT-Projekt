@@ -162,6 +162,7 @@ export class VerbPositionGameEditComponent implements OnInit {
 
   saveChanges() {
     if (this.checkForChanges()) {
+      console.log("trying to save")
       //check if image has changed
       // if(this.currentGame.photoID != this.imageURL) {
         // if(this.currentGame.photoID.search("firebasestorage.googleapis.com") != -1) {
@@ -206,21 +207,33 @@ export class VerbPositionGameEditComponent implements OnInit {
         this.saved = true;
         setTimeout(() => this.saved = false, 2500);
       }
-      else {
-        this.noChanges = true;
-        setTimeout(() => this.noChanges = false, 2500);
-      }
+    else {
+      console.log("no changes")
+      this.noChanges = true;
+      setTimeout(() => this.noChanges = false, 2500);
+    }
   }
 
   checkForChanges(): boolean{
     if(this.currentGame == undefined) return false;
-
     this.question = (<HTMLInputElement>document.getElementById('question')).value;
-    this.updateValuesOfInputVariable();
+    // this.updateValuesOfInputVariable();
     // this.audioURLWord1 = (<HTMLInputElement>document.getElementById('audioURLWord1')).value;
     // this.audioURLWord2 = (<HTMLInputElement>document.getElementById('audioURLWord2')).value;
     // this.audioURLWord3 = (<HTMLInputElement>document.getElementById('audioURLWord3')).value;
 
+    //add speakermode check
+    this.loaded = false;
+    var temp = this.valuesOfInput
+    this.valuesOfInput = []
+    for(var i = 0; i<temp.length; i++) {
+        this.valuesOfInput.push((<HTMLInputElement>document.getElementById("valueWord" + i)).value)
+        // console.log("an Stelle" + i + " kommt der wert von valueWord" + i)
+    }
+    console.log(temp)
+    console.log(this.valuesOfInput)
+    this.loaded = true;
+    console.log(this.valuesOfInput)
     var wordsDidChange = false
     for(var i = 0; i < this.valuesOfInput.length; i++){
       if(this.currentGame.words[i] != this.valuesOfInput[i]) {
@@ -230,7 +243,6 @@ export class VerbPositionGameEditComponent implements OnInit {
       console.log(this.currentGame.words[i] +" == "+ this.valuesOfInput[i])
     }
 
-    console.log("Words changed? : " + wordsDidChange)
     if(this.currentGame.question[0] == this.question &&
       wordsDidChange == false &&
       // this.currentGame.audio[0] == this.audioURLWord1 &&
@@ -248,18 +260,18 @@ export class VerbPositionGameEditComponent implements OnInit {
     }
   }
 
-  updateValuesOfInputVariable(){
+  // updateValuesOfInputVariable(){
 
-    var temp = []
-    for(var i = 0; i<this.valuesOfInput.length; i++) {
-        temp.push((<HTMLInputElement>document.getElementById("valueWord" + i)).value)
-    }
-    if(temp.length<3) temp.push("")
-    if(temp.length<3) temp.push("")
-    if(temp.length<3) temp.push("")
-    this.valuesOfInput = temp;
-    console.log(this.valuesOfInput)
-  }
+    // var temp = []
+    // for(var i = 0; i<this.valuesOfInput.length; i++) {
+    //     temp.push((<HTMLInputElement>document.getElementById("valueWord" + i)).value)
+    // }
+    // if(temp.length<3) temp.push("")
+    // if(temp.length<3) temp.push("")
+    // if(temp.length<3) temp.push("")
+    // this.valuesOfInput = temp;
+    // console.log(this.valuesOfInput)
+  // }
 
   pictureEdited() {  
     //toggle to refresh correct image after inputting a new URL

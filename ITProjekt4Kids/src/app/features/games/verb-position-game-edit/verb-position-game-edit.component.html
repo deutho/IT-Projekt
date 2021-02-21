@@ -37,7 +37,7 @@
             </div>
             <!-- Input Fields -->
             <div  *ngFor="let item of valuesOfInput;  index as i">
-                <input (blur)="updateValuesOfInputVariable()" type="text" class="example-box" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}"> 
+                <input type="text" class="example-box" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}"> 
             </div>      
             <!-- <div>Icons erstellt von <a href="https://icon54.com/" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div> -->
             <div style="display: flex; vertical-align: middle; padding-left: 15px;" (click)="addInputField()">
