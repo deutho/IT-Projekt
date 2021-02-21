@@ -9,7 +9,7 @@ import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { environment } from 'src/environments/environment';
-import { HighlightSpanKind } from 'typescript';
+import { HighlightSpanKind, textSpanIntersectsWithPosition } from 'typescript';
 import {v4 as uuidv4} from 'uuid';
 
 
@@ -284,6 +284,12 @@ export class MainMenuComponent implements OnInit {
 
   createLink(item) {
     var url = environment.shareableURL;
+    if(item.type == "task") {
+      this.directurl = url +'/game/'+item.uid+'?k='+this.currentDocKey+'&t='+item.gameType;
+    }
+    if(item.type == "folder") {
+      this.directurl = url +'/'+item.uid;
+    }
     this.shareGameOverlay = true;
   }
 
@@ -299,11 +305,6 @@ export class MainMenuComponent implements OnInit {
       this.itemtodelete = item;
       this.deleteElementOverlay = true;
     } 
-    // else {
-    //     this.errorMessage = "Sie sind nicht berechtigt, diese Übung zu löschen."
-    //     this.error = true
-    //     setTimeout(() => this.error = false, 4000);
-    // }
   }
   
   async delete() {

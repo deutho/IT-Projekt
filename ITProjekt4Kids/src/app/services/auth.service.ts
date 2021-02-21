@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import { environment } from 'src/environments/environment';
@@ -15,13 +15,14 @@ export class AuthService {
     
 
     constructor(
-        private router: Router,
+        private router: Router, private route: ActivatedRoute
     ) {
         this.authStatusListener();
     }
 
     private authStatusSub = new BehaviorSubject(this.getCurrentUser());
     currentAuthStatus = this.authStatusSub.asObservable();
+    redirectURL: string;
 
 
     //auth change listener for the observable
@@ -39,7 +40,19 @@ export class AuthService {
     }
 
     signIn(email, password): Promise<any> {
-        return firebase.auth().signInWithEmailAndPassword(email, password).then(() => this.router.navigate([' ']));
+        this.redirectURL = "";
+        let params = this.route.snapshot.queryParams;
+            if (params['redirectURL']) {
+                this.redirectURL = params['redirectURL'];
+            }
+        console.log (this.redirectURL)
+        return firebase.auth().signInWithEmailAndPassword(email, password).then(()  => {
+            if (this.redirectURL) {
+                this.router.navigateByUrl(this.redirectURL).catch(() => this.router.navigate([' ']));
+            } else {
+                this.router.navigate([' '])
+            }
+        });
     }
 
     getCurrentUser(): firebase.User {

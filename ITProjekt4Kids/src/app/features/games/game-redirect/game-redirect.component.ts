@@ -28,12 +28,12 @@ export class GameRedirectComponent implements OnInit {
       this.studentMode = studentMode;
     });
 
-    this.redirect(gameid, dockey, type)
+    this.redirect(gameid, dockey, type);
   }
 
   private redirect(gameid, dockey, type) {
-    if (this.currentUser.role == 3 || this.studentMode == true) this.router.navigate(['game/'+type+'/'+gameid], {queryParams:{k: dockey}});
-    if (this.currentUser.role == 2) this.router.navigate(['game/'+type+'-edit/'+gameid], {queryParams:{k: dockey}});
+    if (this.currentUser.role == 3 || this.studentMode == true) this.router.navigate(['game/'+type+'/'+gameid], {queryParams:{k: dockey}, replaceUrl:true});
+    if (this.currentUser.role == 2) this.router.navigate(['game/'+type+'-edit/'+gameid], {queryParams:{k: dockey}, replaceUrl:true});
   }
 
 }
