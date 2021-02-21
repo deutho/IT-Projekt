@@ -12,7 +12,7 @@ import { FirestoreDataService } from './firestore-data.service';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-    
+
 
     constructor(
         private router: Router, private route: ActivatedRoute
@@ -36,7 +36,7 @@ export class AuthService {
         })
     }
     signOut() {
-        firebase.auth().signOut().then(() => this.router.navigate(['login']));   
+        firebase.auth().signOut().then(() => this.router.navigate(['login']));
     }
 
     signIn(email, password): Promise<any> {
@@ -77,9 +77,9 @@ export class AuthService {
         return user.reauthenticateWithCredential(cred);
     }
 
-    isAuthenticated(): boolean {
-        if (firebase.auth().currentUser != null) return true;
-        else return false;
-    }
-    
+    // isAuthenticated(): boolean {
+    //     if (firebase.auth().currentUser != null) return true;
+    //     else return false;
+    // }
+
 }

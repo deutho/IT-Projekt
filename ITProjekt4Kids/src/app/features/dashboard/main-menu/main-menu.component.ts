@@ -127,9 +127,6 @@ export class MainMenuComponent implements OnInit {
         }
         this.appService.myHeader("Startseite");
       }
-      
-      
-
       this.getFolders(id)
     }
   }
@@ -143,8 +140,7 @@ export class MainMenuComponent implements OnInit {
         await this.afs.getFolderElement("Standardübungen").then(data => this.derdiedazFolder = data.folders);
         level0 = true;
       }
-
-
+      
       this.ownFolders = this.currentFolderElement.folders;
       console.log(this.derdiedazFolder);
       
