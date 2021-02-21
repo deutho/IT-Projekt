@@ -8,17 +8,32 @@ import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
 import { ActivatedRoute } from '@angular/router';
 import { Folder } from 'src/app/models/folder.model';
+import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+const starAnimation = trigger('starAnimation', [
+  transition('* <=> *', [
+    query(':enter',
+      [style({ opacity: 0 }), stagger('200ms', animate('600ms ease-out', style({ opacity: 1 })))],
+      { optional: true }
+    ),
+    query(':leave',
+      animate('200ms', style({ opacity: 0 })),
+      { optional: true}
+    )
+  ])
+]);
+
 
 @Component({
   selector: 'app-personal-forms-game',
   templateUrl: './personal-forms-game.component.html',
-  styleUrls: ['./personal-forms-game.component.css']
+  styleUrls: ['./personal-forms-game.component.css'],
+  animations: [starAnimation]
 })
 export class PersonalFormsGameComponent implements OnInit {
 
   constructor(private afs: FirestoreDataService, private appService: AppService, private route: ActivatedRoute) {}
 
-  test = "Hallo Welt!"
+  
   Games: PersonalFormsGame[] = []
   currentUser: User;
   folder: Folder;
@@ -333,7 +348,6 @@ export class PersonalFormsGameComponent implements OnInit {
   }
 
   finishGame() {
-    console.log("fertisch")
     if(this.totalNumberOfRounds > 0) {
       // this.endtime = Date.now();
       // this.duration = this.endtime-this.starttime;
@@ -359,13 +373,41 @@ export class PersonalFormsGameComponent implements OnInit {
   switchMode() {
     this.loaded = false;
     this.speakerMode = !this.speakerMode;
+    const demoClasses = document.querySelectorAll('.example-box');
+    if(this.speakerMode == true) {      
+      demoClasses.forEach(element => {
+        element.setAttribute("style", "cursor: default")
+      });
+    }
+    else{
+      demoClasses.forEach(element => {
+        element.setAttribute("style", "cursor: move")
+      });
+    }
     this.loaded = true;
     // this.updateColorhelper();
   }
   
+  allowDrag(){
+    if(this.speakerMode) return true;
+    return false;
+  }
+
   playSound(soundfile) {
-    console.log(soundfile)
-    this.audio = new Audio(soundfile);
+    console.log(this.speakerMode)
+    if(this.speakerMode == false) return;
+    interface keyMap {
+      [key: string]: string;
+    } 
+    let answerMap:keyMap = {};
+    answerMap[this.currentGame.ich[0]] = this.currentGame.ich[1]
+    answerMap[this.currentGame.du[0]] = this.currentGame.du[1]
+    answerMap[this.currentGame.erSieEs[0]] = this.currentGame.erSieEs[1]
+    answerMap[this.currentGame.wir[0]] = this.currentGame.wir[1]
+    answerMap[this.currentGame.ihr[0]] = this.currentGame.ihr[1]
+    answerMap[this.currentGame.sie[0]] = this.currentGame.sie[1]
+    answerMap[this.currentGame.question[0]] = this.currentGame.question[1]
+    this.audio = new Audio(answerMap[soundfile]);
     this.audio.play();
   }
 }
