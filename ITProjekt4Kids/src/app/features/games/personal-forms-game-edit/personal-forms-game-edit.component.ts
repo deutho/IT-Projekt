@@ -195,12 +195,13 @@ export class PersonalFormsGameEditComponent implements OnInit {
   }
 
   toggleLockedHTML() {
+    console.log("toggle locking of html")
     if(this.isRecording) {
       this.isRecording = false;
       //unlock all record buttons
-      for(var i = 0; i<this.audioStrings.length ; i++){
-        (<HTMLButtonElement> document.getElementById("audioButton" + i)).disabled = false;
-      }
+      // for(var i = 0; i<this.audioStrings.length ; i++){
+      //   (<HTMLButtonElement> document.getElementById("audioButton" + i)).disabled = false;
+      // }
       clearTimeout(this.recordingTimeout)
       this.allowRecord(false);
     }
