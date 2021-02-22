@@ -9,6 +9,7 @@ import { Folderelement } from '../models/folderelement.model';
 import { take } from 'rxjs/operators';
 import { BugReport } from '../models/bugreport.model';
 import { BehaviorSubject } from 'rxjs';
+import { formatDate } from '@angular/common';
 
 
 
@@ -160,7 +161,8 @@ export class FirestoreDataService {
      */
     addBugReport(description: string, user: string, status: string): boolean {
         let success = true;
-        this.db.collection("bugreports").add({
+        let name: string = formatDate(Date.now(),'yyyy-MM-dd HH:mm:ss.SSS','en-GB');
+        this.db.collection("bugreports").doc(name).set({
             description: description,
             user: user,
             time: firebase.firestore.FieldValue.serverTimestamp(),
