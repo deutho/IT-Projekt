@@ -67,7 +67,9 @@ export class VerbPositionGameEditComponent implements OnInit {
   isOwner: boolean;
   isEditor: boolean;
   isViewer: boolean = true;
-
+  audioStrings: string[] = [];
+  audioURLS: string[] = [];
+  audioPlaying = -1;
 
   constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
     this.appService.myImageURL$.subscribe((data) => {
@@ -75,7 +77,7 @@ export class VerbPositionGameEditComponent implements OnInit {
     });
     this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
-      if((<HTMLButtonElement> document.getElementById("audioButtonQuestion")) != null) {
+      if((<HTMLButtonElement> document.getElementById("audioButton0")) != null) {
         this.allowRecord(true);
       }
       this.loadAudio();
@@ -148,11 +150,12 @@ export class VerbPositionGameEditComponent implements OnInit {
         var newGame = new VerbPositionGame(uid, this.valuesOfInput, this.audioData, ['',''], './../../../../assets/Images/Placeholder-Image/north_blur_Text.png', this.folderUID);
         this.currentGame = newGame;        
      }
-     
+     this.valuesOfInput = [];
+     this.audioURLS = [];
      this.loadInputFieldValues();
 
     //  lets the html know, that content can now be loaded
-     this.initSounds();
+    //  this.initSounds();
      this.loaded = true;
   }
 
@@ -166,8 +169,14 @@ export class VerbPositionGameEditComponent implements OnInit {
     // this.words = [this.currentGame.words[0], this.currentGame.words[1], this.currentGame.words[2], this.currentGame.words[3], this.currentGame.words[4], this.currentGame.words[5]]
 
     this.imageURL = this.currentGame.photoID;
-    this.valuesOfInput = this.currentGame.words;
-    this.audioData = this.currentGame.audio;
+    for( var i =0; i < this.currentGame.words.length; i++) {
+      this.valuesOfInput.push(this.currentGame.words[i])
+    }
+    // this.valuesOfInput = this.currentGame.words;
+    for( var i =0; i < this.currentGame.audio.length; i++) {
+      this.audioURLS.push(this.currentGame.audio[i])
+    }
+    // this.audioURLS = this.currentGame.audio;
     // this.updateValuesOfInputVariable();
   }
 
@@ -186,7 +195,7 @@ export class VerbPositionGameEditComponent implements OnInit {
       // }
 
       //Vergame must have a question
-      if((<HTMLInputElement>document.getElementById('question')).value == ''){
+      if(this.question == ''){
         this.noQuestionFilled = true;
         setTimeout(() => this.noQuestionFilled = false, 2500);
         return
@@ -200,14 +209,14 @@ export class VerbPositionGameEditComponent implements OnInit {
 
       //Create Game
 
-      console.log(this.valuesOfInput)
+      // console.log(this.valuesOfInput)
 
 
       this.currentGame = new VerbPositionGame(
         uid, 
         this.valuesOfInput,
         this.audioData,
-        [(<HTMLInputElement>document.getElementById('question')).value],
+        [this.question, this.audioURLS[0]],
         this.imageURL,
         this.folderUID)    
 
@@ -227,42 +236,40 @@ export class VerbPositionGameEditComponent implements OnInit {
 
   checkForChanges(): boolean{
     if(this.currentGame == undefined) return false;
-    this.question = (<HTMLInputElement>document.getElementById('question')).value;
-    // this.updateValuesOfInputVariable();
+
     // this.audioURLWord1 = (<HTMLInputElement>document.getElementById('audioURLWord1')).value;
     // this.audioURLWord2 = (<HTMLInputElement>document.getElementById('audioURLWord2')).value;
     // this.audioURLWord3 = (<HTMLInputElement>document.getElementById('audioURLWord3')).value;
 
-    //add speakermode check
-    this.loaded = false;
-    var temp = this.valuesOfInput
-    this.valuesOfInput = []
-    for(var i = 0; i<temp.length; i++) {
-        this.valuesOfInput.push((<HTMLInputElement>document.getElementById("valueWord" + i)).value)
-        // console.log("an Stelle" + i + " kommt der wert von valueWord" + i)
+
+    // update the words in the input fields - only do when in textmode
+    if(this.editingAudio == false){
+      this.question = (<HTMLInputElement>document.getElementById('question')).value;
+      this.updateValuesOfInputVariable()
     }
-    console.log(temp)
-    console.log(this.valuesOfInput)
-    this.loaded = true;
-    console.log(this.valuesOfInput)
+
+    // check for changes in the words
     var wordsDidChange = false
     for(var i = 0; i < this.valuesOfInput.length; i++){
       if(this.currentGame.words[i] != this.valuesOfInput[i]) {
-        wordsDidChange = true;
-        
+        wordsDidChange = true;        
       }
-      console.log(this.currentGame.words[i] +" == "+ this.valuesOfInput[i])
     }
+    if(this.currentGame.words.length != this.valuesOfInput.length) wordsDidChange = true;
 
+    // check for changes in the audio URLS
+    var audioURLSDidChange = false
+    for(var i = 0; i < this.audioURLS.length; i++){
+      if(this.currentGame.audio[i] != this.audioURLS[i]) {
+        audioURLSDidChange = true;        
+      }
+      console.log(this.currentGame.audio[i] + " = " + this.audioURLS[i])
+    }
+    if(this.currentGame.audio.length != this.audioURLS.length) audioURLSDidChange = true;
+    
     if(this.currentGame.question[0] == this.question &&
       wordsDidChange == false &&
-      // this.currentGame.audio[0] == this.audioURLWord1 &&
-      // this.currentGame.audio[1] == this.audioURLWord2 &&
-      // this.currentGame.audio[2] == this.audioURLWord3 &&
-      // this.currentGame.audio[3] == this.audioURLWord4 &&
-      // this.currentGame.audio[4] == this.audioURLWord5 &&
-      // this.currentGame.audio[5] == this.audioURLWord6 &&
-
+      audioURLSDidChange == false &&
       this.currentGame.photoID == this.imageURL){
         return false;
     }else {
@@ -271,18 +278,18 @@ export class VerbPositionGameEditComponent implements OnInit {
     }
   }
 
-  // updateValuesOfInputVariable(){
-
-    // var temp = []
-    // for(var i = 0; i<this.valuesOfInput.length; i++) {
-    //     temp.push((<HTMLInputElement>document.getElementById("valueWord" + i)).value)
-    // }
-    // if(temp.length<3) temp.push("")
-    // if(temp.length<3) temp.push("")
-    // if(temp.length<3) temp.push("")
-    // this.valuesOfInput = temp;
-    // console.log(this.valuesOfInput)
-  // }
+  updateValuesOfInputVariable(){
+    //get all inputfields starting with id 'valueword'
+    var inputFieldNodes = document.querySelectorAll("[id^='valueWord']")
+    // clear the temporary save of words
+    this.valuesOfInput = []
+    // go through all inputfields, if they contain a word, add them to the temporary word save
+    for(var i = 0; i<inputFieldNodes.length; i++) {
+      if((<HTMLInputElement>inputFieldNodes[i]).value != "") {
+        this.valuesOfInput.push((<HTMLInputElement>inputFieldNodes[i]).value)
+      }
+    }
+  }
 
   pictureEdited() {  
     //toggle to refresh correct image after inputting a new URL
@@ -331,7 +338,9 @@ export class VerbPositionGameEditComponent implements OnInit {
       this.finalScreen = false;
       if(this.currentGame != undefined) this.Games.push(this.currentGame)
       this.currentGame = this.previousGames.pop();   
-      this.initSounds();
+      // this.initSounds();
+      this.valuesOfInput = [];
+      this.audioURLS = [];
       this.loadInputFieldValues();
       this.loaded = true;  
     } 
@@ -367,21 +376,23 @@ export class VerbPositionGameEditComponent implements OnInit {
       }
     }
     this.loadInputFieldValues();
-    this.initSounds();
+    // this.initSounds();
   }
 
 
   switchMode() {
     if(this.editingAudio == false) {
-      this.question = (<HTMLInputElement>document.getElementById('question')).value
-      this.valueWord1 = (<HTMLInputElement>document.getElementById('valueWord1')).value
-      this.valueWord2 = (<HTMLInputElement>document.getElementById('valueWord2')).value
-      this.valueWord3 = (<HTMLInputElement>document.getElementById('valueWord3')).value
-      this.valueWord4 = (<HTMLInputElement>document.getElementById('valueWord4')).value
-      this.valueWord5 = (<HTMLInputElement>document.getElementById('valueWord5')).value
-      this.valueWord6 = (<HTMLInputElement>document.getElementById('valueWord6')).value
+      this.updateValuesOfInputVariable();
+      this.audioStrings = [];
+      // this.answers = [(<HTMLInputElement>document.getElementById('valueIch')).value, (<HTMLInputElement>document.getElementById('valueDu')).value, (<HTMLInputElement>document.getElementById('valueErSieEs')).value, (<HTMLInputElement>document.getElementById('valueWir')).value, (<HTMLInputElement>document.getElementById('valueIhr')).value, (<HTMLInputElement>document.getElementById('valueSie')).value];
+      this.question = (<HTMLInputElement>document.getElementById('question')).value;
+      
+      // Strings e.g. Was macht der Affe?, Der Affe, spielt, die Gitarre, ...
+      this.audioStrings.push(this.question);
+      this.audioStrings = this.audioStrings.concat(this.valuesOfInput);
     }
     this.editingAudio = !this.editingAudio    
+    console.log(this.audioURLS)
   }
 
   startVoiceRecord(HTMLFinder){
@@ -399,140 +410,69 @@ export class VerbPositionGameEditComponent implements OnInit {
   toggleLockedHTML() {
     if(this.isRecording) {
       this.isRecording = false;
-      //unlock all audioButtonAnswer0 audioButtonQuestion
-      (<HTMLButtonElement> document.getElementById("audioButtonQuestion")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord1")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord2")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord3")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord4")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord5")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord6")).disabled = false;
+      //lock all record buttons and w8 for response from Server with URL (constructor listens for change)
+      // for(var i = 0; i<this.audioStrings.length ; i++){
+      //   (<HTMLButtonElement> document.getElementById("audioButton" + i)).disabled = true;
+      // }
       clearTimeout(this.recordingTimeout)
       this.allowRecord(false);
     }
-    else{
+    else{      
       this.isRecording = true;
       //lock all except correct one
-      if(this.triggeredHTML != 'question')(<HTMLButtonElement> document.getElementById("audioButtonQuestion")).disabled = true;
-      if(this.triggeredHTML != 'word1')(<HTMLButtonElement> document.getElementById("audioButtonWord1")).disabled = true;
-      if(this.triggeredHTML != 'word2')(<HTMLButtonElement> document.getElementById("audioButtonWord2")).disabled = true;
-      if(this.triggeredHTML != 'word3')(<HTMLButtonElement> document.getElementById("audioButtonWord3")).disabled = true;
-      if(this.triggeredHTML != 'word4')(<HTMLButtonElement> document.getElementById("audioButtonWord4")).disabled = true;
-      if(this.triggeredHTML != 'word5')(<HTMLButtonElement> document.getElementById("audioButtonWord5")).disabled = true;
-      if(this.triggeredHTML != 'word6')(<HTMLButtonElement> document.getElementById("audioButtonWord6")).disabled = true;
+      for(var i = 0; i<this.audioStrings.length ; i++){
+        (<HTMLButtonElement> document.getElementById("audioButton" + i)).disabled = true;
+        console.log("audioButton" + i + " = " + (<HTMLButtonElement> document.getElementById("audioButton" + i)).disabled)
+
+      }
+      (<HTMLButtonElement> document.getElementById("audioButton" + this.triggeredHTML)).disabled = false;
+      
     }
   }
 
   allowRecord (allowed) {
+    // TODO
     console.log("allowRecord")
     if(allowed == true) {
-      console.log("allowRecord = true");
-      (<HTMLButtonElement> document.getElementById("audioButtonQuestion")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord1")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord2")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord3")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord4")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord5")).disabled = false;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord6")).disabled = false;
+      // console.log("allowRecord = true");
+      for(var i = 0; i<this.audioStrings.length ; i++){
+        (<HTMLButtonElement> document.getElementById("audioButton" + i)).disabled = false;
+      }
     }
     else {
-      (<HTMLButtonElement> document.getElementById("audioButtonQuestion")).disabled = true;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord1")).disabled = true;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord2")).disabled = true;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord3")).disabled = true;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord4")).disabled = true;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord5")).disabled = true;
-      (<HTMLButtonElement> document.getElementById("audioButtonWord6")).disabled = true;
+      for(var i = 0; i<this.audioStrings.length ; i++){
+        (<HTMLButtonElement> document.getElementById("audioButton" + i)).disabled = true;
+      }
     }
   }
 
-  initSounds() {
-    this.audioURLQuestion = this.currentGame.question[1]
-    this.audioURLWord1 = this.currentGame.audio[0]
-    this.audioURLWord2 = this.currentGame.audio[1]
-    this.audioURLWord3 = this.currentGame.audio[2]
-    this.audioURLWord4 = this.currentGame.audio[3]
-    this.audioURLWord5 = this.currentGame.audio[4]
-    this.audioURLWord6 = this.currentGame.audio[5]
-  }
+
+  // initSounds() {
+  //   this.audioURLQuestion = this.currentGame.question[1]
+  //   this.audioURLWord1 = this.currentGame.audio[0]
+  //   this.audioURLWord2 = this.currentGame.audio[1]
+  //   this.audioURLWord3 = this.currentGame.audio[2]
+  //   this.audioURLWord4 = this.currentGame.audio[3]
+  //   this.audioURLWord5 = this.currentGame.audio[4]
+  //   this.audioURLWord6 = this.currentGame.audio[5]
+  // }
 
   loadAudio(){
-    if(this.triggeredHTML == 'question') {
-      this.audioURLQuestion = this.audioURL;
-    }
-    else if(this.triggeredHTML == 'word1') {
-      this.audioURLWord1 = this.audioURL;
-    }
-    else if(this.triggeredHTML == 'word2') {
-      this.audioURLWord2 = this.audioURL;
-    }
-    else if(this.triggeredHTML == 'word3') {
-      this.audioURLWord3 = this.audioURL;
-    }
-    else if(this.triggeredHTML == 'word4') {
-      this.audioURLWord4 = this.audioURL;
-    }
-    else if(this.triggeredHTML == 'word5') {
-      this.audioURLWord5 = this.audioURL;
-    }
-    else if(this.triggeredHTML == 'word6') {
-      this.audioURLWord6 = this.audioURL;
-    }
+    this.audioURLS[this.triggeredHTML] = this.audioURL
   }
-
+  
   playAudio(htmlSource) {
-
+    if(this.audioPlaying != -1) this.stopAudio(this.audioPlaying);
     (<HTMLAudioElement>document.getElementById('player' + htmlSource)).play();
     setTimeout(() => {
       this.stopAudio(htmlSource);
     }, (<HTMLAudioElement>document.getElementById('player' + htmlSource)).duration*1000);
-    
-    if(htmlSource == 'question') {
-      this.audioQuestionPlaying = true;
-    }
-    else if(htmlSource == 'word1') {
-      this.audioWord1Playing = true;
-    }
-    else if(htmlSource == 'word2') {
-      this.audioWord2Playing = true;
-    }
-    else if(htmlSource == 'word3') {
-      this.audioWord3Playing = true;
-    }
-    else if(htmlSource == 'word4') {
-      this.audioWord4Playing = true;
-    }
-    else if(htmlSource == 'word5') {
-      this.audioWord5Playing = true;
-    }
-    else if(htmlSource == 'word6') {
-      this.audioWord6Playing = true;
-    }
+    this.audioPlaying = htmlSource;
   }
 
   stopAudio(htmlSource) {
     (<HTMLAudioElement>document.getElementById('player' + htmlSource)).pause()
-    if(htmlSource == 'question') {
-      this.audioQuestionPlaying = false;
-    }
-    else if(htmlSource == 'word1') {
-      this.audioWord1Playing = false;
-    }
-    else if(htmlSource == 'word2') {
-      this.audioWord2Playing = false;
-    }
-    else if(htmlSource == 'word3') {
-      this.audioWord3Playing = false;
-    }
-    else if(htmlSource == 'word4') {
-      this.audioWord4Playing = false;
-    }
-    else if(htmlSource == 'word5') {
-      this.audioWord5Playing = false;
-    }
-    else if(htmlSource == 'word6') {
-      this.audioWord6Playing = false;
-    }
+    this.audioPlaying = -1;
     clearTimeout(this.recordingTimeout)
   }
 
