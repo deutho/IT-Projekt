@@ -75,7 +75,7 @@ export class VocabularyGameEditComponent implements OnInit {
     this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
       if((<HTMLButtonElement> document.getElementById("audioButtonQuestion")) != null) {
-        this.allowRecord(true);
+        this.allowRecord(true);        
       }
       this.loadAudio();
       // console.log("hellloooo")
