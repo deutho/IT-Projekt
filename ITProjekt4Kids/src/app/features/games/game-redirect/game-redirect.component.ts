@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
@@ -9,10 +9,11 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
   templateUrl: './game-redirect.component.html',
   styleUrls: ['./game-redirect.component.css']
 })
-export class GameRedirectComponent implements OnInit {
+export class GameRedirectComponent implements OnInit, OnDestroy {
 
   currentUser: User;
   studentMode: boolean;
+  modesubscription;
 
   constructor(private route: ActivatedRoute, private router: Router, private afs: FirestoreDataService, private appService: AppService) { }
 
@@ -24,7 +25,7 @@ export class GameRedirectComponent implements OnInit {
     //get user
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
-    this.appService.myStudentMode$.subscribe((studentMode) => {
+    this.modesubscription = this.appService.myStudentMode$.subscribe((studentMode) => {
       this.studentMode = studentMode;
     });
 
@@ -32,8 +33,13 @@ export class GameRedirectComponent implements OnInit {
   }
 
   private redirect(gameid, dockey, type) {
+    console.log(this.studentMode);
     if (this.currentUser.role == 3 || this.studentMode == true) this.router.navigate(['game/'+type+'/'+gameid], {queryParams:{k: dockey}, replaceUrl:true});
-    if (this.currentUser.role == 2) this.router.navigate(['game/'+type+'-edit/'+gameid], {queryParams:{k: dockey}, replaceUrl:true});
+    else if (this.currentUser.role == 2) this.router.navigate(['game/'+type+'-edit/'+gameid], {queryParams:{k: dockey}, replaceUrl:true});
   }
 
+
+  ngOnDestroy() {
+    this.modesubscription.unsubscribe();
+  }
 }
