@@ -6,7 +6,7 @@
 
     <!-- Question -->
     <div *ngIf = "editingAudio == false" class="example-container_question question">
-        <input type="text" id="question" placeholder="Hier bitte Frage eingeben">
+        <input type="text" id="question" placeholder="Hier bitte Frage eingeben" value="{{question}}">
     
 
         <!-- Image -->
@@ -36,7 +36,7 @@
                     <svg fill="LightCoral" style=" width: 40px"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" > <g transform="translate(1 1)"> <g> <g> <path d="M255-1C113.618-1-1,113.618-1,255s114.618,256,256,256s256-114.618,256-256S396.382-1,255-1z M255,468.333 c-117.818,0-213.333-95.515-213.333-213.333S137.182,41.667,255,41.667S468.333,137.182,468.333,255S372.818,468.333,255,468.333 z"/> <path d="M382.996,233.667H127.038c-11.782,0-21.333,9.551-21.333,21.333s9.551,21.333,21.333,21.333h255.957 c11.782,0,21.333-9.551,21.333-21.333S394.778,233.667,382.996,233.667z"/> </g> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>
                 </div>
                 <!-- Input Fields -->
-                <div  *ngFor="let item of valuesOfInput;  index as i">
+                <div *ngFor="let item of valuesOfInput;  index as i">
                     <input type="text" class="example-box" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}"> 
                 </div>      
                 <!-- <div>Icons erstellt von <a href="https://icon54.com/" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div> -->
@@ -49,27 +49,56 @@
 
 
     <!-- Audio -->
+    <!-- Question -->
     <div *ngIf = "editingAudio == true" class="audioEditingContainer">
-        <div class="record-div" *ngFor="let audio of audioStrings, index as i">
-            <div class="textForAudio">{{audioStrings[i]}}</div>
+        <div class="record-div">
+            <div class="textForAudio">{{question}}</div>
             <div class="editAudioInteraction" >
-                <button id="audioButton{{i}}" class="recordButton" (click)="startVoiceRecord(i)" >
+                <button id="audioButton0" class="recordButton" (click)="startVoiceRecord(0)" >
                     <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
                 </button>
                 <div class="spacingBetweenButtonAndTimer"></div>
-                <div class="counter" *ngIf="triggeredHTML == i">{{_recordRTC?.recordingTimer}}</div>
-                <audio id = "player{{i}}" [src]="audioURLS[i]"></audio>
+                <div class="counter" *ngIf="triggeredHTML == '0'">{{_recordRTC?.recordingTimer}}</div>
+                <audio id = "player0" [src]="audioURLS[0]"></audio>
                 <div style="padding-left: 20px;">
-                    <div (click) = "noAudioSource()" *ngIf="this.audioURLS[i] == '' || this.audioURLS[i]==null">
+                    <div (click) = "noAudioSource()" *ngIf="this.audioURLS[0] == '' || this.audioURLS[0]==null">
                         <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                             <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
                         </svg>
                     </div>
                     <!-- *ngIf="this.audioURLQuestion != ''" -->
-                    <div (click) = "playAudio(i)" *ngIf="this.audioURLS[i] != '' && this.audioURLS[i]!=null && this.audioPlaying != i" >
+                    <div (click) = "playAudio(0)" *ngIf="this.audioURLS[0] != '' && this.audioURLS[0]!=null && this.audioPlaying != 0" >
                         <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
                     </div>
-                    <div (click) = "stopAudio('question')" *ngIf="this.audioURLS[i] != '' && this.audioPlaying == i">
+                    <div (click) = "stopAudio(0)" *ngIf="this.audioURLS[0] != '' && this.audioPlaying == 0">
+                        <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Words of Sentence -->
+    <div *ngIf = "editingAudio == true" class="audioEditingContainer">
+        <div class="record-div" *ngFor="let audio of valuesOfInput, index as i">
+            <div class="textForAudio">{{valuesOfInput[i]}}</div>
+            <div class="editAudioInteraction" >
+                <button id="audioButton{{i+1}}" class="recordButton" (click)="startVoiceRecord(i+1)" >
+                    <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
+                </button>
+                <div class="spacingBetweenButtonAndTimer"></div>
+                <div class="counter" *ngIf="triggeredHTML == i+1">{{_recordRTC?.recordingTimer}}</div>
+                <audio id = "player{{i+1}}" [src]="audioURLS[i+1]"></audio>
+                <div style="padding-left: 20px;">
+                    <div (click) = "noAudioSource()" *ngIf="this.audioURLS[i+1] == '' || this.audioURLS[i+1]==null">
+                        <svg fill="lightgrey"  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+                        </svg>
+                    </div>
+                    <!-- *ngIf="this.audioURLQuestion != ''" -->
+                    <div (click) = "playAudio(i+1)" *ngIf="this.audioURLS[i+1] != '' && this.audioURLS[i+1]!=null && this.audioPlaying != i+1" >
+                        <svg  width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path></svg>
+                    </div>
+                    <div (click) = "stopAudio(i+1)" *ngIf="this.audioURLS[i+1] != '' && this.audioPlaying == i+1">
                         <svg width="12" height="12" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pause" class="svg-inline--fa fa-pause fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"></path></svg>                        
                     </div>
                 </div>

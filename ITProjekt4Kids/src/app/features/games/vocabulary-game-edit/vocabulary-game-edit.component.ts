@@ -90,11 +90,8 @@ export class VocabularyGameEditComponent implements OnInit {
     if(this.currentUser.role == 3) {
       this.unauthorized = true;
     } else {
-
         this.folderID = this.route.snapshot.paramMap.get('id');
-
         let dockey: string = this.route.snapshot.queryParamMap.get('k');
-
     
         //get the data of the game
         await this.afs.getFolderElement(dockey).then(data => {
@@ -109,9 +106,7 @@ export class VocabularyGameEditComponent implements OnInit {
         if (this.folder.editors.includes(this.currentUser.uid)) this.isEditor = true;
 
         //set the header
-        this.appService.myHeader(this.folder.name);
-
-    
+        this.appService.myHeader(this.folder.name);    
       
         // get games
         await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
@@ -124,7 +119,6 @@ export class VocabularyGameEditComponent implements OnInit {
           this.Games.forEach(element => {
             numbers.push(element.number);
           });
-
           //calculate the next number
           this.nextCountNumber = Math.max(...numbers)+1;
         }
@@ -137,10 +131,7 @@ export class VocabularyGameEditComponent implements OnInit {
         else this.loadNextGame(true);
       }
   }
-
-
   
-
   startVoiceRecord(HTMLFinder){
     this.triggeredHTML = HTMLFinder;
     this._recordRTC.toggleRecord(this.currentGame.uid);
