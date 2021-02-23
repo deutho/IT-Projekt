@@ -186,13 +186,12 @@ export class MainMenuComponent implements OnInit {
   }
     
   editElement(item) {
-    if (this.currentPathForHTML.substring(0,9) != "derdieDAZ" && item.uid != 'derdiedaz') {
-      this.editElementForm = this.fb.group({
-        name:  [item.name, Validators.required],
-      });
-      this.folderToChange = item;
-      this.editing = true;
-    }
+    this.editElementForm = this.fb.group({
+      name:  [item.name, Validators.required],
+    });
+    this.folderToChange = item;
+    this.editing = true;
+    
   }
 
   async edit() {
@@ -353,7 +352,7 @@ export class MainMenuComponent implements OnInit {
         }
       }
     });  
-    if (cascading == false) await this.afs.deleteFolder(item, this.currentDocKey).then(() => this.getFolders(this.currentDocKey));
+    if (cascading == false) await this.afs.deleteFolder(item, this.currentDocKey).then(() => this.initialize(this.route.snapshot.params['id']));
   }
   
 }
