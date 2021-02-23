@@ -297,7 +297,7 @@ export class MainMenuComponent implements OnInit {
 
   deleteElement(item: Folder) {
     //in case someone is dumb enough and trys to delete our derdiedaz games *hust* schiffer *hust*
-    if (item.editors.includes(this.currentUser.uid)) {
+    if (item.owner == this.currentUser.uid) {
       this.itemtodelete = item;
       this.deleteElementOverlay = true;
     } 
@@ -329,7 +329,7 @@ export class MainMenuComponent implements OnInit {
         await this.afs.deleteDocument('folders', element);
       });
 
-      await this.afs.deleteFolder(this.itemtodelete, this.currentDocKey).then(() => this.getFolders(this.currentDocKey));
+      await this.afs.deleteFolder(this.itemtodelete, this.currentDocKey).then(() => this.initialize(this.route.snapshot.params['id']));
     }
     
     this.deleteElementOverlay = false;
