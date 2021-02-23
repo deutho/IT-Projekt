@@ -72,6 +72,7 @@ export class VerbPositionGameEditComponent implements OnInit {
   audioPlaying = -1;
   easyMode: boolean = true;
   default: boolean;
+  punctuationType: string = ".";
 
   constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
     this.appService.myImageURL$.subscribe((data) => {
@@ -155,7 +156,7 @@ export class VerbPositionGameEditComponent implements OnInit {
         this.valuesOfInput = ['', '', ''];
       	this.audioData = ['', '', ''];
         this.audioURLS = ['', '', '']
-        var newGame = new VerbPositionGame(uid, this.valuesOfInput, this.audioData, ['',''], './../../../../assets/Images/Placeholder-Image/north_blur_Text.png', this.folderUID, this.easyMode);
+        var newGame = new VerbPositionGame(uid, this.valuesOfInput, this.audioData, ['',''], './../../../../assets/Images/Placeholder-Image/north_blur_Text.png', this.folderUID, this.easyMode, this.punctuationType);
         this.currentGame = newGame;        
      }
     if( this.noMoreGames == true) this.valuesOfInput = ['', '', '']
@@ -182,7 +183,10 @@ export class VerbPositionGameEditComponent implements OnInit {
     for( var i =0; i < this.currentGame.audio.length; i++) {
       this.audioURLS.push(this.currentGame.audio[i])
     }
-    // this.updateValuesOfInputVariable();
+    
+    // Punctuation Type (.,?,!) 
+    this.punctuationType = this.currentGame.punctuationType
+    
   }
 
   saveChanges() {
@@ -211,7 +215,8 @@ export class VerbPositionGameEditComponent implements OnInit {
         [this.question, this.audioURLS[0]],
         this.imageURL,
         this.folderUID,
-        this.easyMode)    
+        this.easyMode,
+        this.punctuationType)    
         this.afs.updateTask(this.currentGame);       
         this.finalScreen = false;
         this.saved = true;
@@ -259,12 +264,16 @@ export class VerbPositionGameEditComponent implements OnInit {
         audioURLSDidChange = true;        
       }
     }
+
+    this.punctuationType = (<HTMLSelectElement>document.getElementById("punctuationSelector")).value
+
     if(this.currentGame.audio.length != this.audioURLS.length) audioURLSDidChange = true;
     if(this.currentGame.question[0] == this.question &&
       wordsDidChange == false &&
       audioURLSDidChange == false &&
       this.currentGame.photoID == this.imageURL &&
-      this.currentGame.easyMode == this.easyMode){
+      this.currentGame.easyMode == this.easyMode &&
+      this.currentGame.punctuationType == this.punctuationType){
         return false;
     }else {
       //true - es gibt changes, weil inhalte nicht übereinstimmen -> diese speichern
@@ -375,6 +384,7 @@ export class VerbPositionGameEditComponent implements OnInit {
     }
     this.loadValuesOfGame();
     this.easyMode = this.currentGame.easyMode;
+    
     // this.initSounds();
   }
 

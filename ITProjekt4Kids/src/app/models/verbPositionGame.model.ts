@@ -7,6 +7,7 @@ export class VerbPositionGame{
         public question: string[],
         public photoID: string,
         public folderUID: string,
-        public easyMode: boolean) {
+        public easyMode: boolean,
+        public punctuationType: string) {
     }
 }

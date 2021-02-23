@@ -119,14 +119,14 @@ export class VerbPositionGameComponent implements OnInit {
     for(var i = 0; i < this.correct.length; i++){
       var word = this.correct[i]
 
-        if(word.includes(".")){
+        if(word.includes(this.currentGame.punctuationType)){
           word = word.substr(0, word.length - 1)
         }
         this.correct[i] = word
     }
 
     //add point to last word
-    var lastWord = this.correct[this.correct.length-1] + "."
+    var lastWord = this.correct[this.correct.length-1] + this.currentGame.punctuationType
     this.correct[this.correct.length-1] = lastWord
 
     for(let i = 0; i < this.sentence.length; i++) {
@@ -206,13 +206,13 @@ export class VerbPositionGameComponent implements OnInit {
   point(){
       for(var i = 0; i < this.sentence.length; i++){
         var word = this.sentence[i]
-        if(word.includes(".")){
+        if(word.includes(this.currentGame.punctuationType)){
           word = word.substr(0, word.length - 1)
         }
         this.sentence[i] = word
       }
     var wordPluspoint = this.sentence[this.sentence.length-1]
-    wordPluspoint = wordPluspoint + "."
+    wordPluspoint = wordPluspoint + this.currentGame.punctuationType
     this.sentence[this.sentence.length-1] = wordPluspoint   
   }
 
@@ -256,7 +256,7 @@ export class VerbPositionGameComponent implements OnInit {
 
   playSound(soundfile: string) {
     soundfile = soundfile.toLowerCase()
-    if(soundfile.indexOf('.') != -1) soundfile = soundfile.substr(0, soundfile.length-1)
+    if(soundfile.indexOf(this.currentGame.punctuationType) != -1) soundfile = soundfile.substr(0, soundfile.length-1)
     console.log(this.currentGame.question[1])
     if(this.speakerMode == false) return;
     interface keyMap {
