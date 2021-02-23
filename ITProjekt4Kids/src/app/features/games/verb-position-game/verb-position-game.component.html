@@ -3,7 +3,7 @@
     <div class="content">
 
         <!-- Question-->
-        <h4>{{currentGame.question[0]}}</h4>
+        <h4 (click)="playSound(currentGame.question[0])">{{currentGame.question[0]}}</h4>
 
         <!-- Image-->
         <div class="item-image" >
@@ -13,8 +13,6 @@
         </div>
 
         <!-- Words -->
-
-        <!-- <div id="selection" class= "example-list "*ngIf = "this.answerIsCorrect == true"  (cdkDropListDropped)="drop($event)"></div> -->
         <div
             id="selection"
             cdkDropList
@@ -23,12 +21,8 @@
             cdkDropListEnterPredicate="canDrop"
             (cdkDropListDropped)="drop($event)"
             >
-            <!-- <div *ngIf = "this.answerIsCorrect == true">
-                <div id= "selection" class="example-box" *ngFor="let w of sentence, index as i" cdkDrag [cdkDragDisabled]="w.disabled">{{w.value}}
-                </div>
-            </div> -->
             
-            <div class="example-box" *ngFor="let words of sentence, index as i" cdkDrag="this.ucFirst()" id="{{ 'word' + i }}">{{words}}</div>
+            <div [cdkDragDisabled]="allowDrag()" class="example-box" *ngFor="let words of sentence, index as i" cdkDrag="this.ucFirst()" id="{{ 'word' + i }}" (click)="playSound(words)">{{words}}</div>
         </div>
 
         <!--Fertig Button -->

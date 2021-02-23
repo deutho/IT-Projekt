@@ -297,7 +297,7 @@
           </div>
           <div class="shadow scale"></div>
           <div class="message"><h1 class="alert">Toll gemacht!</h1></div>
-          <button class="button-box" ><h1 class="green" >Startseite</h1></button>
+          <button class="button-box" (click)="goBack()"><h1 class="green" >Startseite</h1></button>
       </div>
       <div *ngIf="happyFace() == false" id="error-box">
           <div class="dot"></div>
@@ -309,7 +309,7 @@
           </div>
           <div class="shadow move"></div>
           <div class="message"><h1 class="alert">Oje! Das musst du noch Üben!</h1></div>
-          <button class="button-box"><h1 class="red" >Startseite</h1></button>
+          <button class="button-box" (click)="goBack()"><h1 class="red" >Startseite</h1></button>
       </div>
   </div>
         

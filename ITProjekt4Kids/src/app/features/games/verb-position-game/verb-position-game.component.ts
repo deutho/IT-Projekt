@@ -4,17 +4,31 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { VerbPositionGame } from 'src/app/models/VerbPositionGame.model';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { AppService } from 'src/app/services/app.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Folder } from 'src/app/models/folder.model';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
+const starAnimation = trigger('starAnimation', [
+  transition('* <=> *', [
+    query(':enter',
+      [style({ opacity: 0 }), stagger('200ms', animate('600ms ease-out', style({ opacity: 1 })))],
+      { optional: true }
+    ),
+    query(':leave',
+      animate('200ms', style({ opacity: 0 })),
+      { optional: true}
+    )
+  ])
+]);
 
 @Component({
   selector: 'app-verb-position-game',
   templateUrl: './verb-position-game.component.html',
-  styleUrls: ['./verb-position-game.component.css']
+  styleUrls: ['./verb-position-game.component.css'],
+  animations: [starAnimation]
 })
 export class VerbPositionGameComponent implements OnInit {
   
-  constructor(private afs: FirestoreDataService, private appService: AppService, private route: ActivatedRoute) {
+  constructor(private afs: FirestoreDataService, private appService: AppService, private route: ActivatedRoute, private router: Router) {
    }
 
    finito: boolean = false
@@ -38,6 +52,7 @@ export class VerbPositionGameComponent implements OnInit {
    roundsLostAnimation = [];
    noQuestionsInGame = false;
    teacherPlaying: boolean;
+   audio = new Audio("");
 
   async ngOnInit(): Promise<void> {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
@@ -168,16 +183,22 @@ export class VerbPositionGameComponent implements OnInit {
     
   //uppercase first letter of the first box
   capitalizeFirst() {
+    if(this.currentGame.easyMode) return;
     var capitalizeFirstLetter = this.sentence[0]
 
     capitalizeFirstLetter =  capitalizeFirstLetter.charAt(0).toUpperCase() + capitalizeFirstLetter.slice(1)
     this.sentence[0] = capitalizeFirstLetter
 
     //change all other first letters of words to lowercase
+    // for(var i = 1; i < this.sentence.length; i++){
+    //   var word = this.sentence[i]
+    //   word = word.charAt(0).toLowerCase() + word.slice(1)
+    //   this.sentence[i] = word
+    // }
     for(var i = 1; i < this.sentence.length; i++){
-      var word = this.sentence[i]
-      word = word.charAt(0).toLowerCase() + word.slice(1)
-      this.sentence[i] = word
+      for(var j = 0; j< this.currentGame.words.length; j++){
+        if(this.currentGame.words[j].toLowerCase() == this.sentence[i].toLowerCase()) this.sentence[i] = this.currentGame.words[j]
+      }      
     }
   }
 
@@ -208,7 +229,49 @@ export class VerbPositionGameComponent implements OnInit {
   switchMode() {
     this.loaded = false;
     this.speakerMode = !this.speakerMode;
+    this.diasableAndEnableHTMLAccordinglyWithSomeCSS();    
     this.loaded = true;
+  }
+
+  diasableAndEnableHTMLAccordinglyWithSomeCSS(){
+    
+    // CSS for Cursor
+    const demoClasses = document.querySelectorAll('.example-box');
+    if(this.speakerMode == true) {      
+      demoClasses.forEach(element => {
+        element.setAttribute("style", "cursor: pointer")
+      });
+    }
+    else{
+      demoClasses.forEach(element => {
+        element.setAttribute("style", "cursor: move")
+      });
+    }
+  }
+
+  allowDrag(){
+    if(this.speakerMode) return true;
+    return false;
+  }
+
+  playSound(soundfile: string) {
+    soundfile = soundfile.toLowerCase()
+    if(soundfile.indexOf('.') != -1) soundfile = soundfile.substr(0, soundfile.length-1)
+    console.log(this.currentGame.question[1])
+    if(this.speakerMode == false) return;
+    interface keyMap {
+      [key: string]: string;
+    } 
+    let answerMap:keyMap = {};
+    answerMap[this.currentGame.question[0].toLowerCase()] = this.currentGame.question[1]
+    for(var i = 0; i<this.currentGame.words.length; i++)
+    {
+      answerMap[this.currentGame.words[i].toLowerCase()] = this.currentGame.audio[i+1]
+      
+    }
+    console.log(answerMap)
+    this.audio = new Audio(answerMap[soundfile]);
+    this.audio.play();
   }
 
   happyFace() {
@@ -224,7 +287,7 @@ export class VerbPositionGameComponent implements OnInit {
   }
 
   goBack() {
-
+    this.router.navigate(['']);
   }
 
 }

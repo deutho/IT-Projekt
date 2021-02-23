@@ -71,6 +71,7 @@ export class VocabularyGameEditComponent implements OnInit {
     
     this.appService.myImageURL$.subscribe((data) => {
       this.imageURL = data;
+      this.pictureEdited(data)
     });    
     this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
@@ -404,10 +405,10 @@ export class VocabularyGameEditComponent implements OnInit {
     }
   }
 
-  pictureEdited() {  
-    //toggle to refresh correct image after inputting a new URL
-    this.imageURL = (<HTMLInputElement>document.getElementById('URL')).value;
-
+  pictureEdited(imageURL?: string) {  
+    if((<HTMLInputElement>document.getElementById('URL')) == null) return;
+    if(imageURL != null) this.imageURL = imageURL
+    else this.imageURL = (<HTMLInputElement>document.getElementById('URL')).value;
     this.editingPicture = false;            
   }
 

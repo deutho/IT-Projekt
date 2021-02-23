@@ -6,6 +6,7 @@ export class VerbPositionGame{
         public audio: string[],
         public question: string[],
         public photoID: string,
-        public folderUID: string) {
+        public folderUID: string,
+        public easyMode: boolean) {
     }
 }

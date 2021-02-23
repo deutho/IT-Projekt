@@ -431,6 +431,10 @@ export class VocabularyGameComponent implements OnInit {
     else return false;
   }
 
+  goBack() {
+    this.router.navigate(['']);
+  }
+
 
 }
 

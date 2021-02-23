@@ -6,7 +6,7 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { take } from 'rxjs/internal/operators/take';
 import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Folder } from 'src/app/models/folder.model';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 const starAnimation = trigger('starAnimation', [
@@ -31,7 +31,7 @@ const starAnimation = trigger('starAnimation', [
 })
 export class PersonalFormsGameComponent implements OnInit {
 
-  constructor(private afs: FirestoreDataService, private appService: AppService, private route: ActivatedRoute) {}
+  constructor(private afs: FirestoreDataService, private appService: AppService, private route: ActivatedRoute, private router: Router) {}
 
   
   Games: PersonalFormsGame[] = []
@@ -413,5 +413,9 @@ export class PersonalFormsGameComponent implements OnInit {
     answerMap[this.currentGame.question[0]] = this.currentGame.question[1]
     this.audio = new Audio(answerMap[soundfile]);
     this.audio.play();
+  }
+
+  goBack() {
+    this.router.navigate(['']);
   }
 }

@@ -30,7 +30,7 @@
 
         <!-- Words -->
         <div class="gameValues">
-            <div class="example-container_values"  style="display: flex; flex-direction: row; ">
+            <div class="example-container_values"  style="display: flex; flex-direction: row; " [ngbTooltip]="!easyMode ? 'Um es den Schülern schwerer zu machen, schreiben Sie das erste Satzglied so, als würde es mitten im Satz stehen. Bsp.: Der Affe => der Affe' : null">
                 <!-- <div>Icons erstellt von <a href="https://www.flaticon.com/de/autoren/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div> -->
                 <div style="display: flex; vertical-align: middle; padding-right: 15px;" (click)="removeInputField()">
                     <svg fill="LightCoral" style=" width: 40px"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" > <g transform="translate(1 1)"> <g> <g> <path d="M255-1C113.618-1-1,113.618-1,255s114.618,256,256,256s256-114.618,256-256S396.382-1,255-1z M255,468.333 c-117.818,0-213.333-95.515-213.333-213.333S137.182,41.667,255,41.667S468.333,137.182,468.333,255S372.818,468.333,255,468.333 z"/> <path d="M382.996,233.667H127.038c-11.782,0-21.333,9.551-21.333,21.333s9.551,21.333,21.333,21.333h255.957 c11.782,0,21.333-9.551,21.333-21.333S394.778,233.667,382.996,233.667z"/> </g> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>
@@ -79,7 +79,7 @@
     </div>
     <!-- Words of Sentence -->
     <div *ngIf = "editingAudio == true" class="audioEditingContainer">
-        <div class="record-div" *ngFor="let audio of valuesOfInput, index as i">
+        <div class="record-div" *ngFor="let audio of valuesOfInput, index as i" >
             <div class="textForAudio">{{valuesOfInput[i]}}</div>
             <div class="editAudioInteraction" >
                 <button id="audioButton{{i+1}}" class="recordButton" (click)="startVoiceRecord(i+1)" >
@@ -116,6 +116,8 @@
         <button (click)="switchMode()">Text/Audio-Switch</button>
         <button (click)="this.leftArrowClicked()">Zurück</button>
         <button (click)="this.rightArrowClicked()">Weiter</button>
+        <button (click)="this.switchDifficulty()" *ngIf="!this.easyMode">wechsel zu leichter Modus</button>
+        <button (click)="this.switchDifficulty()" *ngIf="this.easyMode">wechsel zu schwieriger Modus</button>
     </div>
 
     <!-- Feedback -->

@@ -70,10 +70,14 @@ export class VerbPositionGameEditComponent implements OnInit {
   audioStrings: string[] = [];
   audioURLS: string[] = [];
   audioPlaying = -1;
+  easyMode: boolean = true;
+  default: boolean;
 
   constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
     this.appService.myImageURL$.subscribe((data) => {
       this.imageURL = data;
+      // console.log(data)
+      this.pictureEdited(data)
     });
     this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
@@ -129,6 +133,7 @@ export class VerbPositionGameEditComponent implements OnInit {
     if(this.finalScreen && this.Games.length == 0) {
       this.noMoreGames = true;
       setTimeout(() => this.noMoreGames = false, 2500);
+      if(this.valuesOfInput = []) this.valuesOfInput = ['', '', '']
       return; //maybe add some feedback here
     }
 
@@ -144,16 +149,17 @@ export class VerbPositionGameEditComponent implements OnInit {
     // if game is empty, or you clicked past the last page in the game
     else {
         this.finalScreen = true;
+        this.default = true; 
         let uid = uuidv4();  
         this.question = '';
         this.valuesOfInput = ['', '', ''];
       	this.audioData = ['', '', ''];
         this.audioURLS = ['', '', '']
-        var newGame = new VerbPositionGame(uid, this.valuesOfInput, this.audioData, ['',''], './../../../../assets/Images/Placeholder-Image/north_blur_Text.png', this.folderUID);
+        var newGame = new VerbPositionGame(uid, this.valuesOfInput, this.audioData, ['',''], './../../../../assets/Images/Placeholder-Image/north_blur_Text.png', this.folderUID, this.easyMode);
         this.currentGame = newGame;        
      }
     if( this.noMoreGames == true) this.valuesOfInput = ['', '', '']
-    
+    this.easyMode = this.currentGame.easyMode;
 
     //  lets the html know, that content can now be loaded
     //  this.initSounds();
@@ -204,7 +210,8 @@ export class VerbPositionGameEditComponent implements OnInit {
         this.audioURLS,
         [this.question, this.audioURLS[0]],
         this.imageURL,
-        this.folderUID)    
+        this.folderUID,
+        this.easyMode)    
         this.afs.updateTask(this.currentGame);       
         this.finalScreen = false;
         this.saved = true;
@@ -256,7 +263,8 @@ export class VerbPositionGameEditComponent implements OnInit {
     if(this.currentGame.question[0] == this.question &&
       wordsDidChange == false &&
       audioURLSDidChange == false &&
-      this.currentGame.photoID == this.imageURL){
+      this.currentGame.photoID == this.imageURL &&
+      this.currentGame.easyMode == this.easyMode){
         return false;
     }else {
       //true - es gibt changes, weil inhalte nicht übereinstimmen -> diese speichern
@@ -277,9 +285,10 @@ export class VerbPositionGameEditComponent implements OnInit {
     }
   }
 
-  pictureEdited() {  
-    //toggle to refresh correct image after inputting a new URL
-    this.imageURL = (<HTMLInputElement>document.getElementById('URL')).value;
+  pictureEdited(imageURL?: string) {  
+    if((<HTMLInputElement>document.getElementById('URL')) == null) return;
+    if(imageURL != null) this.imageURL = imageURL
+    else this.imageURL = (<HTMLInputElement>document.getElementById('URL')).value;
     console.log(this.imageURL)
     this.editingPicture = false;            
   }
@@ -322,11 +331,14 @@ export class VerbPositionGameEditComponent implements OnInit {
       return; //maybe add some feedback here
     }else{
       this.finalScreen = false;
-      if(this.currentGame != undefined) this.Games.push(this.currentGame)
+      if(this.currentGame != undefined  && this.default == false) this.Games.push(this.currentGame)
+      else this.default = false;
+
       this.currentGame = this.previousGames.pop();   
       // this.initSounds();
       this.valuesOfInput = [];
       this.audioURLS = [];
+      this.easyMode = this.currentGame.easyMode;
       this.loadValuesOfGame();
       this.loaded = true;  
     } 
@@ -362,6 +374,7 @@ export class VerbPositionGameEditComponent implements OnInit {
       }
     }
     this.loadValuesOfGame();
+    this.easyMode = this.currentGame.easyMode;
     // this.initSounds();
   }
 
@@ -471,6 +484,12 @@ export class VerbPositionGameEditComponent implements OnInit {
 
   removeInputField() {
     this.valuesOfInput.pop()
+  }
+
+  switchDifficulty(){
+    this.easyMode = !this.easyMode
+    // if(!this.easyMode)document.getElementById("customSwitch1").setAttribute("checked", null);
+    // else document.getElementById("customSwitch1").removeAttribute("checked")
   }
 
 }
