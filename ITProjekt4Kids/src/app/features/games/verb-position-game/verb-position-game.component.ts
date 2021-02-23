@@ -53,6 +53,7 @@ export class VerbPositionGameComponent implements OnInit {
    noQuestionsInGame = false;
    teacherPlaying: boolean;
    audio = new Audio("");
+   wrongAnwserNotification: boolean = false;
 
   async ngOnInit(): Promise<void> {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
@@ -114,7 +115,7 @@ export class VerbPositionGameComponent implements OnInit {
   evaluateGame(){
     var Result = []
     var wordId = []
-    
+    this.wrongAnwserNotification = false;
     //return all ponints of words, which where added before
     for(var i = 0; i < this.correct.length; i++){
       var word = this.correct[i]
@@ -163,6 +164,9 @@ export class VerbPositionGameComponent implements OnInit {
       //Stimme "Oje, probier es noch einmal, du schaffst das!"
     }
     this.evaluated = true;
+    if(!this.answerIsCorrect) {
+      this.wrongAnwserNotification = true;
+    }
   }
 
 
