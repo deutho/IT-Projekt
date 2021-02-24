@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { take, tap } from 'rxjs/operators';
 import { User } from 'src/app/models/users.model';
+import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import {MainComponent} from '../main/main.component';
@@ -22,7 +23,7 @@ export class ProfileComponent implements OnInit {
   passwordChange = undefined;
   
   
-  constructor(public afs: FirestoreDataService, public auth: AuthService, private fb: FormBuilder) {
+  constructor(public afs: FirestoreDataService, public auth: AuthService, private fb: FormBuilder, private app: AppService) {
     
   }
   
@@ -41,6 +42,10 @@ export class ProfileComponent implements OnInit {
       newPasswordConfirm: new FormControl('', Validators.required),
     });
     this.passwordChange = false;
+
+
+    this.app.myHeader("Profil");
+
   }
 
   async changePassword() {

@@ -1,5 +1,6 @@
 .example-box {
   padding: 20px 10px;
+  border: 0px;
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
@@ -12,38 +13,31 @@
   min-height: 63px;
 }
 
-.example-container_question {
+/* .example-container_question {
   width: 20%;
   max-width: 100%;
   margin: 0 25px 25px 0;
   display: inline-block;
   vertical-align: top;
   min-width: 100px;
-}
+  border-color: grey;
+} */
 
-.example-container_person {
-  width: 5%;
-  max-width: 100%;
-  margin: 0 25px 25px 0;
+.example-container {
+  margin: 0 0px 0px 0;
   display: inline-block;
   vertical-align: top;
   min-width: 100px;
-}
-
-.example-container_values{
   width: 20%;
   max-width: 100%;
-  margin: 0 25px 25px 0;
-  display: inline-block;
-  vertical-align: top;
-  min-width: 100px;
 }
+
 
 .example-list {
-  border-bottom: solid 1px #ccc;
+  /* border-bottom: solid 1px #ccc; */
   min-height: 63px;
   background: white;
-  /* border-radius: 4px; */
+  border-radius: 4px;
   overflow: hidden;
   display: block;
 }
@@ -107,11 +101,20 @@
   padding: 20px 0px;
 }
 
-.question {
+.centered-flex-column {
   display:flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.question {
+  border-color: lightgray;
+  border-radius: 4px;
+  border-style: solid;
+  margin: 0px 0px 20px -20px;
+  font-size: larger;
+  text-align: center;
 }
 
 .gameValues {
