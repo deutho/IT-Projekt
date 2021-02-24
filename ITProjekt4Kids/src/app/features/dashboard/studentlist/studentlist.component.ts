@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/users.model';
+import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 
@@ -15,13 +16,13 @@ export class StudentlistComponent implements OnInit {
   loading: boolean;
 
 
-  constructor(private afs: FirestoreDataService, private auth: AuthService) { }
+  constructor(private afs: FirestoreDataService, private auth: AuthService, private app: AppService) { }
 
  async ngOnInit() {
    //Get the current teacher
    await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
-
+   this.app.myHeader("Schülerliste")
    this.getStudents();
   }
 
