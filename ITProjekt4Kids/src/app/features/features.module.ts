@@ -27,6 +27,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import { GameRedirectComponent } from './games/game-redirect/game-redirect.component';
+import { StudentlistComponent } from './dashboard/studentlist/studentlist.component';
 
 
 
@@ -51,7 +52,8 @@ declarations: [
   RedirectComponent,
   NotFoundComponent,
   AccessDeniedComponent,
-  GameRedirectComponent],
+  GameRedirectComponent,
+  StudentlistComponent],
 imports: [
   CommonModule,
   RouterModule,

@@ -1,0 +1,9 @@
+<div *ngIf = "loading === false">
+    <p>Liste der Schüler von {{currentUser.firstname}} {{currentUser.lastname}}</p>
+
+    <div *ngFor="let student of studentList;  index as i">
+
+        <p>Nr.:{{i+1}} {{student.lastname}} {{student.firstname}} </p>
+
+    </div>
+</div>

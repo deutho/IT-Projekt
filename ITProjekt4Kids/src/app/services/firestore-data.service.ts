@@ -54,6 +54,16 @@ export class FirestoreDataService {
         return this._afs.collectionGroup('users', ref => ref.where('uid', "==", uid));
     }
 
+    /**
+     * Gets all children of a User based on the parents ID
+     * @param uid 
+     */
+    async getChildernUserByParentID(uid: string): Promise<User[]>{
+        let ref: AngularFirestoreCollectionGroup<any> = this._afs.collectionGroup('users', ref => ref.where('parent', "==", uid));
+        return await ref.valueChanges().pipe(take(1)).toPromise()
+
+    }
+
     /**adds a user with id and parent
      * 
      * @param user user id

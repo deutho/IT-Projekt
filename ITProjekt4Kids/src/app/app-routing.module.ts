@@ -16,6 +16,7 @@ import { NotFoundComponent } from './features/not-found/not-found.component';
 import { AccessDeniedComponent } from './features/access-denied/access-denied.component';
 import { GameRedirectComponent } from './features/games/game-redirect/game-redirect.component';
 import { AuthGuard } from './services/AuthGuard';
+import { StudentlistComponent } from './features/dashboard/studentlist/studentlist.component';
 
 
 const routes: Routes = [
@@ -28,12 +29,16 @@ const routes: Routes = [
   { path: "profile",
   component: ProfileComponent,
   canActivate: [AuthGuard]
- 
 },
+
   { path: "add-user", 
   component: AddUserComponent,
   canActivate: [AuthGuard]
+},
 
+{ path: "studentlist", 
+  component: StudentlistComponent,
+  canActivate: [AuthGuard]
 },
 
   { path: "statistics",
