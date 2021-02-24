@@ -1,4 +1,4 @@
-.example-box {
+/* .example-box {
     padding: 20px 10px;
     border-bottom: solid 1px #ccc;
     color: rgba(0, 0, 0, 0.87);
@@ -10,6 +10,38 @@
     background: white;
     font-size: 14px;
     min-height: 63px;
+  } */
+
+  .inputFieldContainer{
+    /* display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start; */
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: stretch;
+    max-width: 60%;
+  }
+  .example-box {
+    padding: 6px 10px;
+    flex-grow: 1;
+    flex-shrink: 3;
+    /* font-size: 3vh; */
+    /* border: solid 1px #ccc;
+    color: rgba(0, 0, 0, 1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    background: white;
+    
+    min-height: 40px;
+    height: 40px;     */
+  }
+
+  input {
+    width: 100px
   }
   
   .example-container_question {
@@ -36,15 +68,8 @@
     vertical-align: top;
     min-width: 100px;
   }
-  
-  .example-container_values{
-    width: 20%;
-    max-width: 100%;
-    margin: 0 25px 25px 0;
-    display: inline-block;
-    vertical-align: top;
-    min-width: 100px;
-  }
+
+
   
   .example-list {
     border-bottom: solid 1px #ccc;
@@ -117,13 +142,7 @@
     padding: 20px 0px;
   }
   
-  .gameValues {
-    display:flex;
-    flex-direction: row;
-    margin:0 auto;
-    display:block;
-    justify-content: center;
-  }
+
   
   .actionBar {
     display:flex;
@@ -257,3 +276,61 @@ min-width: 280px
   min-width: 50px; 
   min-height: 50px;
 }
+
+
+/* inputfield resizing - great alternative but no time to implement
+ */
+/* *,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.input-sizer {
+  display: inline-grid;
+  vertical-align: top;
+  align-items: center;
+  position: relative;
+  border: solid 1px;
+  padding: 0.25em 0.5em;
+  margin: 5px;
+}
+.input-sizer.stacked {
+  padding: 0.5em;
+  align-items: stretch;
+}
+.input-sizer.stacked::after,
+.input-sizer.stacked textarea {
+  grid-area: 2/1;
+}
+.input-sizer::after,
+.input-sizer textarea {
+  width: auto;
+  min-width: 1em;
+  grid-area: 1/2;
+  font: inherit;
+  padding: 0.25em;
+  margin: 0;
+  resize: none;
+  background: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: none;
+}
+
+.input-sizer::after {
+  content: attr(data-value) " ";
+  visibility: hidden;
+  white-space: pre-wrap;
+}
+.input-sizer:focus-within {
+  outline: solid 1px blue;  
+}
+.input-sizer:focus-within > span {
+  color: blue;
+}
+.input-sizer:focus-within textarea:focus,
+.input-sizer:focus-within input:focus {
+  outline: none;
+} */

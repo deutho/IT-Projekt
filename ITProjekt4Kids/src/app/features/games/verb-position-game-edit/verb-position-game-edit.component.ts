@@ -73,6 +73,11 @@ export class VerbPositionGameEditComponent implements OnInit {
   easyMode: boolean = true;
   default: boolean;
   punctuationType: string = ".";
+  inputForWidthCalc: string;
+  c;
+  ctx;
+  e=null;
+
 
   constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
     this.appService.myImageURL$.subscribe((data) => {
@@ -90,6 +95,16 @@ export class VerbPositionGameEditComponent implements OnInit {
   }
 
     async ngOnInit(): Promise<void> {
+      this.c=document.createElement("canvas");
+      this.c.width=1000;
+      this.c.height=50;
+      this.ctx = this.c.getContext('2d');
+      this.ctx.fillStyle='#00F';
+      this.ctx.font='16px Times, Serif';
+      // ctx.textBaseline = 'Top';
+      
+
+
     //get user
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
@@ -126,6 +141,7 @@ export class VerbPositionGameEditComponent implements OnInit {
           this.loadNextGame();
           // this.initSounds();
     }
+
   }
 
 
@@ -501,5 +517,22 @@ export class VerbPositionGameEditComponent implements OnInit {
     // if(!this.easyMode)document.getElementById("customSwitch1").setAttribute("checked", null);
     // else document.getElementById("customSwitch1").removeAttribute("checked")
   }
+
+  calcWidth(){
+
+
+    
+      if(this.e==null) this.e=document.getElementById('test');
+      var myText=this.e.value;
+      var textWidth=this.ctx.measureText(myText);
+      if(textWidth.width<50) return;
+      this.e.style.width=textWidth.width+45+"px";
+    
+  }
+
+
+
+
+  
 
 }

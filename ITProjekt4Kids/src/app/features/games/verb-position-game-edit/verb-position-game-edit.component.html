@@ -3,7 +3,7 @@
     <div *ngIf = "this.unauthorized === true">
         Sie sind nicht berechtigt, dieses Spiel zu bearbeiten (Styling bitte Thooomas)
     </div>
-
+    <input type="text" id="test" (keypress)="calcWidth()"> 
     <!-- Question -->
     <div *ngIf = "editingAudio == false" class="example-container_question question">
         <input type="text" id="question" placeholder="Hier bitte Frage eingeben" value="{{question}}">
@@ -29,21 +29,31 @@
         </div>
 
         <!-- Words -->
-        <div class="gameValues">
-            <div class="example-container_values"  style="display: flex; flex-direction: row; " [ngbTooltip]="!easyMode ? 'Um es den Schülern schwerer zu machen, schreiben Sie das erste Satzglied so, als würde es mitten im Satz stehen. Bsp.: Der Affe => der Affe' : null">
+        <div>
+            <div style="display: flex; flex-direction: row; " [ngbTooltip]="!easyMode ? 'Um es den Schülern schwerer zu machen, schreiben Sie das erste Satzglied so, als würde es mitten im Satz stehen. Bsp.: Der Affe => der Affe' : null">
+                <!-- minus svg -->
                 <!-- <div>Icons erstellt von <a href="https://www.flaticon.com/de/autoren/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div> -->
                 <div style="display: flex; vertical-align: middle; padding-right: 15px;" (click)="removeInputField()">
                     <svg fill="LightCoral" style=" width: 40px"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" > <g transform="translate(1 1)"> <g> <g> <path d="M255-1C113.618-1-1,113.618-1,255s114.618,256,256,256s256-114.618,256-256S396.382-1,255-1z M255,468.333 c-117.818,0-213.333-95.515-213.333-213.333S137.182,41.667,255,41.667S468.333,137.182,468.333,255S372.818,468.333,255,468.333 z"/> <path d="M382.996,233.667H127.038c-11.782,0-21.333,9.551-21.333,21.333s9.551,21.333,21.333,21.333h255.957 c11.782,0,21.333-9.551,21.333-21.333S394.778,233.667,382.996,233.667z"/> </g> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>
                 </div>
                 <!-- Input Fields -->
-                <div *ngFor="let item of valuesOfInput;  index as i">
-                    <input type="text" class="example-box" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}"> 
-                </div>      
-                <select id="punctuationSelector" value="{{this.punctuationType}}">                            
+                
+
+                <div *ngFor="let item of valuesOfInput;  index as i" class="inputFieldContainer">
+                    <input type="text" class="example-box" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}" onchange="this.calcWidth()"> 
+                    <!-- better alternative but time does not allow to use this way -->
+                    <!-- <label class="input-sizer stacked">
+                        <textarea oninput="this.parentNode.dataset.value = this.value" rows="1" placeholder="" id="'valueWord' + i" value="{{valuesOfInput[i]}}"></textarea>
+                    </label> -->
+                </div>
+                <canvas id="calcWidth" value="inputForWidthCalc"></canvas>
+                <!-- punctuation selection -->
+                <select id="punctuationSelector" class="example-box" value="{{this.punctuationType}}">                            
                     <option value="." selected>.</option>
                     <option value="?">?</option>
                     <option value="!">!</option>
-                 </select>
+                    </select>
+                <!-- plus svg -->
                 <!-- <div>Icons erstellt von <a href="https://icon54.com/" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div> -->
                 <div style="display: flex; vertical-align: middle; padding-left: 15px;" (click)="addInputField()">
                     <svg fill="LimeGreen" style=" width: 40px" viewBox="0 0 512 512"  xmlns="http://www.w3.org/2000/svg"><path d="m256 512c-141.164062 0-256-114.835938-256-256s114.835938-256 256-256 256 114.835938 256 256-114.835938 256-256 256zm0-480c-123.519531 0-224 100.480469-224 224s100.480469 224 224 224 224-100.480469 224-224-100.480469-224-224-224zm0 0"/><path d="m368 272h-224c-8.832031 0-16-7.167969-16-16s7.167969-16 16-16h224c8.832031 0 16 7.167969 16 16s-7.167969 16-16 16zm0 0"/><path d="m256 384c-8.832031 0-16-7.167969-16-16v-224c0-8.832031 7.167969-16 16-16s16 7.167969 16 16v224c0 8.832031-7.167969 16-16 16zm0 0"/></svg>
@@ -160,11 +170,13 @@
                     <path d="M 21 2 C 19.354545 2 18 3.3545455 18 5 L 18 7 L 10.154297 7 A 1.0001 1.0001 0 0 0 9.984375 6.9863281 A 1.0001 1.0001 0 0 0 9.8398438 7 L 8 7 A 1.0001 1.0001 0 1 0 8 9 L 9 9 L 9 45 C 9 46.645455 10.354545 48 12 48 L 38 48 C 39.645455 48 41 46.645455 41 45 L 41 9 L 42 9 A 1.0001 1.0001 0 1 0 42 7 L 40.167969 7 A 1.0001 1.0001 0 0 0 39.841797 7 L 32 7 L 32 5 C 32 3.3545455 30.645455 2 29 2 L 21 2 z M 21 4 L 29 4 C 29.554545 4 30 4.4454545 30 5 L 30 7 L 20 7 L 20 5 C 20 4.4454545 20.445455 4 21 4 z M 11 9 L 18.832031 9 A 1.0001 1.0001 0 0 0 19.158203 9 L 30.832031 9 A 1.0001 1.0001 0 0 0 31.158203 9 L 39 9 L 39 45 C 39 45.554545 38.554545 46 38 46 L 12 46 C 11.445455 46 11 45.554545 11 45 L 11 9 z M 18.984375 13.986328 A 1.0001 1.0001 0 0 0 18 15 L 18 40 A 1.0001 1.0001 0 1 0 20 40 L 20 15 A 1.0001 1.0001 0 0 0 18.984375 13.986328 z M 24.984375 13.986328 A 1.0001 1.0001 0 0 0 24 15 L 24 40 A 1.0001 1.0001 0 1 0 26 40 L 26 15 A 1.0001 1.0001 0 0 0 24.984375 13.986328 z M 30.984375 13.986328 A 1.0001 1.0001 0 0 0 30 15 L 30 40 A 1.0001 1.0001 0 1 0 32 40 L 32 15 A 1.0001 1.0001 0 0 0 30.984375 13.986328 z"/>
                 </svg>   
             </div>
-            <!-- delete but invisible as placeholder -->
-            <div type="button" *ngIf="finalScreen == true" ngbTooltip="Löscht diese Frage. Der Rest des Spieles bleibt unberührt." class="btn" (click) = "deleteElementOverlay = true" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"> 
-                <svg fill="transparent" class="svgs-in-actionbar" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 50 50">
-                    <path d="M 21 2 C 19.354545 2 18 3.3545455 18 5 L 18 7 L 10.154297 7 A 1.0001 1.0001 0 0 0 9.984375 6.9863281 A 1.0001 1.0001 0 0 0 9.8398438 7 L 8 7 A 1.0001 1.0001 0 1 0 8 9 L 9 9 L 9 45 C 9 46.645455 10.354545 48 12 48 L 38 48 C 39.645455 48 41 46.645455 41 45 L 41 9 L 42 9 A 1.0001 1.0001 0 1 0 42 7 L 40.167969 7 A 1.0001 1.0001 0 0 0 39.841797 7 L 32 7 L 32 5 C 32 3.3545455 30.645455 2 29 2 L 21 2 z M 21 4 L 29 4 C 29.554545 4 30 4.4454545 30 5 L 30 7 L 20 7 L 20 5 C 20 4.4454545 20.445455 4 21 4 z M 11 9 L 18.832031 9 A 1.0001 1.0001 0 0 0 19.158203 9 L 30.832031 9 A 1.0001 1.0001 0 0 0 31.158203 9 L 39 9 L 39 45 C 39 45.554545 38.554545 46 38 46 L 12 46 C 11.445455 46 11 45.554545 11 45 L 11 9 z M 18.984375 13.986328 A 1.0001 1.0001 0 0 0 18 15 L 18 40 A 1.0001 1.0001 0 1 0 20 40 L 20 15 A 1.0001 1.0001 0 0 0 18.984375 13.986328 z M 24.984375 13.986328 A 1.0001 1.0001 0 0 0 24 15 L 24 40 A 1.0001 1.0001 0 1 0 26 40 L 26 15 A 1.0001 1.0001 0 0 0 24.984375 13.986328 z M 30.984375 13.986328 A 1.0001 1.0001 0 0 0 30 15 L 30 40 A 1.0001 1.0001 0 1 0 32 40 L 32 15 A 1.0001 1.0001 0 0 0 30.984375 13.986328 z"/>
-                </svg>   
+            <!-- easymode -->
+            <div type="button" ngbTooltip="Im derzeitigen Modus werden die Wörter unverändert im Satz verschoben." class="btn" (click)="this.switchDifficulty()" *ngIf="this.easyMode" data-toggle="tooltip" data-placement="bottom" > 
+                <img style=" width: 5%; min-width: 50px; min-height: 30px; opacity: 0.6;" src="./../../../../assets/Images/a-a.png" alt="">
+            </div>
+            <!-- hardmode -->
+            <div type="button"  ngbTooltip="Im derzeitigen Modus wird das erste Wort des Satzgliedes groß geschrieben, sollte das Satzglied an erster Stelle des Satzes stehen." class="btn" (click)="this.switchDifficulty()" *ngIf="!this.easyMode" data-toggle="tooltip" data-placement="bottom" > 
+                <img style=" width: 5%; min-width: 50px; min-height: 30px; opacity: 0.6;" src="./../../../../assets/Images/aA.png" alt="">
             </div>
             <!-- arrow right -->
             <div type="button" ngbTooltip="Weiter zur nächsten Frage" class="btn" (click) = "this.rightArrowClicked()" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"> 
