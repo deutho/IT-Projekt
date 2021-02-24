@@ -94,3 +94,37 @@ p.symbol{
     background-color: #40d04f;
     margin: 0 auto;
 }
+
+.imageEditing-container {
+    display:flex; 
+    height: 100%; 
+    width: 100%; 
+    min-width: 60%;
+    min-height: 100px; 
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .centerImageEditing {
+    display:inline-block; 
+    margin: auto; 
+    width: 100%; 
+    vertical-align: middle;
+  }
+
+  .imageEditingItem2 {
+    width: 90%; 
+    vertical-align: middle;
+  }
+
+  .buttonsEditImage {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px 0px;
+  }
+
+  .button {
+    font-weight: 800;
+  }
+  

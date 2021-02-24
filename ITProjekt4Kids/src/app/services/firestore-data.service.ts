@@ -146,6 +146,16 @@ export class FirestoreDataService {
         this.db.collection("games").doc(task.uid).set(JSON.parse(JSON.stringify(task)));
     }
 
+    async updateUserPicture(imageURL : string, uid : string) {
+        let ref = await this.db.collectionGroup("users").where("uid","==",uid).get();
+        console.log(ref);
+        ref.forEach(doc => {
+            doc.ref.update({
+                photoID: imageURL
+            });
+        });
+    }
+
     /** temporary result of a finished game
      * 
      * @param uid uid of user (student)

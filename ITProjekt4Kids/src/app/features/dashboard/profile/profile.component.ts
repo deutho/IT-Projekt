@@ -21,10 +21,16 @@ export class ProfileComponent implements OnInit {
   error;
   errorMessage;
   passwordChange = undefined;
+  imageURL = "";
+  editingPicture: boolean = false;
   
   
   constructor(public afs: FirestoreDataService, public auth: AuthService, private fb: FormBuilder, private app: AppService) {
-    
+    this.app.myImageURL$.subscribe((data) => {
+      this.imageURL = data;
+      // console.log(data)
+      this.pictureEdited(data)
+    });
   }
   
   async ngOnInit() {
@@ -45,6 +51,7 @@ export class ProfileComponent implements OnInit {
 
 
     this.app.myHeader("Profil");
+    this.imageURL = this.currentUser.photoID;
 
   }
 
@@ -77,6 +84,27 @@ export class ProfileComponent implements OnInit {
 
     setTimeout(() => this.error = undefined, 4000);
 
+  }
+
+  pictureEdited(imageURL?: string) {  
+    if((<HTMLInputElement>document.getElementById('URL')) == null) return;
+    if(imageURL != null) this.imageURL = imageURL
+    else this.imageURL = (<HTMLInputElement>document.getElementById('URL')).value;
+    this.afs.updateUserPicture(this.imageURL, this.currentUser.uid)
+    console.log(this.imageURL)
+    this.editingPicture = false;            
+  }
+
+  abortPictureEdit() {
+    //Delete the Uploaded Picture in case the Process was aborted
+    if ((<HTMLInputElement>document.getElementById('URL')).value.search("firebasestorage.googleapis.com") != -1) {
+      this.afs.deleteFromStorageByUrl((<HTMLInputElement>document.getElementById('URL')).value).catch((err) => {
+        console.log(err.errorMessage);
+        //Give Warning that Delete Operation was not successful
+      });
+    }
+    this.editingPicture = false;
+    this.imageURL = this.currentUser.photoID;
   }
 
 
