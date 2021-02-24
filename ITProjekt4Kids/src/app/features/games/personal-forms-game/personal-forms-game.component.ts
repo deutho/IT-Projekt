@@ -131,7 +131,7 @@ export class PersonalFormsGameComponent implements OnInit {
           event.currentIndex);
 
         if(event.container.id == "selection") {
-          let index = event.container.data.indexOf("", 0);
+          let index = event.container.data.indexOf("‏‏‎", 0);
           if(index != -1 && event.currentIndex > index) {
             let temp = this.answers[event.currentIndex]
             this.answers[event.currentIndex] = this.answers[index]
@@ -142,13 +142,14 @@ export class PersonalFormsGameComponent implements OnInit {
             this.answers.pop()
           } 
         }
-        if(event.container.data[0] == "") {
+       
+        if(event.container.data[0] == "‏‏‎‎") {
           event.container.data.pop()
-          event.previousContainer.data.push("")
+          event.previousContainer.data.push("‏‏‎‎")
         }
         else{          
           if(event.previousContainer.id == "selection"){
-            this.answers.push("")
+            this.answers.push("‏‏‎‎")
           }          
           if(event.previousContainer.id == "listOne") {
             this.listOneEmpty = true;
@@ -230,7 +231,7 @@ export class PersonalFormsGameComponent implements OnInit {
         this.items4 = [];
         this.items5 = [];
         this.items6 = [];
-    
+
         // boolean to show moveable list again
         this.listOneEmpty = true;
         this.listTwoEmpty = true;

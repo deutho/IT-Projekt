@@ -63,9 +63,9 @@ export class MainComponent implements OnInit, OnDestroy {
     }
   }
 
-  navigate(route: string, header: string) {
+  navigate(route: string) {
     this.router.navigate([route]);
-    this.appService.myHeader(header);
+    // this.appService.myHeader(header);
   }
 
 

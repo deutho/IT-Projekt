@@ -25,12 +25,15 @@ export class BugReportComponent implements OnInit {
   ids: String[] = [];
   dates: String[] = [];
 
-  constructor(private afs: FirestoreDataService) { }
+  constructor(private afs: FirestoreDataService, private app: AppService) { }
 
   async ngOnInit() {
     this.write = true;
     this.posted = false;
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);    
+
+    this.app.myHeader("Feedback geben");
+    
   } 
 
   public async onSubmit() {

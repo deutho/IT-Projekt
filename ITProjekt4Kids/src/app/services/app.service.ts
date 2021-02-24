@@ -16,7 +16,7 @@ import { User } from '../models/users.model';
   export class AppService {
 
     myheader$: Observable<any>;
-    private myHeaderSubject = new BehaviorSubject<String>("Startseite")
+    private myHeaderSubject = new BehaviorSubject<String>("")
     myImageURL$: Observable<any>;
     private myImageURLSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
     myStudentMode$: Observable<any>;

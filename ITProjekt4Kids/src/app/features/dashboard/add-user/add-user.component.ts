@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { take } from 'rxjs/operators';
 import { HostListener } from '@angular/core';
+import { AppService } from 'src/app/services/app.service';
 
 
 @Component({
@@ -27,7 +28,7 @@ export class AddUserComponent implements OnInit {
   newUser: User;
   currentUser: User;
   roleAddingUser: Number;
-  constructor(private fb: FormBuilder, private afs: FirestoreDataService, private auth_service: AuthService) { }
+  constructor(private fb: FormBuilder, private afs: FirestoreDataService, private auth_service: AuthService, private app: AppService) { }
 
   ngOnInit(): void {
     this.adduserform = this.fb.group({
@@ -44,6 +45,10 @@ export class AddUserComponent implements OnInit {
       'auth/invalid-password':	'Der angegebene Wert für das Password ist ungültig. Es muss eine Zeichenfolge mit mindestens sechs Zeichen sein.',
       'auth/weak-password': 'Das Passwort muss mindestens 6 Zeichen lang sein.'
     }; // list of firebase error codes to alternate error messages
+
+
+    this.app.myHeader("Schüler hinzufügen");
+    
   }
   
   public async onSubmit() {   

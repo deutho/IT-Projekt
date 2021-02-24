@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Navigation } from '@angular/router';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-statistics',
@@ -8,10 +9,10 @@ import { Navigation } from '@angular/router';
 })
 export class StatisticsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private app: AppService) { }
 
   ngOnInit(): void {
-    history.pushState(null, "");
+    this.app.myHeader("Statistik");
   }
 
 
