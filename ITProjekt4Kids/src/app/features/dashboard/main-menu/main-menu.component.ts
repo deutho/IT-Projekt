@@ -101,33 +101,37 @@ export class MainMenuComponent implements OnInit {
 
       await this.afs.getFolderElement(id).then(data => {
         this.currentFolderElement = data;
-      }).catch(()=>{
-        this.router.navigate(['notfound']);
       });
+
+      //go to notfound, if there is no data
+      if (this.currentFolderElement == undefined) {
+        this.router.navigate(['notfound'])
+      } else {
       
-      //set the parent dockey
-      this.parentDocKey = this.currentFolderElement.parent;
+        //set the parent dockey
+        this.parentDocKey = this.currentFolderElement.parent;
 
 
-      if (this.parentDocKey != "root") {
-        //get the current folder only if it is not a topfolder
-        await this.afs.getFolderElement(this.parentDocKey).then(data => {
-          let f: Folder[]  = data.folders;
-          f.forEach(folder => {
-            if (folder.uid == id) this.currentFolder = folder
+        if (this.parentDocKey != "root") {
+          //get the current folder only if it is not a topfolder
+          await this.afs.getFolderElement(this.parentDocKey).then(data => {
+            let f: Folder[]  = data.folders;
+            f.forEach(folder => {
+              if (folder.uid == id) this.currentFolder = folder
+            });
           });
-        });
-        this.appService.myHeader(this.currentFolder.name);
-        if (this.currentFolder.owner == this.currentUser.uid) this.isOwnerOfCurrentFolder = true;
+          this.appService.myHeader(this.currentFolder.name);
+          if (this.currentFolder.owner == this.currentUser.uid) this.isOwnerOfCurrentFolder = true;
 
-      }
-      else {
-        if (this.currentDocKey == this.currentUser.uid) {
-          this.isOwnerOfCurrentFolder = true;
         }
-        this.appService.myHeader("Startseite");
+        else {
+          if (this.currentDocKey == this.currentUser.uid) {
+            this.isOwnerOfCurrentFolder = true;
+          }
+          this.appService.myHeader("Startseite");
+        }
+        this.getFolders(id)
       }
-      this.getFolders(id)
     }
   }
 
