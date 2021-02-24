@@ -1,6 +1,7 @@
 <!-- <div id="overlay" *ngIf="this.evaluated == true && this.answerIsCorrect == true && finished == false" (click)=loadNextGame()></div> -->
   <div class="content" *ngIf="loaded == true && finished == false">
-    <h4 (click)="playSound(currentGame.question[0])">{{currentGame.question[0]}}</h4>
+    <h2 (click)="playSound(currentGame.question[0])">{{currentGame.question[0]}}</h2>
+    <div style="height: 4vh;"></div>
     <div class="row">
       
       <!-- first column -->
@@ -176,7 +177,7 @@
         </div>
       </div>
     </div>
-
+    <div style="height: 4vh;"></div>
     <!-- <div class="row"> -->
       <!-- Button, to evaluate a game -->
       <!-- <button (click)="this.evaluateGame()" *ngIf = "this.answerIsCorrect == false">Kontrolle</button> -->
@@ -276,8 +277,8 @@
 
 <!-- final Screen -->
 <div *ngIf = "this.finished == true" class="endScreenContainer">
-  <div class="space"></div>
-  <div class="question"> Du hast beim ersten Versuch {{roundsWon}} von {{totalNumberOfRounds}} Aufgaben bei deinem ersten Versuch richtig beantwortet!</div>
+  <!-- <div class="space"></div> -->
+  <div class="question"> Du hast {{roundsWon}} von {{totalNumberOfRounds}} Aufgaben bei deinem ersten Versuch richtig beantwortet!</div>
   <div class="space"></div>
   <!-- Code from Codepen -->
   <!-- Copyright (c) 2020 by Julie Park (https://codepen.io/juliepark/pen/vjMOKQ)
