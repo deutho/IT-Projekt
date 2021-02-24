@@ -100,36 +100,41 @@ export class VocabularyGameEditComponent implements OnInit {
           f.forEach(folder => {
             if (folder.uid == this.folderID) this.folder = folder
           });
-        });
+        }).catch(() => this.router.navigate(['notfound']))
 
-        //get the rights (Thomas, mit de 2 bools kannst arbeiten - isViewer is eh imma true - jeder kann viewen)
-        if (this.folder.owner == this.currentUser.uid) this.isOwner = true;
-        if (this.folder.editors.includes(this.currentUser.uid)) this.isEditor = true;
+        if (this.folder == undefined) {
+          this.router.navigate(['notfound']);
+        } else {
 
-        //set the header
-        this.appService.myHeader(this.folder.name);    
-      
-        // get games
-        await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
+          //get the rights (Thomas, mit de 2 bools kannst arbeiten - isViewer is eh imma true - jeder kann viewen)
+          if (this.folder.owner == this.currentUser.uid) this.isOwner = true;
+          if (this.folder.editors.includes(this.currentUser.uid)) this.isEditor = true;
 
-        //set numbers
-        this.nextCountNumber = 0;
-        //if already questions in the game
-        if (this.Games.length != 0) {
-          let numbers: number[] = [];
-          this.Games.forEach(element => {
-            numbers.push(element.number);
-          });
-          //calculate the next number
-          this.nextCountNumber = Math.max(...numbers)+1;
+          //set the header
+          this.appService.myHeader(this.folder.name);    
+        
+          // get games
+          await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
+
+          //set numbers
+          this.nextCountNumber = 0;
+          //if already questions in the game
+          if (this.Games.length != 0) {
+            let numbers: number[] = [];
+            this.Games.forEach(element => {
+              numbers.push(element.number);
+            });
+            //calculate the next number
+            this.nextCountNumber = Math.max(...numbers)+1;
+          }
+          
+          //sort array by number
+          this.Games.sort((a, b) => {return b.number - a.number});
+          
+          //load first game
+          if (this.Games.length == 0) this.initializeNewQuestion();
+          else this.loadNextGame(true);
         }
-        
-        //sort array by number
-        this.Games.sort((a, b) => {return b.number - a.number});
-        
-        //load first game
-        if (this.Games.length == 0) this.initializeNewQuestion();
-        else this.loadNextGame(true);
       }
   }
   
