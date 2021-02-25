@@ -3,10 +3,9 @@
     <div *ngIf = "this.unauthorized === true">
         Sie sind nicht berechtigt, dieses Spiel zu bearbeiten (Styling bitte Thooomas)
     </div>
-    <input type="text" id="test" (keypress)="calcWidth()"> 
     <!-- Question -->
     <div *ngIf = "editingAudio == false" class="example-container_question question">
-        <input type="text" id="question" placeholder="Hier bitte Frage eingeben" value="{{question}}">
+        <input type="text" id="question" (keypress)="calcWidth('question')" placeholder="Hier bitte Frage eingeben" value="{{question}}">
     
 
         <!-- Image -->
@@ -39,16 +38,15 @@
                 <!-- Input Fields -->
                 
 
-                <div *ngFor="let item of valuesOfInput;  index as i" class="inputFieldContainer">
-                    <input type="text" class="example-box" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}" onchange="this.calcWidth()"> 
+                <div *ngFor="let item of valuesOfInput;  index as i" >
+                    <input type="text" style="width: 200px" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}" (keypress)="calcWidth('valueWord' + i)"> 
                     <!-- better alternative but time does not allow to use this way -->
                     <!-- <label class="input-sizer stacked">
                         <textarea oninput="this.parentNode.dataset.value = this.value" rows="1" placeholder="" id="'valueWord' + i" value="{{valuesOfInput[i]}}"></textarea>
                     </label> -->
                 </div>
-                <canvas id="calcWidth" value="inputForWidthCalc"></canvas>
                 <!-- punctuation selection -->
-                <select id="punctuationSelector" class="example-box" value="{{this.punctuationType}}">                            
+                <select id="punctuationSelector" value="{{this.punctuationType}}">                            
                     <option value="." selected>.</option>
                     <option value="?">?</option>
                     <option value="!">!</option>

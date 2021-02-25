@@ -94,16 +94,14 @@ export class VerbPositionGameEditComponent implements OnInit {
     })
   }
 
-    async ngOnInit(): Promise<void> {
-      this.c=document.createElement("canvas");
-      this.c.width=1000;
-      this.c.height=50;
-      this.ctx = this.c.getContext('2d');
-      this.ctx.fillStyle='#00F';
-      this.ctx.font='16px Times, Serif';
-      // ctx.textBaseline = 'Top';
-      
-
+  async ngOnInit(): Promise<void> {
+    // scaling of inputboxes
+    this.c=document.createElement("canvas");
+    this.c.width=1000;
+    this.c.height=50;
+    this.ctx = this.c.getContext('2d');
+    this.ctx.fillStyle='#00F';
+    this.ctx.font='16px Times, Serif';
 
     //get user
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
@@ -141,7 +139,6 @@ export class VerbPositionGameEditComponent implements OnInit {
           this.loadNextGame();
           // this.initSounds();
     }
-
   }
 
 
@@ -179,11 +176,9 @@ export class VerbPositionGameEditComponent implements OnInit {
     this.easyMode = this.currentGame.easyMode;
 
     //  lets the html know, that content can now be loaded
-    //  this.initSounds();
-     console.log("audioURLS: "+this.audioURLS)
-     console.log("valuesOfInput: "+this.valuesOfInput)
-     this.loaded = true;
+    this.loaded = true;
   }
+
 
   loadValuesOfGame() {
     // Text
@@ -203,6 +198,11 @@ export class VerbPositionGameEditComponent implements OnInit {
     // Punctuation Type (.,?,!) 
     this.punctuationType = this.currentGame.punctuationType
     
+    //  scale input boxes
+    this.calcWidth('question')
+    for(var i = 0; i<this.valuesOfInput.length; i++) {
+      this.calcWidth('valueWord' + i)
+    }
   }
 
   saveChanges() {
@@ -518,11 +518,11 @@ export class VerbPositionGameEditComponent implements OnInit {
     // else document.getElementById("customSwitch1").removeAttribute("checked")
   }
 
-  calcWidth(){
+  calcWidth(HTMLID){
 
 
     
-      if(this.e==null) this.e=document.getElementById('test');
+      if(this.e==null) this.e=document.getElementById(HTMLID);
       var myText=this.e.value;
       var textWidth=this.ctx.measureText(myText);
       if(textWidth.width<50) return;
