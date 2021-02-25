@@ -7,6 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 import { RecordRTCService } from 'src/app/services/record-rtc.service';
 import { ActivatedRoute } from '@angular/router';
 import { Folder } from 'src/app/models/folder.model';
+import { style } from '@angular/animations';
 
 @Component({
   selector: 'app-verb-position-game-edit',
@@ -73,6 +74,11 @@ export class VerbPositionGameEditComponent implements OnInit {
   easyMode: boolean = true;
   default: boolean;
   punctuationType: string = ".";
+  inputForWidthCalc: string;
+  c;
+  ctx;
+  e=null;
+
 
   constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
     this.appService.myImageURL$.subscribe((data) => {
@@ -89,7 +95,15 @@ export class VerbPositionGameEditComponent implements OnInit {
     })
   }
 
-    async ngOnInit(): Promise<void> {
+  async ngOnInit(): Promise<void> {
+    // scaling of inputboxes
+    this.c=document.createElement("canvas");
+    this.c.width=1000;
+    this.c.height=50;
+    this.ctx = this.c.getContext('2d');
+    this.ctx.fillStyle='#00F';
+    this.ctx.font='16px Times, Serif';
+
     //get user
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
@@ -163,11 +177,9 @@ export class VerbPositionGameEditComponent implements OnInit {
     this.easyMode = this.currentGame.easyMode;
 
     //  lets the html know, that content can now be loaded
-    //  this.initSounds();
-     console.log("audioURLS: "+this.audioURLS)
-     console.log("valuesOfInput: "+this.valuesOfInput)
-     this.loaded = true;
+    this.loaded = true;
   }
+
 
   loadValuesOfGame() {
     // Text
@@ -187,6 +199,11 @@ export class VerbPositionGameEditComponent implements OnInit {
     // Punctuation Type (.,?,!) 
     this.punctuationType = this.currentGame.punctuationType
     
+    //  scale input boxes
+    this.calcWidth('question')
+    for(var i = 0; i<this.valuesOfInput.length; i++) {
+      this.calcWidth('valueForWidthOfInput' + i)
+    }
   }
 
   saveChanges() {
@@ -289,7 +306,7 @@ export class VerbPositionGameEditComponent implements OnInit {
     // go through all inputfields, if they contain a word, add them to the temporary word save
     for(var i = 0; i<inputFieldNodes.length; i++) {
       if((<HTMLInputElement>inputFieldNodes[i]).value != "") {
-        this.valuesOfInput.push((<HTMLInputElement>inputFieldNodes[i]).value)
+        this.valuesOfInput.push((<HTMLInputElement>inputFieldNodes[i]).value);
       }
     }
   }
@@ -501,5 +518,18 @@ export class VerbPositionGameEditComponent implements OnInit {
     // if(!this.easyMode)document.getElementById("customSwitch1").setAttribute("checked", null);
     // else document.getElementById("customSwitch1").removeAttribute("checked")
   }
+
+  calcWidth(HTMLID){    
+      if(this.e==null) this.e=document.getElementById(HTMLID);
+      var myText=this.e.value;
+      var textWidth=this.ctx.measureText(myText);
+      if(textWidth.width<80) return;
+      this.e.style.width=textWidth.width+45+"px";    
+  }
+
+
+
+
+  
 
 }
