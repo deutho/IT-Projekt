@@ -4,12 +4,11 @@
         Sie sind nicht berechtigt, dieses Spiel zu bearbeiten (Styling bitte Thooomas)
     </div>
     <!-- Question -->
-    <div *ngIf = "editingAudio == false" class="example-container_question question">
-        <input type="text" id="question" (keypress)="calcWidth('question')" placeholder="Hier bitte Frage eingeben" value="{{question}}">
-    
+    <input *ngIf = "editingAudio == false" type="text" id="question" (keypress)="calcWidth('question')" placeholder="Hier bitte Frage eingeben" value="{{question}}">
 
+    <div *ngIf = "editingAudio == false" class="example-container_question question">   
         <!-- Image -->
-        <div *ngIf = "editingAudio == false" style="width: 100%; height: 100%; margin-top: -30px;" >          
+        <div *ngIf = "editingAudio == false" style="width: 100%; height: 100%; margin-top: 0px;" >          
             <div id="myimg" class="img-style">              
                 <img id="image" class="image" *ngIf = "this.editingPicture == false" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';"  (click)="this.editingPicture = true" src = "{{imageURL}}">
                 
