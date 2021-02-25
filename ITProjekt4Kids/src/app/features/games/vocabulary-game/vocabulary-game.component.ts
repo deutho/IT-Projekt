@@ -80,37 +80,41 @@ export class VocabularyGameComponent implements OnInit {
 
     let dockey: string = this.route.snapshot.queryParamMap.get('k');
 
-    //get the data of the game
     await this.afs.getFolderElement(dockey).then(data => {
       let f: Folder[]  = data.folders;
       f.forEach(folder => {
         if (folder.uid == this.folderID) this.folder = folder
       });
-    });
+    }).catch(() => this.router.navigate(['notfound']))
 
-    //evaluate if teacher is playing
-    if (this.currentUser.role == 2) this.teacherPlaying == true;
+    if (this.folder == undefined) {
+      this.router.navigate(['notfound']);
+    } else {
 
-    //set the header
-    this.appService.myHeader(this.folder.name);
+      //evaluate if teacher is playing
+      if (this.currentUser.role == 2) this.teacherPlaying == true;
 
-    await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
+      //set the header
+      this.appService.myHeader(this.folder.name);
 
-    this.shuffleArray(this.Games);
+      await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
 
-    this.audioQuestion.preload ="auto";
-    this.audioButton1.preload = "auto";
-    this.audioButton2.preload = "auto";
-    this.audioButton3.preload = "auto";
-    this.audioButton4.preload = "auto";
+      this.shuffleArray(this.Games);
+
+      this.audioQuestion.preload ="auto";
+      this.audioButton1.preload = "auto";
+      this.audioButton2.preload = "auto";
+      this.audioButton3.preload = "auto";
+      this.audioButton4.preload = "auto";
 
 
 
 
 
-    this.starttime = Date.now();
-    this.loadNextGame();
-    this.totalNumberOfRounds = this.Games.length+1; 
+      this.starttime = Date.now();
+      this.loadNextGame();
+      this.totalNumberOfRounds = this.Games.length+1;
+    } 
   }
 
 

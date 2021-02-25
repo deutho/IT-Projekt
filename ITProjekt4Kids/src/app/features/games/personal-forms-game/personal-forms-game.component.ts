@@ -90,24 +90,28 @@ export class PersonalFormsGameComponent implements OnInit {
 
     let dockey: string = this.route.snapshot.queryParamMap.get('k');
 
-    //get the data of the game
     await this.afs.getFolderElement(dockey).then(data => {
       let f: Folder[]  = data.folders;
       f.forEach(folder => {
         if (folder.uid == this.folderID) this.folder = folder
       });
-    });
+    }).catch(() => this.router.navigate(['notfound']))
 
-    //evaluate if teacher is playing
-    if (this.currentUser.role == 2) this.teacherPlaying == true;
+    if (this.folder == undefined) {
+      this.router.navigate(['notfound']);
+    } else {
 
-    //set the header
-    this.appService.myHeader(this.folder.name);
+      //evaluate if teacher is playing
+      if (this.currentUser.role == 2) this.teacherPlaying == true;
 
-    await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
-    this.shuffleArray(this.Games)
-    this.loadNextGame()
-    this.totalNumberOfRounds = this.Games.length+1; 
+      //set the header
+      this.appService.myHeader(this.folder.name);
+
+      await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
+      this.shuffleArray(this.Games)
+      this.loadNextGame()
+      this.totalNumberOfRounds = this.Games.length+1; 
+    }
   }
 
   //method to evaluate if something can be dropped in the list/field
