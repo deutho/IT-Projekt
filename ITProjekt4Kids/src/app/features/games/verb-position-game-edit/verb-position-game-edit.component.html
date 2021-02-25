@@ -39,7 +39,7 @@
                 <div style="display: flex; flex-direction: row; flex-wrap: wrap; align-content: stretch; flex-grow: 1; flex-shrink: 3;" placement="top-left" [ngbTooltip]="!easyMode ? 'Um es den Schülern schwerer zu machen, schreiben Sie das erste Satzglied so, als würde es mitten im Satz stehen. Bsp.: Der Affe => der Affe' : null">
                     <div *ngFor="let item of valuesOfInput;  index as i"  style="display: flex; flex-direction: row; flex-wrap: wrap; align-content: stretch; flex-grow: 1; flex-shrink: 3;">
                         <!-- calcwidth not really working here - needs some investigation -->
-                        <input type="text" class="example-box" style="display: flex; flex-grow: 1; flex-shrink: 3;" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}" (keypress)="calcWidth('valueForWidthOfInput' + i)"> 
+                        <input type="text" class="example-box" style="display: flex; flex-grow: 1; flex-shrink: 3;" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 30 +  'px';"> 
                     </div>
                     <!-- punctuation selection -->
                     <select id="punctuationSelector" class="example-box" value="{{this.punctuationType}}">                            
