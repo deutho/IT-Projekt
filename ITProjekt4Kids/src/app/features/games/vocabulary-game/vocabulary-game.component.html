@@ -22,7 +22,7 @@
     </div>
     <div class="item-image" (click) = "buttonClicked('question')">
         <div id="myimg" class="img-style">
-            <img id="image" rel="preload" class="image" src = "{{imageURL}}">
+            <img id="image" rel="preload" class="image" src = "{{imageURL}}" onerror="this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';">
         </div>        
     </div>
     <div class="item-ans1">
