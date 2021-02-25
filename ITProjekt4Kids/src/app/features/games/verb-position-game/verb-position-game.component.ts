@@ -62,24 +62,29 @@ export class VerbPositionGameComponent implements OnInit {
 
     let dockey: string = this.route.snapshot.queryParamMap.get('k');
 
-    //get the data of the game
     await this.afs.getFolderElement(dockey).then(data => {
       let f: Folder[]  = data.folders;
       f.forEach(folder => {
         if (folder.uid == this.folderID) this.folder = folder
       });
-    });
+    }).catch(() => this.router.navigate(['notfound']))
 
-    //set the header
-    this.appService.myHeader(this.folder.name);
+    if (this.folder == undefined) {
+      this.router.navigate(['notfound']);
+    } else {
 
-    //evaluate if teacher is playing
-    if (this.currentUser.role == 2) this.teacherPlaying == true;
 
-    await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
-    this.sentence = [];
-    this.loadNextGame();
-    this.totalNumberOfRounds = this.Games.length+1;
+      //set the header
+      this.appService.myHeader(this.folder.name);
+
+      //evaluate if teacher is playing
+      if (this.currentUser.role == 2) this.teacherPlaying == true;
+
+      await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
+      this.sentence = [];
+      this.loadNextGame();
+      this.totalNumberOfRounds = this.Games.length+1;
+    }
   }
     
   drop(event: CdkDragDrop<string[]>) {

@@ -7,7 +7,7 @@ import { FirestoreDataService } from 'src/app/services/firestore-data.service';
 import { take } from 'rxjs/operators';
 import { User } from 'src/app/models/users.model';
 import { RecordRTCService } from 'src/app/services/record-rtc.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Folder } from 'src/app/models/folder.model';
 
 @Component({
@@ -69,7 +69,7 @@ export class PersonalFormsGameEditComponent implements OnInit {
   isViewer: boolean = true;
 
 
-  constructor(private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
+  constructor(private router: Router, private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
 
     this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
@@ -93,33 +93,37 @@ export class PersonalFormsGameEditComponent implements OnInit {
 
           let dockey: string = this.route.snapshot.queryParamMap.get('k');
 
-          //get the data of the game
           await this.afs.getFolderElement(dockey).then(data => {
             let f: Folder[]  = data.folders;
             f.forEach(folder => {
               if (folder.uid == this.folderUID) this.folder = folder
             });
-          });
+          }).catch(() => this.router.navigate(['notfound']))
+  
+          if (this.folder == undefined) {
+            this.router.navigate(['notfound']);
+          } else {
 
-          //set the header
-          this.appService.myHeader(this.folder.name);
+            //set the header
+            this.appService.myHeader(this.folder.name);
 
-          //get the rights (Thomas, mit de 2 bools kannst arbeiten - isViewer is eh imma true - jeder kann viewen)
-          if (this.folder.owner == this.currentUser.uid) this.isOwner = true;
-          if (this.folder.editors.includes(this.currentUser.uid)) this.isEditor = true;
+            //get the rights (Thomas, mit de 2 bools kannst arbeiten - isViewer is eh imma true - jeder kann viewen)
+            if (this.folder.owner == this.currentUser.uid) this.isOwner = true;
+            if (this.folder.editors.includes(this.currentUser.uid)) this.isEditor = true;
 
 
-        
+          
 
-            // get games
-            await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
-            //init second stack for going back and forwards between games
-            let previousGames = [];
-            this.previousGames = previousGames;
+              // get games
+              await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
+              //init second stack for going back and forwards between games
+              let previousGames = [];
+              this.previousGames = previousGames;
 
-            //load first game
-            this.loadNextGame();
-            this.initSounds();
+              //load first game
+              this.loadNextGame();
+              this.initSounds();
+          }
     }
   }
 
