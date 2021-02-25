@@ -9,7 +9,7 @@
     
 
         <!-- Image -->
-        <div *ngIf = "editingAudio == false" class="item-image" >          
+        <div *ngIf = "editingAudio == false" style="width: 100%; height: 100%; margin-top: -30px;" >          
             <div id="myimg" class="img-style">              
                 <img id="image" class="image" *ngIf = "this.editingPicture == false" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';"  (click)="this.editingPicture = true" src = "{{imageURL}}">
                 
@@ -29,28 +29,25 @@
 
         <!-- Words -->
         <div>
-            <div style="display: flex; flex-direction: row; " [ngbTooltip]="!easyMode ? 'Um es den Schülern schwerer zu machen, schreiben Sie das erste Satzglied so, als würde es mitten im Satz stehen. Bsp.: Der Affe => der Affe' : null">
+            <div style="display: flex; flex-direction: row; " >
                 <!-- minus svg -->
                 <!-- <div>Icons erstellt von <a href="https://www.flaticon.com/de/autoren/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div> -->
                 <div style="display: flex; vertical-align: middle; padding-right: 15px;" (click)="removeInputField()">
                     <svg fill="LightCoral" style=" width: 40px"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" > <g transform="translate(1 1)"> <g> <g> <path d="M255-1C113.618-1-1,113.618-1,255s114.618,256,256,256s256-114.618,256-256S396.382-1,255-1z M255,468.333 c-117.818,0-213.333-95.515-213.333-213.333S137.182,41.667,255,41.667S468.333,137.182,468.333,255S372.818,468.333,255,468.333 z"/> <path d="M382.996,233.667H127.038c-11.782,0-21.333,9.551-21.333,21.333s9.551,21.333,21.333,21.333h255.957 c11.782,0,21.333-9.551,21.333-21.333S394.778,233.667,382.996,233.667z"/> </g> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>
                 </div>
                 <!-- Input Fields -->
-                
-
-                <div *ngFor="let item of valuesOfInput;  index as i" >
-                    <input type="text" style="width: 200px" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}" (keypress)="calcWidth('valueWord' + i)"> 
-                    <!-- better alternative but time does not allow to use this way -->
-                    <!-- <label class="input-sizer stacked">
-                        <textarea oninput="this.parentNode.dataset.value = this.value" rows="1" placeholder="" id="'valueWord' + i" value="{{valuesOfInput[i]}}"></textarea>
-                    </label> -->
-                </div>
-                <!-- punctuation selection -->
-                <select id="punctuationSelector" value="{{this.punctuationType}}">                            
-                    <option value="." selected>.</option>
-                    <option value="?">?</option>
-                    <option value="!">!</option>
+                <div style="display: flex; flex-direction: row; flex-wrap: wrap; align-content: stretch; flex-grow: 1; flex-shrink: 3;" placement="top-left" [ngbTooltip]="!easyMode ? 'Um es den Schülern schwerer zu machen, schreiben Sie das erste Satzglied so, als würde es mitten im Satz stehen. Bsp.: Der Affe => der Affe' : null">
+                    <div *ngFor="let item of valuesOfInput;  index as i"  style="display: flex; flex-direction: row; flex-wrap: wrap; align-content: stretch; flex-grow: 1; flex-shrink: 3;">
+                        <!-- calcwidth not really working here - needs some investigation -->
+                        <input type="text" class="example-box" style="display: flex; flex-grow: 1; flex-shrink: 3;" [id]="'valueWord' + i" value="{{valuesOfInput[i]}}" (keypress)="calcWidth('valueForWidthOfInput' + i)"> 
+                    </div>
+                    <!-- punctuation selection -->
+                    <select id="punctuationSelector" class="example-box" value="{{this.punctuationType}}">                            
+                        <option value="." selected>.</option>
+                        <option value="?">?</option>
+                        <option value="!">!</option>
                     </select>
+                </div>                   
                 <!-- plus svg -->
                 <!-- <div>Icons erstellt von <a href="https://icon54.com/" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/de/" title="Flaticon">www.flaticon.com</a></div> -->
                 <div style="display: flex; vertical-align: middle; padding-left: 15px;" (click)="addInputField()">

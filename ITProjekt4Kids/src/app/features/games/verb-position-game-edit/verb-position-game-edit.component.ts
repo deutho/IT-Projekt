@@ -7,6 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 import { RecordRTCService } from 'src/app/services/record-rtc.service';
 import { ActivatedRoute } from '@angular/router';
 import { Folder } from 'src/app/models/folder.model';
+import { style } from '@angular/animations';
 
 @Component({
   selector: 'app-verb-position-game-edit',
@@ -201,7 +202,7 @@ export class VerbPositionGameEditComponent implements OnInit {
     //  scale input boxes
     this.calcWidth('question')
     for(var i = 0; i<this.valuesOfInput.length; i++) {
-      this.calcWidth('valueWord' + i)
+      this.calcWidth('valueForWidthOfInput' + i)
     }
   }
 
@@ -305,7 +306,7 @@ export class VerbPositionGameEditComponent implements OnInit {
     // go through all inputfields, if they contain a word, add them to the temporary word save
     for(var i = 0; i<inputFieldNodes.length; i++) {
       if((<HTMLInputElement>inputFieldNodes[i]).value != "") {
-        this.valuesOfInput.push((<HTMLInputElement>inputFieldNodes[i]).value)
+        this.valuesOfInput.push((<HTMLInputElement>inputFieldNodes[i]).value);
       }
     }
   }
@@ -518,16 +519,12 @@ export class VerbPositionGameEditComponent implements OnInit {
     // else document.getElementById("customSwitch1").removeAttribute("checked")
   }
 
-  calcWidth(HTMLID){
-
-
-    
+  calcWidth(HTMLID){    
       if(this.e==null) this.e=document.getElementById(HTMLID);
       var myText=this.e.value;
       var textWidth=this.ctx.measureText(myText);
-      if(textWidth.width<50) return;
-      this.e.style.width=textWidth.width+45+"px";
-    
+      if(textWidth.width<80) return;
+      this.e.style.width=textWidth.width+45+"px";    
   }
 
 
