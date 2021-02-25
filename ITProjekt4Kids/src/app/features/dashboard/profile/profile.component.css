@@ -80,6 +80,8 @@ p.symbol{
     display: block;
     max-width: 500px;
     max-height: 500px;
+    border-radius: 500px;
+    filter: drop-shadow(7px 7px 4px rgba(0,0,0,0.5));
 }
 
 .img-symbol-style{
