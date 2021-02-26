@@ -16,6 +16,12 @@
   overflow-x: auto;
 }
 
+.svgs-in-actionbar {
+  width: 5%; 
+  min-width: 50px; 
+  min-height: 50px;
+}
+
 .example-box {
   padding: 20px 10px;
   border-right: solid 1px #ccc;
@@ -69,7 +75,7 @@
 .content {
   padding: 30px 0px;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   flex-direction: column;
   width: 100%;

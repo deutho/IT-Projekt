@@ -33,7 +33,7 @@
         <!-- image -->
         <div *ngIf = "editingAudio == false" class="item-image" >          
             <div id="myimg" class="img-style">              
-                <img id="image" class="image" *ngIf = "this.editingPicture == false" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';"  (click)="this.editingPicture = true" src="{{imageURL}}">
+                <img id="image" class="image" *ngIf = "this.editingPicture == false" onerror="this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';"  (click)="this.editingPicture = true" src="{{imageURL}}">
                 
                 <!-- <img *ngIf = "this.editingPicture == true" onerror="this.onerror=null;this.src='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg';" id="image" class="image"  (click)="this.editingPicture = true" src = "{{imageURL}}"> -->
                 <div class="imageEditing-container"  *ngIf = "this.editingPicture == true">
