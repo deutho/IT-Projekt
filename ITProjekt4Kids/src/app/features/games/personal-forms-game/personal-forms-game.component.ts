@@ -120,40 +120,26 @@ export class PersonalFormsGameComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    
+    console.log(event)
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       //if list is full and is not the list that has the initialized values, don't insert
-      if(event.container.data.length > 0 && event.container.id != "selection") {}
       
+      
+      if(event.container.data.length > 0 && event.container.id != "selection") {}     
+
       else{
         // insert
+
         transferArrayItem(event.previousContainer.data,
           event.container.data,
           event.previousIndex,
           event.currentIndex);
+             
 
-        if(event.container.id == "selection") {
-          let index = event.container.data.indexOf("‏‏‎", 0);
-          if(index != -1 && event.currentIndex > index) {
-            let temp = this.answers[event.currentIndex]
-            this.answers[event.currentIndex] = this.answers[index]
-            this.answers[index] = temp
-            this.answers.pop()
-          }
-          else if(index != -1) {
-            this.answers.pop()
-          } 
-        }
-       
-        if(event.container.data[0] == "‏‏‎‎") {
-          event.container.data.pop()
-          event.previousContainer.data.push("‏‏‎‎")
-        }
-        else{          
           if(event.previousContainer.id == "selection"){
-            this.answers.push("‏‏‎‎")
+            this.answers.push('')
           }          
           if(event.previousContainer.id == "listOne") {
             this.listOneEmpty = true;
@@ -191,7 +177,20 @@ export class PersonalFormsGameComponent implements OnInit {
           if(event.container.id == "listSix") {
             this.listSixEmpty = false;
           }
+      }
+
+      if(event.container.id == "selection") {
+        console.log('3');
+        let index = event.container.data.indexOf('');
+        if(index != -1 && event.currentIndex > index) {
+          let temp = this.answers[event.currentIndex]
+          this.answers[event.currentIndex] = this.answers[index]
+          this.answers[index] = temp
+          this.answers.pop()
         }
+        else if(index != -1) {
+          this.answers.pop()
+        } 
       }
     }
   }
@@ -252,7 +251,6 @@ export class PersonalFormsGameComponent implements OnInit {
      
 
   checkIfAllItemsAllocated(){
-    console.log(this.items1.length)
     if(this.items1.length == 0 || this.items2.length == 0 || this.items3.length == 0 || this.items4.length == 0 || this.items5.length == 0 || this.items6.length == 0){
       this.allItemsAllocated = true;
       setTimeout(() => this.allItemsAllocated = false, 2500);

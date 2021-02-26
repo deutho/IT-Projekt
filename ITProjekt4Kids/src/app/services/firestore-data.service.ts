@@ -142,8 +142,8 @@ export class FirestoreDataService {
      * 
      * @param task uid of task
      */
-    updateTask(task) {
-        this.db.collection("games").doc(task.uid).set(JSON.parse(JSON.stringify(task)));
+    async updateTask(task) {
+        await this.db.collection("games").doc(task.uid).set(JSON.parse(JSON.stringify(task)));
     }
 
     async updateUserPicture(imageURL : string, uid : string) {

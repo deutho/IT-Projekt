@@ -91,6 +91,7 @@ export class VerbPositionGameComponent implements OnInit {
     moveItemInArray(this.sentence, event.previousIndex, event.currentIndex); 
     this.capitalizeFirst();
     this.point();
+    this.removeColor();
   }
 
   loadNextGame() {
@@ -134,12 +135,14 @@ export class VerbPositionGameComponent implements OnInit {
     //add point to last word
     var lastWord = this.correct[this.correct.length-1] + this.currentGame.punctuationType
     this.correct[this.correct.length-1] = lastWord
+    this.correct[0] = this.correct[0].charAt(0).toUpperCase() + this.correct[0].substring(1, this.correct[0].length);
 
     for(let i = 0; i < this.sentence.length; i++) {
       let word = (<HTMLElement>document.getElementById('word' + i))
       wordId[i] = word
     }
-  
+    let temp = wordId[0].innerText;
+    wordId[0].innerText = wordId[0].innerText.charAt(0).toUpperCase() + wordId[0].innerText.substring(1, wordId[0].innerText.length);
     //generate a dynamic sentence evaluation
     for(let i = 0; i < this.sentence.length; i++){
       
@@ -153,7 +156,7 @@ export class VerbPositionGameComponent implements OnInit {
         Result[i] = "falsch";
       }
     }
-
+    wordId[0].innerText = temp;
     let tempAnswerChecker = true;
 
     for( let i in Result) {
@@ -297,6 +300,14 @@ export class VerbPositionGameComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['']);
+  }
+
+  removeColor(){
+    for(let i = 0; i < this.sentence.length; i++) {
+      let word = (<HTMLElement>document.getElementById('word' + i))
+      word.setAttribute("style","background-color:#ffffff;")
+      
+    }    
   }
 
 }
