@@ -57,6 +57,7 @@
     display: flex;
     justify-content: flex-start;
     min-width: 100px;
+    padding: 0px 20px;
 }
 
 .studentInfoItem0{
@@ -91,4 +92,33 @@
     margin: 0px auto 40px auto;
     text-decoration: underline;
     padding: 0px 20px;
+}
+
+@media screen and (max-width: 800px) {
+    .studentInfo {
+        display: flex;
+        flex-direction: column;
+        margin: 0px 20px;
+        font-size: larger;
+        text-align: center;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .studentInfoItem{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        min-width: 100px;
+        padding: 10px 20px;
+    }
+    
+    .studentInfoItem0{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 100px;
+    }
 }
