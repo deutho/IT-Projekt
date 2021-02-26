@@ -12,7 +12,7 @@
           Man darf nur eine Datei wählen!
       </div>
       <div *ngFor="let file of files">
-          <upload-task currentGameUID="{{currentGameUID}}" [file]="file"></upload-task>
+          <upload-task path = {{path}} currentGameUID="{{currentGameUID}}" [file]="file"></upload-task>
         </div>
         
   </div>  

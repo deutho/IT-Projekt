@@ -9,6 +9,7 @@ import { Component, Input } from '@angular/core';
 
 export class UploaderComponent {
   @Input() public currentGameUID: string;
+  @Input() public path: string
 
   isHovering: boolean;
   tooManyFiles: boolean = false;
