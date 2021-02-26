@@ -6,6 +6,7 @@ import { User } from 'src/app/models/users.model';
 import { AppService } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
+import { flattenDiagnosticMessageText } from 'typescript';
 import {MainComponent} from '../main/main.component';
 
 @Component({
@@ -21,6 +22,7 @@ export class ProfileComponent implements OnInit {
   accountTyp: String;
   imageURL = "";
   editingPicture: boolean = false;
+  loaded: boolean = false;
   
   
   constructor(public afs: FirestoreDataService, private app: AppService, public router: Router) {
@@ -42,6 +44,7 @@ export class ProfileComponent implements OnInit {
 
     this.app.myHeader("Profil");
     this.imageURL = this.currentUser.photoID;
+    this.loaded = true;
 
   }
 

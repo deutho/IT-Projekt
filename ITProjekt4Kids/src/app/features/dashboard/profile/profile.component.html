@@ -3,7 +3,7 @@
     <link rel="stylesheet" type="text/css" href="profile.component.css">
 </head>
 
-    <div class="grid-container">
+    <div *ngIf = "loaded == true" class="grid-container">
         <div class="item-image">
                 <div id="profile_image">
                     <img *ngIf = "editingPicture == false" class = "img-style" onerror="this.onerror=null; this.src='./../../../assets/Images/profile_image.png';" src = "{{imageURL}}">
