@@ -17,6 +17,7 @@ import { AccessDeniedComponent } from './features/access-denied/access-denied.co
 import { GameRedirectComponent } from './features/games/game-redirect/game-redirect.component';
 import { AuthGuard } from './services/AuthGuard';
 import { StudentlistComponent } from './features/dashboard/studentlist/studentlist.component';
+import { PasswordChangeComponent } from './features/dashboard/profile/password-change/password-change.component';
 
 
 const routes: Routes = [
@@ -30,7 +31,10 @@ const routes: Routes = [
   component: ProfileComponent,
   canActivate: [AuthGuard]
 },
-
+  { path: "profile/change-password",
+  component: PasswordChangeComponent,
+  canActivate: [AuthGuard]
+},
   { path: "add-user", 
   component: AddUserComponent,
   canActivate: [AuthGuard]

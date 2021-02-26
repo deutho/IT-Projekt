@@ -28,6 +28,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import { GameRedirectComponent } from './games/game-redirect/game-redirect.component';
 import { StudentlistComponent } from './dashboard/studentlist/studentlist.component';
+import { PasswordChangeComponent } from './dashboard/profile/password-change/password-change.component';
 
 
 
@@ -53,7 +54,8 @@ declarations: [
   NotFoundComponent,
   AccessDeniedComponent,
   GameRedirectComponent,
-  StudentlistComponent],
+  StudentlistComponent,
+  PasswordChangeComponent],
 imports: [
   CommonModule,
   RouterModule,
