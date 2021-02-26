@@ -82,6 +82,7 @@ export class VerbPositionGameComponent implements OnInit {
 
       await this.afs.getTasksPerID(this.folderID).then(data => this.Games = data);
       this.sentence = [];
+      this.shuffleArray(this.Games)
       this.loadNextGame();
       this.totalNumberOfRounds = this.Games.length+1;
     }
@@ -112,6 +113,8 @@ export class VerbPositionGameComponent implements OnInit {
         this.loaded = true;
         this.answerIsCorrect = false;
         this.imageURL = this.currentGame.photoID;
+        if(this.imageURL == './../../../../assets/Images/Placeholder-Image/north_blur_Text.png') this.imageURL = './../../../../assets/Images/imageNotFound.jpg'
+        this.removeColor()
     }
     else {
       this.finishGame() 
@@ -189,8 +192,6 @@ export class VerbPositionGameComponent implements OnInit {
           arr[currentIndex] = arr[randomIndex];
           arr[randomIndex] = temporaryValue;
       }
-      this.capitalizeFirst();
-      this.point();
     }
     
   //uppercase first letter of the first box
@@ -305,7 +306,7 @@ export class VerbPositionGameComponent implements OnInit {
   removeColor(){
     for(let i = 0; i < this.sentence.length; i++) {
       let word = (<HTMLElement>document.getElementById('word' + i))
-      word.setAttribute("style","background-color:#ffffff;")
+      if(word != null) word.setAttribute("style","background-color:#ffffff;")
       
     }    
   }

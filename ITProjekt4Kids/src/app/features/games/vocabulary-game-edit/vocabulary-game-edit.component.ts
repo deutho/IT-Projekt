@@ -346,16 +346,9 @@ export class VocabularyGameEditComponent implements OnInit {
       this.currentGame.answer2[1] = this.audioURLAnswer3;
       this.currentGame.answer3[1] = this.audioURLAnswer4;
       this.currentGame.question[1] = this.audioURLQuestion;
-      this.currentGame.coloring = this.coloring;
-      if(this.currentGame.photoID != this.imageURL) {
-        if(this.currentGame.photoID.search("firebasestorage.googleapis.com") != -1) {
-          this.afs.deleteFromStorageByUrl(this.currentGame.photoID).catch((err) => {
-            console.log(err.errorMessage);
-            //Give Warning that Delete Operation was not successful
-          });
-        }
-        this.currentGame.photoID = this.imageURL;
-      }
+      this.currentGame.coloring = this.coloring;        
+      this.currentGame.photoID = this.imageURL;
+
       
       this.afs.updateTask(this.currentGame);
       this.finalScreen = false;

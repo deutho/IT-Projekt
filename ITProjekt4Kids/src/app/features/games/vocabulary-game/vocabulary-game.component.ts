@@ -229,6 +229,7 @@ export class VocabularyGameComponent implements OnInit {
       this.currentGame.photoID = "https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg"
     }
     this.imageURL = this.currentGame.photoID; //in the meantime set the URL
+    if(this.imageURL == './../../../../assets/Images/Placeholder-Image/north_blur_Text.png') this.imageURL = './../../../../assets/Images/imageNotFound.jpg'
     this.shuffleArray(this.answers);
   }
 

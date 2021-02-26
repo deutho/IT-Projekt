@@ -42,7 +42,7 @@ export class VerbPositionGameEditComponent implements OnInit {
   audioURLWord5: string;
   audioURLWord6: string;
   notAllInputFieldsFilled = false;
-  noQuestionFilled = false;
+  noFilled = false;
   saved = false;
   noChanges = false;
   editingAudio = false;
@@ -216,9 +216,10 @@ export class VerbPositionGameEditComponent implements OnInit {
       this.currentGame.photoID = this.imageURL;
 
       // //Verbgame must have a question
-      if(this.question == ''){
-        this.noQuestionFilled = true;
-        setTimeout(() => this.noQuestionFilled = false, 2500);
+      if(this.question == '' || this.valuesOfInput.length == 0){
+        this.noFilled = true;
+        setTimeout(() => this.noFilled = false, 2500);
+        if(this.valuesOfInput.length == 0) this.valuesOfInput = ['']
         return
       }
 
