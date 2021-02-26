@@ -13,9 +13,15 @@
     }
 .item-ans3 {
     grid-area: ans3;
+    margin-top: -40px;
+    padding-bottom: -40px;
+    margin-bottom: 0px;
     }
 .item-ans4 {
     grid-area: ans4;
+    margin-top: -40px;
+    padding-bottom: -40px;
+    margin-bottom: 0px;
     }
 
 
@@ -42,10 +48,12 @@
 
 .item-actionBar1 {
     grid-area: actionBar1;
+    margin-top: -150px;
 }
 
 .item-actionBar2 {
     grid-area: actionBar2;
+    margin-top: -130px;
 }
 
 .item-mid {
@@ -79,7 +87,7 @@
     background-color: #ffffff;
     border-radius: 10px;
     width: 90%;
-    height: 75%;
+    height: 60%;
     margin: 10px auto;
     min-height: 50px;
     padding: 10px 0px 10px 0px;
@@ -95,24 +103,25 @@
 .img-style {
     max-width: 50%;
     max-height: 50%;
-	margin: 60px auto;
+	margin: 30px auto;
     text-align: center;
 	min-width: 280px
 }
 
 .image {
-	width: 80%; 
-	height: 80%;
+	width: 60%; 
+	height: 60%;
 	border-radius: 15px;
 	border: 20px solid white;
 	filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
+    margin-top: -50px;
 }
 
 .question {
     overflow-wrap: break-word;
     font-size: 200%;
     text-align: center;  
-    width: 100%
+    width: 100%;    
 }
 .imageEditing-container {
     display:flex; 

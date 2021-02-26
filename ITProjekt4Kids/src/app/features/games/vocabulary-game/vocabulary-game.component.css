@@ -2,7 +2,7 @@
     grid-area: question;    
     }
 .item-image {
-    grid-area: image;
+    grid-area: image;	
     }
 .item-ans1 {
     grid-area: ans1;
@@ -86,7 +86,7 @@
 
 .input{
     width: 97.5%;
-    padding: 0 0 0 2.5%;
+    padding: 0 0 0 2.5%;	
 }
 
 #overlay {

@@ -22,12 +22,12 @@
     <div class="item-mid" style="width: 100%; display: flex; justify-content: space-between;">        
 
         <!-- arrow left -->
-        <div type="button" (click)="leftArrowClicked()" class="item-left arrow" >
+        <!-- <div type="button" (click)="leftArrowClicked()" class="item-left arrow" >
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left" class="svg-inline--fa fa-chevron-left fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                 <path fill="currentColor" d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z">
                 </path>
             </svg>
-        </div> 
+        </div>  -->
 
         
         <!-- image -->
@@ -192,12 +192,12 @@
 
 
         <!-- arrow right -->
-        <div type="button" (click)="rightArrowClicked()" class="item-right arrow">
+        <!-- <div type="button" (click)="rightArrowClicked()" class="item-right arrow">
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" class="svg-inline--fa fa-chevron-right fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                 <path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z">
                 </path>
             </svg>
-        </div>  
+        </div>   -->
     </div>    
 
     <!-- buttons 1 to 4 -->
@@ -234,7 +234,7 @@
 
     <!-- actionBar editing=false speichern -->
     <div *ngIf = "editingAudio == false" class="item-actionBar1 action-bar-styling" >
-        <div style="min-height: 150px;"></div>
+        <!-- <div style="min-height: 0px;"></div> -->
         <div type="button"  ngbTooltip="Textmodus - erlaubt das Ändern der Textfelder." class="btn icon-action-bar" >      
             <svg  fill="#0275d8" class="svgs-in-actionbar" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve"> <path d="M255,394.948H80c-44.112,0-80-35.888-80-80v-118c0-44.112,35.888-80,80-80h175c11.046,0,20,8.954,20,20s-8.954,20-20,20H80  c-22.056,0-40,17.944-40,40v118c0,22.056,17.944,40,40,40h175c11.046,0,20,8.954,20,20S266.046,394.948,255,394.948z M432,116.948  h-18c-11.046,0-20,8.954-20,20s8.954,20,20,20h18c22.056,0,40,17.944,40,40v118c0,22.056-17.944,40-40,40h-18  c-11.046,0-20,8.954-20,20s8.954,20,20,20h18c44.112,0,80-35.888,80-80v-118C512,152.835,476.112,116.948,432,116.948z M414,472  c-33.084,0-60-26.916-60-60V100c0-33.084,26.916-60,60-60c11.046,0,20-8.954,20-20s-8.954-20-20-20  c-32.676,0-61.74,15.755-80,40.066C315.74,15.755,286.676,0,254,0c-11.046,0-20,8.954-20,20s8.954,20,20,20  c33.084,0,60,26.916,60,60v312c0,33.084-26.916,60-60,60c-11.046,0-20,8.954-20,20s8.954,20,20,20c32.676,0,61.74-15.755,80-40.066  C352.26,496.245,381.324,512,414,512c11.046,0,20-8.954,20-20S425.046,472,414,472z"/> </svg>
         </div>
@@ -246,6 +246,10 @@
         </div>
     </div>
     <div class="item-actionBar2 action-bar-styling" >
+        <!-- arrow left -->
+        <div type="button" ngbTooltip="Zurück zur vorherigen Frage" class="btn" (click) = "this.leftArrowClicked()" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"> 
+            <svg fill="grey" class="svgs-in-actionbar" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="long-arrow-alt-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z"></path></svg>        
+        </div>
         <div type="button" *ngIf="finalScreen == false" ngbTooltip="Löscht diese Frage. Der Rest des Spieles bleibt unberührt." class="btn icon-action-bar" (click) = "deleteElementOverlay = true" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"> 
             <svg fill="grey" class="svgs-in-actionbar" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 50 50">
                 <path d="M 21 2 C 19.354545 2 18 3.3545455 18 5 L 18 7 L 10.154297 7 A 1.0001 1.0001 0 0 0 9.984375 6.9863281 A 1.0001 1.0001 0 0 0 9.8398438 7 L 8 7 A 1.0001 1.0001 0 1 0 8 9 L 9 9 L 9 45 C 9 46.645455 10.354545 48 12 48 L 38 48 C 39.645455 48 41 46.645455 41 45 L 41 9 L 42 9 A 1.0001 1.0001 0 1 0 42 7 L 40.167969 7 A 1.0001 1.0001 0 0 0 39.841797 7 L 32 7 L 32 5 C 32 3.3545455 30.645455 2 29 2 L 21 2 z M 21 4 L 29 4 C 29.554545 4 30 4.4454545 30 5 L 30 7 L 20 7 L 20 5 C 20 4.4454545 20.445455 4 21 4 z M 11 9 L 18.832031 9 A 1.0001 1.0001 0 0 0 19.158203 9 L 30.832031 9 A 1.0001 1.0001 0 0 0 31.158203 9 L 39 9 L 39 45 C 39 45.554545 38.554545 46 38 46 L 12 46 C 11.445455 46 11 45.554545 11 45 L 11 9 z M 18.984375 13.986328 A 1.0001 1.0001 0 0 0 18 15 L 18 40 A 1.0001 1.0001 0 1 0 20 40 L 20 15 A 1.0001 1.0001 0 0 0 18.984375 13.986328 z M 24.984375 13.986328 A 1.0001 1.0001 0 0 0 24 15 L 24 40 A 1.0001 1.0001 0 1 0 26 40 L 26 15 A 1.0001 1.0001 0 0 0 24.984375 13.986328 z M 30.984375 13.986328 A 1.0001 1.0001 0 0 0 30 15 L 30 40 A 1.0001 1.0001 0 1 0 32 40 L 32 15 A 1.0001 1.0001 0 0 0 30.984375 13.986328 z"/>
@@ -257,11 +261,15 @@
         <div *ngIf="coloring == true"  (click)="coloring = false" type="button"  ngbTooltip='Die Artikel (der, die, das) in den Antwortmöglichkeiten werden für die Schüler eingefärbt.' class="btn icon-action-bar" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"> 
             <svg id="Capa_1" class="svgs-in-actionbar" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g><path d="m324.009 373.796v103.937h60.008c38.848-22.477 71.238-54.868 93.715-93.715v-60.008h-103.936c-11.941 20.637-29.149 37.845-49.787 49.786z" fill="#09a1e5"/><path d="m373.796 187.991h103.937v-60.008c-22.477-38.848-54.868-71.238-93.715-93.715h-60.008v103.937c20.637 11.94 37.845 29.148 49.786 49.786z" fill="#962b7c"/><path d="m187.991 138.204v-103.937h-60.008c-38.848 22.477-71.238 54.868-93.715 93.715v60.008h103.937c11.94-20.637 29.148-37.845 49.786-49.786z" fill="#ff9259"/><path d="m256 392-60 60 60 60c46.638 0 90.359-12.478 128.018-34.267l-60.008-103.937c-20.007 11.575-43.234 18.204-68.01 18.204z" fill="#3ec3ff"/><path d="m138.204 324.009h-103.937v60.008c22.477 38.848 54.868 71.238 93.715 93.715h42.82l17.188-103.937c-20.637-11.94-37.845-29.148-49.786-49.786z" fill="#49b296"/><path d="m392 256c0 24.776-6.629 48.003-18.204 68.009l103.937 60.008c21.79-37.659 34.267-81.379 34.267-128.017l-60-40z" fill="#077ccc"/><path d="m187.991 373.796-60.008 103.937c37.658 21.789 81.379 34.267 128.017 34.267v-120c-24.776 0-48.003-6.629-68.009-18.204z" fill="#2897b1"/><path d="m120 256-60-30-60 30c0 46.638 12.477 90.358 34.267 128.018l103.937-60.008c-11.575-20.007-18.204-43.234-18.204-68.01z" fill="#89c247"/><path d="m392 256h120c0-46.638-12.477-90.358-34.267-128.018l-103.937 60.008c11.575 20.007 18.204 43.234 18.204 68.01z" fill="#622876"/><path d="m324.009 138.204 60.008-103.937c-37.658-21.789-81.379-34.267-128.017-34.267l-60 60 60 60c24.776 0 48.003 6.629 68.009 18.204z" fill="#cb2e81"/><path d="m256 120v-120c-46.638 0-90.359 12.478-128.018 34.267l60.008 103.937c20.007-11.575 43.234-18.204 68.01-18.204z" fill="#ff5178"/><path d="m138.204 187.991-103.937-60.009c-21.79 37.66-34.267 81.38-34.267 128.018h120c0-24.776 6.629-48.003 18.204-68.009z" fill="#ffd23b"/><path d="m347.811 202.993h-151.811l60 159.007c58.542 0 106-47.458 106-106 0-19.311-5.166-37.414-14.189-53.007z" fill="#09a1e5"/><path d="m164.189 202.993c-9.023 15.593-14.189 33.696-14.189 53.007 0 58.542 47.458 106 106 106v-159.007z" fill="#ffd23b"/><path d="m347.811 202.993c-18.329-31.679-52.58-52.993-91.811-52.993l-30 53 30 53z" fill="#ff3187"/><path d="m256 150c-39.231 0-73.482 21.314-91.811 52.993l91.811 53.007z" fill="#ff5178"/></g></svg>  
         </div>
+        <!-- arrow right -->
+        <div type="button" ngbTooltip="Weiter zur nächsten Frage" class="btn" (click) = "this.rightArrowClicked()" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"> 
+            <svg fill="grey" class="svgs-in-actionbar" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="long-arrow-alt-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z"></path></svg> 
+        </div>
     </div>
 
     <!-- actionBar editing=true speichern -->
     <div *ngIf = "editingAudio == true" class="item-actionBar1 action-bar-styling">
-        <div style="min-height: 150px;"></div>
+        <!-- <div style="min-height: 150px;"></div> -->
         <div type="button"  ngbTooltip="Textmodus - erlaubt das Ändern der Textfelder."  class="btn icon-action-bar"  (click) = "switchMode()">      
             <svg fill="grey" style="width: 5%; min-width: 50px; min-height: 50px; enable-background:new 0 0 512 512;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve"> <path d="M255,394.948H80c-44.112,0-80-35.888-80-80v-118c0-44.112,35.888-80,80-80h175c11.046,0,20,8.954,20,20s-8.954,20-20,20H80  c-22.056,0-40,17.944-40,40v118c0,22.056,17.944,40,40,40h175c11.046,0,20,8.954,20,20S266.046,394.948,255,394.948z M432,116.948  h-18c-11.046,0-20,8.954-20,20s8.954,20,20,20h18c22.056,0,40,17.944,40,40v118c0,22.056-17.944,40-40,40h-18  c-11.046,0-20,8.954-20,20s8.954,20,20,20h18c44.112,0,80-35.888,80-80v-118C512,152.835,476.112,116.948,432,116.948z M414,472  c-33.084,0-60-26.916-60-60V100c0-33.084,26.916-60,60-60c11.046,0,20-8.954,20-20s-8.954-20-20-20  c-32.676,0-61.74,15.755-80,40.066C315.74,15.755,286.676,0,254,0c-11.046,0-20,8.954-20,20s8.954,20,20,20  c33.084,0,60,26.916,60,60v312c0,33.084-26.916,60-60,60c-11.046,0-20,8.954-20,20s8.954,20,20,20c32.676,0,61.74-15.755,80-40.066  C352.26,496.245,381.324,512,414,512c11.046,0,20-8.954,20-20S425.046,472,414,472z"/> </svg>
         </div>

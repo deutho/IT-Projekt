@@ -154,14 +154,14 @@
   .img-style {
     max-width: 50%;
     max-height: 50%;
-	margin: 60px auto;
+	  margin: 30px auto;
     text-align: center;
-	min-width: 340px
+	  min-width: 340px
 }
 
 .image {
-	width: 80%; 
-	height: 80%;
+	width: 60%; 
+	height: 60%;
 	border-radius: 15px;
 	border: 20px solid white;
 	filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
