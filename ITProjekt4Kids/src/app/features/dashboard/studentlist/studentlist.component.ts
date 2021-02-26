@@ -39,6 +39,10 @@ export class StudentlistComponent implements OnInit {
       return 0;
     });
 
+    for(var i = 0; i<this.studentList.length; i++){
+      this.studentList[i].username = this.studentList[i].username.substring(0,this.studentList[i].username.length - 13)
+    }
+
     this.loading = false;
 
   }

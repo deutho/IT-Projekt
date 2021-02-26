@@ -1,0 +1,94 @@
+.image{
+    width: 70px;
+    height: 70px;
+    border-radius: 50px;
+}
+
+.listOfStudents {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* align-content: center; */
+    text-align: center;
+
+}
+
+.listContainer {
+    background-color: #fff;
+    border-radius: 40px;
+    width: 80%;
+    filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
+    margin: 40px auto;
+    padding: 20px 0px;
+}
+
+.pageContent {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+    /* align-content: flex-start; */
+    /* justify-content: flex-start; */
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    max-width: 80%;
+    width: 80%
+}
+
+.studentInfo {
+    display: flex;
+    flex-direction: row;
+    margin: 0px 20px;
+    font-size: larger;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.studentInfoItem{
+    width: 25%;
+    display: flex;
+    justify-content: flex-start;
+    min-width: 100px;
+}
+
+.studentInfoItem0{
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100px;
+}
+
+.number {
+    display: flex; 
+    text-align: center; 
+    align-items: center; 
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.divider {
+    margin: 10px auto;
+    height: 1px;
+    background: #000;
+    width: 80%;
+}
+
+.header {
+    width:100%;
+    display: flex;
+    justify-content: center;
+    font-size: x-large;
+    text-align: center;
+    margin: 0px auto 40px auto;
+    text-decoration: underline;
+    padding: 0px 20px;
+}

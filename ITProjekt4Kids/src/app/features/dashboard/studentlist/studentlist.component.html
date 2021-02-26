@@ -1,9 +1,23 @@
-<div *ngIf = "loading === false">
-    <p>Liste der Schüler von {{currentUser.firstname}} {{currentUser.lastname}}</p>
+<div *ngIf = "loading === false" class="pageContent">
 
-    <div *ngFor="let student of studentList;  index as i">
+    <div class="listContainer">
+        <div class="header">Liste der Schüler von {{currentUser.firstname}} {{currentUser.lastname}}</div>
 
-        <p>Nr.:{{i+1}} {{student.lastname}} {{student.firstname}} </p>
+        <div *ngFor="let student of studentList;  index as i" class="listOfStudents">
+            <div class="row">
+                <div class="studentInfo"> 
+                    <div class="studentInfoItem0">
+                        <div clasS="number">{{i+1}}</div>
+                        <img class="image" src="{{student.photoID}}" onerror="src='./../../../../assets/Images/placeholder-profileimage.jpg'" alt="Foto">
 
+                    </div>
+                    <div class="studentInfoItem">Nachname: {{student.lastname}}</div> 
+                    <div class="studentInfoItem">Vorname: {{student.firstname}}</div> 
+                    <div class="studentInfoItem">Benutzername: {{student.username}} </div> 
+                </div>
+            </div>
+
+            <div class="divider"></div>
+        </div>
     </div>
 </div>

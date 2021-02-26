@@ -31,7 +31,7 @@ export class UploadTaskComponent implements OnInit {
 
   startUpload() {
     // The storage path
-    const path = `${this.path}_${this.currentGameUID}_${Date.now()}_${this.file.name}`;
+    const path = `${this.path}/${this.currentGameUID}_${Date.now()}_${this.file.name}`;
 
     // Reference to storage bucket
     const ref = this.storage.ref(path);
