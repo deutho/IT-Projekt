@@ -64,6 +64,7 @@ export class MainMenuComponent implements OnInit {
   unauthorized: boolean = false;
   currentFolderElement: Folderelement;
   isOwnerOfCurrentFolder: boolean;
+  isEditorOfCurrentFolder: boolean;
 
   
 
@@ -89,6 +90,7 @@ export class MainMenuComponent implements OnInit {
   //initialize the component after a path change
   async initialize(id) {
     this.isOwnerOfCurrentFolder = false;
+    this.isEditorOfCurrentFolder = false;
 
     console.log(id);
     if (id === " ") {
@@ -121,12 +123,17 @@ export class MainMenuComponent implements OnInit {
             });
           });
           this.appService.myHeader(this.currentFolder.name);
-          if (this.currentFolder.owner == this.currentUser.uid) this.isOwnerOfCurrentFolder = true;
+          if (this.currentFolder.owner == this.currentUser.uid){
+            this.isOwnerOfCurrentFolder = true;
+            this.isEditorOfCurrentFolder = true;
+          } 
+          if (this.currentFolder.editors.includes(this.currentUser.uid)) this.isEditorOfCurrentFolder = true;
 
         }
         else {
           if (this.currentDocKey == this.currentUser.uid) {
             this.isOwnerOfCurrentFolder = true;
+            this.isEditorOfCurrentFolder = true;
           }
           this.appService.myHeader("Startseite");
         }
