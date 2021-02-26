@@ -211,48 +211,40 @@ export class VerbPositionGameEditComponent implements OnInit {
 
       this.currentGame.photoID = this.imageURL;
 
-      //Verbgame must have a question
+      // //Verbgame must have a question
       if(this.question == ''){
         this.noQuestionFilled = true;
         setTimeout(() => this.noQuestionFilled = false, 2500);
         return
       }
-      
-      
-      let uid;
-      if(this.currentGame.uid == '') uid = uuidv4();
-      else uid = this.currentGame.uid;
 
+      // trim audio array to delete unnecessary audio URLS
+      this.audioURLS.length = this.valuesOfInput.length + 1;
 
       //Create Game
       this.currentGame = new VerbPositionGame(
-        uid, 
-        this.valuesOfInput,
-        this.audioURLS,
-        [this.question, this.audioURLS[0]],
-        this.imageURL,
-        this.folderUID,
-        this.easyMode,
-        this.punctuationType)    
-        this.afs.updateTask(this.currentGame);       
-        this.finalScreen = false;
-        this.saved = true;
-        setTimeout(() => this.saved = false, 2500);
+                                              this.currentGame.uid, 
+                                              Object.assign([],this.valuesOfInput),
+                                              this.audioURLS,
+                                              [this.question, this.audioURLS[0]],
+                                              this.imageURL,
+                                              this.folderUID,
+                                              this.easyMode,
+                                              this.punctuationType)    
+      this.afs.updateTask(this.currentGame);       
+      this.finalScreen = false;
+      this.saved = true;
+      setTimeout(() => this.saved = false, 2500);
       }
     else {
-      console.log("no changes")
       this.noChanges = true;
       setTimeout(() => this.noChanges = false, 2500);
     }
   }
 
   checkForChanges(): boolean{
+
     if(this.currentGame == undefined) return false;
-
-    // this.audioURLWord1 = (<HTMLInputElement>document.getElementById('audioURLWord1')).value;
-    // this.audioURLWord2 = (<HTMLInputElement>document.getElementById('audioURLWord2')).value;
-    // this.audioURLWord3 = (<HTMLInputElement>document.getElementById('audioURLWord3')).value;
-
 
     // update the words in the input fields - only do when in textmode
     if(this.editingAudio == false){
@@ -267,6 +259,7 @@ export class VerbPositionGameEditComponent implements OnInit {
         wordsDidChange = true;        
       }
     }
+
     if(this.currentGame.words.length != this.valuesOfInput.length) wordsDidChange = true;
     // special case - needs to be in place when moving away from new unedited game
     if(this.currentGame.words.length == 3 
@@ -282,7 +275,7 @@ export class VerbPositionGameEditComponent implements OnInit {
       }
     }
 
-    this.punctuationType = (<HTMLSelectElement>document.getElementById("punctuationSelector")).value
+    
 
     if(this.currentGame.audio.length != this.audioURLS.length) audioURLSDidChange = true;
     if(this.currentGame.question[0] == this.question &&
@@ -309,6 +302,7 @@ export class VerbPositionGameEditComponent implements OnInit {
         this.valuesOfInput.push((<HTMLInputElement>inputFieldNodes[i]).value);
       }
     }
+    this.punctuationType = (<HTMLSelectElement>document.getElementById("punctuationSelector")).value
   }
 
   pictureEdited(imageURL?: string) {  
@@ -394,14 +388,8 @@ export class VerbPositionGameEditComponent implements OnInit {
   //discard button from warning of unsaved changes
   discardChanges() {
     this.unsavedChanges=false;
-    if (this.imageURL != this.currentGame.photoID) {
-      if (this.imageURL.search("firebasestorage.googleapis.com") != -1) {
-        this.afs.deleteFromStorageByUrl(this.imageURL);
-      }
-    }
     this.loadValuesOfGame();
-    this.easyMode = this.currentGame.easyMode;
-    
+    this.easyMode = this.currentGame.easyMode;    
     // this.initSounds();
   }
 
@@ -471,16 +459,6 @@ export class VerbPositionGameEditComponent implements OnInit {
     }
   }
 
-
-  // initSounds() {
-  //   this.audioURLQuestion = this.currentGame.question[1]
-  //   this.audioURLWord1 = this.currentGame.audio[0]
-  //   this.audioURLWord2 = this.currentGame.audio[1]
-  //   this.audioURLWord3 = this.currentGame.audio[2]
-  //   this.audioURLWord4 = this.currentGame.audio[3]
-  //   this.audioURLWord5 = this.currentGame.audio[4]
-  //   this.audioURLWord6 = this.currentGame.audio[5]
-  // }
 
   loadAudio(){
     this.audioURLS[this.triggeredHTML] = this.audioURL
