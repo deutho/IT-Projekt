@@ -8,7 +8,7 @@
                 <div id="profile_image">
                     <img *ngIf = "editingPicture == false" class = "img-style" onerror="this.onerror=null; this.src='./../../../assets/Images/profile_image.png';" src = "{{imageURL}}">
                     <div class="imageEditing-container"  *ngIf = "this.editingPicture == true">
-                        <uploader currentGameUID="{{currentUser.uid}}" style="padding: 10px; cursor: pointer;"></uploader>
+                        <uploader path="pictures/profilepictures" currentGameUID="{{currentUser.uid}}" style="padding: 10px; cursor: pointer;"></uploader>
                         <div class="centerImageEditing">            
                             <input id="URL" class="imageEditingItem2" value="{{imageURL}}">
                             <div class="buttonsEditImage">
