@@ -25,14 +25,17 @@
     
 </div>
 
-<div class="content" *ngIf = "write === false">
-    <h3 style="text-align: center;">Feedback Reports von {{currentUser.firstname}} {{currentUser.lastname}}</h3>
-    <ul *ngFor="let bugreport of bugreports;  index as i" style="padding-top: -50px;">
-        <li style="margin-top: 30px;">
-             {{i+1}} Status: {{bugreport.status}} vom {{dates[i]}}: {{bugreport.description}}
-             
-        </li>
-    </ul>
-    <button (click)="changeView();" class = "btn login-button-style">Feedback geben</button>
-</div>
 
+
+<div class = "container">
+    <div class="bugreport-list" *ngIf = "write === false">
+        <h3 style="text-align: center;">Feedback Reports von {{currentUser.firstname}} {{currentUser.lastname}}</h3>
+        <ul *ngFor="let bugreport of bugreports;  index as i" style="padding-top: -50px;">
+            <li style="margin-top: 30px;">
+                {{i+1}} Status: {{bugreport.status}} vom {{dates[i]}}: {{bugreport.description}}
+                
+            </li>
+        </ul>
+        <button (click)="changeView();" class = "btn login-button-style">Feedback geben</button>
+    </div>
+</div>
