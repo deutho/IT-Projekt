@@ -6,7 +6,7 @@
 
     <div *ngIf="editingAudio == false" class="centered-flex-column" style="display: flex; width: 100%; flex-direction: column;">
         <!-- Question -->
-        <input class="question" type="text" id="question" placeholder="Nennform" value="{{this.audioStrings[0]}}">
+        <input [disabled]="isViewer" class="question" type="text" id="question" placeholder="Nennform" value="{{this.audioStrings[0]}}">
         
         <!-- main part -->    
         <div class="gameValues">
@@ -25,12 +25,12 @@
             <!-- input words -->
             <div class="example-container">
                 <div style="display: flex; flex-direction: column;">
-                    <input type="text" class="example-box" id ="valueIch" placeholder="z.B. gehe" value="{{this.audioStrings[1]}}"> 
-                    <input type="text" class="example-box" id ="valueDu" placeholder="z.B. gehst" value="{{this.audioStrings[2]}}">
-                    <input type="text" class="example-box" id ="valueErSieEs" placeholder="z.B. geht" value="{{this.audioStrings[3]}}">
-                    <input type="text" class="example-box" id ="valueWir" placeholder="z.B. gehen" value="{{this.audioStrings[4]}}">
-                    <input type="text" class="example-box" id ="valueIhr" placeholder="z.B. geht" value="{{this.audioStrings[5]}}">
-                    <input type="text" class="example-box" id ="valueSie" placeholder="z.B. gehen" value="{{this.audioStrings[6]}}">
+                    <input [disabled]="isViewer" type="text" class="example-box" id ="valueIch" placeholder="z.B. gehe" value="{{this.audioStrings[1]}}"> 
+                    <input [disabled]="isViewer" type="text" class="example-box" id ="valueDu" placeholder="z.B. gehst" value="{{this.audioStrings[2]}}">
+                    <input [disabled]="isViewer" type="text" class="example-box" id ="valueErSieEs" placeholder="z.B. geht" value="{{this.audioStrings[3]}}">
+                    <input [disabled]="isViewer" type="text" class="example-box" id ="valueWir" placeholder="z.B. gehen" value="{{this.audioStrings[4]}}">
+                    <input [disabled]="isViewer" type="text" class="example-box" id ="valueIhr" placeholder="z.B. geht" value="{{this.audioStrings[5]}}">
+                    <input [disabled]="isViewer" type="text" class="example-box" id ="valueSie" placeholder="z.B. gehen" value="{{this.audioStrings[6]}}">
                 </div>
             </div>
         </div>
@@ -40,7 +40,7 @@
         <div class="record-div" *ngFor="let audio of audioStrings, index as i">
             <div class="textForAudio">{{audioStrings[i]}}</div>
             <div class="editAudioInteraction" >
-                <button id="audioButton{{i}}" class="recordButton" (click)="startVoiceRecord(i)" >
+                <button [disabled]="isViewer" id="audioButton{{i}}" class="recordButton" (click)="startVoiceRecord(i)" >
                     <svg  width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone" class="svg-inline--fa fa-microphone fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z"></path></svg>
                 </button>
                 <div class="spacingBetweenButtonAndTimer"></div>
@@ -104,7 +104,7 @@
             <svg  fill="grey" class="svgs-in-actionbar" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve"> <path d="M255,394.948H80c-44.112,0-80-35.888-80-80v-118c0-44.112,35.888-80,80-80h175c11.046,0,20,8.954,20,20s-8.954,20-20,20H80  c-22.056,0-40,17.944-40,40v118c0,22.056,17.944,40,40,40h175c11.046,0,20,8.954,20,20S266.046,394.948,255,394.948z M432,116.948  h-18c-11.046,0-20,8.954-20,20s8.954,20,20,20h18c22.056,0,40,17.944,40,40v118c0,22.056-17.944,40-40,40h-18  c-11.046,0-20,8.954-20,20s8.954,20,20,20h18c44.112,0,80-35.888,80-80v-118C512,152.835,476.112,116.948,432,116.948z M414,472  c-33.084,0-60-26.916-60-60V100c0-33.084,26.916-60,60-60c11.046,0,20-8.954,20-20s-8.954-20-20-20  c-32.676,0-61.74,15.755-80,40.066C315.74,15.755,286.676,0,254,0c-11.046,0-20,8.954-20,20s8.954,20,20,20  c33.084,0,60,26.916,60,60v312c0,33.084-26.916,60-60,60c-11.046,0-20,8.954-20,20s8.954,20,20,20c32.676,0,61.74-15.755,80-40.066  C352.26,496.245,381.324,512,414,512c11.046,0,20-8.954,20-20S425.046,472,414,472z"/> </svg>
         </div>
         <!-- save -->
-        <div type="button"  ngbTooltip="Speichert vorgenommene Änderungen." class="btn"  (click) = "saveChanges()"> 
+        <div *ngIf="isViewer==false" type="button"  ngbTooltip="Speichert vorgenommene Änderungen." class="btn"  (click) = "saveChanges()"> 
             <svg fill="grey" class="svgs-in-actionbar" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve"> <g> <g> <path d="M508.885,88.448L423.552,3.115C421.547,1.131,418.837,0,416,0H32C14.357,0,0,14.357,0,32v448c0,17.643,14.357,32,32,32 h448c17.643,0,32-14.357,32-32V96C512,93.163,510.869,90.453,508.885,88.448z M490.667,480c0,5.888-4.8,10.667-10.667,10.667H32 c-5.867,0-10.667-4.779-10.667-10.667V32c0-5.888,4.8-10.667,10.667-10.667h379.584l79.083,79.083V480z"/> </g> </g> <g> <g> <path d="M373.333,0H138.667C132.779,0,128,4.779,128,10.667v128c0,17.643,14.357,32,32,32h192c17.643,0,32-14.357,32-32v-128 C384,4.779,379.221,0,373.333,0z M362.667,138.667c0,5.888-4.8,10.667-10.667,10.667H160c-5.867,0-10.667-4.779-10.667-10.667 V21.333h213.333V138.667z"/> </g> </g> <g> <g> <path d="M394.667,192H117.333C87.915,192,64,215.936,64,245.333v256C64,507.221,68.779,512,74.667,512h362.667 c5.888,0,10.667-4.779,10.667-10.667v-256C448,215.936,424.085,192,394.667,192z M426.667,490.667H85.333V245.333 c0-17.643,14.357-32,32-32h277.333c17.643,0,32,14.357,32,32V490.667z"/> </g> </g> <g> <g> <path d="M330.667,42.667H288c-5.888,0-10.667,4.779-10.667,10.667v64c0,5.888,4.779,10.667,10.667,10.667h42.667 c5.888,0,10.667-4.779,10.667-10.667v-64C341.333,47.445,336.555,42.667,330.667,42.667z M320,106.667h-21.333V64H320V106.667z"/> </g> </g> <g> <g> <path d="M373.333,277.333H138.667c-5.888,0-10.667,4.779-10.667,10.667s4.779,10.667,10.667,10.667h234.667 c5.888,0,10.667-4.779,10.667-10.667S379.221,277.333,373.333,277.333z"/> </g> </g> <g> <g> <path d="M373.333,341.333H138.667c-5.888,0-10.667,4.779-10.667,10.667c0,5.888,4.779,10.667,10.667,10.667h234.667 c5.888,0,10.667-4.779,10.667-10.667C384,346.112,379.221,341.333,373.333,341.333z"/> </g> </g> <g> <g> <path d="M373.333,405.333H138.667c-5.888,0-10.667,4.779-10.667,10.667c0,5.888,4.779,10.667,10.667,10.667h234.667 c5.888,0,10.667-4.779,10.667-10.667C384,410.112,379.221,405.333,373.333,405.333z"/> </g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> </svg>                  
         </div>
         <!-- audiomode -->
@@ -122,13 +122,13 @@
             <svg fill="grey" class="svgs-in-actionbar" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="long-arrow-alt-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z"></path></svg>        
         </div>
         <!-- delete -->
-        <div type="button" *ngIf="finalScreen == false" ngbTooltip="Löscht diese Frage. Der Rest des Spieles bleibt unberührt." class="btn" (click) = "deleteElementOverlay = true" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"> 
+        <div type="button" *ngIf="finalScreen == false && isViewer==false" ngbTooltip="Löscht diese Frage. Der Rest des Spieles bleibt unberührt." class="btn" (click) = "deleteElementOverlay = true" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"> 
             <svg fill="grey" class="svgs-in-actionbar" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 50 50">
                 <path d="M 21 2 C 19.354545 2 18 3.3545455 18 5 L 18 7 L 10.154297 7 A 1.0001 1.0001 0 0 0 9.984375 6.9863281 A 1.0001 1.0001 0 0 0 9.8398438 7 L 8 7 A 1.0001 1.0001 0 1 0 8 9 L 9 9 L 9 45 C 9 46.645455 10.354545 48 12 48 L 38 48 C 39.645455 48 41 46.645455 41 45 L 41 9 L 42 9 A 1.0001 1.0001 0 1 0 42 7 L 40.167969 7 A 1.0001 1.0001 0 0 0 39.841797 7 L 32 7 L 32 5 C 32 3.3545455 30.645455 2 29 2 L 21 2 z M 21 4 L 29 4 C 29.554545 4 30 4.4454545 30 5 L 30 7 L 20 7 L 20 5 C 20 4.4454545 20.445455 4 21 4 z M 11 9 L 18.832031 9 A 1.0001 1.0001 0 0 0 19.158203 9 L 30.832031 9 A 1.0001 1.0001 0 0 0 31.158203 9 L 39 9 L 39 45 C 39 45.554545 38.554545 46 38 46 L 12 46 C 11.445455 46 11 45.554545 11 45 L 11 9 z M 18.984375 13.986328 A 1.0001 1.0001 0 0 0 18 15 L 18 40 A 1.0001 1.0001 0 1 0 20 40 L 20 15 A 1.0001 1.0001 0 0 0 18.984375 13.986328 z M 24.984375 13.986328 A 1.0001 1.0001 0 0 0 24 15 L 24 40 A 1.0001 1.0001 0 1 0 26 40 L 26 15 A 1.0001 1.0001 0 0 0 24.984375 13.986328 z M 30.984375 13.986328 A 1.0001 1.0001 0 0 0 30 15 L 30 40 A 1.0001 1.0001 0 1 0 32 40 L 32 15 A 1.0001 1.0001 0 0 0 30.984375 13.986328 z"/>
             </svg>   
         </div>
         <!-- delete but invisible as placeholder -->
-        <div type="button" *ngIf="finalScreen == true" ngbTooltip="Löscht diese Frage. Der Rest des Spieles bleibt unberührt." class="btn" (click) = "deleteElementOverlay = true" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"> 
+        <div type="button" *ngIf="finalScreen == true" class="btn" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"> 
             <svg fill="transparent" class="svgs-in-actionbar" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 50 50">
                 <path d="M 21 2 C 19.354545 2 18 3.3545455 18 5 L 18 7 L 10.154297 7 A 1.0001 1.0001 0 0 0 9.984375 6.9863281 A 1.0001 1.0001 0 0 0 9.8398438 7 L 8 7 A 1.0001 1.0001 0 1 0 8 9 L 9 9 L 9 45 C 9 46.645455 10.354545 48 12 48 L 38 48 C 39.645455 48 41 46.645455 41 45 L 41 9 L 42 9 A 1.0001 1.0001 0 1 0 42 7 L 40.167969 7 A 1.0001 1.0001 0 0 0 39.841797 7 L 32 7 L 32 5 C 32 3.3545455 30.645455 2 29 2 L 21 2 z M 21 4 L 29 4 C 29.554545 4 30 4.4454545 30 5 L 30 7 L 20 7 L 20 5 C 20 4.4454545 20.445455 4 21 4 z M 11 9 L 18.832031 9 A 1.0001 1.0001 0 0 0 19.158203 9 L 30.832031 9 A 1.0001 1.0001 0 0 0 31.158203 9 L 39 9 L 39 45 C 39 45.554545 38.554545 46 38 46 L 12 46 C 11.445455 46 11 45.554545 11 45 L 11 9 z M 18.984375 13.986328 A 1.0001 1.0001 0 0 0 18 15 L 18 40 A 1.0001 1.0001 0 1 0 20 40 L 20 15 A 1.0001 1.0001 0 0 0 18.984375 13.986328 z M 24.984375 13.986328 A 1.0001 1.0001 0 0 0 24 15 L 24 40 A 1.0001 1.0001 0 1 0 26 40 L 26 15 A 1.0001 1.0001 0 0 0 24.984375 13.986328 z M 30.984375 13.986328 A 1.0001 1.0001 0 0 0 30 15 L 30 40 A 1.0001 1.0001 0 1 0 32 40 L 32 15 A 1.0001 1.0001 0 0 0 30.984375 13.986328 z"/>
             </svg>   

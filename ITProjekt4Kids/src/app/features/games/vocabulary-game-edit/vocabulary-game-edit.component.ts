@@ -63,7 +63,7 @@ export class VocabularyGameEditComponent implements OnInit {
   unauthorized: boolean = false;
   isOwner: boolean = false;
   isEditor: boolean = false;
-  isViewer: boolean = true;
+  isViewer: boolean = false;
   
  
 
@@ -109,7 +109,8 @@ export class VocabularyGameEditComponent implements OnInit {
           //get the rights (Thomas, mit de 2 bools kannst arbeiten - isViewer is eh imma true - jeder kann viewen)
           if (this.folder.owner == this.currentUser.uid) this.isOwner = true;
           if (this.folder.editors.includes(this.currentUser.uid)) this.isEditor = true;
-
+          if(this.isOwner == false && this.isEditor == false) this.isViewer = true;
+          
           //set the header
           this.appService.myHeader(this.folder.name);    
         
