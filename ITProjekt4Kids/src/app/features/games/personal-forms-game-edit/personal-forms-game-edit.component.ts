@@ -64,9 +64,9 @@ export class PersonalFormsGameEditComponent implements OnInit {
   isRecording: any = false;
   audioURL: string;
   audioPlaying = -1;
-  isOwner: boolean = true;
-  isEditor: boolean = true;
-  isViewer: boolean = true;
+  isOwner: boolean = false;
+  isEditor: boolean = false;
+  isViewer: boolean = false;
 
 
   constructor(private router: Router, private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
@@ -110,19 +110,17 @@ export class PersonalFormsGameEditComponent implements OnInit {
             //get the rights (Thomas, mit de 2 bools kannst arbeiten - isViewer is eh imma true - jeder kann viewen)
             if (this.folder.owner == this.currentUser.uid) this.isOwner = true;
             if (this.folder.editors.includes(this.currentUser.uid)) this.isEditor = true;
+            if (this.isOwner == false && this.isEditor == false) this.isViewer = true;
 
+            // get games
+            await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
+            //init second stack for going back and forwards between games
+            let previousGames = [];
+            this.previousGames = previousGames;
 
-          
-
-              // get games
-              await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
-              //init second stack for going back and forwards between games
-              let previousGames = [];
-              this.previousGames = previousGames;
-
-              //load first game
-              this.loadNextGame();
-              this.initSounds();
+            //load first game
+            this.loadNextGame();
+            this.initSounds();
           }
     }
   }

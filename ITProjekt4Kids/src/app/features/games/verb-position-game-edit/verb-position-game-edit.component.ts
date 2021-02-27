@@ -65,9 +65,9 @@ export class VerbPositionGameEditComponent implements OnInit {
   words: string[]
   valuesOfInput = [];
   audioData = [];
-  isOwner: boolean;
-  isEditor: boolean;
-  isViewer: boolean = true;
+  isOwner: boolean = false;
+  isEditor: boolean = false;
+  isViewer: boolean = false;
   audioStrings: string[] = [];
   audioURLS: string[] = [];
   audioPlaying = -1;
@@ -131,22 +131,19 @@ export class VerbPositionGameEditComponent implements OnInit {
           //get the rights (Thomas, mit de 2 bools kannst arbeiten - isViewer is eh imma true - jeder kann viewen)
           if (this.folder.owner == this.currentUser.uid) this.isOwner = true;
           if (this.folder.editors.includes(this.currentUser.uid)) this.isEditor = true;
+          if(this.isOwner == false && this.isEditor == false) this.isViewer = true;         
 
-          
-
-            // get games
-            await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
-            //init second stack for going back and forwards between games
-            let previousGames = [];
-            this.previousGames = previousGames;
-            //load first game
-            this.loadNextGame();
-            // this.initSounds();
+          // get games
+          await this.afs.getTasksPerID(this.folderUID).then(data => this.Games = data);
+          //init second stack for going back and forwards between games
+          let previousGames = [];
+          this.previousGames = previousGames;
+          //load first game
+          this.loadNextGame();
+          // this.initSounds();
         }
     }
   }
-
-
 
   loadNextGame(nopush?: boolean){
     if(this.finalScreen && this.Games.length == 0) {
@@ -181,7 +178,7 @@ export class VerbPositionGameEditComponent implements OnInit {
     this.easyMode = this.currentGame.easyMode;
 
     //  lets the html know, that content can now be loaded
-    this.loaded = true;
+    this.loaded = true;    
   }
 
 
