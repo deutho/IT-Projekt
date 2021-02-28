@@ -297,7 +297,7 @@ loadCurrentValues(){
   }
 
   loadNextGame() {
-    if(this.finalScreen && this.Games.length == 0) {
+    if((this.finalScreen && this.Games.length == 0) || (this.isViewer && this.Games.length == 0))  {
       this.noMoreGames = true;
       setTimeout(() => this.noMoreGames = false, 2500);
       return; //maybe add some feedback here

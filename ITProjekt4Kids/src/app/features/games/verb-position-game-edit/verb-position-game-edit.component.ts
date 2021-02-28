@@ -146,7 +146,7 @@ export class VerbPositionGameEditComponent implements OnInit {
   }
 
   loadNextGame(nopush?: boolean){
-    if(this.finalScreen && this.Games.length == 0) {
+    if((this.finalScreen && this.Games.length == 0)  || (this.isViewer && this.Games.length == 0))  { 
       this.noMoreGames = true;
       setTimeout(() => this.noMoreGames = false, 2500);
       if(this.valuesOfInput = []) this.valuesOfInput = ['', '', '']

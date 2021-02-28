@@ -279,7 +279,7 @@ export class VocabularyGameEditComponent implements OnInit {
 
   loadNextGame(nopush?: boolean) {   
     this.loaded = false;
-    if(this.finalScreen && this.Games.length == 0) {
+    if((this.finalScreen && this.Games.length == 0) || (this.isViewer && this.Games.length == 0))   {
       this.noMoreGames = true;
       this.loaded = true;
       setTimeout(() => this.noMoreGames = false, 2500);
@@ -294,7 +294,7 @@ export class VocabularyGameEditComponent implements OnInit {
       }   
         
       // if game is empty, or you clicked past the last page in the game
-      else this.initializeNewQuestion();
+      else  this.initializeNewQuestion();
 
       // set values for question, answers and photo-url
       this.question = this.currentGame.question[0];
