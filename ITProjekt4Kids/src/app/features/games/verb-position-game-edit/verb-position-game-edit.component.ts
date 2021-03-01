@@ -146,6 +146,7 @@ export class VerbPositionGameEditComponent implements OnInit {
   }
 
   loadNextGame(nopush?: boolean){
+    console.log(this.Games.length)
     if((this.finalScreen && this.Games.length == 0)  || (this.isViewer && this.Games.length == 0))  { 
       this.noMoreGames = true;
       setTimeout(() => this.noMoreGames = false, 2500);

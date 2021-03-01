@@ -279,6 +279,7 @@ export class VocabularyGameEditComponent implements OnInit {
 
   loadNextGame(nopush?: boolean) {   
     this.loaded = false;
+    console.log(this.Games.length)
     if((this.finalScreen && this.Games.length == 0) || (this.isViewer && this.Games.length == 0))   {
       this.noMoreGames = true;
       this.loaded = true;
