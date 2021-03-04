@@ -8,6 +8,7 @@ import { RecordRTCService } from 'src/app/services/record-rtc.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Folder } from 'src/app/models/folder.model';
 import { style } from '@angular/animations';
+import { nullSafeIsEquivalent } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-verb-position-game-edit',
@@ -63,7 +64,7 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
   audioWord5Playing = false;
   audioWord6Playing = false;
   words: string[]
-  valuesOfInput = [];
+  valuesOfInput: string[] = [];
   audioData = [];
   isOwner: boolean = false;
   isEditor: boolean = false;
@@ -77,19 +78,20 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
   inputForWidthCalc: string;
   c;
   ctx;
-  e=null;
   studentmode: boolean = false;
   dockey: string;
   studentmodesubscription;
+  imageURLSubscription: any;
+  audioURLSubscription: any;
 
 
   constructor(private router: Router, private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
-    this.appService.myImageURL$.subscribe((data) => {
+    this.imageURLSubscription = this.appService.myImageURL$.subscribe((data) => {
       this.imageURL = data;
       // console.log(data)
       this.pictureEdited(data)
     });
-    this._recordRTC.downloadURL$.subscribe((data) => {
+    this.audioURLSubscription = this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
       if((<HTMLButtonElement> document.getElementById("audioButton0")) != null) {
         this.allowRecord(true);
@@ -149,12 +151,11 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
 
     this.studentmodesubscription = this.appService.myStudentMode$.subscribe((data) => {
       if (data != this.studentmode)
-      this.router.navigate(['game/'+this.folderUID], {queryParams:{k: this.dockey, t: 'verb-position-game'}, replaceUrl: true});
+      this.router.navigate(['game/'+this.folderUID], {queryParams:{k: this.dockey, t: 'verb-position-game'}, replaceUrl: false});
     });
   }
 
   loadNextGame(nopush?: boolean){
-    console.log(this.Games.length)
     if((this.finalScreen && this.Games.length == 0)  || (this.isViewer && this.Games.length == 0))  { 
       this.noMoreGames = true;
       setTimeout(() => this.noMoreGames = false, 2500);
@@ -188,6 +189,13 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
 
     //  lets the html know, that content can now be loaded
     this.loaded = true;    
+
+
+    //  scale input boxes
+    this.calcWidth('question')
+    for(var i = 0; i<this.valuesOfInput.length; i++) {
+      this.calcWidth('valueWord' + i)
+    }
   }
 
 
@@ -208,12 +216,7 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
     
     // Punctuation Type (.,?,!) 
     this.punctuationType = this.currentGame.punctuationType
-    
-    //  scale input boxes
-    this.calcWidth('question')
-    for(var i = 0; i<this.valuesOfInput.length; i++) {
-      this.calcWidth('valueForWidthOfInput' + i)
-    }
+  
   }
 
   saveChanges() {
@@ -232,6 +235,11 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
       // trim audio array to delete unnecessary audio URLS
       this.audioURLS.length = this.valuesOfInput.length + 1;
 
+      for(var i = 0; i<this.valuesOfInput.length; i++){
+        this.valuesOfInput[i] = this.valuesOfInput[i].trim()
+        this.valuesOfInput[i] = this.valuesOfInput[i].replace(/\s\s+/g, " ")
+      }
+
       //Create Game
       this.currentGame = new VerbPositionGame(
                                               this.currentGame.uid, 
@@ -243,9 +251,14 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
                                               this.easyMode,
                                               this.punctuationType)    
       this.afs.updateTask(this.currentGame);       
+
       this.finalScreen = false;
       this.saved = true;
       setTimeout(() => this.saved = false, 2500);
+      this.calcWidth('question')
+      for(var i = 0; i<this.valuesOfInput.length; i++) {
+        this.calcWidth('valueWord' + i)
+      }
       }
     else {
       this.noChanges = true;
@@ -509,17 +522,22 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
   }
 
   calcWidth(HTMLID){    
-      if(this.e==null) this.e=document.getElementById(HTMLID);
-      var myText=this.e.value;
-      var textWidth=this.ctx.measureText(myText);
-      if(textWidth.width<80) return;
-      this.e.style.width=textWidth.width+45+"px";    
+    let e = document.getElementById(HTMLID);
+    if(e==null || (<HTMLInputElement>e).value == "") {      
+      setTimeout(() => this.calcWidth(HTMLID), 10);
+      return;
+    }
+    var myText= (<HTMLInputElement>e).value;
+    var textWidth=this.ctx.measureText(myText);    
+    e.style.width=textWidth.width*1.2+40+"px";    
   }
 
 
 
   ngOnDestroy() {
     this.studentmodesubscription.unsubscribe(); 
+    this.audioURLSubscription.unsubscribe(); 
+    this.imageURLSubscription.unsubscribe(); 
    }
 
 

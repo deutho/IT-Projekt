@@ -70,11 +70,12 @@ export class PersonalFormsGameEditComponent implements OnInit, OnDestroy {
   studentmode: boolean = false;
   dockey: string;
   studentmodesubscription;
+  audioURLSubscription: any;
 
 
   constructor(private router: Router, private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
 
-    this._recordRTC.downloadURL$.subscribe((data) => {
+    this.audioURLSubscription = this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
       if((<HTMLButtonElement> document.getElementById("audioButton0")) != null) {
         this.allowRecord(true);
@@ -481,5 +482,6 @@ loadCurrentValues(){
 
   ngOnDestroy() {
     this.studentmodesubscription.unsubscribe(); 
+    this.audioURLSubscription.unsubscribe(); 
    }
 }

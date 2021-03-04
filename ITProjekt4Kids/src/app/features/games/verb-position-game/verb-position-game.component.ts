@@ -92,7 +92,7 @@ export class VerbPositionGameComponent implements OnInit, OnDestroy {
 
     this.studentmodesubscription =this.appService.myStudentMode$.subscribe((data) => {
       if (data != this.studentmode)
-      this.router.navigate(['game/'+this.folderID], {queryParams:{k: this.dockey, t: 'verb-position-game'}, replaceUrl: true});
+      this.router.navigate(['game/'+this.folderID], {queryParams:{k: this.dockey, t: 'verb-position-game'}, replaceUrl: false});
     });
   }
     
@@ -112,8 +112,7 @@ export class VerbPositionGameComponent implements OnInit, OnDestroy {
         for(let i = 0; i < this.currentGame.words.length; i++){
           if(this.currentGame.words[i] != "undefined") this.sentence.push(this.currentGame.words[i])   
         }
-
-        console.log('sentence: ' + this.sentence)
+        
         this.correct = this.sentence.slice();
         this.shuffleArray(this.sentence); 
         this.capitalizeFirst();
@@ -122,7 +121,7 @@ export class VerbPositionGameComponent implements OnInit, OnDestroy {
         this.answerIsCorrect = false;
         this.imageURL = this.currentGame.photoID;
         if(this.imageURL == './../../../../assets/Images/Placeholder-Image/north_blur_Text.png') this.imageURL = './../../../../assets/Images/imageNotFound.jpg'
-        this.removeColor()
+        this.removeColor()        
     }
     else {
       this.finishGame() 
@@ -157,13 +156,11 @@ export class VerbPositionGameComponent implements OnInit, OnDestroy {
     //generate a dynamic sentence evaluation
     for(let i = 0; i < this.sentence.length; i++){
       
-      if (wordId[i].innerText == this.correct[i]) {
+      if (wordId[i].innerText.replace(/\s\s+/g, ' ') == this.correct[i].replace(/\s\s+/g, ' ')) {
         wordId[i].setAttribute("style","background-color:#52FF82;")
-        console.log("word " + i + " richtig")
         Result[i] = "richtig";
       }else {
         wordId[i].setAttribute("style", "background-color:#FF7171;")
-        console.log("word " + i + " falsch")
         Result[i] = "falsch";
       }
     }
@@ -211,11 +208,6 @@ export class VerbPositionGameComponent implements OnInit, OnDestroy {
     this.sentence[0] = capitalizeFirstLetter
 
     //change all other first letters of words to lowercase
-    // for(var i = 1; i < this.sentence.length; i++){
-    //   var word = this.sentence[i]
-    //   word = word.charAt(0).toLowerCase() + word.slice(1)
-    //   this.sentence[i] = word
-    // }
     for(var i = 1; i < this.sentence.length; i++){
       for(var j = 0; j< this.currentGame.words.length; j++){
         if(this.currentGame.words[j].toLowerCase() == this.sentence[i].toLowerCase()) this.sentence[i] = this.currentGame.words[j]
@@ -225,13 +217,15 @@ export class VerbPositionGameComponent implements OnInit, OnDestroy {
 
   //set dynamic point to the end of the sentence
   point(){
-      for(var i = 0; i < this.sentence.length; i++){
-        var word = this.sentence[i]
-        if(word.includes(this.currentGame.punctuationType)){
-          word = word.substr(0, word.length - 1)
-        }
-        this.sentence[i] = word
+    // remove punctuation from all words
+    for(var i = 0; i < this.sentence.length; i++){
+      var word = this.sentence[i]
+      if(word.includes(this.currentGame.punctuationType)){
+        word = word.substr(0, word.length - 1)
       }
+      this.sentence[i] = word
+    }
+    // add point to correct word (last one)
     var wordPluspoint = this.sentence[this.sentence.length-1]
     wordPluspoint = wordPluspoint + this.currentGame.punctuationType
     this.sentence[this.sentence.length-1] = wordPluspoint   

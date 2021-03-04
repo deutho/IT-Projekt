@@ -12,6 +12,10 @@
     min-height: 63px;
   } */
 
+  input {
+    text-align: center;
+  }
+
   .inputFieldContainer{
     /* display: flex;
     flex-direction: row;
@@ -137,9 +141,10 @@
     flex-direction: column;
     /* justify-content: center; */
     align-items: center;
-  
     padding: 20px 0px;
   }
+
+  
   
 
   

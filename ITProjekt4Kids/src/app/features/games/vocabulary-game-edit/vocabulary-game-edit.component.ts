@@ -69,14 +69,16 @@ export class VocabularyGameEditComponent implements OnInit, OnDestroy {
   dockey: string;
   studentmode: boolean = false;
   studentmodesubscription;
+  audioURLSubscription: any;
+  imageURLSubscription: any;
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) {
     
-    this.appService.myImageURL$.subscribe((data) => {
+    this.imageURLSubscription = this.appService.myImageURL$.subscribe((data) => {
       this.imageURL = data;
       this.pictureEdited(data)
     });    
-    this._recordRTC.downloadURL$.subscribe((data) => {
+    this.audioURLSubscription = this._recordRTC.downloadURL$.subscribe((data) => {
       this.audioURL = data;
       if((<HTMLButtonElement> document.getElementById("audioButtonQuestion")) != null) {
         this.allowRecord(true);        
@@ -581,6 +583,8 @@ export class VocabularyGameEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.studentmodesubscription.unsubscribe(); 
+    this.audioURLSubscription.unsubscribe(); 
+    this.imageURLSubscription.unsubscribe(); 
    }
 
 }
