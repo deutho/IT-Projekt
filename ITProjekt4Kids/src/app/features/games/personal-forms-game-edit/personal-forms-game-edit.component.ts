@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {CdkDragDrop, CdkDropList, CDK_DROP_LIST, copyArrayItem, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { AppService } from 'src/app/services/app.service';
 import {v4 as uuidv4} from 'uuid';
@@ -15,7 +15,7 @@ import { Folder } from 'src/app/models/folder.model';
   templateUrl: './personal-forms-game-edit.component.html',
   styleUrls: ['./personal-forms-game-edit.component.css']
 })
-export class PersonalFormsGameEditComponent implements OnInit {
+export class PersonalFormsGameEditComponent implements OnInit, OnDestroy {
   
   folderUID;
   folder: Folder;
@@ -67,6 +67,9 @@ export class PersonalFormsGameEditComponent implements OnInit {
   isOwner: boolean = false;
   isEditor: boolean = false;
   isViewer: boolean = false;
+  studentmode: boolean = false;
+  dockey: string;
+  studentmodesubscription;
 
 
   constructor(private router: Router, private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
@@ -91,9 +94,9 @@ export class PersonalFormsGameEditComponent implements OnInit {
 
           this.folderUID = this.route.snapshot.paramMap.get('id');
 
-          let dockey: string = this.route.snapshot.queryParamMap.get('k');
+          this.dockey = this.route.snapshot.queryParamMap.get('k');
 
-          await this.afs.getFolderElement(dockey).then(data => {
+          await this.afs.getFolderElement(this.dockey).then(data => {
             let f: Folder[]  = data.folders;
             f.forEach(folder => {
               if (folder.uid == this.folderUID) this.folder = folder
@@ -123,6 +126,11 @@ export class PersonalFormsGameEditComponent implements OnInit {
             this.initSounds();
           }
     }
+
+    this.studentmodesubscription = this.appService.myStudentMode$.subscribe((data) => {
+      if (data != this.studentmode)
+      this.router.navigate(['game/'+this.folderUID], {queryParams:{k: this.dockey, t: 'personal-forms-game'}, replaceUrl: true});
+    });
   }
 
 
@@ -470,4 +478,8 @@ loadCurrentValues(){
     }
 
   }
+
+  ngOnDestroy() {
+    this.studentmodesubscription.unsubscribe(); 
+   }
 }

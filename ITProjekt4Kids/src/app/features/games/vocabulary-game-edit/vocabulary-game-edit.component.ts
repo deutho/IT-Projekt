@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { take } from 'rxjs/internal/operators/take';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
@@ -14,7 +14,7 @@ import { Folder } from 'src/app/models/folder.model';
   templateUrl: './vocabulary-game-edit.component.html',
   styleUrls: ['./vocabulary-game-edit.component.css']
 })
-export class VocabularyGameEditComponent implements OnInit {
+export class VocabularyGameEditComponent implements OnInit, OnDestroy {
 
   // global variables
   Games: VocabularyGame[];
@@ -64,8 +64,11 @@ export class VocabularyGameEditComponent implements OnInit {
   isOwner: boolean = false;
   isEditor: boolean = false;
   isViewer: boolean = false;
-  
- 
+  image = new Image();
+  imageLoaded: boolean = false; 
+  dockey: string;
+  studentmode: boolean = false;
+  studentmodesubscription;
 
   constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) {
     
@@ -81,10 +84,12 @@ export class VocabularyGameEditComponent implements OnInit {
       this.loadAudio();
       // console.log("hellloooo")
     })
+
   }
 
   async ngOnInit(): Promise<void> {
-    
+
+  
     //get user
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
@@ -92,10 +97,10 @@ export class VocabularyGameEditComponent implements OnInit {
       this.unauthorized = true;
     } else {
         this.folderID = this.route.snapshot.paramMap.get('id');
-        let dockey: string = this.route.snapshot.queryParamMap.get('k');
+        this.dockey = this.route.snapshot.queryParamMap.get('k');
     
         //get the data of the game
-        await this.afs.getFolderElement(dockey).then(data => {
+        await this.afs.getFolderElement(this.dockey).then(data => {
           let f: Folder[]  = data.folders;
           f.forEach(folder => {
             if (folder.uid == this.folderID) this.folder = folder
@@ -137,6 +142,11 @@ export class VocabularyGameEditComponent implements OnInit {
           else this.loadNextGame(true);
         }
       }
+      //Observable for the live studentmode change
+      this.studentmodesubscription = this.appService.myStudentMode$.subscribe((data) => {
+          if (data != this.studentmode)
+          this.router.navigate(['game/'+this.folderID], {queryParams:{k: this.dockey, t: 'vocabular-game'}, replaceUrl: true});
+      });
   }
   
   startVoiceRecord(HTMLFinder){
@@ -304,10 +314,27 @@ export class VocabularyGameEditComponent implements OnInit {
       this.coloring = this.currentGame.coloring;
 
       //  lets the html know, that content can now be loaded
+
       this.initSounds();
-      this.loaded = true;
       this.loadInnerTextValues();
+      this.loaded = true;
     }
+  }
+
+
+  checkIfContentIsLoaded() {
+    if( 
+      // taken out atm to avoid long waiting between questions - has to be implementet better - will take alot of time
+      // this.audioQuestionLoaded == true &&
+      // this.audioButton1Loaded == true &&
+      // this.audioButton2Loaded == true &&
+      // this.audioButton3Loaded == true &&
+      // this.audioButton4Loaded == true &&
+      this.imageLoaded == true
+      ) {
+        this.loaded = true
+      }
+    else this.loaded = false;
   }
 
   // activated on click of left arrow - loades the previous game
@@ -551,5 +578,9 @@ export class VocabularyGameEditComponent implements OnInit {
       this.currentGame.coloring = false;
     }
   }
+
+  ngOnDestroy() {
+    this.studentmodesubscription.unsubscribe(); 
+   }
 
 }

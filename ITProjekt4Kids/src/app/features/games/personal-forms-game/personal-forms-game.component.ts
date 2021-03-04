@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import {CdkDragDrop, CdkDropList, CDK_DROP_LIST, copyArrayItem, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { PersonalFormsGame } from 'src/app/models/PersonalFormsGame.model';
 import { supportsPassiveEventListeners } from '@angular/cdk/platform';
@@ -29,7 +29,7 @@ const starAnimation = trigger('starAnimation', [
   styleUrls: ['./personal-forms-game.component.css'],
   animations: [starAnimation]
 })
-export class PersonalFormsGameComponent implements OnInit {
+export class PersonalFormsGameComponent implements OnInit, OnDestroy {
 
   constructor(private afs: FirestoreDataService, private appService: AppService, private route: ActivatedRoute, private router: Router) {}
 
@@ -55,6 +55,9 @@ export class PersonalFormsGameComponent implements OnInit {
   checked : boolean = false
   teacherPlaying: boolean = false;
   audio = new Audio("");
+  studentmode: boolean = true;
+  dockey: string;
+  studentmodesubscription;
 
 
   // boolean to detect if list already contains a string
@@ -88,9 +91,9 @@ export class PersonalFormsGameComponent implements OnInit {
 
     this.folderID = this.route.snapshot.paramMap.get('id');
 
-    let dockey: string = this.route.snapshot.queryParamMap.get('k');
+    this.dockey = this.route.snapshot.queryParamMap.get('k');
 
-    await this.afs.getFolderElement(dockey).then(data => {
+    await this.afs.getFolderElement(this.dockey).then(data => {
       let f: Folder[]  = data.folders;
       f.forEach(folder => {
         if (folder.uid == this.folderID) this.folder = folder
@@ -112,6 +115,11 @@ export class PersonalFormsGameComponent implements OnInit {
       this.loadNextGame()
       this.totalNumberOfRounds = this.Games.length+1; 
     }
+
+    this.studentmodesubscription = this.appService.myStudentMode$.subscribe((data) => {
+      if (data != this.studentmode)
+      this.router.navigate(['game/'+this.folderID], {queryParams:{k: this.dockey, t: 'personal-forms-game'}, replaceUrl: true});
+    });
   }
 
   //method to evaluate if something can be dropped in the list/field
@@ -420,5 +428,9 @@ export class PersonalFormsGameComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['']);
+  }
+
+  ngOnDestroy() {
+   this.studentmodesubscription.unsubscribe(); 
   }
 }

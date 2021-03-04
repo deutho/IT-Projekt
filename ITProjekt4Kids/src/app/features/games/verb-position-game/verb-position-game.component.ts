@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from 'src/app/models/users.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { VerbPositionGame } from 'src/app/models/VerbPositionGame.model';
@@ -26,7 +26,7 @@ const starAnimation = trigger('starAnimation', [
   styleUrls: ['./verb-position-game.component.css'],
   animations: [starAnimation]
 })
-export class VerbPositionGameComponent implements OnInit {
+export class VerbPositionGameComponent implements OnInit, OnDestroy {
   
   constructor(private afs: FirestoreDataService, private appService: AppService, private route: ActivatedRoute, private router: Router) {
    }
@@ -54,15 +54,18 @@ export class VerbPositionGameComponent implements OnInit {
    teacherPlaying: boolean;
    audio = new Audio("");
    wrongAnwserNotification: boolean = false;
+   studentmode: boolean = true;
+   dockey: string;
+   studentmodesubscription;
 
   async ngOnInit(): Promise<void> {
     await this.afs.getCurrentUser().then(data => this.currentUser = data[0]);
 
     this.folderID = this.route.snapshot.paramMap.get('id');
 
-    let dockey: string = this.route.snapshot.queryParamMap.get('k');
+    this.dockey = this.route.snapshot.queryParamMap.get('k');
 
-    await this.afs.getFolderElement(dockey).then(data => {
+    await this.afs.getFolderElement(this.dockey).then(data => {
       let f: Folder[]  = data.folders;
       f.forEach(folder => {
         if (folder.uid == this.folderID) this.folder = folder
@@ -86,6 +89,11 @@ export class VerbPositionGameComponent implements OnInit {
       this.loadNextGame();
       this.totalNumberOfRounds = this.Games.length+1;
     }
+
+    this.studentmodesubscription =this.appService.myStudentMode$.subscribe((data) => {
+      if (data != this.studentmode)
+      this.router.navigate(['game/'+this.folderID], {queryParams:{k: this.dockey, t: 'verb-position-game'}, replaceUrl: true});
+    });
   }
     
   drop(event: CdkDragDrop<string[]>) {
@@ -310,5 +318,9 @@ export class VerbPositionGameComponent implements OnInit {
       
     }    
   }
+
+  ngOnDestroy() {
+    this.studentmodesubscription.unsubscribe(); 
+   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/internal/operators/take';
 import { VocabularyGame } from 'src/app/models/VocabularyGame.model';
@@ -29,7 +29,7 @@ const starAnimation = trigger('starAnimation', [
   styleUrls: ['./vocabulary-game.component.css'],
   animations: [starAnimation]
 })
-export class VocabularyGameComponent implements OnInit {
+export class VocabularyGameComponent implements OnInit, OnDestroy {
 
   Games: VocabularyGame[];
   currentGame: VocabularyGame;
@@ -68,9 +68,12 @@ export class VocabularyGameComponent implements OnInit {
   image = new Image();  
   noQuestionsInGame = false;
   teacherPlaying: boolean;
+  dockey: string;
+  studentmode = true;
+  studentmodesubscription;
 
   
-  constructor(private afs: FirestoreDataService, private router: Router, private appService: AppService, private route: ActivatedRoute) {}
+  constructor(private afs: FirestoreDataService, public router: Router, private appService: AppService, private route: ActivatedRoute) {}
 
   async ngOnInit(){
 
@@ -78,9 +81,9 @@ export class VocabularyGameComponent implements OnInit {
 
     this.folderID = this.route.snapshot.paramMap.get('id');
 
-    let dockey: string = this.route.snapshot.queryParamMap.get('k');
+    this.dockey = this.route.snapshot.queryParamMap.get('k');
 
-    await this.afs.getFolderElement(dockey).then(data => {
+    await this.afs.getFolderElement(this.dockey).then(data => {
       let f: Folder[]  = data.folders;
       f.forEach(folder => {
         if (folder.uid == this.folderID) this.folder = folder
@@ -114,7 +117,12 @@ export class VocabularyGameComponent implements OnInit {
       this.starttime = Date.now();
       this.loadNextGame();
       this.totalNumberOfRounds = this.Games.length+1;
-    } 
+    }
+
+    this.studentmodesubscription = this.appService.myStudentMode$.subscribe((data) => {
+      if (data != this.studentmode)
+      this.router.navigate(['game/'+this.folderID], {queryParams:{k: this.dockey, t: 'vocabular-game'}, replaceUrl: true});
+    });
   }
 
 
@@ -436,9 +444,10 @@ export class VocabularyGameComponent implements OnInit {
     else return false;
   }
 
-  goBack() {
-    this.router.navigate(['']);
-  }
+
+  ngOnDestroy() {
+    this.studentmodesubscription.unsubscribe(); 
+   }
 
 
 }

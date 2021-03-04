@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { VerbPositionGame } from 'src/app/models/VerbPositionGame.model';
 import { AppService } from 'src/app/services/app.service';
 import { FirestoreDataService } from 'src/app/services/firestore-data.service';
@@ -14,7 +14,7 @@ import { style } from '@angular/animations';
   templateUrl: './verb-position-game-edit.component.html',
   styleUrls: ['./verb-position-game-edit.component.css']
 })
-export class VerbPositionGameEditComponent implements OnInit {
+export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
 
   folderUID;
   folder: Folder;
@@ -78,6 +78,9 @@ export class VerbPositionGameEditComponent implements OnInit {
   c;
   ctx;
   e=null;
+  studentmode: boolean = false;
+  dockey: string;
+  studentmodesubscription;
 
 
   constructor(private router: Router, private afs: FirestoreDataService, private appService: AppService, public _recordRTC:RecordRTCService, private route: ActivatedRoute) { 
@@ -112,9 +115,9 @@ export class VerbPositionGameEditComponent implements OnInit {
     } else {
 
         this.folderUID = this.route.snapshot.paramMap.get('id');
-        let dockey: string = this.route.snapshot.queryParamMap.get('k');
+        this.dockey = this.route.snapshot.queryParamMap.get('k');
 
-        await this.afs.getFolderElement(dockey).then(data => {
+        await this.afs.getFolderElement(this.dockey).then(data => {
           let f: Folder[]  = data.folders;
           f.forEach(folder => {
             if (folder.uid == this.folderUID) this.folder = folder
@@ -143,6 +146,11 @@ export class VerbPositionGameEditComponent implements OnInit {
           // this.initSounds();
         }
     }
+
+    this.studentmodesubscription = this.appService.myStudentMode$.subscribe((data) => {
+      if (data != this.studentmode)
+      this.router.navigate(['game/'+this.folderUID], {queryParams:{k: this.dockey, t: 'verb-position-game'}, replaceUrl: true});
+    });
   }
 
   loadNextGame(nopush?: boolean){
@@ -509,6 +517,10 @@ export class VerbPositionGameEditComponent implements OnInit {
   }
 
 
+
+  ngOnDestroy() {
+    this.studentmodesubscription.unsubscribe(); 
+   }
 
 
   
