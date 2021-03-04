@@ -181,6 +181,7 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
         this.valuesOfInput = ['', '', ''];
       	this.audioData = ['', '', ''];
         this.audioURLS = ['', '', '']
+        this.imageURL = './../../../../assets/Images/Placeholder-Image/north_blur_Text.png'
         var newGame = new VerbPositionGame(uid, this.valuesOfInput, this.audioData, ['',''], './../../../../assets/Images/Placeholder-Image/north_blur_Text.png', this.folderUID, this.easyMode, this.punctuationType);
         this.currentGame = newGame;        
      }
@@ -394,6 +395,7 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
       this.deleteElementOverlay = false;
       await this.afs.deleteDocument("games", questionToDelete);
       this.loadNextGame(true);
+      this.previousGames.pop();
     }
   }
 
