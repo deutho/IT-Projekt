@@ -499,11 +499,11 @@ export class VocabularyGameEditComponent implements OnInit, OnDestroy {
   //discard button from warning of unsaved changes
   discardChanges() {
     this.unsavedChanges=false;
-    if (this.imageURL != this.currentGame.photoID) {
-      if (this.imageURL.search("firebasestorage.googleapis.com") != -1) {
-        this.afs.deleteFromStorageByUrl(this.imageURL);
-      }
-    }
+    // if (this.imageURL != this.currentGame.photoID) {
+    //   if (this.imageURL.search("firebasestorage.googleapis.com") != -1) {
+    //     this.afs.deleteFromStorageByUrl(this.imageURL);
+    //   }
+    // }
     this.loadInnerTextValues();
     this.initSounds();
   }

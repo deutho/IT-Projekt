@@ -542,7 +542,7 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
 
       // set the correct height
       // el.scrollHeight is the full height of the content, not just the visible part
-      e.style.minHeight = Math.max(50, e.scrollHeight + diff + 5) + 'px';
+      e.style.minHeight = Math.max(20, e.scrollHeight + diff + 5) + 'px';
     }
     
   }

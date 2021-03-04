@@ -4,7 +4,7 @@
         Sie sind nicht berechtigt, dieses Spiel zu bearbeiten (Styling bitte Thooomas)
     </div>
     <!-- Question -->
-    <textarea class="question" style="min-height: 20px; resize: none; text-align: center;" [disabled]="isViewer" *ngIf = "editingAudio == false" type="text" id="question" (keypress)="calcWidth('question')" placeholder="Hier bitte Frage eingeben" value="{{question}}"></textarea>
+    <textarea class="question" style="min-height: 10px; resize: none; text-align: center;" [disabled]="isViewer" *ngIf = "editingAudio == false" type="text" id="question" (keypress)="calcWidth('question')" placeholder="Hier bitte Frage eingeben" value="{{question}}"></textarea>
 
     <div *ngIf = "editingAudio == false" class="example-container_question question">   
         <!-- Image -->
