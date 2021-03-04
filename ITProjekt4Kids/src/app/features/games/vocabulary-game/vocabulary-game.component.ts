@@ -118,11 +118,12 @@ export class VocabularyGameComponent implements OnInit, OnDestroy {
       this.loadNextGame();
       this.totalNumberOfRounds = this.Games.length+1;
     }
-
-    this.studentmodesubscription = this.appService.myStudentMode$.subscribe((data) => {
-      if (data != this.studentmode)
-      this.router.navigate(['game/'+this.folderID], {queryParams:{k: this.dockey, t: 'vocabular-game'}, replaceUrl: true});
-    });
+    
+      this.studentmodesubscription = this.appService.myStudentMode$.subscribe((data) => {
+        if (this.currentUser.role == 2 && data != this.studentmode)
+        this.router.navigate(['game/'+this.folderID], {queryParams:{k: this.dockey, t: 'vocabular-game'}, replaceUrl: true});
+      });
+    
   }
 
 

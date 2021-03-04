@@ -145,10 +145,12 @@ export class VocabularyGameEditComponent implements OnInit, OnDestroy {
         }
       }
       //Observable for the live studentmode change
-      this.studentmodesubscription = this.appService.myStudentMode$.subscribe((data) => {
-          if (data != this.studentmode)
-          this.router.navigate(['game/'+this.folderID], {queryParams:{k: this.dockey, t: 'vocabular-game'}, replaceUrl: true});
-      });
+      
+        this.studentmodesubscription = this.appService.myStudentMode$.subscribe((data) => {
+            if (this.currentUser.role == 2 && data != this.studentmode)
+            this.router.navigate(['game/'+this.folderID], {queryParams:{k: this.dockey, t: 'vocabular-game'}, replaceUrl: true});
+        });
+      
   }
   
   startVoiceRecord(HTMLFinder){

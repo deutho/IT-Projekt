@@ -91,7 +91,7 @@ export class VerbPositionGameComponent implements OnInit, OnDestroy {
     }
 
     this.studentmodesubscription =this.appService.myStudentMode$.subscribe((data) => {
-      if (data != this.studentmode)
+      if (this.currentUser.role == 2 && data != this.studentmode)
       this.router.navigate(['game/'+this.folderID], {queryParams:{k: this.dockey, t: 'verb-position-game'}, replaceUrl: false});
     });
   }

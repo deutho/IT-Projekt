@@ -129,7 +129,7 @@ export class PersonalFormsGameEditComponent implements OnInit, OnDestroy {
     }
 
     this.studentmodesubscription = this.appService.myStudentMode$.subscribe((data) => {
-      if (data != this.studentmode)
+      if (this.currentUser.role == 2 && data != this.studentmode)
       this.router.navigate(['game/'+this.folderUID], {queryParams:{k: this.dockey, t: 'personal-forms-game'}, replaceUrl: true});
     });
   }
