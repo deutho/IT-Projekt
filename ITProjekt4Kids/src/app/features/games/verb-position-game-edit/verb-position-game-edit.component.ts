@@ -338,13 +338,7 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
   }
 
   abortPictureEdit() {
-    //Delete the Uploaded Picture in case the Process was aborted
-    if ((<HTMLInputElement>document.getElementById('URL')).value.search("firebasestorage.googleapis.com") != -1) {
-      this.afs.deleteFromStorageByUrl((<HTMLInputElement>document.getElementById('URL')).value).catch((err) => {
-        console.log(err.errorMessage);
-        //Give Warning that Delete Operation was not successful
-      });
-    }
+    //Delete the Uploaded Picture in case the Process was aborted    
     this.editingPicture = false;
     this.imageURL = this.currentGame.photoID;
   }
@@ -529,7 +523,28 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
     }
     var myText= (<HTMLInputElement>e).value;
     var textWidth=this.ctx.measureText(myText);    
-    e.style.width=textWidth.width*1.2+40+"px";    
+    
+    // makes input field wider/smaller (1.3 = 70% of width) according to input
+    if( ((textWidth.width*1.2+40) *1.3) < document.body.clientWidth) {
+      e.style.width=textWidth.width*1.2+40+"px";  
+    }
+    else {
+      e.style.width = document.body.clientWidth * 0.7 +"px";
+    }
+    // scale height of question input field
+    if(HTMLID == 'question') {
+      e.style.boxSizing = 'border-box';
+      var outerHeight = parseInt(window.getComputedStyle(e).height, 10);
+      var diff = outerHeight - e.clientHeight;
+
+      // set the height to 0 in case of it has to be shrinked
+      e.style.minHeight = 0 + "px";
+
+      // set the correct height
+      // el.scrollHeight is the full height of the content, not just the visible part
+      e.style.minHeight = Math.max(50, e.scrollHeight + diff + 5) + 'px';
+    }
+    
   }
 
 
