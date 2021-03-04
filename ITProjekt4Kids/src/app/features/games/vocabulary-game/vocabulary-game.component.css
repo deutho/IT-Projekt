@@ -77,6 +77,19 @@
 	filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
+.actionBar {
+	display:flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+  }
+
+.svgs-in-actionbar {
+    width: 5%; 
+    min-width: 50px; 
+    min-height: 50px;
+}
+
 .question {
     overflow-wrap: break-word;
     font-size: 200%;
