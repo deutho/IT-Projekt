@@ -70,10 +70,10 @@ export class VerbPositionGameComponent implements OnInit, OnDestroy {
       f.forEach(folder => {
         if (folder.uid == this.folderID) this.folder = folder
       });
-    }).catch(() => this.router.navigate(['notfound']))
+    }).catch(() => this.router.navigate(['notfound'], {replaceUrl: true}))
 
     if (this.folder == undefined) {
-      this.router.navigate(['notfound']);
+      this.router.navigate(['notfound'], {replaceUrl: true});
     } else {
 
 
@@ -314,7 +314,7 @@ export class VerbPositionGameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.studentmodesubscription.unsubscribe(); 
+    if (this.studentmodesubscription != undefined) this.studentmodesubscription.unsubscribe(); 
    }
 
 }

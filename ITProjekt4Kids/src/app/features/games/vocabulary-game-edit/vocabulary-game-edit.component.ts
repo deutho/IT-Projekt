@@ -107,10 +107,10 @@ export class VocabularyGameEditComponent implements OnInit, OnDestroy {
           f.forEach(folder => {
             if (folder.uid == this.folderID) this.folder = folder
           });
-        }).catch(() => this.router.navigate(['notfound']))
+        }).catch(() => this.router.navigate(['notfound'], {replaceUrl: true}))
 
         if (this.folder == undefined) {
-          this.router.navigate(['notfound']);
+          this.router.navigate(['notfound'], {replaceUrl: true});
         } else {
 
           //get the rights (Thomas, mit de 2 bools kannst arbeiten - isViewer is eh imma true - jeder kann viewen)
@@ -584,7 +584,7 @@ export class VocabularyGameEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.studentmodesubscription.unsubscribe(); 
+    if (this.studentmodesubscription != undefined) this.studentmodesubscription.unsubscribe(); 
     this.audioURLSubscription.unsubscribe(); 
     this.imageURLSubscription.unsubscribe(); 
    }
