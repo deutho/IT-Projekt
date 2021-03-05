@@ -431,6 +431,6 @@ export class PersonalFormsGameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-   this.studentmodesubscription.unsubscribe(); 
+    if (this.studentmodesubscription != undefined) this.studentmodesubscription.unsubscribe(); 
   }
 }
