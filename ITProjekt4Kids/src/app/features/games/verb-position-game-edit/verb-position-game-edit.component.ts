@@ -73,7 +73,7 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
   audioURLS: string[] = [];
   audioPlaying = -1;
   easyMode: boolean = true;
-  default: boolean;
+  default: boolean = false;
   punctuationType: string = ".";
   inputForWidthCalc: string;
   c;
@@ -190,13 +190,16 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
 
     //  lets the html know, that content can now be loaded
     this.loaded = true;    
-
+    
 
     //  scale input boxes
-    this.calcWidth('question')
-    for(var i = 0; i<this.valuesOfInput.length; i++) {
-      this.calcWidth('valueWord' + i)
-    }
+    setTimeout(() => {    
+      this.calcWidth('question')
+      for(var i = 0; i<this.valuesOfInput.length; i++) {
+        this.calcWidth('valueWord' + i)
+      }
+    }, 50)
+
   }
 
 
@@ -381,6 +384,12 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
       this.loadValuesOfGame();
       this.loaded = true;  
     } 
+
+    //  scale input boxes
+    this.calcWidth('question')
+    for(var i = 0; i<this.valuesOfInput.length; i++) {
+      this.calcWidth('valueWord' + i)
+    }
   }
 
   /**
@@ -525,7 +534,6 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
     }
     var myText= (<HTMLInputElement>e).value;
     var textWidth=this.ctx.measureText(myText);    
-    
     // makes input field wider/smaller (1.3 = 70% of width) according to input
     if( ((textWidth.width*1.2+40) *1.3) < document.body.clientWidth) {
       e.style.width=textWidth.width*1.2+40+"px";  
@@ -541,7 +549,6 @@ export class VerbPositionGameEditComponent implements OnInit, OnDestroy {
 
       // set the height to 0 in case of it has to be shrinked
       e.style.minHeight = 0 + "px";
-
       // set the correct height
       // el.scrollHeight is the full height of the content, not just the visible part
       e.style.minHeight = Math.max(20, e.scrollHeight + diff + 5) + 'px';

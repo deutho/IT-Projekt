@@ -61,7 +61,8 @@
     align-items: center;
     justify-content: center;
     overflow-wrap: break-word;
-
+    min-width: 200px;
+    
   }
   
   .example-container_person {
